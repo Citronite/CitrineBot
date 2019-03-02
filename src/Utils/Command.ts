@@ -1,11 +1,15 @@
-import { CommandOptions, ChannelID, GuildID } from 'typings';
-import { Collection, Snowflake, Guild } from 'discord.js';
+import { Collection, Guild } from 'discord.js';
+
+import { 
+	CommandOptions,
+	ChannelID, 
+	GuildID,
+} from 'typings';
 
 type Command = SubCommand | BaseCommand | AbstractCommand;
 
-
 abstract class AbstractCommand {
-	public subcommands : Collection<string, SubCommand>;
+	public subcommands? : Collection<string, SubCommand>;
 	public readonly name: string;
 	public readonly description: string;
 	public readonly botPerms: string[];
@@ -13,15 +17,15 @@ abstract class AbstractCommand {
 	public readonly usageArgs: Array<string[]>;
 
 	constructor(name: string, options: CommandOptions) {
-		this.subcommands = new Collection();
 		this.name = name;
 		this.description = options.description || 'No description provided :(';
-		this.botPerms = !!options.botPerms ? options.botPerms.concat(['VIEW_CHANNEL']) : ['VIEW_CHANNEL'];
-		this.memberPerms = !!options.memberPerms ? options.memberPerms : [];
+		this.botPerms = options.botPerms ? options.botPerms.concat(['VIEW_CHANNEL']) : ['VIEW_CHANNEL'];
+		this.memberPerms = options.memberPerms ? options.memberPerms : [];
 		this.usageArgs = options.usageArgs || [];
 	}
 
-	registerSubCommands(...subCmds: SubCommand[]): Command {
+	registerSubCommands(...subCmds: SubCommand[]): AbstractCommand {
+		this.subcommands = new Collection();
 		for (const subCmd of subCmds) {
 			if (subCmd instanceof SubCommand) {
 				subCmd.setParentCmd(this);
@@ -106,7 +110,7 @@ export class BaseCommand extends AbstractCommand {
 }
 
 export class SubCommand extends AbstractCommand {
-	private parent: BaseCommand | SubCommand | undefined;
+	private parent: Command | undefined;
 	private base: BaseCommand | undefined;
 
 	constructor(name: string, options: CommandOptions) {
@@ -121,7 +125,7 @@ export class SubCommand extends AbstractCommand {
 		}
 	}
 
-	getParentCmd(): BaseCommand | SubCommand | undefined {
+	getParentCmd(): Command | undefined {
 		return this.parent;
 	}
 
