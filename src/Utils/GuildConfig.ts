@@ -4,11 +4,12 @@ import { Guild } from 'discord.js';
 export class GuildConfig implements IGuildConfig {
 	public readonly id: GuildID;
 	public prefix: string;
-	public readonly disabledChannels: ChannelID[];
+	public disabledChannels: ChannelID[];
 	public disabledRole: RoleID;
 	public deleteCmdCalls: boolean;
 	public deleteCmdCallsDelay: number;
-	public readonly reqRoles: { [cmd in string]: RoleID }
+	public readMsgEdits: boolean;
+	public reqRoles: { [cmd in string]: RoleID }
 
 	constructor(guild: Guild, prefix: string) {
 		this.id = guild.id;
@@ -17,6 +18,7 @@ export class GuildConfig implements IGuildConfig {
 		this.disabledRole = '';
 		this.deleteCmdCalls = false;
 		this.deleteCmdCallsDelay = 0;
+		this.readMsgEdits = false;
 		this.reqRoles = {};
 	}
 
