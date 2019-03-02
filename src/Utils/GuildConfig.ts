@@ -41,7 +41,7 @@ export class GuildConfig implements IGuildConfig {
 		delete this.reqRoles[cmd];
 	}
 
-	toString() {
+	toString(): string {
 		return JSON.stringify(this, null, '\t');
 	}
 }
