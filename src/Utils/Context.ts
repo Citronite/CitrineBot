@@ -1,7 +1,7 @@
 import { IContext } from "typings";
 import { Client, Message, User, Channel } from "discord.js";
 
-class Context implements IContext {
+export class Context implements IContext {
 	public readonly client: Client;
 	public readonly invokedPrefix: string;
 	public readonly message: Message;
@@ -28,11 +28,20 @@ class Context implements IContext {
 		// Implement awaitReply from the Misaki Bot thing!!!
 	}
 
+	awaitReaction() {
+		// Kinda like awaitReply, but waits for a reaction on the bot message. Could be used for yes/no stuff?
+		// First param would be msg to send, second param list of reactions to await.
+	}
+
 	send() {
 		// Same as message.channel.send()
 	}
 
-	sendDm() {
+	reply() {
+		// Same as message.reply();
+	}
+
+	sendDM() {
 		// Open and send message in DMs with author, returns the DM Channel!
 	}
 }
