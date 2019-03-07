@@ -8,7 +8,7 @@ import {
 type Command = SubCommand | BaseCommand | AbstractCommand;
 
 abstract class AbstractCommand {
-	public subcommands? : Collection<string, SubCommand>;
+	public subcommands?: Collection<string, SubCommand>;
 	public readonly name: string;
 	public readonly description: string;
 	public readonly botPerms: string[];

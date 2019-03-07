@@ -4,14 +4,14 @@ export class JsUtils {
 	constructor() {
 		throw new Error('This class may not be instantiated!');
 	}
-	/**
-	*		Returns a random element from array 
+	/*
+	*		Returns a random element from array
 	*/
-	static arrRandom(arr: any[]): any[] {
+	public static arrRandom(arr: any[]): any[] {
 		return arr[Math.floor(Math.random() * this.length)];
 	}
 
-	/** 
+	/*
 	*		Removes elements from an array.
 	*		Returns the modified array.
 	*		EXAMPLE:
@@ -19,7 +19,7 @@ export class JsUtils {
 	*		arrErase(arr, 'cabbage', 'carrots');
 	*		RETURNS: ['apples', 'oranges', 'bananas']
 	*/
-	static arrErase(arr: any[], ...args: any[]): any[] {
+	public static arrErase(arr: any[], ...args: any[]): any[] {
 		for (const arg of args) {
 			if (arr.includes(arg)) {
 				const index = arr.indexOf(arg);
@@ -29,7 +29,7 @@ export class JsUtils {
 		return arr;
 	}
 
-	/** 
+	/*
 	* 	Add elements to original array if they don't already exist,
 	* 	otherwise push them to the original array.
 	* 	Returns the modified array.
@@ -39,12 +39,11 @@ export class JsUtils {
 	*		console.log( arrToggle(arr1, arr2) );
 	* 	Logs: [1,2,3,4,8,9,10]
 	*/
-	static arrToggle(original: any[], toggleArr: any[]): any[] {
+	public static arrToggle(original: any[], toggleArr: any[]): any[] {
 		for (const el of toggleArr) {
 			if (!original.includes(el)) {
 				original.push(el);
-			}
-			else {
+			}	else {
 				const index = original.indexOf(el);
 				original.splice(index, 1);
 			}
@@ -52,11 +51,11 @@ export class JsUtils {
 		return original;
 	}
 
-	/**
+	/*
 	*		Takes an object and returns a
-	*		discord.js Collection from it. 
+	*		discord.js Collection from it.
 	*/
-	static objToMap(obj: any): Collection<any, any> {
+	public static objToMap(obj: any): Collection<any, any> {
 		const keys = Reflect.ownKeys(obj);
 		const map = new Collection();
 		for (const key of keys) {
@@ -65,11 +64,11 @@ export class JsUtils {
 		return map;
 	}
 
-	/**
-	*		Takes a map or collection, 
+	/*
+	*		Takes a map or collection,
 	*		and returns a JS object from it.
 	*/
-	static mapToObj(map: Map<any, any>): object {
+	public static mapToObj(map: Map<any, any>): object {
 		const obj: any = {};
 		for (const [key, val] of map) {
 			obj[key] = val;
@@ -77,13 +76,13 @@ export class JsUtils {
 		return obj;
 	}
 
-	/**	
+	/*
 	*		Returns whether object is an instance of a class.
-	*		Avoids errors like 
+	*		Avoids errors like
 	*		1 instanceof Number // False
-	*		'string' instanceof String // False 
+	*		'string' instanceof String // False
 	*/
-	static isInstance(obj: Object, cls: any): boolean {
+	public static isInstance(obj: object, cls: any): boolean {
 		if (obj instanceof cls) return true;
 		if (obj.constructor === cls) return true;
 		return false;
