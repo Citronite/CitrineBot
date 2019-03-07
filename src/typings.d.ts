@@ -1,4 +1,3 @@
-
 declare module 'typings' {
 	import { 
 		Collection, 
