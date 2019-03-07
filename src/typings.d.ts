@@ -33,36 +33,26 @@ declare module 'typings' {
 	export interface IGuildConfig {
 		readonly id: string;
 		prefix: string;
-		disabledChannels: ChannelID[];
 		disabledRole: RoleID;
 		deleteCmdCalls: boolean;
 		deleteCmdCallsDelay: number;
-		reqRoles: { [cmd in string]: RoleID }
-	}
-
-	export interface ICitrineClient {
-
+		readMsgEdits: boolean;
+		disabledUsers: Set<UserID>;
+		disabledChannels: Set<ChannelID>;
+		disabledCommands: Set<string> | string[];
+		reqRoles: { [cmd in string]: RoleID | undefined }
 	}
 
 	interface IAbstractCommand {
-		subcommands : Collection<string, ISubCommand>;
+		subcommands?: Collection<string, ISubCommand>;
 		readonly name: string;
 		readonly description: string;
-		readonly botPerms: string[];
-		readonly memberPerms: string[];
 		readonly usageArgs: Array<string[]>;
 		registerSubCommands: (...subCmds: ISubCommand[]) => IAbstractCommand;
 	}
 
 	export interface IBaseCommand extends IAbstractCommand {
 		readonly module: string;
-		disabled: boolean;
-		disabledIn: ChannelID[];
-		aliases: string[];
-		globalEnable: () => void;
-		globalDisable: () => void;
-		disableIn: (id: ChannelID | GuildID, guild: Guild) => string[];
-		enableIn: (id: ChannelID | GuildID, guild: Guild) => string[];
 		setAlias: (alias: string) => string[];
 		unsetAlias: (alias: string) => string[];
 		execute: (ctx: IContext, ...args: string[]) => void;
