@@ -6,13 +6,13 @@ import { PermHandler } from './PermHandler';
 export class CitrineUtils {
 	public CmdHandler: CmdHandler;
 	public PermHandler: PermHandler;
-	public djsUtils: djsUtils;
-	public jsUtils: jsUtils;
+	public djs: djsUtils;
+	public js: jsUtils;
 
 	constructor() {
 		this.CmdHandler = CmdHandler;
 		this.PermHandler = PermHandler;
-		this.djsUtils = djsUtils;
-		this.jsUtils = jsUtils;
+		this.djs = djsUtils;
+		this.js = jsUtils;
 	}
 }
