@@ -1,8 +1,7 @@
 import { Collection, Guild } from 'discord.js';
-
-import { 
+import {
 	CommandOptions,
-	ChannelID, 
+	ChannelID,
 	GuildID,
 } from 'typings';
 
@@ -24,7 +23,7 @@ abstract class AbstractCommand {
 		this.usageArgs = options.usageArgs || [];
 	}
 
-	registerSubCommands(...subCmds: SubCommand[]): AbstractCommand {
+	public registerSubCommands(...subCmds: SubCommand[]): AbstractCommand {
 		this.subcommands = new Collection();
 		for (const subCmd of subCmds) {
 			if (subCmd instanceof SubCommand) {
