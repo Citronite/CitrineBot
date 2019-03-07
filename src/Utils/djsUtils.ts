@@ -16,7 +16,7 @@ export class DjsUtils {
 		throw new Error('This class may not be instantiated!');
 	}
 
-	static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string {
+	public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string {
 		return Util.escapeMarkdown(text, onlyCodeBlock, onlyInlineCode);
 	}
 
@@ -33,7 +33,7 @@ export class DjsUtils {
 	}
 
 	static generateSnowflake(timestamp?: number | Date): Snowflake {
-		return SnowflakeUtil.generate(/**timestamp*/);
+		return SnowflakeUtil.generate(/**timestamp**/);
 	}
 
 	static inlineCode(str: string | string[]): string | string[] {
