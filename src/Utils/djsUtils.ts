@@ -11,7 +11,7 @@ import { Util,
 	GuildMember
 } from 'discord.js';
 
-export class djsUtils {
+export class DjsUtils {
 	constructor() {
 		throw new Error('This class may not be instantiated!');
 	}
@@ -67,7 +67,7 @@ export class djsUtils {
 	}
 
 	static resolveRole(guild: Guild, role: string): Role | null {
-		const parsedRole = djsUtils.parseMention(role);
+		const parsedRole = DjsUtils.parseMention(role);
 		if (guild.roles.has(parsedRole)) {
 			return guild.roles.get(parsedRole) || null;
 		}
@@ -77,7 +77,7 @@ export class djsUtils {
 	}
 
 	static async resolveUser(client: Client, user: string): Promise<User | null> {
-		const parsedUser = djsUtils.parseMention(user);
+		const parsedUser = DjsUtils.parseMention(user);
 		try {
 			const fetched = await client.fetchUser(parsedUser);
 			return fetched || null;
@@ -89,7 +89,7 @@ export class djsUtils {
 	}
 
 	static resolveGuildChannel(guild: Guild, channel: string): GuildChannel | null {
-		const parsedChnl = djsUtils.parseMention(channel);
+		const parsedChnl = DjsUtils.parseMention(channel);
 
 		const finder = (v: GuildChannel): boolean => {
 			if (v.name === parsedChnl) return true;
@@ -101,7 +101,7 @@ export class djsUtils {
 	}
 
 	static async resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null> {
-		const parsedMember = djsUtils.parseMention(member);
+		const parsedMember = DjsUtils.parseMention(member);
 		try {
 			const fetched = await guild.fetchMember(parsedMember);
 			if (fetched) return fetched;
