@@ -33,7 +33,7 @@ export class MessageContext implements IMessageContext {
 			// color: green
 			return this.channel.send('Success Embed!');
 		} else {
-			return this.channel.send(`✔ ${msg}`);
+			return this.channel.send(`✅ **Success:** ${msg}`);
 		}
 	}
 
@@ -42,7 +42,7 @@ export class MessageContext implements IMessageContext {
 			// color: red
 			return this.channel.send('Error Embed!');
 		} else {
-			return this.channel.send(`❗ ${msg}`);
+			return this.channel.send(`⛔ **Error:** ${msg}`);
 		}
 	}
 
@@ -51,7 +51,7 @@ export class MessageContext implements IMessageContext {
 			// color: yellow
 			return this.channel.send('Alert Embed!');
 		} else {
-			return this.channel.send(`⚠ ${msg}`);
+			return this.channel.send(`⚠ **Alert:** ${msg}`);
 		}
 	}
 
