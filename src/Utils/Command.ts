@@ -18,6 +18,7 @@ abstract class AbstractCommand {
 	constructor(name: string, options: CommandOptions) {
 		this.name = name;
 		this.description = options.description || 'No description provided :(';
+		// Remove this thing and use PermHandler instead?
 		this.botPerms = options.botPerms ? options.botPerms.concat(['VIEW_CHANNEL']) : ['VIEW_CHANNEL'];
 		this.memberPerms = options.memberPerms ? options.memberPerms : [];
 		this.usageArgs = options.usageArgs || [];
