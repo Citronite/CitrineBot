@@ -1,12 +1,12 @@
-import { Client } from 'discord.js';
+import { Client, ClientOptions } from 'discord.js';
 
 export class CitrineClient extends Client {
-	constructor() {
-		super();
+	constructor(options: ClientOptions) {
+		super(options);
 	}
 
-	public initModules(): boolean {
-		return 1 > 0;
+	public initModules(defaultModules: string[]): boolean {
+		return !!defaultModules;
 	}
 
 	public initEvents(): boolean {
@@ -35,6 +35,6 @@ export class CitrineClient extends Client {
 
 	public async launch(TOKEN: string): Promise<boolean> {
 		// Starts bot!
-		return Promise.reject(false);
+		return Promise.reject(TOKEN);
 	}
 }
