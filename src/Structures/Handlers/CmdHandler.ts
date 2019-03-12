@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { GuildConfig } from '../Utils/GuildConfig';
-import { BaseCommand } from '../Utils/Command';
+import { BaseCommand } from '../CommandStructures/Command';
 import { Command } from 'typings';
 
 export class CmdHandler {

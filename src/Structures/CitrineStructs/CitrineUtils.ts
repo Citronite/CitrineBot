@@ -1,7 +1,7 @@
 import { DjsUtils } from '../Utils/DjsUtils';
 import { JsUtils } from '../Utils/JsUtils';
-import { CmdHandler } from './CmdHandler';
-import { PermHandler } from './PermHandler';
+import { CmdHandler } from '../Handlers/CmdHandler';
+import { PermHandler } from '../Handlers/PermHandler';
 
 export class CitrineUtils {
 	public CmdHandler: CmdHandler;

@@ -1,13 +1,14 @@
 import { Message } from 'discord.js';
-import { CommandError, ErrorTypes } from './CommandError';
+import { CommandError, ErrorTypes } from '../CommandStructures/CommandError';
 import { IGuildConfig, Command } from 'typings';
+import { CitrineClient } from '../CitrineStructures/CitrineClient';
 
 export class PermHandler {
 	constructor() {
 		throw new Error('This class may not be instantiated!');
 	}
 
-	public static checkCustomFilters(cmd: Command, message: Message, client): Error | void {
+	public static checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): Error | void {
 		const { config: globalConfig } = client.settings;
 		const config: IGuildConfig = client.settings.getGuild(message.guild.id);
 		const errors: string[] = [];

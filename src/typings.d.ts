@@ -46,7 +46,7 @@ declare module 'typings' {
 		readMsgEdits: boolean;
 		disabledUsers: Set<UserID>;
 		disabledChannels: Set<ChannelID>;
-		disabledCommands: Set<string> | string[];
+		disabledCommands: Set<string>;
 		reqRoles: { [cmd in string]: RoleID | undefined }
 	}
 
