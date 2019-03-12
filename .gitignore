@@ -3,3 +3,6 @@ node_modules
 
 # tsc outDir
 dist
+
+# extra stuff
+*.txt

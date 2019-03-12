@@ -1,0 +1,8 @@
+{
+	"extends": "tslint-config-fire",
+	"rules": {
+		"linebreak-style": false,
+		"no-implicit-dependencies": false,
+		"no-unnecessary-class": false
+	}
+}
