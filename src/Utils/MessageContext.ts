@@ -1,4 +1,5 @@
 import { IMessageContext } from 'typings';
+import { Embed } from './Embeds';
 
 import { Client,
 	Message,
@@ -30,17 +31,17 @@ export class MessageContext implements IMessageContext {
 
 	public async success(msg: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			// color: green
-			return this.channel.send('Success Embed!');
+			const embed = Embed.success(msg);
+			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`✅ **Success:** ${msg}`);
 		}
 	}
 
-	public async error(msg: string, embed: boolean = true): Promise<Message | Message[]> {
+	public async error(msg: string, type: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			// color: red
-			return this.channel.send('Error Embed!');
+			const embed = Embed.error(msg, type);
+			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`⛔ **Error:** ${msg}`);
 		}
@@ -48,8 +49,8 @@ export class MessageContext implements IMessageContext {
 
 	public async alert(msg: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			// color: yellow
-			return this.channel.send('Alert Embed!');
+			const embed = Embed.alert(msg);
+			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`⚠ **Alert:** ${msg}`);
 		}

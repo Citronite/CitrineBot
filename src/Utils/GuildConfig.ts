@@ -8,6 +8,19 @@ import {
 	UserID
 } from 'typings';
 
+const props = [
+	'id',
+	'prefix',
+	'disabledRole',
+	'deleteCmdCalls',
+	'deleteCmdCallsDelay',
+	'readMsgEdits',
+	'disabledUsers',
+	'disabledChannels',
+	'disabledCommands',
+	'reqRoles'
+];
+
 export class GuildConfig implements IGuildConfig {
 	public readonly id: GuildID;
 	public prefix: string;
@@ -20,9 +33,11 @@ export class GuildConfig implements IGuildConfig {
 	public disabledCommands: Set<string>;
 	public reqRoles: { [cmd in string]: RoleID | undefined };
 
-	constructor(guild?: Guild, oldConfig?: IGuildConfig) {
-		if (guild) {
-			const client: CitrineClient = guild.client;
+	constructor(guild: Guild | IGuildConfig) {
+		if (guild instanceof Guild) {
+			// Have to use any here since TS doesn't know guild.client
+			// would be CitrineClient instead of Client.
+			const client: any = guild.client;
 
 			this.id = guild.id;
 			this.prefix = client.settings.global.prefix;
@@ -35,21 +50,23 @@ export class GuildConfig implements IGuildConfig {
 			this.disabledCommands = new Set();
 			this.reqRoles = {};
 
-		}	else if (oldConfig) {
-
-			this.id = oldConfig.id;
-			this.prefix = oldConfig.prefix;
-			this.disabledRole = oldConfig.disabledRole;
-			this.deleteCmdCalls = oldConfig.deleteCmdCalls;
-			this.deleteCmdCallsDelay = oldConfig.deleteCmdCallsDelay;
-			this.readMsgEdits = oldConfig.readMsgEdits;
-			this.disabledUsers = new Set(oldConfig.disabledUsers);
-			this.disabledChannels = new Set(oldConfig.disabledChannels);
-			this.disabledCommands = new Set(oldConfig.disabledCommands);
-			this.reqRoles = oldConfig.reqRoles;
-
 		}	else {
-			throw new Error('Invalid data provided for GuildConfig!');
+
+			Object.keys(guild).forEach(val => {
+				if (!props.includes(val)) throw new Error('Invalid data provided to GuildConfig constructor!');
+			});
+
+			this.id = guild.id;
+			this.prefix = guild.prefix;
+			this.disabledRole = guild.disabledRole;
+			this.deleteCmdCalls = guild.deleteCmdCalls;
+			this.deleteCmdCallsDelay = guild.deleteCmdCallsDelay;
+			this.readMsgEdits = guild.readMsgEdits;
+			this.disabledUsers = new Set(guild.disabledUsers);
+			this.disabledChannels = new Set(guild.disabledChannels);
+			this.disabledCommands = new Set(guild.disabledCommands);
+			this.reqRoles = guild.reqRoles;
+
 		}
 	}
 
