@@ -19,7 +19,8 @@ export class CitrineSettings {
 			devs: new Set(['DEFAULT']),
 			disabledUsers: new Set(['DEFAULT']),
 			disabledGuilds: new Set(['DEFAULT']),
-			disabledCommands: new Set(['DEFAULT'])
+			disabledCommands: new Set(['DEFAULT']),
+			aliases: {}
 		};
 	}
 
