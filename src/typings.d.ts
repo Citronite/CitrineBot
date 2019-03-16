@@ -50,6 +50,15 @@ declare module 'typings' {
 		reqRoles: { [cmd in string]: RoleID | undefined }
 	}
 
+	export interface IGlobalConfig {
+		owner: UserID;
+		prefix: string;
+		devs: Set<UserID>;
+		disabledUsers: Set<UserID>;
+		disabledGuilds: Set<GuildID>;
+		disabledCommands: Set<string>;
+	}
+
 	interface IAbstractCommand {
 		subcommands?: Collection<string, ISubCommand>;
 		readonly name: string;
