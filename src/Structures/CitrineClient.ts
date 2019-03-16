@@ -1,8 +1,13 @@
 import { Client, ClientOptions } from 'discord.js';
+import { CitrineSettings } from './CitrineStructs/CitrineSettings';
 
 export class CitrineClient extends Client {
+	public readonly settings: CitrineSettings;
+
 	constructor(options: ClientOptions) {
 		super(options);
+
+		this.settings = new CitrineSettings(this);
 	}
 
 	public initModules(defaultModules: string[]): boolean {
