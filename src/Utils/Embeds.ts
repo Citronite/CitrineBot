@@ -6,7 +6,7 @@ export class Embed {
 		throw new Error('This class may not be instantiated with new');
 	}
 
-	public static error(info: string = 'An unknown error occurred!', type: string = 'UNKNOWN '): RichEmbed {
+	public static error(info: string = 'An unknown error occurred!', type: string = 'UNKNOWN:666'): RichEmbed {
 		return new RichEmbed().setColor(Colors.RED)
 			.setDescription(`⛔ ${info}`)
 			.setFooter(`Error: ${type}`)
