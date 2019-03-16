@@ -1,5 +1,5 @@
 import { RichEmbed } from 'discord.js';
-import { Embed } from '../../Utils/Embeds';
+import { BuildEmbed } from '../../Utils/BuildEmbed';
 import { ErrorCodes } from './ErrorCodes';
 
 export class CommonError extends Error {
