@@ -16,6 +16,7 @@
   "dependencies": {
     "discord.js": "^11.4.2",
     "keyv": "^3.1.0",
+    "uws": "^100.0.1",
     "winston": "^3.2.1"
   }
 }

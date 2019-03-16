@@ -9,8 +9,9 @@ export const Colors: any = {
 	PURPLE: 0xCC397B,
 	FUCHSIA: 0xC154C1,
 	GOLD: 0xEFCC00,
-	DARK: 10, // Discord Dark Mode color
-	LIGHT: 11, // Discord Light Mode color
+	DARK: 0x3d3e3f,
+	LIGHT: 0xf9fcff,
 	CYAN: 0x00FFFF,
-	PINK: 0xF77FBE
+	PINK: 0xF77FBE,
+	BOT: 0xFFEF00
 };
