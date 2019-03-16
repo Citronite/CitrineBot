@@ -1,5 +1,5 @@
-import { IMessageContext } from 'typings';
-import { Embed } from './Embeds';
+import { IContext } from 'typings';
+import { BuildEmbed } from './BuildEmbed';
 
 import { Client,
 	Message,
@@ -14,7 +14,7 @@ import { Client,
 
 type reaction = string | Emoji | ReactionEmoji;
 
-export class MessageContext implements IMessageContext {
+export class Context implements IContext {
 	public readonly client: Client;
 	public readonly invokedPrefix: string;
 	public readonly message: Message;
@@ -31,7 +31,7 @@ export class MessageContext implements IMessageContext {
 
 	public async success(msg: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			const embed = Embed.success(msg);
+			const embed = BuildEmbed.success(msg);
 			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`✅ **Success:** ${msg}`);
@@ -40,19 +40,10 @@ export class MessageContext implements IMessageContext {
 
 	public async error(msg: string, type: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			const embed = Embed.error(msg, type);
+			const embed = BuildEmbed.error(msg, type);
 			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`⛔ **Error:** ${msg}`);
-		}
-	}
-
-	public async alert(msg: string, embed: boolean = true): Promise<Message | Message[]> {
-		if (embed) {
-			const embed = Embed.alert(msg);
-			return this.channel.send(embed);
-		} else {
-			return this.channel.send(`⚠ **Alert:** ${msg}`);
 		}
 	}
 
