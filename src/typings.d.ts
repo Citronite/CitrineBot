@@ -18,12 +18,10 @@ declare module 'typings' {
 
 	export type CommandOptions = {
 		description? : string,
-		botPerms? : string[],
-		memberPerms? : string[],
-		usageArgs? : Array<string[]>,
+		usage? : string,
 	}
 
-	export interface IMessageContext {
+	export interface IContext {
 		readonly client: Client;
 		readonly invokedPrefix: string;
 		readonly message: Message;
@@ -31,10 +29,12 @@ declare module 'typings' {
 		readonly channel: Channel;
 		success: (msg: string, embed: boolean) => Promise<Message | Message[]>;
 		error: (msg: string, type: string, embed: boolean) => Promise<Message | Message[]>;
-		alert: (msg: string, embed: boolean) => Promise<Message | Message[]>;
 		confirm: (msg: string, timeOut: number) => Promise<boolean | null>;
 		prompt: (msg: string, contentOnly: boolean, timeOut: number) => Promise<Message | string | null>;
 		promptReaction: (msg: string, emojis: string[], limit: number, timeOut: number) => Promise<MessageReaction[] | null>;
+		send: (...args: any) => Promise<Message | Message[]>;
+		reply: (...args: any) => Promise<Message | Message[]>;
+		sendDM: (...args: any) => Promise<Message | Message[]>;
 	}
 
 	export interface IGuildConfig {
@@ -47,7 +47,7 @@ declare module 'typings' {
 		disabledUsers: Set<UserID>;
 		disabledChannels: Set<ChannelID>;
 		disabledCommands: Set<string>;
-		reqRoles: { [cmd in string]: RoleID | undefined }
+		reqRoles: { [cmd in string]: RoleID | undefined };
 	}
 
 	export interface IGlobalConfig {
@@ -57,8 +57,9 @@ declare module 'typings' {
 		disabledUsers: Set<UserID>;
 		disabledGuilds: Set<GuildID>;
 		disabledCommands: Set<string>;
+		aliases: { [cmd in string]: string[] };
 	}
-
+/*
 	interface IAbstractCommand {
 		subcommands?: Collection<string, ISubCommand>;
 		readonly name: string;
@@ -71,19 +72,20 @@ declare module 'typings' {
 		readonly module: string;
 		setAlias: (alias: string) => string[];
 		unsetAlias: (alias: string) => string[];
-		execute: (ctx: IMessageContext, ...args: string[]) => void;
-		noArgsFallback?: (ctx: IMessageContext) => void;
+		execute: (ctx: IContext, ...args: string[]) => void;
+		noArgsFallback?: (ctx: IContext) => void;
 	}
 	export interface ISubCommand extends IAbstractCommand {
 		readonly parent: ISubCommand | IBaseCommand;
 		readonly base: IBaseCommand;
-		setParentCmd: (cmd: Command) => void | Error;
-		getParentCmd: () => Command | undefined;
-		setBaseCmd: (cmd: Command) => void | Error;
-		getBaseCmd: () => IBaseCommand | undefined;
-		execute: (ctx: IMessageContext, ...args: string[]) => void;
-		noArgsFallback?: (ctx: IMessageContext) => void;
+		setParent: (cmd: Command) => void | Error;
+		getParent: () => Command | undefined;
+		setBase: (cmd: Command) => void | Error;
+		getBase: () => IBaseCommand | undefined;
+		execute: (ctx: IContext, ...args: string[]) => void;
+		noArgsFallback?: (ctx: IContext) => void;
 	}
 
-	export type Command = ISubCommand | IBaseCommand;
+	type Command = ISubCommand | IBaseCommand;
+*/
 }
