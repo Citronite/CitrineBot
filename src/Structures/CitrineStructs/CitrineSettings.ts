@@ -2,7 +2,7 @@ import * as path from 'path';
 import { IGlobalConfig, GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
-import { CommonError } from '../ErrorStructs/CommonError';
+import { BaseError } from '../ErrorStructs/BaseError';
 import { CitrineClient } from '../CitrineClient';
 
 export class CitrineSettings {
@@ -20,26 +20,29 @@ export class CitrineSettings {
 			disabledUsers: new Set(['DEFAULT']),
 			disabledGuilds: new Set(['DEFAULT']),
 			disabledCommands: new Set(['DEFAULT']),
+			loadedModules: new Set(['core']),
 			aliases: {}
 		};
 	}
 
-	public getGuild(id: GuildID): GuildConfig | null {
-		return;
+	public async getGuild(id: GuildID): Promise<GuildConfig | null> {
+		const conf = new GuildConfig(this.client.db.guilds.get(id));
+		return conf || null;
 	}
 
-	public setGuild(guild: Guild): GuildConfig | CommonError {
-		return;
+	public async setGuild(guild: Guild): Promise<GuildConfig | Error> {
+		const conf = this.client.db.guilds.set(new GuildConfig(guild));
+		return conf;
 	}
-
+/*
 	public getModule(name: string): ModuleConfig | null {
 		return;
 	}
 
-	public setModule(module: object): ModuleConfig | CommonError {
+	public setModule(module: object): ModuleConfig | BaseError {
 		return;
 	}
-
+*/
 	public toJSON(): object {
 		const conf = this.globalConfig;
 		return {
@@ -47,6 +50,7 @@ export class CitrineSettings {
 			disabledUsers: [...conf.disabledUsers],
 			disabledGuilds: [...conf.disabledGuilds],
 			disabledCommands: [...conf.disabledCommands],
+			loadedModules: [...conf.loadedModules]
 		};
 	}
 
@@ -57,7 +61,9 @@ export class CitrineSettings {
 			devs: new Set(conf.devs),
 			disabledGuilds: new Set(conf.disabledGuilds),
 			disabledCommands: new Set(conf.disabledCommands),
-			disabledUsers: new Set(conf.disabledUsers)
+			disabledUsers: new Set(conf.disabledUsers),
+			loadedModules: new Set(conf.loadedModules),
+			aliases: conf.aliases
 		};
 	}
 
