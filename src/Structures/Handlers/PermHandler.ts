@@ -1,9 +1,9 @@
-import { IGuildConfig, Command } from 'typings';
+import { IGuildConfig } from 'typings';
 import { CitrineClient } from '../CitrineClient';
 import { CommandError } from '../ErrorStructs/CommandError';
-import { CommonError } from '../ErrorStructs/CommonError';
+import { BaseError } from '../ErrorStructs/BaseError';
 import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
-
+import { Command } from '../CommandStructs/AbstractCommand';
 import {
 	Message,
 	GuildMember,
@@ -22,7 +22,7 @@ export class PermHandler {
 	public static checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): void | CommandError {
 		const { globalConfig } = client.settings;
 		const config: IGuildConfig | null = client.settings.getGuild(message.guild.id);
-		if (!config) throw new CommonError(ErrorCodes.NOT_FOUND, [`GuildConfig not found (id: ${message.guild.id})`]);
+		if (!config) throw new BaseError(ErrorCodes.NOT_FOUND, [`GuildConfig not found (id: ${message.guild.id})`]);
 
 		const errors = [];
 
@@ -43,14 +43,14 @@ export class PermHandler {
 
 	public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void | Error {
 		const memberPerms = channel.memberPermissions(member);
-		if (memberPerms === null) throw new CommonError(ErrorCodes.NOT_FOUND, [`Member permissions not found (id: ${member.id})`]);
+		if (memberPerms === null) throw new BaseError(ErrorCodes.NOT_FOUND, [`Member permissions not found (id: ${member.id})`]);
 
 		const missing = memberPerms.missing(perms, checkAdmin);
 		if (!missing) return;
 
 		const missingFlags = new Permissions(missing).toArray(checkAdmin);
 		const code = channel.client.user.id === member.id ? ErrorCodes.MISSING_BOT_PERMS : ErrorCodes.MISSING_MEMBER_PERMS;
-		throw new CommonError(code, missingFlags);
+		throw new BaseError(code, missingFlags);
 	}
 
 	public static checkManageMessages(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): void {
