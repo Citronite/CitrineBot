@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 
-class CitrineLogger {
+export class CitrineLogger {
 	constructor() {
 		// Implement this :P
 	}
