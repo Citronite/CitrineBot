@@ -1,7 +1,7 @@
 import { AbstractCommand, Command } from './AbstractCommand';
 import { BaseCommand } from './BaseCommand';
 import { CommandOptions } from 'typings';
-import { BuildEmbed } from '../../Utils/BuildEmbed';
+import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { Context } from '../../Utils/Context';
 
 export class SubCommand extends AbstractCommand {
@@ -39,6 +39,6 @@ export class SubCommand extends AbstractCommand {
 	}
 
 	public noArgsFallback(ctx: Context): void {
-		ctx.send(BuildEmbed.command(ctx, this));
+		ctx.send(QuickEmbed.commandHelp(ctx, this));
 	}
 }

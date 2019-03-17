@@ -5,7 +5,7 @@ import { SubCommand } from '../Structures/CommandStructs/SubCommand';
 import { BaseCommand } from '../Structures/CommandStructs/BaseCommand';
 import { Context } from './Context';
 
-export class BuildEmbed {
+export class QuickEmbed {
 	constructor() {
 		throw new Error('This class may not be instantiated with new');
 	}
@@ -24,7 +24,7 @@ export class BuildEmbed {
 			.setTimestamp();
 	}
 
-	public static common(user: User | GuildMember): RichEmbed {
+	public static base(user: User | GuildMember): RichEmbed {
 		if (user instanceof GuildMember) {
 			const color = user.displayColor;
 
@@ -39,8 +39,8 @@ export class BuildEmbed {
 		}
 	}
 
-	public static command(ctx: Context, cmd: SubCommand | BaseCommand): RichEmbed {
-		const embed = this.common(ctx.message.member || ctx.author);
+	public static commandHelp(ctx: Context, cmd: SubCommand | BaseCommand): RichEmbed {
+		const embed = this.base(ctx.message.member || ctx.author);
 		const baseCmd = cmd instanceof SubCommand ? cmd.getBase() : cmd;
 		const module = baseCmd ? baseCmd.module : '--/--';
 		const baseName = baseCmd ? baseCmd.name : '--/--';
