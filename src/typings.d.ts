@@ -57,6 +57,7 @@ declare module 'typings' {
 		disabledUsers: Set<UserID>;
 		disabledGuilds: Set<GuildID>;
 		disabledCommands: Set<string>;
+		loadedModules: Set<string>;
 		aliases: { [cmd in string]: string[] };
 	}
 /*
