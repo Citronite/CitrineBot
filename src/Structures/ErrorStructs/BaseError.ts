@@ -1,8 +1,8 @@
 import { RichEmbed } from 'discord.js';
-import { BuildEmbed } from '../../Utils/BuildEmbed';
+import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { ErrorCodes } from './ErrorCodes';
 
-export class CommonError extends Error {
+export class BaseError extends Error {
 	public readonly code: number;
 	public readonly type: string;
 	public readonly name: string;
@@ -24,6 +24,6 @@ export class CommonError extends Error {
 	}
 
 	public toEmbed(): RichEmbed {
-		return Embed.error(this.message, this.type).setTitle('Exception Occurred!');
+		return QuickEmbed.error(this.message, this.type).setTitle('Exception Occurred!');
 	}
 }
