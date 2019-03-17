@@ -4,6 +4,7 @@ import { BaseCommand } from './BaseCommand';
 import { SubCommand } from './SubCommand';
 
 export type Command = SubCommand | BaseCommand | AbstractCommand;
+
 type Class = (new(...args: any[]) => any);
 
 export abstract class AbstractCommand {
