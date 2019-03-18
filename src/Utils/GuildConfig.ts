@@ -1,5 +1,4 @@
 import { Guild } from 'discord.js';
-import { CitrineClient } from '../Structures/CitrineClient';
 import {
 	IGuildConfig,
 	GuildID,
