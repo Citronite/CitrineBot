@@ -1,9 +1,13 @@
 import * as path from 'path';
-import { IGlobalConfig, GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
 import { BaseError } from '../ErrorStructs/BaseError';
 import { CitrineClient } from '../CitrineClient';
+import {
+	IGlobalConfig,
+	GuildID,
+	IGuildConfig
+} from 'typings';
 
 export class CitrineSettings {
 	public globalConfig: IGlobalConfig;
@@ -25,14 +29,24 @@ export class CitrineSettings {
 		};
 	}
 
-	public async getGuild(id: GuildID): Promise<GuildConfig | null> {
-		const conf = new GuildConfig(this.client.db.guilds.get(id));
-		return conf || null;
+	public async getGuild(id: GuildID): Promise<GuildConfig> {
+		try {
+			const jsonData = await this.client.db.guilds.get(id);
+			const conf = new GuildConfig(jsonData);
+			return Promise.resolve(conf);
+		} catch (err) {
+			return Promise.reject(null);
+		}
 	}
 
-	public async setGuild(guild: Guild): Promise<GuildConfig | Error> {
-		const conf = this.client.db.guilds.set(new GuildConfig(guild));
-		return conf;
+	public async setGuild(guild: Guild | IGuildConfig): Promise<GuildConfig> {
+		try {
+			const conf = new GuildConfig(guild);
+			await this.client.db.guilds.set(guild.id, conf.toJSON);
+			return Promise.resolve(conf);
+		} catch (err) {
+			return Promise.reject(null);
+		}
 	}
 /*
 	public getModule(name: string): ModuleConfig | null {
@@ -43,16 +57,6 @@ export class CitrineSettings {
 		return;
 	}
 */
-	public toJSON(): object {
-		const conf = this.globalConfig;
-		return {
-			...conf,
-			disabledUsers: [...conf.disabledUsers],
-			disabledGuilds: [...conf.disabledGuilds],
-			disabledCommands: [...conf.disabledCommands],
-			loadedModules: [...conf.loadedModules]
-		};
-	}
 
 	public fromJSON(conf: any): IGlobalConfig {
 		return {
@@ -64,6 +68,17 @@ export class CitrineSettings {
 			disabledUsers: new Set(conf.disabledUsers),
 			loadedModules: new Set(conf.loadedModules),
 			aliases: conf.aliases
+		};
+	}
+
+	public toJSON(): object {
+		const conf = this.globalConfig;
+		return {
+			...conf,
+			disabledUsers: [...conf.disabledUsers],
+			disabledGuilds: [...conf.disabledGuilds],
+			disabledCommands: [...conf.disabledCommands],
+			loadedModules: [...conf.loadedModules]
 		};
 	}
 
