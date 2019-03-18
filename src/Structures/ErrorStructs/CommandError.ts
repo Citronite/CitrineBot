@@ -1,7 +1,7 @@
-import { Command } from 'typings';
-import { CommonError } from './CommonError';
+import { Command } from '../CommandStructs/AbstractCommand';
+import { BaseError } from './BaseError';
 
-export class CommandError extends CommonError {
+export class CommandError extends BaseError {
 	public readonly cmd: Command;
 	constructor(cmd: Command, code: number, errors: string[]) {
 		super(code, errors);

@@ -1,9 +1,8 @@
-import { IGuildConfig, Command } from 'typings';
+import { GuildConfig } from '../../Utils/GuildConfig';
 import { CitrineClient } from '../CitrineClient';
-import { CommandError } from '../ErrorStructs/CommandError';
-import { CommonError } from '../ErrorStructs/CommonError';
+import { BaseError } from '../ErrorStructs/BaseError';
 import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
-
+import { Command } from '../CommandStructs/AbstractCommand';
 import {
 	Message,
 	GuildMember,
@@ -19,38 +18,40 @@ export class PermHandler {
 		throw new Error('This class may not be instantiated with new!');
 	}
 
-	public static checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): void | CommandError {
+	public static async checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): Promise<boolean> {
 		const { globalConfig } = client.settings;
-		const config: IGuildConfig | null = client.settings.getGuild(message.guild.id);
-		if (!config) throw new CommonError(ErrorCodes.NOT_FOUND, [`GuildConfig not found (id: ${message.guild.id})`]);
+		try {
+			const config: GuildConfig = await client.settings.getGuild(message.guild.id);
+			const errors = [];
 
-		const errors = [];
+			if (message.author.id === globalConfig.owner) return Promise.resolve(true);
 
-		if (message.author.id === globalConfig.owner) return;
+			if (globalConfig.disabledUsers.has(message.author.id)) errors.push('Disabled User [Global]');
 
-		if (globalConfig.disabledUsers.has(message.author.id)) errors.push('Disabled User [Global]');
+			if (config.disabledUsers.has(message.author.id)) errors.push('Disabled User [Local]');
 
-		if (config.disabledUsers.has(message.author.id)) errors.push('Disabled User [Local]');
+			if (config.disabledChannels.has(message.channel.id)) errors.push('Disabled Channel');
 
-		if (config.disabledChannels.has(message.channel.id)) errors.push('Disabled Channel');
+			if (globalConfig.disabledCommands.has(cmd.name)) errors.push('Disabled Command [Global]');
 
-		if (globalConfig.disabledCommands.has(cmd.name)) errors.push('Disabled Command [Global]');
+			if (config.disabledCommands.has(cmd.name)) errors.push('Disabled Command [Local]');
 
-		if (config.disabledCommands.has(cmd.name)) errors.push('Disabled Command [Local]');
-
-		if (errors.length) throw new CommandError(cmd, ErrorCodes.FAILED_CUSTOM_FILTERS, errors);
+			return errors.length ? Promise.reject(new BaseError(ErrorCodes.FAILED_CUSTOM_FILTERS, errors)) : Promise.resolve(true);
+		} catch (err) {
+			return Promise.reject(err);
+		}
 	}
 
-	public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void | Error {
+	public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void | BaseError {
 		const memberPerms = channel.memberPermissions(member);
-		if (memberPerms === null) throw new CommonError(ErrorCodes.NOT_FOUND, [`Member permissions not found (id: ${member.id})`]);
+		if (memberPerms === null) throw new BaseError(ErrorCodes.NOT_FOUND, [`Member permissions not found (id: ${member.id})`]);
 
 		const missing = memberPerms.missing(perms, checkAdmin);
 		if (!missing) return;
 
 		const missingFlags = new Permissions(missing).toArray(checkAdmin);
 		const code = channel.client.user.id === member.id ? ErrorCodes.MISSING_BOT_PERMS : ErrorCodes.MISSING_MEMBER_PERMS;
-		throw new CommonError(code, missingFlags);
+		throw new BaseError(code, missingFlags);
 	}
 
 	public static checkManageMessages(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): void {

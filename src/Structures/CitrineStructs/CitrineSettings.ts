@@ -1,9 +1,13 @@
 import * as path from 'path';
-import { IGlobalConfig, GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
-import { CommonError } from '../ErrorStructs/CommonError';
+import { BaseError } from '../ErrorStructs/BaseError';
 import { CitrineClient } from '../CitrineClient';
+import {
+	IGlobalConfig,
+	GuildID,
+	IGuildConfig
+} from 'typings';
 
 export class CitrineSettings {
 	public globalConfig: IGlobalConfig;
@@ -19,24 +23,52 @@ export class CitrineSettings {
 			devs: new Set(['DEFAULT']),
 			disabledUsers: new Set(['DEFAULT']),
 			disabledGuilds: new Set(['DEFAULT']),
-			disabledCommands: new Set(['DEFAULT'])
+			disabledCommands: new Set(['DEFAULT']),
+			loadedModules: new Set(['core']),
+			aliases: {}
 		};
 	}
 
-	public getGuild(id: GuildID): GuildConfig | null {
-		return;
+	public async getGuild(id: GuildID): Promise<GuildConfig> {
+		try {
+			const jsonData = await this.client.db.guilds.get(id);
+			const conf = new GuildConfig(jsonData);
+			return Promise.resolve(conf);
+		} catch (err) {
+			return Promise.reject(null);
+		}
 	}
 
-	public setGuild(guild: Guild): GuildConfig | CommonError {
-		return;
+	public async setGuild(guild: Guild | IGuildConfig): Promise<GuildConfig> {
+		try {
+			const conf = new GuildConfig(guild);
+			await this.client.db.guilds.set(guild.id, conf.toJSON);
+			return Promise.resolve(conf);
+		} catch (err) {
+			return Promise.reject(null);
+		}
 	}
-
+/*
 	public getModule(name: string): ModuleConfig | null {
 		return;
 	}
 
-	public setModule(module: object): ModuleConfig | CommonError {
+	public setModule(module: object): ModuleConfig | BaseError {
 		return;
+	}
+*/
+
+	public fromJSON(conf: any): IGlobalConfig {
+		return {
+			owner: conf.owner,
+			prefix: conf.prefix,
+			devs: new Set(conf.devs),
+			disabledGuilds: new Set(conf.disabledGuilds),
+			disabledCommands: new Set(conf.disabledCommands),
+			disabledUsers: new Set(conf.disabledUsers),
+			loadedModules: new Set(conf.loadedModules),
+			aliases: conf.aliases
+		};
 	}
 
 	public toJSON(): object {
@@ -46,17 +78,7 @@ export class CitrineSettings {
 			disabledUsers: [...conf.disabledUsers],
 			disabledGuilds: [...conf.disabledGuilds],
 			disabledCommands: [...conf.disabledCommands],
-		};
-	}
-
-	public fromJSON(conf: any): IGlobalConfig {
-		return {
-			owner: conf.owner,
-			prefix: conf.prefix,
-			devs: new Set(conf.devs),
-			disabledGuilds: new Set(conf.disabledGuilds),
-			disabledCommands: new Set(conf.disabledCommands),
-			disabledUsers: new Set(conf.disabledUsers)
+			loadedModules: [...conf.loadedModules]
 		};
 	}
 

@@ -13,5 +13,7 @@ export const Colors: any = {
 	LIGHT: 0xf9fcff,
 	CYAN: 0x00FFFF,
 	PINK: 0xF77FBE,
-	BOT: 0xFFEF00
+	BOT: 0xFFEF00 // The CANARY color.
 };
+
+export const Colours = Colors;

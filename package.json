@@ -1,8 +1,8 @@
 {
   "name": "citrine-ts",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "��#\u0000 \u0000c\u0000i\u0000t\u0000r\u0000i\u0000n\u0000e\u0000\r\u0000 \u0000",
-  "main": "index.js",
+  "main": "bin/citrine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,10 +10,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/keyv": "^3.1.0",
     "@types/node": "^11.9.4",
     "tslint-config-fire": "^1.0.1"
   },
   "dependencies": {
+    "@keyv/sqlite": "^2.0.0",
     "discord.js": "^11.4.2",
     "keyv": "^3.1.0",
     "uws": "^100.0.1",

@@ -1,5 +1,5 @@
 import { IContext } from 'typings';
-import { BuildEmbed } from './BuildEmbed';
+import { QuickEmbed } from './QuickEmbed';
 
 import { Client,
 	Message,
@@ -31,7 +31,7 @@ export class Context implements IContext {
 
 	public async success(msg: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			const embed = BuildEmbed.success(msg);
+			const embed = QuickEmbed.success(msg);
 			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`✅ **Success:** ${msg}`);
@@ -40,7 +40,7 @@ export class Context implements IContext {
 
 	public async error(msg: string, type: string, embed: boolean = true): Promise<Message | Message[]> {
 		if (embed) {
-			const embed = BuildEmbed.error(msg, type);
+			const embed = QuickEmbed.error(msg, type);
 			return this.channel.send(embed);
 		} else {
 			return this.channel.send(`⛔ **Error:** ${msg}`);
