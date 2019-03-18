@@ -78,13 +78,17 @@ export class GuildConfig implements IGuildConfig {
 		this.reqRoles[cmd] = undefined;
 	}
 
-	public toString(): string {
-		const tmp = {
+	public toJSON(): object {
+		return {
 			...this,
 			disabledUsers: [...this.disabledUsers],
 			disabledChannels: [...this.disabledChannels],
 			disabledCommands: [...this.disabledCommands],
 		};
-		return JSON.stringify(tmp, null, '\t');
+	}
+
+	public toString(): string {
+		const obj = this.toJSON();
+		return JSON.stringify(obj, null, '\t');
 	}
 }
