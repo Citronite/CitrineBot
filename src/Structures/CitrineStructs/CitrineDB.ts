@@ -4,4 +4,8 @@ export class CitrineDB {
 	constructor() {
 		// TODO
 	}
+
+	public add(name: string) {
+		return name;
+	}
 }
