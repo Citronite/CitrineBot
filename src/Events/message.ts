@@ -1,17 +1,27 @@
 import { Message } from 'discord.js';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { GuildConfig } from '../Utils/GuildConfig';
+import { BaseError } from '../Structures/ErrorStructs/BaseError';
+import { ErrorCodes } from '../Structures/ErrorStructs/ErrorCodes';
 
 module.exports = {
 	name: 'message',
-	maxListeners: 5,
-	listener: (client: CitrineClient, message: Message): void => {
+	maxListeners: 1,
+	listener: async (client: CitrineClient, message: Message): Promise<void> => {
 		const { settings } = client;
-		const { CmdHandler } = client.utils;
+		const { cmdHandler } = client;
+		let config: GuildConfig | null = null;
+		try {
+			config = await settings.getGuild(message.guild.id);
+			if (!config) config =  await settings.setGuild(message.guild);
+			if (!config) throw new BaseError(ErrorCodes.UNKNOWN_ERROR, ['']);
 
-		const config: GuildConfig = settings.getGuild(message.guild) || settings.setGuild(message.guild);
-		if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
+			if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
 
-		CmdHandler.processCmd(message, config); // CmdHandler.processCmd() should ONLY check perms, and then execute cmd. no other side effects.
+			cmdHandler.processCommand(message, config);
+
+		} catch (err) {
+			client.logger.error(err);
+		}
 	}
 };
