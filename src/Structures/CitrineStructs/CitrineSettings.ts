@@ -10,8 +10,10 @@ import {
 } from 'typings';
 
 export class CitrineSettings {
-	public globalConfig: IGlobalConfig;
+	public readonly globalConfig: IGlobalConfig;
+	public readonly stats: object;
 	public readonly client: CitrineClient;
+
 	constructor(client: CitrineClient) {
 		// Implement this!
 		this.client = client; // In the output JS files, use Reflect.defineProperty()
@@ -27,36 +29,26 @@ export class CitrineSettings {
 			loadedModules: new Set(['core']),
 			aliases: {}
 		};
+
+		this.stats = {
+			processedCommands: 0,
+			messagesRead: 0,
+		};
 	}
 
-	public async getGuild(id: GuildID): Promise<GuildConfig> {
-		try {
-			const jsonData = await this.client.db.guilds.get(id);
-			const conf = new GuildConfig(jsonData);
-			return Promise.resolve(conf);
-		} catch (err) {
-			return Promise.reject(null);
-		}
+	public async save(): Promise<boolean> {
+		// To be implemented.
+		// This function doesnt take or return anything. Simply saves the bot's current settings
+		// e.g. stats and globalConfig to the db
+		return Promise.reject(false);
 	}
 
-	public async setGuild(guild: Guild | IGuildConfig): Promise<GuildConfig> {
-		try {
-			const conf = new GuildConfig(guild);
-			await this.client.db.guilds.set(guild.id, conf.toJSON);
-			return Promise.resolve(conf);
-		} catch (err) {
-			return Promise.reject(null);
-		}
+	public async load(): Promise<boolean> {
+		// To be implemented
+		// This function doesn't take or return anything. Simply fetches bot's settings
+		// e.g. stats and globalConfig from the db, and updates them.
+		return Promise.reject(false);
 	}
-/*
-	public getModule(name: string): ModuleConfig | null {
-		return;
-	}
-
-	public setModule(module: object): ModuleConfig | BaseError {
-		return;
-	}
-*/
 
 	public fromJSON(conf: any): IGlobalConfig {
 		return {
