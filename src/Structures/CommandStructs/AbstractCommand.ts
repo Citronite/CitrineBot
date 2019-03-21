@@ -2,10 +2,12 @@ import { Collection } from 'discord.js';
 import { CommandOptions } from 'typings';
 import { BaseCommand } from './BaseCommand';
 import { SubCommand } from './SubCommand';
+import { Context } from '../../Utils/Context';
 
-export type Command = SubCommand | BaseCommand | AbstractCommand;
+export type Command = SubCommand | BaseCommand;
 
-type Class = (new(...args: any[]) => any);
+type tCommand = SubCommand | BaseCommand | AbstractCommand;
+type tClass = (new(...args: any[]) => any);
 
 export abstract class AbstractCommand {
 	public subcommands?: Collection<string, SubCommand>;
@@ -19,7 +21,11 @@ export abstract class AbstractCommand {
 		this.usage = options.usage || '';
 	}
 
-	public registerSubCommands(...subCmds: Array<Class>): Command {
+	public async execute(ctx: Context, ...args: any[]): Promise<void> {
+		return;
+	}
+
+	public registerSubCommands(...subCmds: Array<tClass>): tCommand {
 		this.subcommands = new Collection();
 		for (const subCmd of subCmds) {
 			const instance = new subCmd();
