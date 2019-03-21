@@ -1,8 +1,6 @@
 import { RichEmbed, User, GuildMember } from 'discord.js';
 import { Colors } from './Constants';
 import { Command } from '../Structures/CommandStructs/AbstractCommand';
-import { SubCommand } from '../Structures/CommandStructs/SubCommand';
-import { BaseCommand } from '../Structures/CommandStructs/BaseCommand';
 import { Context } from './Context';
 
 export class QuickEmbed {
@@ -39,42 +37,16 @@ export class QuickEmbed {
 		}
 	}
 
-	public static commandHelp(ctx: Context, cmd: SubCommand | BaseCommand): RichEmbed {
+	public static commandHelp(ctx: Context, cmd: Command): RichEmbed {
 		const embed = this.base(ctx.message.member || ctx.author);
-		const baseCmd = cmd instanceof SubCommand ? cmd.getBase() : cmd;
-		const module = baseCmd ? baseCmd.module : '--/--';
-		const baseName = baseCmd ? baseCmd.name : '--/--';
+		const help = ctx.client.utils.format.commandHelp(cmd);
 
-		embed.setTitle(cmd.name)
-			.setDescription(cmd.description)
-			.addField('Module', module, true)
-			.addField('Base Command', baseName, true);
-
-		if (cmd.usage) {
-			const codeblock = `\`\`\`\n${cmd.usage}\n\`\`\``;
-			embed.addField('Command Usage', codeblock, false);
-		}
-
-		if (cmd.subcommands) {
-			const names = [];
-			const descrips = [];
-			const final = [];
-
-			for (const [key, val] of cmd.subcommands) {
-				names.push(key);
-				descrips.push(val.description);
-			}
-
-			const longest = names.reduce((acc, cur) => acc > cur.length ? acc : cur.length, 0);
-
-			for (let x = 0; x <= names.length; x++) {
-				const str = names[x].padEnd(longest + 2) + descrips[x];
-				final.push(str);
-			}
-
-			const codeblock = `\`\`\`\n${final.join('\n')}\`\`\``;
-			embed.addField('SubCommands', codeblock);
-		}
+		embed.setTitle(help.name)
+			.setDescription(help.description)
+			.addField('Chip', help.module, true)
+			.addField('Base Command', help.base, true)
+			.addField('Usage', help.usage, false)
+			.addField('SubCommands', help.subcommands, false);
 
 		return embed;
 	}
