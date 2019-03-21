@@ -1,7 +1,8 @@
 import { IContext } from 'typings';
 import { QuickEmbed } from './QuickEmbed';
-
-import { Client,
+import { CitrineClient } from '../Structures/CitrineClient';
+import {
+	Client,
 	Message,
 	User,
 	TextChannel,
@@ -15,7 +16,7 @@ import { Client,
 type reaction = string | Emoji | ReactionEmoji;
 
 export class Context implements IContext {
-	public readonly client: Client;
+	public readonly client: any; // This is actually CitrineClient but TypeScript is dumb, so yeah. /shrug
 	public readonly invokedPrefix: string;
 	public readonly message: Message;
 	public readonly author: User;
