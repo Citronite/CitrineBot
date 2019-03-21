@@ -1,4 +1,6 @@
+
 declare module 'typings' {
+
 	import { 
 		Collection, 
 		Client, 
@@ -65,14 +67,12 @@ declare module 'typings' {
 		subcommands?: Collection<string, ISubCommand>;
 		readonly name: string;
 		readonly description: string;
-		readonly usageArgs: Array<string[]>;
+		readonly usage: Array<string[]>;
 		registerSubCommands: (...subCmds: ISubCommand[]) => IAbstractCommand;
 	}
 
 	export interface IBaseCommand extends IAbstractCommand {
 		readonly module: string;
-		setAlias: (alias: string) => string[];
-		unsetAlias: (alias: string) => string[];
 		execute: (ctx: IContext, ...args: string[]) => void;
 		noArgsFallback?: (ctx: IContext) => void;
 	}
