@@ -4,12 +4,12 @@ import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { Context } from '../../Utils/Context';
 
 export class BaseCommand extends AbstractCommand {
-	public readonly module: string;
+	public readonly chip: string;
 
-	constructor(name: string, module: string, options: CommandOptions) {
+	constructor(name: string, chip: string, options: CommandOptions) {
 		super(name, options);
 
-		this.module = module;
+		this.chip = chip;
 	}
 
 	public noArgsFallback(ctx: Context): void {
