@@ -19,10 +19,10 @@ export class BaseError extends Error {
 		this.message = `Error(s):\n\t${errors.join('\n')}`;
 	}
 
-	public toString(): string {
+	public toString(code: boolean = true): string {
 		const top = `⛔ ${this.name} ⛔`;
 		const msg = this.message;
-		return `\`\`\`\n${top}\n\n${msg}\n\`\`\``;
+		return code ? `\`\`\`\n${top}\n\n${msg}\n\`\`\`` : `${top}\n\n${msg}`;
 	}
 
 	public toEmbed(): RichEmbed {
