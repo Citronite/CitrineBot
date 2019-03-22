@@ -16,7 +16,7 @@ import {
 type reaction = string | Emoji | ReactionEmoji;
 
 export class Context implements IContext {
-	public readonly client: any; // This is actually CitrineClient but TypeScript is dumb, so yeah. /shrug
+	public readonly client: any; // This is actually CitrineClient but TypeScript is dumb, so yeah.
 	public readonly invokedPrefix: string;
 	public readonly message: Message;
 	public readonly author: User;
