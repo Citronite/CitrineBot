@@ -6,7 +6,6 @@ import { BaseError } from '../ErrorStructs/BaseError';
 import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
 import { Context } from '../../Utils/Context';
 import { ExceptionParser } from '../ErrorStructs/ExceptionParser';
-import { ICmdHandler } from 'typings';
 
 export class CmdHandler {
 	constructor() {
