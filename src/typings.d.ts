@@ -9,8 +9,10 @@ declare module 'typings' {
 		GuildMember, 
 		Guild, 
 		Channel,
+		TextChannel,
 		Snowflake,
-		MessageReaction
+		MessageReaction,
+		PermissionResolvable
 	} from 'discord.js';
 
 	export type GuildID = Snowflake;
@@ -50,6 +52,9 @@ declare module 'typings' {
 		disabledChannels: Set<ChannelID>;
 		disabledCommands: Set<string>;
 		reqRoles: { [cmd in string]: RoleID | undefined };
+		setReqRole: (cmd: any, role: RoleID) => void;
+		unsetReqRole: (cmd: any) => void;
+		toJSON: () => object;
 	}
 
 	export interface IGlobalConfig {
@@ -61,6 +66,25 @@ declare module 'typings' {
 		disabledCommands: Set<string>;
 		loadedModules: Set<string>;
 		aliases: { [cmd in string]: string[] };
+	}
+
+	export interface ICmdHandler {
+		checkPrefix: (message: any, config: IGuildConfig) => string | null;
+		getArgs: (message: any, prefix: string, parseQuotes: boolean) => string[] | null;
+		getBaseCmd: (message: any, args: string[]) => [any, string[]] | [null, null];
+		getFinalCmd: (message: Message, args: string[]) => [any, string[]] | [null, null];
+		processCommand: (message: any, config: IGuildConfig) => Promise<void>;
+	}
+
+	export interface IPermHandler {
+		checkCustomFilters: (cmd: any, message: Message, client: any) => Promise<boolean>;
+		checkDiscordPerms: (channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin?: boolean) => void | Error;
+		checkManageMessages: (channel: TextChannel, member: GuildMember, checkAdmin?: boolean) => boolean;
+		checkBan: (channel: TextChannel, member: GuildMember, checkAdmin?: boolean) => boolean;
+		checkKick(channel: TextChannel, member: GuildMember, checkAdmin?: boolean): boolean;
+		checkGuildOwner: (guild: Guild, member: GuildMember) => boolean;
+		checkBotOwner: (user: User | GuildMember) => boolean;
+		checkBotDev: (user: User | GuildMember) => boolean;
 	}
 /*
 	interface IAbstractCommand {
