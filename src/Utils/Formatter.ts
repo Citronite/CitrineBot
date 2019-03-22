@@ -31,9 +31,9 @@ export class Formatter {
 	 */
 	public static codeblock(str: string | string[], lang: string = ''): string | string[] {
 		if (typeof str === 'string') {
-			return `\`\`\`\n${str}\`\`\``;
+			return `\`\`\`${lang}\n${str}\`\`\``;
 		} else {
-			return str.map(val => `\`\`\`\n${val}\`\`\``);
+			return str.map(val => `\`\`\`${lang}\n${val}\`\`\``);
 		}
 	}
 
@@ -92,7 +92,7 @@ export class Formatter {
 				final.push(str);
 			}
 
-			subcommands = useCodeBlocks ? `\`\`\`\n${final.join('\n')}\m\`\`\`` : final.join('\n');
+			subcommands = useCodeBlocks ? `\`\`\`\n${final.join('\n')}\n\`\`\`` : final.join('\n');
 		}
 
 		return {
