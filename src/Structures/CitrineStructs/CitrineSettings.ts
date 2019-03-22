@@ -1,16 +1,10 @@
 import * as path from 'path';
-import { GuildConfig } from '../../Utils/GuildConfig';
-import { Guild } from 'discord.js';
 import { BaseError } from '../ErrorStructs/BaseError';
 import { CitrineClient } from '../CitrineClient';
-import {
-	IGlobalConfig,
-	GuildID,
-	IGuildConfig
-} from 'typings';
+import { IGlobalConfig } from 'typings';
 
 export class CitrineSettings {
-	public readonly globalConfig: IGlobalConfig;
+	public readonly global: IGlobalConfig;
 	public readonly stats: object;
 	public readonly client: CitrineClient;
 
@@ -19,14 +13,14 @@ export class CitrineSettings {
 		this.client = client; // In the output JS files, use Reflect.defineProperty()
 
 		// On launch, get the config from the db and replace this with that.
-		this.globalConfig = {
+		this.global = {
 			owner: 'DEFAULT',
 			prefix: 'DEFAULT',
 			devs: new Set(['DEFAULT']),
-			disabledUsers: new Set(['DEFAULT']),
-			disabledGuilds: new Set(['DEFAULT']),
-			disabledCommands: new Set(['DEFAULT']),
-			loadedModules: new Set(['core']),
+			disabledUsers: new Set(),
+			disabledGuilds: new Set(),
+			disabledCommands: new Set(),
+			loadedModules: new Set(),
 			aliases: {}
 		};
 
@@ -64,7 +58,7 @@ export class CitrineSettings {
 	}
 
 	public toJSON(): object {
-		const conf = this.globalConfig;
+		const conf = this.global;
 		return {
 			...conf,
 			disabledUsers: [...conf.disabledUsers],
