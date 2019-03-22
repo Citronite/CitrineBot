@@ -42,7 +42,7 @@ export class GuildConfig implements IGuildConfig {
 			this.prefix = client.settings.global.prefix;
 			this.disabledRole = '';
 			this.deleteCmdCalls = false;
-			this.deleteCmdCallsDelay = 0;
+			this.deleteCmdCallsDelay = 2000;
 			this.readMsgEdits = false;
 			this.disabledUsers = new Set();
 			this.disabledChannels = new Set();
