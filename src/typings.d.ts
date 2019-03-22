@@ -12,7 +12,11 @@ declare module 'typings' {
 		TextChannel,
 		Snowflake,
 		MessageReaction,
-		PermissionResolvable
+		PermissionResolvable,
+		SplitOptions,
+		DeconstructedSnowflake,
+		Role,
+		GuildChannel
 	} from 'discord.js';
 
 	export type GuildID = Snowflake;
@@ -85,6 +89,39 @@ declare module 'typings' {
 		checkGuildOwner: (guild: Guild, member: GuildMember) => boolean;
 		checkBotOwner: (user: User | GuildMember) => boolean;
 		checkBotDev: (user: User | GuildMember) => boolean;
+	}
+
+	export interface IDjsUtils {
+		escapeMarkdown: (text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean) => string;
+		fetchRecommendedShards: (token: string, guildsPerShard?: number) => Promise<number>;
+		splitMessage: (text: string, options?: SplitOptions) => string | string[];
+		deconstructSnowflake: (snowflake: string) => DeconstructedSnowflake;
+		generateSnowflake: (timestamp?: number | Date) => Snowflake;
+		inlineCode: (str: string | string[]) => string | string[];
+		blockCode: (str: string | string[], lang?: string) => string | string[];
+		parseMention: (mention: string) => string;
+		parseQuotes: (text: string) => (string | undefined)[];
+		resolveRole: (guild: Guild, role: string) => Role | null;
+		resolveGuildChannel: (guild: Guild, channel: string) => GuildChannel | null;
+		resolveUser: (client: Client, user: string) => Promise<User | null>;
+		resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
+	}
+
+	export interface IJsUtils {
+		cloneData: (obj: object) => object;
+		arrRandom: (arr: any[]) => any[];
+		objRandom: (obj: any[]) => any[];
+		arrErase: (arr: any[], ...args: any[]) => any[];
+		arrToggle: (original: any[], toggleArr: any[]) => any[];
+		objToMap: (obj: any) => Collection<any, any>;
+		mapToObj: (map: Map<any, any> | Collection<any, any>) => object;
+		isInstance: (obj: object, cls: any) => boolean;
+	}
+
+	export interface IFormatter {
+		inline: (str: string | string[]) => string | string[];
+		codeblock: (str: string | string[], lang?: string) => string | string[];
+		commandHelp(cmd: any, maxWidth?: number, useCodeBlocks?: boolean): object;
 	}
 /*
 	interface IAbstractCommand {
