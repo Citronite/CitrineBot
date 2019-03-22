@@ -101,7 +101,8 @@ export class DjsUtils {
 			const fetched = await client.fetchUser(parsedUser);
 			return fetched || null;
 		}	catch(err) {
-			// client.logger.warn(`<Client>.fetchUser() failed for [${user}]`);
+			const tsIsDumb: any = client;
+			tsIsDumb.logger.warn(`<Client>.fetchUser() failed for [${user}]`);
 			return null;
 		}
 	}
@@ -127,7 +128,8 @@ export class DjsUtils {
 			return fetchedGuild.members.find(finder) || null;
 
 		}	catch (err) {
-			// guild.client.logger.warn(`<Client>.fetchMembers() failed for [${member}]`);
+			const client: any = guild.client;
+			client.logger.warn(`<Client>.fetchMembers() failed for [${member}]`);
 			return null;
 		}
 	}
