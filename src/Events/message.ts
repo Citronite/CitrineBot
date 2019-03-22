@@ -2,26 +2,24 @@ import { Message } from 'discord.js';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { GuildConfig } from '../Utils/GuildConfig';
 import { BaseError } from '../Structures/ErrorStructs/BaseError';
-import { ErrorCodes } from '../Structures/ErrorStructs/ErrorCodes';
+import { ExceptionParser } from '../Structures/ErrorStructs/ExceptionParser';
 
 module.exports = {
 	name: 'message',
 	maxListeners: 1,
 	listener: async (client: CitrineClient, message: Message): Promise<void> => {
-		const { settings } = client;
-		const { cmdHandler } = client;
+		const { cmdHandler, db } = client;
 		let config: GuildConfig | null = null;
+
 		try {
-			config = await settings.getGuild(message.guild.id);
-			if (!config) config =  await settings.setGuild(message.guild);
-			if (!config) throw new BaseError(ErrorCodes.UNKNOWN_ERROR, ['']);
+			config = await db.getGuild(message.guild.id);
+			if (!config) config =  await db.setGuild(message.guild);
+			if (!config) throw new BaseError(999, ExceptionParser.getDefaultMessages()[999]);
 
-			if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
-
-			cmdHandler.processCommand(message, config);
+			await cmdHandler.processCommand(message, config);
 
 		} catch (err) {
-			client.logger.error(err);
+			client.logger.error();
 		}
 	}
 };
