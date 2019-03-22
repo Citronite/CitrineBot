@@ -11,6 +11,9 @@ import { Util,
 	GuildMember
 } from 'discord.js';
 
+/**
+ * Extra djs-related utility functions.
+ */
 export class DjsUtils {
 	constructor() {
 		throw new Error('This class may not be instantiated!');
