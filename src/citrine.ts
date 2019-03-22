@@ -26,7 +26,7 @@ const citrine = new CitrineClient(options);
 
 (async () => {
 	try {
-		citrine.initModules(defaultModules);
+		citrine.initChips(defaultModules);
 		citrine.initEvents();
 		citrine.initDB();
 

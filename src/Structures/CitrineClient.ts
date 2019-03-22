@@ -27,8 +27,8 @@ export class CitrineClient extends Client {
 		this.permHandler = PermHandler;
 	}
 
-	public initModules(defaultModules: string[]): boolean {
-		return !!defaultModules;
+	public initChips(defaultChips: string[]): boolean {
+		return !!defaultChips;
 	}
 
 	public initEvents(): boolean {
@@ -39,19 +39,19 @@ export class CitrineClient extends Client {
 		return 1 > 0;
 	}
 
-	public async loadModule(): Promise<boolean> {
+	public async loadChip(): Promise<boolean> {
 		return Promise.reject(false);
 	}
 
-	public async unloadModule(): Promise<boolean> {
+	public async unloadChip(): Promise<boolean> {
 		return Promise.reject(false);
 	}
 
-	public async clearCachedModule(): Promise<boolean> {
+	public async clearCachedChip(): Promise<boolean> {
 		return Promise.reject(false);
 	}
 
-	public async reloadModule(): Promise<boolean> {
+	public async reloadChip(): Promise<boolean> {
 		return Promise.reject(false);
 	}
 
