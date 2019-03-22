@@ -5,6 +5,7 @@ import { CitrineDB } from './CitrineStructs/CitrineDB';
 import { Client, ClientOptions } from 'discord.js';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
+import { ICmdHandler, IPermHandler } from 'typings';
 
 export class CitrineClient extends Client {
 	public readonly settings: CitrineSettings;
@@ -12,16 +13,16 @@ export class CitrineClient extends Client {
 	public readonly utils: CitrineUtils;
 	public readonly db: CitrineDB;
 
-	public readonly cmdHandler: CmdHandler;
-	public readonly permHandler: PermHandler;
+	public readonly cmdHandler: ICmdHandler;
+	public readonly permHandler: IPermHandler;
 
 	constructor(options: ClientOptions) {
 		super(options);
 
 		this.settings = new CitrineSettings(this);
-		this.logger = new CitrineLogger();
+		this.logger = new CitrineLogger(this);
 		this.utils = new CitrineUtils();
-		this.db = new CitrineDB();
+		this.db = new CitrineDB(this);
 
 		this.cmdHandler = CmdHandler;
 		this.permHandler = PermHandler;
