@@ -4,9 +4,9 @@ import { BaseCommand } from '../CommandStructs/BaseCommand';
 import { Command } from '../CommandStructs/AbstractCommand';
 import { BaseError } from '../ErrorStructs/BaseError';
 import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
-import { CommandError } from '../ErrorStructs/CommandError';
 import { Context } from '../../Utils/Context';
 import { ExceptionParser } from '../ErrorStructs/ExceptionParser';
+import { ICmdHandler } from 'typings';
 
 export class CmdHandler {
 	constructor() {
@@ -101,7 +101,10 @@ export class CmdHandler {
 			if (!cmd) return;
 			if (!finalArgs) finalArgs = [''];
 
-			// Create the Context class.
+			// Now we know that the message is a bot command, check if
+			// config.deleteCmdCalls is true for this guild, if so, delete the message.
+			if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
+
 			const ctx = new Context(message, invokedPrefix);
 
 			try {
@@ -115,8 +118,11 @@ export class CmdHandler {
 			} catch (err) {
 				// If the error occurred within the chip command, or the customFilterCheck,
 				// then send it to the chat and return.
+				// If the error was unknown, then log it to console.
 				const parsed = ExceptionParser.parse(err, cmd);
 				ctx.send(parsed.toEmbed());
+				if (err.code === 999) message.client.logger.error(err);
+
 				return;
 			}
 		} catch (err) {
