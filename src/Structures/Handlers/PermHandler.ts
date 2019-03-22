@@ -19,9 +19,11 @@ export class PermHandler {
 	}
 
 	public static async checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): Promise<boolean> {
-		const { globalConfig } = client.settings;
+		const { global: globalConfig } = client.settings;
 		try {
-			const config: GuildConfig = await client.settings.getGuild(message.guild.id);
+			const config: GuildConfig | null = await client.db.getGuild(message.guild.id);
+			if (!config) throw new BaseError(ErrorCodes.NOT_FOUND, ['GuildConfig not found']);
+
 			const errors = [];
 
 			if (message.author.id === globalConfig.owner) return Promise.resolve(true);
@@ -54,28 +56,28 @@ export class PermHandler {
 		throw new BaseError(code, missingFlags);
 	}
 
-	public static checkManageMessages(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): void {
-		return;
+	public static checkManageMessages(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): boolean {
+		return false;
 	}
 
-	public static checkBan(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): void {
-		return;
+	public static checkBan(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): boolean {
+		return false;
 	}
 
-	public static checkKick(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): void {
-		return;
+	public static checkKick(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): boolean {
+		return false;
 	}
 
-	public static checkGuildOwner(guild: Guild, member: GuildMember): void {
-		return;
+	public static checkGuildOwner(guild: Guild, member: GuildMember): boolean {
+		return false;
 	}
 
-	public static checkBotOwner(user: User | GuildMember): void {
-		return;
+	public static checkBotOwner(user: User | GuildMember): boolean {
+		return false;
 	}
 
-	public static checkBotDev(): void {
-		return;
+	public static checkBotDev(): boolean {
+		return false;
 	}
 
 }
