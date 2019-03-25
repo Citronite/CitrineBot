@@ -14,7 +14,7 @@ rl.currMenu = undefined;
 
 // Simple shorthand function for console.log
 function println(str) {
-	console.log(str + '\n');
+	console.log(` ${str}\n`);
 }
 
 // Another rather redundant shorthand :P
