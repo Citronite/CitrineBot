@@ -1,65 +1,56 @@
-const Menu = require('./Menu.js');
+const AbstractMenu = require('./AbstractMenu.js');
+const ChipsMenu = require('./ChipsMenu.js');
 const RepairsMenu = require('./RepairsMenu.js');
 const GuidesMenu = require('./GuidesMenu.js');
-const CLI = require('../cli.js');
+const CreditsMenu = require('./CreditsMenu.js');
+const { rl, println, printMenu, sleep } = require('../cli.js');
 
-const { println, printMenu, sleep } = CLI;
+const Chips = new ChipsMenu();
 const Repairs = new RepairsMenu();
 const Guides = new GuidesMenu();
+const Credits = new CreditsMenu();
 
-class HomeMenu extends Menu {
+class HomeMenu extends AbstractMenu {
 	constructor() {
 		super({
 			title: 'Welcome to the Citrine Launcher! What would you like to do?',
 			choices: [
 				'Launch Citrine',
+				'Manage Chips',
 				'Repairs / Maintenance',
 				'View Guides / Documentations',
-				'View Credits',
-				'View License',
+				'View Credits / License',
 			],
 		});
 		this.code = 0;
 	}
 
 	async 1() {
-		CLI.rl.currMenu = { code: 9 };
+		rl.currMenu = { code: 9 };
 
 		await sleep(500);
 		println('Launch Citrine');
 
 		await sleep(500);
-		println('0. Go back to the homepage');
+		println('0. Shut down Citrine & go back to the homepage');
 
-		CLI.rl.prompt();
+		rl.prompt();
 	}
 
-	2() { printMenu(Repairs); }
+	2() {
+		printMenu(Chips);
+	}
 
-	3() { printMenu(Guides); }
+	3() {
+		printMenu(Repairs);
+	}
 
-	async 4() {
-		CLI.rl.currMenu = { code: 9 };
-
-		await sleep(500);
-		println('Show Credits (or just link to github repo)');
-
-		await sleep(500);
-		println('0. Go back to the homepage');
-
-		CLI.rl.prompt();
+	4() {
+		printMenu(Guides);
 	}
 
 	async 5() {
-		CLI.rl.currMenu = { code: 9 };
-
-		await sleep(500);
-		println('Show License (or just link to github repo)');
-
-		await sleep(500);
-		println('0. Go back to the homepage');
-
-		CLI.rl.prompt();
+		printMenu(Credits);
 	}
 }
 

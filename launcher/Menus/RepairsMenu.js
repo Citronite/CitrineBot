@@ -1,7 +1,7 @@
-const Menu = require('./Menu.js');
+const AbstractMenu = require('./AbstractMenu.js');
 const { println } = require('../cli.js');
 
-class RepairsMenu extends Menu {
+class RepairsMenu extends AbstractMenu {
 	constructor() {
 		super({
 			title: 'What would you like to do?',
@@ -14,7 +14,7 @@ class RepairsMenu extends Menu {
 			],
 		});
 
-		this.code = 1;
+		this.code = 2;
 	}
 
 	1() { println('Recompile'); }

@@ -1,4 +1,4 @@
-class Menu {
+class AbstractMenu {
 	constructor(options) {
 		this.title = options.title;
 		this.choices = options.choices;
@@ -10,4 +10,4 @@ class Menu {
 	}
 }
 
-module.exports = Menu;
+module.exports = AbstractMenu;
