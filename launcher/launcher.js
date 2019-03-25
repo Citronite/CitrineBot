@@ -1,4 +1,8 @@
 const fs = require('fs');
+const { exec } = require('child_process');
+// const path = require('path');
+const HomeMenu = require('./Menus/HomeMenu.js');
+const Home = new HomeMenu();
 const {
 	cls,
 	sleep,
@@ -9,9 +13,18 @@ const {
 	rl,
 	printMenu,
 } = require('./cli.js');
-const HomeMenu = require('./Menus/HomeMenu.js');
-const Home = new HomeMenu();
 
+// Promisified version of child_process.exec()
+function execute(...args) {
+	return new Promise((res, rej) => {
+		exec(...args, (err, stdout, stderr) => {
+			if (err) return rej(err);
+			return res({ stdout, stderr });
+		});
+	});
+}
+
+// Self-explanatory
 async function printHomepage() {
 	cls(0, 0);
 	printHeader();
@@ -19,6 +32,7 @@ async function printHomepage() {
 	await printMenu(Home);
 }
 
+// Add the line event listener, and prints the homepage
 async function startLauncher() {
 	rl.on('line', async (line) => {
 		line = line.trim();
@@ -29,9 +43,12 @@ async function startLauncher() {
 		}
 
 		if (line === '0') {
+			// If the current menu is the homepage, then exit the launcher
 			if (rl.currMenu.code === 0) {
 				rl.close();
+				return;
 			}
+			// Otherwise, simply go back to the homepage
 			else {
 				await printHomepage();
 			}
@@ -39,6 +56,7 @@ async function startLauncher() {
 		else {
 			cls();
 			println('');
+			// Run whatever option the user chose
 			await rl.currMenu.run(line);
 		}
 	});
@@ -47,17 +65,14 @@ async function startLauncher() {
 
 }
 
-// Somehow check if its a first run or not.
-// If so, do firstRunSetup();
-// Otherwise, startLauncher();
-
-// Start Launcher
-
 const dir = fs.readdirSync('.');
 
 (async () => {
+	// If the directory includes the bin folder, it means
+	// source code was already compiled
 	if (dir.includes('bin')) {
 		const bin = fs.readdirSync('./bin');
+		// Just a very minimal check to see if the main file was compiled
 		if (bin.includes('citrine.js')) {
 			await startLauncher();
 		}
@@ -72,10 +87,11 @@ const dir = fs.readdirSync('.');
 
 			if (recompile) {
 				println('\nPlease wait . . .');
-				// Delete bin folder, recompile source code
-				// Ask to restart launcher
+				// Recompile source code
+				// Once finished, start the launcher again.
 			}
 			else {
+				// If they don't want to recompile, just close the launcher
 				println('\nAlright. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
 				rl.close();
 			}
@@ -89,12 +105,43 @@ const dir = fs.readdirSync('.');
 		println('Hello there! Seems like this is your first time running Citrine!');
 
 		await sleep();
-		await input('First, please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE_NAME>');
+		let TOKEN = await input('First, please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE>');
+		if (TOKEN.startsWith('PATH:')) {
+			TOKEN = process.env[TOKEN.slice(5)];
+		}
 
-		// Do stuff with token here
+		const prefix = await input('Please choose a global prefix for your bot:');
 
-		await input('Please choose a global prefix for your bot:');
+		try {
+			println('\nPlease wait...');
+			const { stderr } = await execute('tsc');
+			if (stderr) throw stderr;
 
+			println('Successfully compiled code!');
+		}
+		catch (err) {
+			println('Unknown error occurred while compiling code.');
+			println(err);
+			println('Please make sure Citrine is installed properly, and try again');
+			rl.close();
+			return;
+		}
+
+		try {
+			const DB = require('../bin/Structures/CitrineStructs/CitrineDB.js');
+			const Settings = require('../bin/Structures/CitrineStructs/CitrineSettings.js');
+			await DB.initialSetup();
+			await Settings.initialSetup(TOKEN, prefix);
+
+			println('Successfully initialized databases and settings for Citrine!');
+		}
+		catch (err) {
+			println('Unknown error occurred while trying to initialize bot settings.');
+			println(err);
+			println('Please make sure Citrine is installed properly, and try again');
+			rl.close();
+			return;
+		}
 		// Store prefix in settings.
 
 		println('\nStarting launcher. . .');
