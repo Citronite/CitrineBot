@@ -73,4 +73,8 @@ export class CitrineSettings {
 		return JSON.stringify(obj, null, '\t');
 	}
 
+	public static async initialSetup(token: string, prefix: string): Promise<boolean> {
+		return false;
+	}
+
 }
