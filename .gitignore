@@ -1,8 +1,9 @@
 # Dependencies
-node_modules
+node_modules/
 
 # tsc outDir
-bin
+bin/
 
 # extra stuff
 *.txt
+data/
