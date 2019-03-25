@@ -54,4 +54,8 @@ export class CitrineDB {
 			return Promise.resolve(false);
 		}
 	}
+
+	public async initialSetup(): Promise<boolean> {
+		return false;
+	}
 }
