@@ -63,7 +63,7 @@ declare module 'typings' {
 
 	export interface IGlobalConfig {
 		owner: UserID;
-		prefix: string;
+		globalPrefix: string;
 		devs: Set<UserID>;
 		disabledUsers: Set<UserID>;
 		disabledGuilds: Set<GuildID>;
