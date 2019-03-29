@@ -6,6 +6,7 @@ import { Client, ClientOptions } from 'discord.js';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
 import { ICmdHandler, IPermHandler } from 'typings';
+import * as fs from 'fs';
 
 export class CitrineClient extends Client {
 	public readonly settings: CitrineSettings;
@@ -22,7 +23,7 @@ export class CitrineClient extends Client {
 		this.settings = new CitrineSettings(this);
 		this.logger = new CitrineLogger(this);
 		this.utils = new CitrineUtils();
-		this.db = new CitrineDB(this);
+		this.db = new CitrineDB();
 
 		this.cmdHandler = CmdHandler;
 		this.permHandler = PermHandler;
@@ -56,8 +57,24 @@ export class CitrineClient extends Client {
 		return Promise.reject(false);
 	}
 
-	public async launch(TOKEN: string): Promise<boolean> {
+	public async launch(): Promise<void> {
 		// Starts bot!
-		return Promise.reject(TOKEN);
+		try {
+			const { token, prefix } = require('../data/core/_settings.json');
+			await this.settings.load();
+
+			if (this.settings.globalPrefix === 'DEFAULT') this.settings.globalPrefix = prefix;
+
+			await this.login(token);
+			if (this.settings.owner === 'DEFAULT') {
+				const app = await this.fetchApplication();
+				this.settings.owner = app.owner.id;
+			}
+
+			await this.settings.save();
+			Promise.resolve();
+		} catch (err) {
+			return Promise.reject(err);
+		}
 	}
 }
