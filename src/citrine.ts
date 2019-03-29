@@ -20,8 +20,6 @@ const options: ClientOptions = {
 	disabledEvents: ['TYPING_START']
 };
 
-const TOKEN = 'temp var here, otherwise the .launch() will handle the token stuff :P';
-
 const citrine = new CitrineClient(options);
 
 (async () => {
@@ -30,10 +28,13 @@ const citrine = new CitrineClient(options);
 		citrine.initEvents();
 		citrine.initDB();
 
-		await citrine.launch(TOKEN);
+		await citrine.launch();
 		console.log('- - - Citrine launched successfully! - - -');
 
 	} catch (err) {
 		process.exit(1);
 	}
 })();
+
+process.on('uncaughtException', err => citrine.logger.error());
+process.on('unhandledRejection', err => citrine.logger.error());
