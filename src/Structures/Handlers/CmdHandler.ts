@@ -15,7 +15,7 @@ export class CmdHandler {
 	public static checkPrefix(message: any, config: GuildConfig): string | null {
 		if (message.author.bot) return null;
 
-		const gPrefix = message.client.settings.globalConfig.prefix;
+		const gPrefix = message.client.settings.globalPrefix;
 		const lPrefix = config.prefix;
 		const id = message.client.user.id;
 		const rgx = new RegExp(`^(<@!?\\${id}>|\\${lPrefix})\\|\\${gPrefix})\\s*`);
@@ -37,7 +37,7 @@ export class CmdHandler {
 		const name = copy.shift().toLowerCase();
 		const cmd = message.client.commands.get(name) ||
 			message.client.commands.find((val: Command) => {
-				const { aliases } = message.client.settings.globalConfig.aliases[val.name];
+				const aliases = message.client.settings.aliases[val.name];
 				return aliases && aliases.includes(name);
 			}) ||	null;
 
