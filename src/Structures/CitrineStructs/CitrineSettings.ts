@@ -1,53 +1,149 @@
-import * as path from 'path';
-import { BaseError } from '../ErrorStructs/BaseError';
+import * as fs from 'fs';
 import { CitrineClient } from '../CitrineClient';
 import { IGlobalConfig } from 'typings';
 
 export class CitrineSettings {
-	public readonly global: IGlobalConfig;
-	public readonly stats: object;
 	public readonly client: CitrineClient;
+	private config: IGlobalConfig;
 
 	constructor(client: CitrineClient) {
-		// Implement this!
-		this.client = client; // In the output JS files, use Reflect.defineProperty()
+		this.client = client;
 
-		// On launch, get the config from the db and replace this with that.
-		this.global = {
+		this.config = {
 			owner: 'DEFAULT',
-			prefix: 'DEFAULT',
-			devs: new Set(['DEFAULT']),
+			globalPrefix: 'DEFAULT',
+			devs: new Set(),
 			disabledUsers: new Set(),
 			disabledGuilds: new Set(),
 			disabledCommands: new Set(),
 			loadedModules: new Set(),
 			aliases: {}
 		};
-
-		this.stats = {
-			processedCommands: 0,
-			messagesRead: 0,
-		};
 	}
 
-	public async save(): Promise<boolean> {
-		// To be implemented.
-		// This function doesnt take or return anything. Simply saves the bot's current settings
-		// e.g. stats and globalConfig to the db
+	get owner(): string {
+		return this.config.owner;
+	}
+
+	set owner(id: string) {
+		this.config.owner = id;
+	}
+
+	get globalPrefix(): string {
+		return this.config.globalPrefix;
+	}
+
+	set globalPrefix(str) {
+		this.config.globalPrefix = str;
+	}
+
+	get devs(): string[] {
+		return [...this.config.devs];
+	}
+
+	public addDev(id: string): void {
+		this.config.devs.add(id);
+	}
+
+	public removeDev(id: string): void {
+		this.config.devs.delete(id);
+	}
+
+	get disabledUsers(): string[] {
+		return [...this.config.disabledUsers];
+	}
+
+	public disableUser(id: string): void {
+		this.config.disabledUsers.add(id);
+	}
+
+	public enableUser(id: string): void {
+		this.config.disabledUsers.delete(id);
+	}
+
+	get disabledGuilds(): string[] {
+		return [...this.config.disabledGuilds];
+	}
+
+	public disableGuild(id: string): void {
+		this.config.disabledGuilds.add(id);
+		const guild = this.client.guilds.get(id);
+		if (guild) {
+			guild.leave();
+		}
+	}
+
+	public enableGuild(id: string): void {
+		this.config.disabledGuilds.delete(id);
+	}
+
+	get disabledCommands(): string[] {
+		return [...this.config.disabledCommands];
+	}
+
+	public disableCommand(name: string): void {
+		this.config.disabledCommands.add(name);
+	}
+
+	public enableCommand(name: string): void {
+		this.config.disabledCommands.delete(name);
+	}
+
+	get loadedModules(): string[] {
+		return [...this.config.loadedModules];
+	}
+
+	public addLoadedModule(name: string): void {
+		this.config.loadedModules.add(name);
+	}
+
+	public removeLoadedModule(name: string): void {
+		this.config.loadedModules.delete(name);
+	}
+
+	get aliases(): object {
+		return this.config.aliases;
+	}
+
+	public setAlias(cmd: string, alias: string): void {
+		const aliases = this.config.aliases[cmd] ? new Set(this.config.aliases[cmd]) : new Set();
+		aliases.add(alias);
+		this.config.aliases[cmd] = [...aliases];
+	}
+
+	public unsetAlias(cmd: string, alias: string): void {
+		if (!this.config.aliases[cmd]) return;
+		const aliases = new Set(this.config.aliases[cmd]);
+		aliases.delete(alias);
+		this.config.aliases[cmd] = [...aliases];
+	}
+
+	public async save(): Promise<void> {
+		try {
+			const jsonData = this.toJSON();
+			await this.client.db.guilds.set('GLOBAL', jsonData);
+			Promise.resolve();
+		}	catch (err) {
+			Promise.reject(err);
+		}
 		return Promise.reject(false);
 	}
 
-	public async load(): Promise<boolean> {
-		// To be implemented
-		// This function doesn't take or return anything. Simply fetches bot's settings
-		// e.g. stats and globalConfig from the db, and updates them.
-		return Promise.reject(false);
+	public async load(): Promise<void> {
+		try {
+			const jsonData = await this.client.db.guilds.get('GLOBAL');
+			const parsed = this.fromJSON(jsonData);
+			this.config = parsed;
+			return Promise.reject();
+		} catch (err) {
+			return Promise.reject(err);
+		}
 	}
 
 	public fromJSON(conf: any): IGlobalConfig {
 		return {
 			owner: conf.owner,
-			prefix: conf.prefix,
+			globalPrefix: conf.globalPrefix,
 			devs: new Set(conf.devs),
 			disabledGuilds: new Set(conf.disabledGuilds),
 			disabledCommands: new Set(conf.disabledCommands),
@@ -58,9 +154,10 @@ export class CitrineSettings {
 	}
 
 	public toJSON(): object {
-		const conf = this.global;
+		const conf = this.config;
 		return {
 			...conf,
+			devs: [...conf.devs],
 			disabledUsers: [...conf.disabledUsers],
 			disabledGuilds: [...conf.disabledGuilds],
 			disabledCommands: [...conf.disabledCommands],
@@ -74,7 +171,13 @@ export class CitrineSettings {
 	}
 
 	public static async initialSetup(token: string, prefix: string): Promise<boolean> {
-		return false;
+		const data = JSON.stringify({ token, prefix });
+		return new Promise((res, rej) => {
+			fs.writeFile(`${process.cwd()}/data/core/_settings.json`, data, err => {
+				if (err) return rej(err);
+				return res(true);
+			});
+		});
 	}
 
 }
