@@ -32,6 +32,24 @@ async function printHomepage() {
 	await printMenu(Home);
 }
 
+// Compiles code.
+async function compileCitrine() {
+	try {
+		println('\nPlease wait...');
+		const { stderr } = await execute('tsc --project ".."');
+		if (stderr) throw stderr;
+
+		println('Successfully recompiled code!');
+		return true;
+	}
+	catch (err) {
+		println('Unknown error occurred while compiling code.');
+		println(err);
+		println('Please make sure Citrine is installed properly, and try again');
+		return false;
+	}
+}
+
 // Add the line event listener, and prints the homepage
 async function startLauncher() {
 	rl.on('line', async (line) => {
@@ -70,30 +88,32 @@ const dir = fs.readdirSync('.');
 (async () => {
 	// If the directory includes the bin folder, it means
 	// source code was already compiled
-	if (dir.includes('bin')) {
+	if (dir.includes('data') && dir.includes('bin')) {
 		const bin = fs.readdirSync('./bin');
+		const data = fs.readdirSync('./data/core');
 		// Just a very minimal check to see if the main file was compiled
-		if (bin.includes('citrine.js')) {
+		if (bin.includes('citrine.js') && data.includes('_settings.json')) {
 			await startLauncher();
 		}
 		else {
 			cls(0, 0);
 			await sleep(500);
-
 			printHeader();
-
 			await sleep();
+
 			const recompile = await confirm('It seems like you are missing some important files in your bin folder.\nWould you like to try re-compiling Citrine?');
 
 			if (recompile) {
-				println('\nPlease wait . . .');
-				// Recompile source code
-				// Once finished, start the launcher again.
+				const successful = await compileCitrine();
+				if (!successful) {
+					rl.close();
+					return;
+				}
 			}
 			else {
-				// If they don't want to recompile, just close the launcher
-				println('\nAlright. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
+				println('\n Alright then. Please make sure Citrine is installed properly on your device,\n and then try running the launcher again.');
 				rl.close();
+				return;
 			}
 		}
 	}
@@ -103,35 +123,34 @@ const dir = fs.readdirSync('.');
 
 		await sleep(500);
 		println('Hello there! Seems like this is your first time running Citrine!');
-
 		await sleep();
-		let TOKEN = await input('First, please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE>');
-		if (TOKEN.startsWith('PATH:')) {
-			TOKEN = process.env[TOKEN.slice(5)];
+
+		let TOKEN;
+		while(true) {
+			TOKEN = await input('Please insert your bot token. If it is stored\n on your path, simply enter PATH:<VARIABLE>');
+			if (TOKEN.startsWith('PATH:')) {
+				TOKEN = process.env[TOKEN.slice(5)];
+				if (!TOKEN) {
+					println('Failed to find the token! Did you make a typo?');
+					continue;
+				}
+				break;
+			}
 		}
 
 		const prefix = await input('Please choose a global prefix for your bot:');
 
-		try {
-			println('\nPlease wait...');
-			const { stderr } = await execute('tsc');
-			if (stderr) throw stderr;
-
-			println('Successfully compiled code!');
-		}
-		catch (err) {
-			println('Unknown error occurred while compiling code.');
-			println(err);
-			println('Please make sure Citrine is installed properly, and try again');
+		const successful = await compileCitrine();
+		if (!successful) {
 			rl.close();
 			return;
 		}
 
 		try {
-			const DB = require('../bin/Structures/CitrineStructs/CitrineDB.js');
-			const Settings = require('../bin/Structures/CitrineStructs/CitrineSettings.js');
-			await DB.initialSetup();
-			await Settings.initialSetup(TOKEN, prefix);
+			const _DB = require('../bin/Structures/CitrineStructs/CitrineDB.js');
+			const _Settings = require('../bin/Structures/CitrineStructs/CitrineSettings.js');
+			await _DB.initialSetup();
+			await _Settings.initialSetup(TOKEN, prefix);
 
 			println('Successfully initialized databases and settings for Citrine!');
 		}
