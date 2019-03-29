@@ -36,14 +36,14 @@ async function printHomepage() {
 async function compileCitrine() {
 	try {
 		println('\nPlease wait...');
-		const { stderr } = await execute('tsc --project ".."');
+		const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
 		if (stderr) throw stderr;
-
+		if (stdout) println(stdout);
 		println('Successfully recompiled code!');
 		return true;
 	}
 	catch (err) {
-		println('Unknown error occurred while compiling code.');
+		println('Uh-oh! An unknown error occurred while compiling code!');
 		println(err);
 		println('Please make sure Citrine is installed properly, and try again');
 		return false;
@@ -105,14 +105,10 @@ const dir = fs.readdirSync('.');
 
 			if (recompile) {
 				const successful = await compileCitrine();
-				if (!successful) {
-					rl.close();
-					return;
-				}
+				if (!successful) return;
 			}
 			else {
-				println('\n Alright then. Please make sure Citrine is installed properly on your device,\n and then try running the launcher again.');
-				rl.close();
+				println('\n Alright then. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
 				return;
 			}
 		}
@@ -125,26 +121,15 @@ const dir = fs.readdirSync('.');
 		println('Hello there! Seems like this is your first time running Citrine!');
 		await sleep();
 
-		let TOKEN;
-		while(true) {
-			TOKEN = await input('Please insert your bot token. If it is stored\n on your path, simply enter PATH:<VARIABLE>');
-			if (TOKEN.startsWith('PATH:')) {
-				TOKEN = process.env[TOKEN.slice(5)];
-				if (!TOKEN) {
-					println('Failed to find the token! Did you make a typo?');
-					continue;
-				}
-				break;
-			}
+		let TOKEN = await input('Please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE>');
+		if (TOKEN.startsWith('PATH:')) {
+			TOKEN = process.env[TOKEN.slice(5)];
 		}
 
 		const prefix = await input('Please choose a global prefix for your bot:');
 
 		const successful = await compileCitrine();
-		if (!successful) {
-			rl.close();
-			return;
-		}
+		if (!successful) return;
 
 		try {
 			const _DB = require('../bin/Structures/CitrineStructs/CitrineDB.js');
@@ -158,7 +143,6 @@ const dir = fs.readdirSync('.');
 			println('Unknown error occurred while trying to initialize bot settings.');
 			println(err);
 			println('Please make sure Citrine is installed properly, and try again');
-			rl.close();
 			return;
 		}
 		// Store prefix in settings.
@@ -166,5 +150,6 @@ const dir = fs.readdirSync('.');
 		println('\nStarting launcher. . .');
 		await sleep(500);
 		await startLauncher();
+
 	}
 })();
