@@ -1,4 +1,4 @@
-export const ErrorCodes: {[key in string]: number} = {
+export const ErrorCodes: any = {
 	PERMISSION_ERROR: 100,
 	MISSING_BOT_PERMS: 101,
 	MISSING_MEMBER_PERMS: 102,
@@ -7,5 +7,14 @@ export const ErrorCodes: {[key in string]: number} = {
 	INSUFFICIENT_ARGS: 201,
 	INVALID_ARGS: 202,
 	NOT_FOUND: 404,
-	UNKNOWN_ERROR: 999
+	UNKNOWN_ERROR: 999,
+	100: 'PERMISSION_ERROR',
+	101: 'MISSING_BOT_PERMS',
+	102: 'MISSING_MEMBER_PERMS',
+	103: 'FAILED_CUSTOM_FILTERS',
+	200: 'ARGS_ERROR',
+	201: 'INSUFFIECIENT_ARGS',
+	202: 'INVALID_ARGS',
+	404: 'NOT_FOUND',
+	999: 'UNKNOWN_ERROR'
 };
