@@ -4,7 +4,9 @@
   "description": "��#\u0000 \u0000c\u0000i\u0000t\u0000r\u0000i\u0000n\u0000e\u0000\r\u0000 \u0000",
   "main": "bin/citrine.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "launcher": "node launcher\\launcher.js",
+    "run": "node bin\\citrine.js"
   },
   "keywords": [],
   "author": "",
