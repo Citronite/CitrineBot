@@ -4,12 +4,12 @@ import { IGlobalConfig } from 'typings';
 
 export class CitrineSettings {
 	public readonly client: CitrineClient;
-	private config: IGlobalConfig;
+	private data: IGlobalConfig;
 
 	constructor(client: CitrineClient) {
 		this.client = client;
 
-		this.config = {
+		this.data = {
 			owner: 'DEFAULT',
 			globalPrefix: 'DEFAULT',
 			devs: new Set(),
@@ -22,51 +22,51 @@ export class CitrineSettings {
 	}
 
 	get owner(): string {
-		return this.config.owner;
+		return this.data.owner;
 	}
 
 	set owner(id: string) {
-		this.config.owner = id;
+		this.data.owner = id;
 	}
 
 	get globalPrefix(): string {
-		return this.config.globalPrefix;
+		return this.data.globalPrefix;
 	}
 
 	set globalPrefix(str) {
-		this.config.globalPrefix = str;
+		this.data.globalPrefix = str;
 	}
 
 	get devs(): string[] {
-		return [...this.config.devs];
+		return [...this.data.devs];
 	}
 
 	public addDev(id: string): void {
-		this.config.devs.add(id);
+		this.data.devs.add(id);
 	}
 
 	public removeDev(id: string): void {
-		this.config.devs.delete(id);
+		this.data.devs.delete(id);
 	}
 
 	get disabledUsers(): string[] {
-		return [...this.config.disabledUsers];
+		return [...this.data.disabledUsers];
 	}
 
 	public disableUser(id: string): void {
-		this.config.disabledUsers.add(id);
+		this.data.disabledUsers.add(id);
 	}
 
 	public enableUser(id: string): void {
-		this.config.disabledUsers.delete(id);
+		this.data.disabledUsers.delete(id);
 	}
 
 	get disabledGuilds(): string[] {
-		return [...this.config.disabledGuilds];
+		return [...this.data.disabledGuilds];
 	}
 
 	public disableGuild(id: string): void {
-		this.config.disabledGuilds.add(id);
+		this.data.disabledGuilds.add(id);
 		const guild = this.client.guilds.get(id);
 		if (guild) {
 			guild.leave();
@@ -74,48 +74,48 @@ export class CitrineSettings {
 	}
 
 	public enableGuild(id: string): void {
-		this.config.disabledGuilds.delete(id);
+		this.data.disabledGuilds.delete(id);
 	}
 
 	get disabledCommands(): string[] {
-		return [...this.config.disabledCommands];
+		return [...this.data.disabledCommands];
 	}
 
 	public disableCommand(name: string): void {
-		this.config.disabledCommands.add(name);
+		this.data.disabledCommands.add(name);
 	}
 
 	public enableCommand(name: string): void {
-		this.config.disabledCommands.delete(name);
+		this.data.disabledCommands.delete(name);
 	}
 
 	get loadedModules(): string[] {
-		return [...this.config.loadedModules];
+		return [...this.data.loadedModules];
 	}
 
 	public addLoadedModule(name: string): void {
-		this.config.loadedModules.add(name);
+		this.data.loadedModules.add(name);
 	}
 
 	public removeLoadedModule(name: string): void {
-		this.config.loadedModules.delete(name);
+		this.data.loadedModules.delete(name);
 	}
 
 	get aliases(): object {
-		return this.config.aliases;
+		return this.data.aliases;
 	}
 
 	public setAlias(cmd: string, alias: string): void {
-		const aliases = this.config.aliases[cmd] ? new Set(this.config.aliases[cmd]) : new Set();
+		const aliases = this.data.aliases[cmd] ? new Set(this.data.aliases[cmd]) : new Set();
 		aliases.add(alias);
-		this.config.aliases[cmd] = [...aliases];
+		this.data.aliases[cmd] = [...aliases];
 	}
 
 	public unsetAlias(cmd: string, alias: string): void {
-		if (!this.config.aliases[cmd]) return;
-		const aliases = new Set(this.config.aliases[cmd]);
+		if (!this.data.aliases[cmd]) return;
+		const aliases = new Set(this.data.aliases[cmd]);
 		aliases.delete(alias);
-		this.config.aliases[cmd] = [...aliases];
+		this.data.aliases[cmd] = [...aliases];
 	}
 
 	public async save(): Promise<void> {
@@ -133,14 +133,14 @@ export class CitrineSettings {
 		try {
 			const jsonData = await this.client.db.guilds.get('GLOBAL');
 			const parsed = this.fromJSON(jsonData);
-			this.config = parsed;
+			this.data = parsed;
 			return Promise.reject();
 		} catch (err) {
 			return Promise.reject(err);
 		}
 	}
 
-	public fromJSON(conf: any): IGlobalConfig {
+	private fromJSON(conf: any): IGlobalConfig {
 		return {
 			owner: conf.owner,
 			globalPrefix: conf.globalPrefix,
@@ -154,7 +154,7 @@ export class CitrineSettings {
 	}
 
 	public toJSON(): object {
-		const conf = this.config;
+		const conf = this.data;
 		return {
 			...conf,
 			devs: [...conf.devs],
