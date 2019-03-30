@@ -1,6 +1,6 @@
 import Keyv = require('keyv');
 import { mkdir } from 'fs';
-import { GuildID, IGuildConfig } from 'typings';
+import { GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
 
@@ -40,7 +40,7 @@ export class CitrineDB implements ICitrineDB {
 		}
 	}
 
-	public async setGuild(guild: Guild | IGuildConfig): Promise<GuildConfig> {
+	public async setGuild(guild: Guild | GuildConfig | any): Promise<GuildConfig> {
 		try {
 			const conf = new GuildConfig(guild);
 			await this.guilds.set(guild.id, conf.toJSON());
@@ -61,7 +61,7 @@ export class CitrineDB implements ICitrineDB {
 
 	public async initialSetup(): Promise<boolean> {
 		const path = `${cwd}\\data\\core`;
-		return new Promise( (res, rej) => {
+		return new Promise((res, rej) => {
 			mkdir(path, err => {
 				if (err) return rej(err);
 				return res(true);
