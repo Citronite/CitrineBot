@@ -44,7 +44,7 @@ declare module 'typings' {
 		reply: (...args: any) => Promise<Message | Message[]>;
 		sendDM: (...args: any) => Promise<Message | Message[]>;
 	}
-
+/*
 	export interface IGuildConfig {
 		readonly id: string;
 		prefix: string;
@@ -60,7 +60,7 @@ declare module 'typings' {
 		unsetReqRole: (cmd: any) => void;
 		toJSON: () => object;
 	}
-
+*/
 	export interface IGlobalConfig {
 		owner: UserID;
 		globalPrefix: string;
@@ -73,11 +73,11 @@ declare module 'typings' {
 	}
 
 	export interface ICmdHandler {
-		checkPrefix: (message: any, config: IGuildConfig) => string | null;
+		checkPrefix: (message: any, config: any) => string | null;
 		getArgs: (message: any, prefix: string, parseQuotes: boolean) => string[] | null;
 		getBaseCmd: (message: any, args: string[]) => [any, string[]] | [null, null];
 		getFinalCmd: (message: Message, args: string[]) => [any, string[]] | [null, null];
-		processCommand: (message: any, config: IGuildConfig) => Promise<void>;
+		processCommand: (message: any, config: any) => Promise<void>;
 	}
 
 	export interface IPermHandler {
