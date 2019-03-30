@@ -3,6 +3,7 @@ import { mkdir } from 'fs';
 import { GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
+import { resolve } from 'path';
 
 const cwd = process.cwd();
 
@@ -20,7 +21,7 @@ export class CitrineDB implements ICitrineDB {
 
 	public async create(name: string, path: string): Promise<Keyv<any>> {
 		try {
-			this[name] = new Keyv(`sqlite://${cwd}/${path}`);
+			this[name] = new Keyv(`sqlite://${resolve(path)}`);
 			return Promise.resolve(this[name]);
 		} catch (err) {
 			return Promise.reject(err);
