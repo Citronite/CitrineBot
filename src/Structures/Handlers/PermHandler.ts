@@ -19,7 +19,7 @@ export class PermHandler {
 	}
 
 	public static async checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): Promise<boolean> {
-		const { global: globalConfig } = client.settings;
+		const { settings: globalConfig } = client;
 		try {
 			const config: GuildConfig | null = await client.db.getGuild(message.guild.id);
 			if (!config) throw new BaseError(ErrorCodes.NOT_FOUND, ['GuildConfig not found']);
@@ -28,15 +28,15 @@ export class PermHandler {
 
 			if (message.author.id === globalConfig.owner) return Promise.resolve(true);
 
-			if (globalConfig.disabledUsers.has(message.author.id)) errors.push('Disabled User [Global]');
+			if (globalConfig.disabledUsers.includes(message.author.id)) errors.push('Disabled User [Global]');
 
-			if (config.disabledUsers.has(message.author.id)) errors.push('Disabled User [Local]');
+			if (config.disabledUsers.includes(message.author.id)) errors.push('Disabled User [Local]');
 
-			if (config.disabledChannels.has(message.channel.id)) errors.push('Disabled Channel');
+			if (config.disabledChannels.includes(message.channel.id)) errors.push('Disabled Channel');
 
-			if (globalConfig.disabledCommands.has(cmd.name)) errors.push('Disabled Command [Global]');
+			if (globalConfig.disabledCommands.includes(cmd.name)) errors.push('Disabled Command [Global]');
 
-			if (config.disabledCommands.has(cmd.name)) errors.push('Disabled Command [Local]');
+			if (config.disabledCommands.includes(cmd.name)) errors.push('Disabled Command [Local]');
 
 			return errors.length ? Promise.reject(new BaseError(ErrorCodes.FAILED_CUSTOM_FILTERS, errors)) : Promise.resolve(true);
 		} catch (err) {
