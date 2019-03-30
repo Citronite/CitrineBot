@@ -51,12 +51,12 @@ async function compileCitrine() {
 	catch (err) {
 		println('Uh-oh! An unknown error occurred while compiling code!');
 		println(err);
-		println('Please make sure Citrine is installed properly, and try again');
+		println('Please make sure Citrine is installed properly, and try again.');
 		return false;
 	}
 }
 
-// Add the line event listener, and prints the homepage
+// Adds the line event listener, and prints the homepage
 async function startLauncher() {
 	rl.on('line', async (line) => {
 		line = line.trim();
@@ -72,7 +72,7 @@ async function startLauncher() {
 				rl.close();
 				return;
 			}
-			// Otherwise, simply go back to the homepage
+			// Otherwise, go back to the homepage
 			else {
 				await printHomepage();
 			}
@@ -92,26 +92,36 @@ async function startLauncher() {
 const dir = fs.readdirSync('.');
 
 (async () => {
-	// If the directory includes the bin folder, it means
-	// source code was already compiled
+	cls(0, 0);
+	await sleep();
+	printHeader();
+	await sleep();
+
+	// Kinda hacky but whatever :P
+	// This here sorta checks to make sure everything is in place
+	// before trying to start the launcher.
 	if (dir.includes('data') && dir.includes('bin')) {
 		const bin = fs.readdirSync('./bin');
-		const data = fs.readdirSync('./data/core');
-		// Just a very minimal check to see if the main file was compiled
+		let data = [];
+		try {
+			data = fs.readdirSync('./data/core');
+		}
+		catch(err) {
+			println('The core folder is missing from the data directory. Please make sure\nyou installed Citrine correctly and try again.');
+			return;
+		}
+
+		// Just a very minimal check to see if the initial setup was successful
 		if (bin.includes('citrine.js') && data.includes('_settings.json')) {
 			await startLauncher();
 		}
 		else {
-			cls(0, 0);
-			await sleep();
-			printHeader();
-			await sleep();
-
 			const recompile = await confirm('It seems like you are missing some important files in your bin folder.\nWould you like to try re-compiling Citrine?');
 
 			if (recompile) {
-				const successful = await compileCitrine();
-				if (!successful) return;
+				// If compilation was unsuccessful, end the launcher. :(
+				const finished = await compileCitrine();
+				if (!finished) return;
 			}
 			else {
 				println('\nAlright then. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
@@ -122,36 +132,41 @@ const dir = fs.readdirSync('.');
 	else {
 		cls(0, 0);
 		printHeader();
-
 		await sleep();
 		println('Hello there! Seems like this is your first time running Citrine!');
 		await sleep(2000);
 
 		let TOKEN = await input('Please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE>');
-		if (TOKEN.startsWith('PATH:')) {
-			TOKEN = process.env[TOKEN.slice(5)];
+		if (TOKEN.startsWith('PATH:')) TOKEN = process.env[TOKEN.slice(5)];
+		while (!TOKEN) {
+			TOKEN = await input('Please insert a valid bot token:');
+			if (TOKEN.startsWith('PATH:')) TOKEN = process.env[TOKEN.slice(5)];
 		}
 
-		const prefix = await input('Please choose a global prefix for your bot:');
+		let prefix = await input('Please choose a global prefix for your bot:');
+		while (!prefix) {
+			prefix = await input('Please choose a valid prefix for your bot:');
+		}
 
 		const successful = await compileCitrine();
 		if (!successful) return;
 
 		try {
-			const _DB = require('../bin/Structures/CitrineStructs/CitrineDB.js');
-			const _Settings = require('../bin/Structures/CitrineStructs/CitrineSettings.js');
-			await _DB.initialSetup();
-			await _Settings.initialSetup(TOKEN, prefix);
+			const dbPath = '../bin/Structures/CitrineStructs/CitrineDB.js';
+			const settingsPath = '../bin/Structures/CitrineStructs/CitrineSettings.js';
+			const { CitrineDB } = require(dbPath);
+			const { CitrineSettings } = require(settingsPath);
+			await CitrineDB.initialSetup();
+			await CitrineSettings.initialSetup(TOKEN, prefix);
 
 			println('Successfully initialized databases and settings for Citrine!');
 		}
 		catch (err) {
 			println('Unknown error occurred while trying to initialize bot settings.');
 			println(err);
-			println('Please make sure Citrine is installed properly, and try again');
+			println('Please make sure Citrine is installed properly, and try again.');
 			return;
 		}
-		// Store prefix in settings.
 
 		println('\nStarting launcher. . .');
 		await sleep();
