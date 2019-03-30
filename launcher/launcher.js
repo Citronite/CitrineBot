@@ -37,10 +37,16 @@ async function compileCitrine() {
 	try {
 		println('\nPlease wait...');
 		const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
-		if (stderr) throw stderr;
+		if (stderr) println(stderr);
 		if (stdout) println(stdout);
-		println('Successfully recompiled code!');
-		return true;
+		const bin = fs.readdirSync('./bin');
+		if (bin && bin.includes('citrine.js')) {
+			println('Successfully recompiled code!');
+			return true;
+		}
+		else {
+			throw 'Missing file citrine.js';
+		}
 	}
 	catch (err) {
 		println('Uh-oh! An unknown error occurred while compiling code!');
@@ -97,7 +103,7 @@ const dir = fs.readdirSync('.');
 		}
 		else {
 			cls(0, 0);
-			await sleep(500);
+			await sleep();
 			printHeader();
 			await sleep();
 
@@ -108,7 +114,7 @@ const dir = fs.readdirSync('.');
 				if (!successful) return;
 			}
 			else {
-				println('\n Alright then. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
+				println('\nAlright then. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
 				return;
 			}
 		}
@@ -117,9 +123,9 @@ const dir = fs.readdirSync('.');
 		cls(0, 0);
 		printHeader();
 
-		await sleep(500);
-		println('Hello there! Seems like this is your first time running Citrine!');
 		await sleep();
+		println('Hello there! Seems like this is your first time running Citrine!');
+		await sleep(2000);
 
 		let TOKEN = await input('Please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE>');
 		if (TOKEN.startsWith('PATH:')) {
@@ -148,7 +154,7 @@ const dir = fs.readdirSync('.');
 		// Store prefix in settings.
 
 		println('\nStarting launcher. . .');
-		await sleep(500);
+		await sleep();
 		await startLauncher();
 
 	}
