@@ -171,7 +171,7 @@ export class CitrineSettings {
 	}
 
 	public static async initialSetup(token: string, prefix: string): Promise<boolean> {
-		const data = JSON.stringify({ token, prefix });
+		const data = JSON.stringify({ token, prefix }, null, '\t');
 		return new Promise((res, rej) => {
 			fs.writeFile(`${process.cwd()}/data/core/_settings.json`, data, err => {
 				if (err) return rej(err);

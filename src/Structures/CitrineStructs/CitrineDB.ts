@@ -60,10 +60,10 @@ export class CitrineDB implements ICitrineDB {
 		}
 	}
 
-	public async initialSetup(): Promise<boolean> {
+	public static async initialSetup(): Promise<boolean> {
 		const path = `${cwd}\\data\\core`;
 		return new Promise((res, rej) => {
-			mkdir(path, err => {
+			mkdir(path, { recursive: true }, err => {
 				if (err) return rej(err);
 				return res(true);
 			});
