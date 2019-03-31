@@ -2,13 +2,13 @@ import { CitrineClient } from './Structures/CitrineClient';
 import { ClientOptions } from 'discord.js';
 
 /*
-*        CitrineBot - An open-source, modular
+*     CitrineBot - A powerful open-source, modular
 *        discord bot, built with developer and
 *             user experience in mind!
 *
 *	    By @PandaHappy 🍂#8851 | @Quantomistro3178
-*	       Discord: https://discord.gg/rEM9gFN
 *     GitHub: https://github.com/Quantomistro3178
+*	    Support Server: https://discord.gg/rEM9gFN
 *
 *          ###############################
 *          #                             #
