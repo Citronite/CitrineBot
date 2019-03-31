@@ -1,1 +1,0 @@
-node .\launcher\launcher.js
