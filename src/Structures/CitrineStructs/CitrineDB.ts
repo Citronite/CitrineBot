@@ -1,57 +1,72 @@
-import * as Keyv from 'keyv';
-import { GuildID, IGuildConfig } from 'typings';
+import Keyv = require('keyv');
+import { mkdir } from 'fs';
+import { GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
-import { CitrineClient } from '../CitrineClient';
+import { resolve } from 'path';
 
-export class CitrineDB {
-	public readonly guilds: Map<string, IGuildConfig>;
-	public readonly client: CitrineClient;
+const cwd = process.cwd();
 
-	constructor(client: CitrineClient) {
-		// TODO
-		// THIS IS SUPPOSED TO BE A KEYV DB BTW!
-		this.guilds = new Map();
-		this.client = client;
-	}
+interface ICitrineDB {
+  [key: string]: any;
+}
 
-	public create(name: string) {
-		return name;
-	}
+export class CitrineDB implements ICitrineDB {
+  [key: string]: any;
+  public readonly guilds: Keyv<any>;
 
-	public async getGuild(id: GuildID): Promise<GuildConfig | null> {
-		try {
-			const jsonData = this.guilds.get(id);
-			if (jsonData) {
-				const conf = new GuildConfig(jsonData);
-				return Promise.resolve(conf);
-			}
-			return Promise.resolve(null);
-		} catch (err) {
-			this.client.logger.warn();
-			return Promise.resolve(null);
-		}
-	}
+  constructor() {
+    this.guilds = new Keyv(`sqlite://${cwd}/data/core/guilds.sqlite`);
+  }
 
-	public async setGuild(guild: Guild | IGuildConfig): Promise<GuildConfig | null> {
-		try {
-			const conf = new GuildConfig(guild);
-			this.guilds.set(guild.id, conf);
+  public async create(name: string, path: string): Promise<Keyv<any>> {
+    try {
+      this[name] = new Keyv(`sqlite://${resolve(path)}`);
+      return Promise.resolve(this[name]);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
 
-			return Promise.resolve(conf);
-		} catch (err) {
-			this.client.logger.warn();
-			return Promise.resolve(null);
-		}
-	}
+  public async getGuild(id: GuildID): Promise<GuildConfig> {
+    try {
+      const jsonData = await this.guilds.get(id);
+      if (jsonData) {
+        const conf = new GuildConfig(jsonData);
+        return Promise.resolve(conf);
+      }
+      throw new Error(`Unable to find GuildConfig for id: ${id}`);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
 
-	public async unsetGuild(id: GuildID): Promise<boolean> {
-		try {
-			this.guilds.delete(id);
-			return Promise.resolve(true);
-		} catch (err) {
-			this.client.logger.warn();
-			return Promise.resolve(false);
-		}
-	}
+  public async setGuild(guild: Guild | GuildConfig | any): Promise<GuildConfig> {
+    try {
+      const conf = new GuildConfig(guild);
+      await this.guilds.set(guild.id, conf.toJSON());
+      return Promise.resolve(conf);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
+  public async unsetGuild(id: GuildID): Promise<void> {
+    try {
+      await this.guilds.delete(id);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
+  public static async initialSetup(): Promise<boolean> {
+    const path = `${cwd}\\data\\core`;
+    return new Promise((res, rej) => {
+      mkdir(path, { recursive: true }, err => {
+        if (err) return rej(err);
+        return res(true);
+      });
+    });
+  }
 }

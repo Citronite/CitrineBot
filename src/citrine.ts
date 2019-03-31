@@ -2,38 +2,41 @@ import { CitrineClient } from './Structures/CitrineClient';
 import { ClientOptions } from 'discord.js';
 
 /*
-*							By @Quantomistro3178
-*					Discord: PandaHappy 🍂#8851
-*	  GitHub: https://github.com/Quantomistro3178
+*        CitrineBot - An open-source, modular
+*        discord bot, built with developer and
+*             user experience in mind!
 *
-*					###############################
-*					#                             #
-*					#     C  I  T  R  I  N  E     #
-*					#                             #
-*					###############################
+*	    By @PandaHappy 🍂#8851 | @Quantomistro3178
+*	       Discord: https://discord.gg/rEM9gFN
+*     GitHub: https://github.com/Quantomistro3178
+*
+*          ###############################
+*          #                             #
+*          #     C  I  T  R  I  N  E     #
+*          #                             #
+*          ###############################
 */
 
-const defaultModules = ['dev-utils'];
+const defaultChips = ['dev-utils'];
 
 const options: ClientOptions = {
-	disableEveryone: true,
-	disabledEvents: ['TYPING_START']
+  disableEveryone: true,
+  disabledEvents: ['TYPING_START']
 };
-
-const TOKEN = 'temp var here, otherwise the .launch() will handle the token stuff :P';
 
 const citrine = new CitrineClient(options);
 
-(async () => {
-	try {
-		citrine.initChips(defaultModules);
-		citrine.initEvents();
-		citrine.initDB();
+(async function main() {
+  try {
+    citrine.initChips(defaultChips);
+    citrine.initEvents();
+    citrine.initDB();
 
-		await citrine.launch(TOKEN);
-		console.log('- - - Citrine launched successfully! - - -');
-
-	} catch (err) {
-		process.exit(1);
-	}
+    await citrine.launch();
+  } catch (err) {
+    process.exit(1);
+  }
 })();
+
+process.on('uncaughtException', err => citrine.logger.error());
+process.on('unhandledRejection', err => citrine.logger.error());

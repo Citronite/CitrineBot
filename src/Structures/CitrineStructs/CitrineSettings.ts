@@ -1,76 +1,183 @@
-import * as path from 'path';
-import { BaseError } from '../ErrorStructs/BaseError';
+import * as fs from 'fs';
 import { CitrineClient } from '../CitrineClient';
 import { IGlobalConfig } from 'typings';
 
 export class CitrineSettings {
-	public readonly global: IGlobalConfig;
-	public readonly stats: object;
-	public readonly client: CitrineClient;
+  public readonly client: CitrineClient;
+  private data: IGlobalConfig;
 
-	constructor(client: CitrineClient) {
-		// Implement this!
-		this.client = client; // In the output JS files, use Reflect.defineProperty()
+  constructor(client: CitrineClient) {
+    this.client = client;
 
-		// On launch, get the config from the db and replace this with that.
-		this.global = {
-			owner: 'DEFAULT',
-			prefix: 'DEFAULT',
-			devs: new Set(['DEFAULT']),
-			disabledUsers: new Set(),
-			disabledGuilds: new Set(),
-			disabledCommands: new Set(),
-			loadedModules: new Set(),
-			aliases: {}
-		};
+    this.data = {
+      owner: 'DEFAULT',
+      globalPrefix: 'DEFAULT',
+      devs: new Set(),
+      disabledUsers: new Set(),
+      disabledGuilds: new Set(),
+      disabledCommands: new Set(),
+      loadedModules: new Set(),
+      aliases: {}
+    };
+  }
 
-		this.stats = {
-			processedCommands: 0,
-			messagesRead: 0,
-		};
-	}
+  get owner(): string {
+    return this.data.owner;
+  }
 
-	public async save(): Promise<boolean> {
-		// To be implemented.
-		// This function doesnt take or return anything. Simply saves the bot's current settings
-		// e.g. stats and globalConfig to the db
-		return Promise.reject(false);
-	}
+  set owner(id: string) {
+    this.data.owner = id;
+  }
 
-	public async load(): Promise<boolean> {
-		// To be implemented
-		// This function doesn't take or return anything. Simply fetches bot's settings
-		// e.g. stats and globalConfig from the db, and updates them.
-		return Promise.reject(false);
-	}
+  get globalPrefix(): string {
+    return this.data.globalPrefix;
+  }
 
-	public fromJSON(conf: any): IGlobalConfig {
-		return {
-			owner: conf.owner,
-			prefix: conf.prefix,
-			devs: new Set(conf.devs),
-			disabledGuilds: new Set(conf.disabledGuilds),
-			disabledCommands: new Set(conf.disabledCommands),
-			disabledUsers: new Set(conf.disabledUsers),
-			loadedModules: new Set(conf.loadedModules),
-			aliases: conf.aliases
-		};
-	}
+  set globalPrefix(str) {
+    this.data.globalPrefix = str;
+  }
 
-	public toJSON(): object {
-		const conf = this.global;
-		return {
-			...conf,
-			disabledUsers: [...conf.disabledUsers],
-			disabledGuilds: [...conf.disabledGuilds],
-			disabledCommands: [...conf.disabledCommands],
-			loadedModules: [...conf.loadedModules]
-		};
-	}
+  get devs(): string[] {
+    return [...this.data.devs];
+  }
 
-	public toString(): string {
-		const obj = this.toJSON();
-		return JSON.stringify(obj, null, '\t');
-	}
+  public addDev(id: string): void {
+    this.data.devs.add(id);
+  }
+
+  public removeDev(id: string): void {
+    this.data.devs.delete(id);
+  }
+
+  get disabledUsers(): string[] {
+    return [...this.data.disabledUsers];
+  }
+
+  public disableUser(id: string): void {
+    this.data.disabledUsers.add(id);
+  }
+
+  public enableUser(id: string): void {
+    this.data.disabledUsers.delete(id);
+  }
+
+  get disabledGuilds(): string[] {
+    return [...this.data.disabledGuilds];
+  }
+
+  public disableGuild(id: string): void {
+    this.data.disabledGuilds.add(id);
+    const guild = this.client.guilds.get(id);
+    if (guild) {
+      guild.leave();
+    }
+  }
+
+  public enableGuild(id: string): void {
+    this.data.disabledGuilds.delete(id);
+  }
+
+  get disabledCommands(): string[] {
+    return [...this.data.disabledCommands];
+  }
+
+  public disableCommand(name: string): void {
+    this.data.disabledCommands.add(name);
+  }
+
+  public enableCommand(name: string): void {
+    this.data.disabledCommands.delete(name);
+  }
+
+  get loadedModules(): string[] {
+    return [...this.data.loadedModules];
+  }
+
+  public addLoadedModule(name: string): void {
+    this.data.loadedModules.add(name);
+  }
+
+  public removeLoadedModule(name: string): void {
+    this.data.loadedModules.delete(name);
+  }
+
+  get aliases(): object {
+    return this.data.aliases;
+  }
+
+  public setAlias(cmd: string, alias: string): void {
+    const aliases = this.data.aliases[cmd] ? new Set(this.data.aliases[cmd]) : new Set();
+    aliases.add(alias);
+    this.data.aliases[cmd] = [...aliases];
+  }
+
+  public unsetAlias(cmd: string, alias: string): void {
+    if (!this.data.aliases[cmd]) return;
+    const aliases = new Set(this.data.aliases[cmd]);
+    aliases.delete(alias);
+    this.data.aliases[cmd] = [...aliases];
+  }
+
+  public async save(): Promise<void> {
+    try {
+      const jsonData = this.toJSON();
+      await this.client.db.guilds.set('GLOBAL', jsonData);
+      Promise.resolve();
+    }	catch (err) {
+      Promise.reject(err);
+    }
+    return Promise.reject(false);
+  }
+
+  public async load(): Promise<void> {
+    try {
+      const jsonData = await this.client.db.guilds.get('GLOBAL');
+      const parsed = this.fromJSON(jsonData);
+      this.data = parsed;
+      return Promise.reject();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  }
+
+  private fromJSON(conf: any): IGlobalConfig {
+    return {
+      owner: conf.owner,
+      globalPrefix: conf.globalPrefix,
+      devs: new Set(conf.devs),
+      disabledGuilds: new Set(conf.disabledGuilds),
+      disabledCommands: new Set(conf.disabledCommands),
+      disabledUsers: new Set(conf.disabledUsers),
+      loadedModules: new Set(conf.loadedModules),
+      aliases: conf.aliases
+    };
+  }
+
+  public toJSON(): object {
+    const conf = this.data;
+    return {
+      ...conf,
+      devs: [...conf.devs],
+      disabledUsers: [...conf.disabledUsers],
+      disabledGuilds: [...conf.disabledGuilds],
+      disabledCommands: [...conf.disabledCommands],
+      loadedModules: [...conf.loadedModules]
+    };
+  }
+
+  public toString(): string {
+    const obj = this.toJSON();
+    return JSON.stringify(obj, null, '\t');
+  }
+
+  public static async initialSetup(token: string, prefix: string): Promise<boolean> {
+    const data = JSON.stringify({ token, prefix }, null, '\t');
+    return new Promise((res, rej) => {
+      fs.writeFile(`${process.cwd()}/data/core/_settings.json`, data, err => {
+        if (err) return rej(err);
+        return res(true);
+      });
+    });
+  }
 
 }
