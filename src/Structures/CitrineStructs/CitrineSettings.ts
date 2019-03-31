@@ -122,21 +122,19 @@ export class CitrineSettings {
     try {
       const jsonData = this.toJSON();
       await this.client.db.guilds.set('GLOBAL', jsonData);
-      Promise.resolve();
     }	catch (err) {
       Promise.reject(err);
     }
-    return Promise.reject(false);
   }
 
   public async load(): Promise<void> {
     try {
       const jsonData = await this.client.db.guilds.get('GLOBAL');
+      if (!jsonData) return;
       const parsed = this.fromJSON(jsonData);
       this.data = parsed;
-      return Promise.reject();
     } catch (err) {
-      return Promise.reject(err);
+      Promise.reject(err);
     }
   }
 
@@ -169,15 +167,4 @@ export class CitrineSettings {
     const obj = this.toJSON();
     return JSON.stringify(obj, null, '\t');
   }
-
-  public static async initialSetup(token: string, prefix: string): Promise<boolean> {
-    const data = JSON.stringify({ token, prefix }, null, '\t');
-    return new Promise((res, rej) => {
-      fs.writeFile(`${process.cwd()}/data/core/_settings.json`, data, err => {
-        if (err) return rej(err);
-        return res(true);
-      });
-    });
-  }
-
 }
