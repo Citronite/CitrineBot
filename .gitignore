@@ -1,2 +1,10 @@
-*.txt
+# Dependencies
 node_modules/
+
+# tsc outDir
+bin/
+
+# extra stuff
+*.txt
+data/
+start_citrine.bat
