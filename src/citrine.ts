@@ -2,18 +2,22 @@ import { CitrineClient } from './Structures/CitrineClient';
 import { ClientOptions } from 'discord.js';
 
 /*
-*							By @Quantomistro3178
-*					Discord: PandaHappy 🍂#8851
-*	  GitHub: https://github.com/Quantomistro3178
+*        CitrineBot - An open-source, modular
+*        discord bot, built with developer and
+*             user experience in mind!
 *
-*					###############################
-*					#                             #
-*					#     C  I  T  R  I  N  E     #
-*					#                             #
-*					###############################
+*	    By @PandaHappy 🍂#8851 | @Quantomistro3178
+*	       Discord: https://discord.gg/rEM9gFN
+*     GitHub: https://github.com/Quantomistro3178
+*
+*          ###############################
+*          #                             #
+*          #     C  I  T  R  I  N  E     #
+*          #                             #
+*          ###############################
 */
 
-const defaultModules = ['dev-utils'];
+const defaultChips = ['dev-utils'];
 
 const options: ClientOptions = {
 	disableEveryone: true,
@@ -22,15 +26,13 @@ const options: ClientOptions = {
 
 const citrine = new CitrineClient(options);
 
-(async () => {
+(async function main() {
 	try {
-		citrine.initChips(defaultModules);
+		citrine.initChips(defaultChips);
 		citrine.initEvents();
 		citrine.initDB();
 
 		await citrine.launch();
-		console.log('- - - Citrine launched successfully! - - -');
-
 	} catch (err) {
 		process.exit(1);
 	}
