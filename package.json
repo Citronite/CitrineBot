@@ -1,15 +1,15 @@
 {
   "name": "citrine-ts",
   "version": "0.1.0",
-  "description": "��#\u0000 \u0000c\u0000i\u0000t\u0000r\u0000i\u0000n\u0000e\u0000\r\u0000 \u0000",
+  "description": "Citrine - A powerful, fully modular, easily extensible Discord bot!",
   "main": "bin/citrine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "launcher": "node launcher\\main.js",
-    "run": "node bin\\citrine.js"
+    "citrine": "node bin\\citrine.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Quantomistro3178",
   "license": "ISC",
   "devDependencies": {
     "@types/keyv": "^3.1.0",
