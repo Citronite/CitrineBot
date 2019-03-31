@@ -3,7 +3,13 @@ const ChipsMenu = require('./ChipsMenu.js');
 const RepairsMenu = require('./RepairsMenu.js');
 const GuidesMenu = require('./GuidesMenu.js');
 const CreditsMenu = require('./CreditsMenu.js');
-const { rl, println, printMenu, sleep } = require('../cli.js');
+const {
+	rl,
+	println,
+	printMenu,
+	sleep,
+//	execute,
+} = require('../cli.js');
 
 const Chips = new ChipsMenu();
 const Repairs = new RepairsMenu();
@@ -29,7 +35,7 @@ class HomeMenu extends AbstractMenu {
 		rl.currMenu = { code: 9 };
 
 		await sleep(500);
-		println('Launch Citrine');
+		println('Launching Citrine. . .');
 
 		await sleep(500);
 		println('0. Shut down Citrine & go back to the homepage');
