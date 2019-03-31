@@ -54,19 +54,8 @@ export class CitrineDB implements ICitrineDB {
   public async unsetGuild(id: GuildID): Promise<void> {
     try {
       await this.guilds.delete(id);
-      return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
     }
-  }
-
-  public static async initialSetup(): Promise<boolean> {
-    const path = `${cwd}\\data\\core`;
-    return new Promise((res, rej) => {
-      mkdir(path, { recursive: true }, err => {
-        if (err) return rej(err);
-        return res(true);
-      });
-    });
   }
 }
