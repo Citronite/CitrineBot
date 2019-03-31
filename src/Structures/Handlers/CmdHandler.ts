@@ -55,9 +55,10 @@ export class CmdHandler {
 
 		let subCmd = base;
 		while (true) {
-			if (subCmd.subcommands.has(argsCopy[0].toLowerCase())) {
-				subCmd = subCmd.subcommands.get(argsCopy[0].toLowerCase());
-				argsCopy.shift();
+			if (!subCmd.subcommands.size) break;
+			const name = argsCopy.shift().toLowerCase();
+			if (subCmd.subcommands.has(name)) {
+				subCmd = subCmd.subcommands.get(name);
 			} else {
 				break;
 			}
@@ -82,7 +83,7 @@ export class CmdHandler {
 
 		try {
 			// Check if the message was prefixed. If so, obtain the invoked prefix.
-			// Otherwise, return.
+			// Otherwise, return (since the message wasn't a bot command)
 			const invokedPrefix = this.checkPrefix(message, config);
 			if (!invokedPrefix) return;
 
@@ -91,17 +92,17 @@ export class CmdHandler {
 			const args = this.getArgs(message, invokedPrefix);
 			if (!args) return;
 
-			// Gets the last command in the "command chain", and the remaining args.
-			// If there is no command, return.
+			// Get the last command in the "command chain", and the remaining args.
+			// If no command is found, return silently.
 			// Example:
-			// If the command is: [p]basecmd subcmd1 subcmd2 @randomMention @anotherMention
-			// This would return: [subcmd2, ['@randomMention', '@anotherMention']]
+			// If the command is: [p]basecmd subcmd1 subcmd2 @randomMention anArgument
+			// This would return: [subcmd2, ['@randomMention', 'anArgument']]
 			let [cmd, finalArgs]: [Command | null, string[] | null] = this.getFinalCmd(message, args);
 			if (!cmd) return;
-			if (!finalArgs) finalArgs = [''];
+			if (!finalArgs) finalArgs = [];
 
 			// Now we know that the message is a bot command, check if
-			// config.deleteCmdCalls is true for this guild, if so, delete the message.
+			// config.deleteCmdCalls is set for this guild. If so, delete the message.
 			if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
 
 			const ctx = new Context(message, invokedPrefix);
@@ -115,17 +116,17 @@ export class CmdHandler {
 				await cmd.execute(ctx, ...finalArgs);
 
 			} catch (err) {
-				// If the error occurred within the chip command, or the customFilterCheck,
-				// then send it to the chat and return.
-				// If the error was unknown, then log it to console.
+				// If the error occurred within the command, or the customFilterCheck,
+				// then send the error to the chat and return.
+				// If the error was unknown, then also log it to the console for
+				// debugging.
 				const parsed = ExceptionParser.parse(err, cmd);
 				ctx.send(parsed.toEmbed());
 				if (err.code === 999) message.client.logger.error(err);
-
 				return;
 			}
 		} catch (err) {
-			// If the error occurred within the code, then log it to the console as well
+			// If the error occurred within the above code, then log it to the console as well
 			// as the chat, and then return.
 			message.client.logger.error(err);
 			const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
