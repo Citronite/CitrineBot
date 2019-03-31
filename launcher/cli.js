@@ -1,4 +1,5 @@
 const readline = require('readline');
+const { exec } = require('child_process');
 const AbstractMenu = require('./Menus/AbstractMenu.js');
 
 const prompt = '-> ';
@@ -20,15 +21,6 @@ function println(str) {
 // Another rather redundant shorthand :P
 function print(...args) {
 	console.log(...args);
-}
-
-// Useful sleep function for better UX
-async function sleep(time = 1000) {
-	return new Promise((res) => {
-		setTimeout(() => {
-			res();
-		}, time);
-	});
 }
 
 // Self-explanatory
@@ -63,13 +55,6 @@ async function confirm(str) {
 	}
 }
 
-// Clear console screen. By default, it clears everything BELOW the header
-// Use cls(0, 0) to clear the whole screen
-function cls(x = 0, y = 8) {
-	readline.cursorTo(process.stdout, x, y);
-	readline.clearScreenDown(process.stdout);
-}
-
 // Takes a Menu (must be instance of an extension of the AbstractMenu class)
 // and prints it to console.
 // Also sets rl.currMenu to that menu. This, along with <Menu>.code can be helpful
@@ -99,6 +84,32 @@ async function printMenu(menu) {
 	rl.prompt();
 }
 
+// Clear console screen. By default, it clears everything BELOW the header
+// Use cls(0, 0) to clear the whole screen
+function cls(x = 0, y = 8) {
+	readline.cursorTo(process.stdout, x, y);
+	readline.clearScreenDown(process.stdout);
+}
+
+// Useful sleep function for better UX
+async function sleep(time = 1000) {
+	return new Promise((res) => {
+		setTimeout(() => {
+			res();
+		}, time);
+	});
+}
+
+// Promisified version of child_process.exec()
+function execute(...args) {
+	return new Promise((res, rej) => {
+		exec(...args, (err, stdout, stderr) => {
+			if (err) return rej(err);
+			return res({ stdout, stderr });
+		});
+	});
+}
+
 // Exports
 module.exports = {
 	print,
@@ -110,4 +121,5 @@ module.exports = {
 	input,
 	cls,
 	confirm,
+	execute,
 };
