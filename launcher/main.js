@@ -14,6 +14,7 @@ const {
 } = require('./cli.js');
 
 const Home = new HomeMenu();
+
 // Self-explanatory
 async function printHomepage() {
   cls(0, 0);
@@ -41,8 +42,8 @@ async function compileCitrine() {
   catch (err) {
     println('Uh-oh! An unknown error occurred while compiling code!');
     println(err);
-    println('Please make sure Citrine is installed properly, and try again.' +
-            'For further help, you can join the official support server:' +
+    println('Please make sure Citrine is installed properly, and try again.\n' +
+            'For further help, you can join the official support server:\n' +
             'Official Support Server: https://discord.gg/rEM9gFN');
     return false;
   }
@@ -100,7 +101,7 @@ async function startLauncher() {
       data = fs.readdirSync('./data/core');
     }
     catch(err) {
-      println('The core folder is missing from the data directory. Please make sure\nyou installed Citrine correctly and try again.');
+      println('Directory ./data/core seems to be missing. Please make sure\nyou installed Citrine correctly and try again.');
       return;
     }
 
@@ -114,13 +115,15 @@ async function startLauncher() {
       if (recompile) {
         const finished = await compileCitrine();
         if (!finished) return;
-        println('Please restart the launcher. If the problem persists, you\n' +
-                'can visit the official support server for more help.' +
+
+        println('Please restart the launcher. If problems persist, you\n' +
+                'can visit the official support server for more help:\n' +
                 'Official Support Server: https://discord.gg/rEM9gFN');
         return;
       }
       else {
-        println('\nAlright then. Please make sure Citrine is installed properly on your device,\nand then try running the launcher again.');
+        println('\nAlright then. Please make sure Citrine is installed properly\n' +
+                'on your device, and then try running the launcher again.');
         return;
       }
     }
@@ -133,7 +136,9 @@ async function startLauncher() {
     await sleep(2000);
 
     // Obtain the bot token
-    let TOKEN = await input('Please insert your bot token. If it is stored\non your path, simply enter PATH:<VARIABLE>');
+    let TOKEN = await input('Please insert your bot token. If it is stored\n' +
+                            'on your path, simply enter PATH:<VARIABLE>');
+
     if (TOKEN.startsWith('PATH:')) TOKEN = process.env[TOKEN.slice(5)];
     while (!TOKEN) {
       TOKEN = await input('Please insert a valid bot token:');
@@ -147,39 +152,39 @@ async function startLauncher() {
     }
 
     // Compile source code
-    const successful = await compileCitrine();
-    if (!successful) return;
-
-    // Run initialSetup functions for the DB and Settings
-    try {
-      const dbPath = '../bin/Structures/CitrineStructs/CitrineDB.js';
-      const settingsPath = '../bin/Structures/CitrineStructs/CitrineSettings.js';
-      const { CitrineDB } = require(dbPath);
-      const { CitrineSettings } = require(settingsPath);
-      await CitrineDB.initialSetup();
-      await CitrineSettings.initialSetup(TOKEN, prefix);
-
-      println('Successfully initialized databases and settings for Citrine!');
-    }
-    catch (err) {
-      println('Unknown error occurred while trying to initialize bot settings.');
-      println(err);
-      println('Please make sure Citrine is installed properly, and try again.');
-      return;
-    }
+    const finished = await compileCitrine();
+    if (!finished) return;
 
     try {
-      const start_citrine = ':: Simply run the node script for starting the bot.\nnode run\n';
-      fs.writeFile('./start_citrine.bat', start_citrine, (err) => {
+      println('Creating path: ./data/core');
+      const path = './data/core';
+      fs.mkdir(path, { recursive: true }, err => {
         if (err) throw err;
       });
 
-      println('Created file start_citrine.bat\nFrom now on, you can simply click on this file to run the bot!');
+      println('Creating file: ./data/core/_settings.json');
+      const _settings = JSON.stringify({ TOKEN, prefix }, null, '\t');
+      fs.writeFile('./data/core/_settings.json', _settings, err => {
+        if (err) throw err;
+      });
+
+      if (!dir.includes('start_citrine.bat')) {
+        println('Creating file: ./start_citrine.bat');
+        const start_citrine = ':: Simply run the node script for starting the bot.\nnode run\n';
+        fs.writeFile('./start_citrine.bat', start_citrine, (err) => {
+          if (err) throw err;
+        });
+      }
     }
     catch (err) {
-      println('Error creating start_citrine.bat');
+      println('Error creating files.');
       println(err);
       await sleep();
+      println('You may configure the files manually and try again.\n' +
+              'If the problem persists, you can visit the official\n' +
+              'support server for more help:\n' +
+              'Official Support Server: https://discord.gg/rEM9gFN');
+      return;
     }
 
     // Start the launcher!
