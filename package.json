@@ -5,7 +5,7 @@
   "main": "bin/citrine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "launcher": "node launcher\\launcher.js",
+    "launcher": "node launcher\\main.js",
     "run": "node bin\\citrine.js"
   },
   "keywords": [],
