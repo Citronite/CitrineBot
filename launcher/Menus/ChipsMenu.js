@@ -2,6 +2,7 @@ const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
 const { println } = require('../cli.js');
 
+// Allows managing chips through the launcher.
 class ChipsMenu extends AbstractMenu {
   constructor() {
     super({
@@ -36,6 +37,9 @@ class ChipsMenu extends AbstractMenu {
 
   4() {
     println('Create new Chip');
+    // This will actually just create boilerplate files in Chips/<Name>
+    // including the _meta.js, with defaults in place.
+    // Maybe also a git branch for it?
     println('To be implemented!');
   }
 }
