@@ -5,21 +5,21 @@ import { BaseError } from '../Structures/ErrorStructs/BaseError';
 import { ExceptionParser } from '../Structures/ErrorStructs/ExceptionParser';
 
 module.exports = {
-	name: 'message',
-	maxListeners: 1,
-	listener: async (client: CitrineClient, message: Message): Promise<void> => {
-		const { cmdHandler, db } = client;
-		let config: GuildConfig | null = null;
+  name: 'message',
+  maxListeners: 1,
+  listener: async (client: CitrineClient, message: Message): Promise<void> => {
+    const { cmdHandler, db } = client;
+    let config: GuildConfig | null = null;
 
-		try {
-			config = await db.getGuild(message.guild.id);
-			if (!config) config =  await db.setGuild(message.guild);
-			if (!config) throw new BaseError(999, ExceptionParser.getDefaultMessages()[999]);
+    try {
+      config = await db.getGuild(message.guild.id);
+      if (!config) config =  await db.setGuild(message.guild);
+      if (!config) throw new BaseError(999, ExceptionParser.getDefaultMessages()[999]);
 
-			await cmdHandler.processCommand(message, config);
+      await cmdHandler.processCommand(message, config);
 
-		} catch (err) {
-			client.logger.error();
-		}
-	}
+    } catch (err) {
+      client.logger.error();
+    }
+  }
 };

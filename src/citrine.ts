@@ -20,22 +20,22 @@ import { ClientOptions } from 'discord.js';
 const defaultChips = ['dev-utils'];
 
 const options: ClientOptions = {
-	disableEveryone: true,
-	disabledEvents: ['TYPING_START']
+  disableEveryone: true,
+  disabledEvents: ['TYPING_START']
 };
 
 const citrine = new CitrineClient(options);
 
 (async function main() {
-	try {
-		citrine.initChips(defaultChips);
-		citrine.initEvents();
-		citrine.initDB();
+  try {
+    citrine.initChips(defaultChips);
+    citrine.initEvents();
+    citrine.initDB();
 
-		await citrine.launch();
-	} catch (err) {
-		process.exit(1);
-	}
+    await citrine.launch();
+  } catch (err) {
+    process.exit(1);
+  }
 })();
 
 process.on('uncaughtException', err => citrine.logger.error());

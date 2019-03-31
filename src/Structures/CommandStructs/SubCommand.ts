@@ -5,40 +5,40 @@ import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { Context } from '../../Utils/Context';
 
 export class SubCommand extends AbstractCommand {
-	private parent?: Command;
-	private base?: BaseCommand;
+  private parent?: Command;
+  private base?: BaseCommand;
 
-	constructor(name: string, options: CommandOptions) {
-		super(name, options);
-	}
+  constructor(name: string, options: CommandOptions) {
+    super(name, options);
+  }
 
-	public setParent(cmd: Command): void | Error {
-		if (this.parent) throw new Error('Parent commands cannot be reset!');
+  public setParent(cmd: Command): void | Error {
+    if (this.parent) throw new Error('Parent commands cannot be reset!');
 
-		if (cmd instanceof BaseCommand || cmd instanceof SubCommand) {
-			this.parent = cmd;
-		}
-	}
+    if (cmd instanceof BaseCommand || cmd instanceof SubCommand) {
+      this.parent = cmd;
+    }
+  }
 
-	public getParent(): Command | undefined {
-		return this.parent;
-	}
+  public getParent(): Command | undefined {
+    return this.parent;
+  }
 
-	public setBase(cmd: Command): void | Error {
-		if (this.base) throw new Error('Base commands cannot be reset!');
+  public setBase(cmd: Command): void | Error {
+    if (this.base) throw new Error('Base commands cannot be reset!');
 
-		if (cmd instanceof BaseCommand) {
-			this.base = cmd;
-		}	else if (cmd instanceof SubCommand) {
-			this.base = cmd.base;
-		}
-	}
+    if (cmd instanceof BaseCommand) {
+      this.base = cmd;
+    }	else if (cmd instanceof SubCommand) {
+      this.base = cmd.base;
+    }
+  }
 
-	public getBase(): BaseCommand | undefined {
-		return this.base;
-	}
+  public getBase(): BaseCommand | undefined {
+    return this.base;
+  }
 
-	public noArgsFallback(ctx: Context): void {
-		ctx.send(QuickEmbed.commandHelp(ctx, this));
-	}
+  public noArgsFallback(ctx: Context): void {
+    ctx.send(QuickEmbed.commandHelp(ctx, this));
+  }
 }

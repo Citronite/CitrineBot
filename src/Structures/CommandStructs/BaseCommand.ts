@@ -4,15 +4,15 @@ import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { Context } from '../../Utils/Context';
 
 export class BaseCommand extends AbstractCommand {
-	public readonly chip: string;
+  public readonly chip: string;
 
-	constructor(name: string, chip: string, options: CommandOptions) {
-		super(name, options);
+  constructor(name: string, chip: string, options: CommandOptions) {
+    super(name, options);
 
-		this.chip = chip;
-	}
+    this.chip = chip;
+  }
 
-	public noArgsFallback(ctx: Context): void {
-		ctx.send(QuickEmbed.commandHelp(ctx, this));
-	}
+  public noArgsFallback(ctx: Context): void {
+    ctx.send(QuickEmbed.commandHelp(ctx, this));
+  }
 }

@@ -21,9 +21,9 @@ async function rmdir() {
 }
 
 module.exports = {
-	readdir,
-	readFile,
-	writeFile,
-	mkdir,
-	rmdir
+  readdir,
+  readFile,
+  writeFile,
+  mkdir,
+  rmdir
 };
