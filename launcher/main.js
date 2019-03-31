@@ -169,7 +169,7 @@ async function startLauncher() {
     }
 
     try {
-      const start_citrine = ':: Simply run the node script for starting the bot.\nnode run';
+      const start_citrine = ':: Simply run the node script for starting the bot.\nnode run\n';
       fs.writeFile('./start_citrine.bat', start_citrine, (err) => {
         if (err) throw err;
       });
