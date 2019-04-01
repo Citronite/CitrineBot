@@ -11,5 +11,7 @@ module.exports = {
       return;
     }
     ctx.send(error.toEmbed());
+
+    if (error.code === 999) ctx.client.logger.error(error);
   }
 };
