@@ -16,7 +16,7 @@ import { Util,
  */
 export class DjsUtils {
   constructor() {
-    throw new Error('This class may not be instantiated!');
+    throw new Error('This class may not be instantiated with the new keyword!');
   }
 
   public static escapeMarkdown(text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean): string {

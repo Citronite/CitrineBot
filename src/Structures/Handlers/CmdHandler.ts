@@ -9,7 +9,7 @@ import { ExceptionParser } from '../ErrorStructs/ExceptionParser';
 
 export class CmdHandler {
   constructor() {
-    throw new Error('This class may not be instantiated with new!');
+    throw new Error('This class may not be instantiated with the new keyword!');
   }
 
   public static checkPrefix(message: any, config: GuildConfig): string | null {
@@ -113,25 +113,22 @@ export class CmdHandler {
         await message.client.permHandler.checkCustomFilters(cmd, message, message.client);
 
         // Execute the command. Note that args are not passed as an array.
-        await cmd.execute(ctx, ...finalArgs);
+        cmd.execute(ctx, ...finalArgs);
 
       } catch (err) {
         // If the error occurred within the command, or the customFilterCheck,
         // then send the error to the chat and return.
         // If the error was unknown, then also log it to the console for
         // debugging.
-        const parsed = ExceptionParser.parse(err, cmd);
-        ctx.send(parsed.toEmbed());
-        if (err.code === 999) message.client.logger.error(err);
-        return;
+        const parsedError = ExceptionParser.parse(err, cmd);
+        message.client.emit('commandError', ctx, parsedError);
       }
     } catch (err) {
       // If the error occurred within the above code, then log it to the console as well
       // as the chat, and then return.
-      message.client.logger.error(err);
       const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
       message.channel.send(error.toEmbed());
-      return;
+      message.client.logger.error(err);
     }
   }
 }

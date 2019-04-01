@@ -7,7 +7,7 @@ type Exception = number | string | CommandError | BaseError;
 
 export class ExceptionParser {
   constructor() {
-    throw new Error('This class may not be instantiated with new!');
+    throw new Error('This class may not be instantiated with the new keyword!');
   }
 
   public static parse(err: Exception, cmd?: Command): CommandError | BaseError {

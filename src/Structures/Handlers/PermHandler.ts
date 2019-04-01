@@ -15,7 +15,7 @@ import {
 
 export class PermHandler {
   constructor() {
-    throw new Error('This class may not be instantiated with new!');
+    throw new Error('This class may not be instantiated with the new keyword!');
   }
 
   public static async checkCustomFilters(cmd: Command, message: Message, client: CitrineClient): Promise<boolean> {
