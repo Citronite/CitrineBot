@@ -3,16 +3,9 @@ import { BaseCommand } from '../Structures/CommandStructs/BaseCommand';
 
 export class Formatter {
   constructor() {
-    throw new Error('This class may not be instantiated with new!');
+    throw new Error('This class may not be instantiated with the new keyword!');
   }
 
-  /**
-   * Takes a string or array of strings and formats them as
-   * inline code.
-   * @param {string | string[]} str
-   * @returns {string | string[]}
-   * @static
-   */
   public static inline(str: string | string[]): string | string[] {
     if (typeof str === 'string') {
       return `\`${str}\``;
@@ -21,14 +14,6 @@ export class Formatter {
     }
   }
 
-  /**
-   * Takes a string or array of strings and formats them as
-   * codeblocks.
-   * @param {string | string[]} str
-   * @param {string} lang - Language for syntax highlihgting
-   * @returns {string | string[]}
-   * @static
-   */
   public static codeblock(str: string | string[], lang: string = ''): string | string[] {
     if (typeof str === 'string') {
       return `\`\`\`${lang}\n${str}\`\`\``;
@@ -37,15 +22,6 @@ export class Formatter {
     }
   }
 
-  /**
-   * Takes a Command object and returns an object containing properly
-   * formatted information, to be displayed for command help
-   * @param {Command} cmd - The command to format help for
-   * @param {number} maxWidth - Maximum width for each line
-   * @param {boolean} useCodeBlocks - Whether to use codeblocks for usage and subcommands help
-   * @returns {object} Object containing formatted help for all properties of a command
-   * @static
-   */
   public static commandHelp(cmd: Command, maxWidth: number = 80, useCodeBlocks: boolean = true): object {
     const name = cmd.name;
     const description = cmd.description;
