@@ -12,12 +12,12 @@ export abstract class AbstractCommand {
   public subcommands?: Collection<string, Command>;
   public readonly name: string;
   public readonly description: string;
-  public readonly usage: string;
+  public readonly usage?: string;
 
   constructor(name: string, options: CommandOptions) {
     this.name = name;
-    this.description = options.description || 'No description provided';
-    this.usage = options.usage || '';
+    this.description = (options && options.description) || 'No description provided';
+    this.usage = (options && options.usage) || undefined;
   }
 
   public async execute(ctx: Context, ...args: any[]): Promise<void> {
