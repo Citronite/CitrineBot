@@ -32,13 +32,13 @@ class HomeMenu extends AbstractMenu {
   }
 
   async 1() {
-    rl.currMenu = { code: 9 };
+    rl.currMenu = { code: 0 };
 
     await sleep(500);
     println('Launching Citrine. . .');
 
     await sleep(500);
-    println('0. Shut down Citrine & go back to the homepage');
+    println('0. Close Launcher');
 
     rl.prompt();
   }
