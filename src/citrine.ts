@@ -2,7 +2,7 @@ import { CitrineClient } from './Structures/CitrineClient';
 import { ClientOptions } from 'discord.js';
 
 /*
-*        CitrineBot - An open-source, modular
+*    CitrineBot - A powerful, open-source, modular
 *        discord bot, built with developer and
 *             user experience in mind!
 *
@@ -17,7 +17,7 @@ import { ClientOptions } from 'discord.js';
 *          ###############################
 */
 
-const defaultChips = ['dev-utils'];
+const defaultChips: string[] = [];
 
 const options: ClientOptions = {
   disableEveryone: true,
