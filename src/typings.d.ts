@@ -135,7 +135,6 @@ declare module 'typings' {
   export interface IBaseCommand extends IAbstractCommand {
     readonly module: string;
     execute: (ctx: IContext, ...args: string[]) => void;
-    noArgsFallback?: (ctx: IContext) => void;
   }
   export interface ISubCommand extends IAbstractCommand {
     readonly parent: ISubCommand | IBaseCommand;
@@ -145,7 +144,6 @@ declare module 'typings' {
     setBase: (cmd: Command) => void | Error;
     getBase: () => IBaseCommand | undefined;
     execute: (ctx: IContext, ...args: string[]) => void;
-    noArgsFallback?: (ctx: IContext) => void;
   }
 
   type Command = ISubCommand | IBaseCommand;
