@@ -8,7 +8,16 @@
     "launcher": "node launcher\\main.js",
     "citrine": "node bin\\citrine.js"
   },
-  "keywords": [],
+  "keywords": [
+    "discord",
+    "discord.js",
+    "javascript",
+    "typescript",
+    "bot",
+    "discordbot",
+    "citrine",
+    "discord-bot"
+  ],
   "author": "Quantomistro3178",
   "license": "ISC",
   "devDependencies": {

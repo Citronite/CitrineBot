@@ -1,2 +1,2 @@
-:: Simply run the node script to start the bot
-node run
+:: Simply run the main file
+node ./bin/citrine.js
