@@ -5,13 +5,13 @@ import { Context } from './Context';
 
 export class QuickEmbed {
   constructor() {
-    throw new Error('This class may not be instantiated with new');
+    throw new Error('This class may not be instantiated with the new keyword');
   }
 
-  public static error(info: string = 'An unknown error occurred!', type: string = 'UNKNOWN:666'): RichEmbed {
+  public static error(info: string = 'An unknown error occurred!'): RichEmbed {
     return new RichEmbed().setColor(Colors.RED)
       .setDescription(`⛔ ${info}`)
-      .setFooter(`Error: ${type}`)
+      .setFooter('This wasn\'t supposed to happen...')
       .setTimestamp();
   }
 
@@ -22,7 +22,7 @@ export class QuickEmbed {
       .setTimestamp();
   }
 
-  public static base(user: User | GuildMember): RichEmbed {
+  public static basic(user: User | GuildMember): RichEmbed {
     if (user instanceof GuildMember) {
       const color = user.displayColor;
 
@@ -38,15 +38,16 @@ export class QuickEmbed {
   }
 
   public static commandHelp(ctx: Context, cmd: Command): RichEmbed {
-    const embed = this.base(ctx.message.member || ctx.author);
+    const embed = this.basic(ctx.message.member || ctx.author);
     const help = ctx.client.utils.format.commandHelp(cmd);
 
     embed.setTitle(help.name)
       .setDescription(help.description)
-      .addField('Chip', help.module, true)
-      .addField('Base Command', help.base, true)
-      .addField('Usage', help.usage, false)
-      .addField('SubCommands', help.subcommands, false);
+      .addField('Chip', help.chip, true)
+      .addField('Base Command', help.base, true);
+
+    if (help.usage) embed.addField('Usage', help.usage, false);
+    if (help.subcommands) embed.addField('SubCommands', help.subcommands, false);
 
     return embed;
   }
