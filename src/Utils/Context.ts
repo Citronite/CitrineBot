@@ -39,9 +39,9 @@ export class Context implements IContext {
     }
   }
 
-  public async error(msg: string, type: string, embed: boolean = true): Promise<Message | Message[]> {
+  public async error(msg: string, embed: boolean = true): Promise<Message | Message[]> {
     if (embed) {
-      const embed = QuickEmbed.error(msg, type);
+      const embed = QuickEmbed.error(msg);
       return this.channel.send(embed);
     } else {
       return this.channel.send(`⛔ **Error:** ${msg}`);

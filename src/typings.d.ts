@@ -36,7 +36,7 @@ declare module 'typings' {
     readonly author: User;
     readonly channel: Channel;
     success: (msg: string, embed: boolean) => Promise<Message | Message[]>;
-    error: (msg: string, type: string, embed: boolean) => Promise<Message | Message[]>;
+    error: (msg: string, embed: boolean) => Promise<Message | Message[]>;
     confirm: (msg: string, timeOut: number) => Promise<boolean | null>;
     prompt: (msg: string, contentOnly: boolean, timeOut: number) => Promise<Message | string | null>;
     promptReaction: (msg: string, emojis: string[], limit: number, timeOut: number) => Promise<MessageReaction[] | null>;
