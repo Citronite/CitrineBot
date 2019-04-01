@@ -37,8 +37,4 @@ export class SubCommand extends AbstractCommand {
   public getBase(): BaseCommand | undefined {
     return this.base;
   }
-
-  public noArgsFallback(ctx: Context): void {
-    ctx.send(QuickEmbed.commandHelp(ctx, this));
-  }
 }

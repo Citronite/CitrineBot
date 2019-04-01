@@ -11,8 +11,4 @@ export class BaseCommand extends AbstractCommand {
 
     this.chip = chip;
   }
-
-  public noArgsFallback(ctx: Context): void {
-    ctx.send(QuickEmbed.commandHelp(ctx, this));
-  }
 }
