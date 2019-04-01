@@ -17,7 +17,7 @@ export abstract class AbstractCommand {
 
   constructor(name: string, options: CommandOptions) {
     this.name = name;
-    this.description = options.description || 'No description provided :(';
+    this.description = options.description || 'No description provided';
     this.usage = options.usage || '';
   }
 
@@ -29,7 +29,10 @@ export abstract class AbstractCommand {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
       const instance = new subCmd();
-      if (instance instanceof SubCommand) {
+      // Hacky check for whether its a subcommand or not.
+      // Couldn't use instanceof SubCommand because of circular reference.
+      // I think. 🤔
+      if (instance.getParent) {
         this.subcommands.set(instance.name, instance);
         continue;
       }
