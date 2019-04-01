@@ -5,7 +5,7 @@ import { Collection } from 'discord.js';
  */
 export class JsUtils {
   constructor() {
-    throw new Error('This class may not be instantiated!');
+    throw new Error('This class may not be instantiated with the new keyword!');
   }
 
   /**
