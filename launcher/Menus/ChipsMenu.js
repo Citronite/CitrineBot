@@ -39,6 +39,7 @@ class ChipsMenu extends AbstractMenu {
     println('Create new Chip');
     // This will actually just create boilerplate files in Chips/<Name>
     // including the _meta.js, with defaults in place.
+    // As well as the data/<Name> folder etc. etc.
     // Maybe also a git branch for it?
     println('To be implemented!');
   }
