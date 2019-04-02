@@ -61,16 +61,18 @@ export class CitrineClient extends Client {
     // Starts bot!
     try {
       console.log('Fetching data. . .');
-      const { token, prefix } = require('../data/core/_settings.json');
+      const { TOKEN, prefix } = require('../../data/core/_settings.json');
       await this.settings.load();
 
       if (this.settings.globalPrefix === 'DEFAULT') this.settings.globalPrefix = prefix;
 
       console.log('Logging in to Discord. . .');
-      await this.login(token);
-      const app = await this.fetchApplication();
+      await this.login(TOKEN);
 
-      if (this.settings.owner === 'DEFAULT') this.settings.owner = app.owner.id;
+      if (this.settings.owner === 'DEFAULT') {
+        const app = await this.fetchApplication();
+        this.settings.owner = app.owner.id;
+      }
 
       await this.settings.save();
 

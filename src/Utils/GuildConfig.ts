@@ -169,6 +169,6 @@ export class GuildConfig {
 
   public toString(): string {
     const obj = this.toJSON();
-    return JSON.stringify(obj, null, '\t');
+    return JSON.stringify(obj, null, '\n\t');
   }
 }
