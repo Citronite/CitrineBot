@@ -217,7 +217,7 @@ async function startLauncher() {
     catch (err) {
       println(err);
       println('Error installing dependencies.\n\n' +
-              'Please try running `npm install` to manually install dependencies.\n' +
+              'You can try running `npm install` to manually install dependencies.\n' +
               'If a problem persists, you can visit the support server for help.\n' +
               'Support Server: https://discord.gg/rEM9gFN');
       rl.close();
