@@ -1,11 +1,12 @@
-import { Util,
+import { CitrineClient } from '../Structures/CitrineClient';
+import {
+  Util,
   SnowflakeUtil,
   SplitOptions,
   Snowflake,
   DeconstructedSnowflake,
   Role,
   Guild,
-  Client,
   User,
   GuildChannel,
   GuildMember
@@ -66,10 +67,10 @@ export class DjsUtils {
     const matches = text.match(/".*?"/g);
     if (!matches || !matches.length) return text.split(/ +/);
     const tmp = ` ${Date.now()}`;
-    return text.replace(/".*?"/g, tmp).split(/ +/).map(val => val === tmp ? matches.shift() : val).filter(Boolean);
+    return text.replace(/".*?"/g, tmp).split(/ +/).map(val => val === tmp.slice(1) ? matches.shift() : val);
   }
 
-  public static resolveRole(guild: Guild, role: string): Role | null {
+  public static async resolveRole(guild: Guild, role: string): Promise<Role | null> {
     const parsedRole = DjsUtils.parseMention(role);
 
     const finder = (val: Role): boolean => {
@@ -83,7 +84,7 @@ export class DjsUtils {
     return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
   }
 
-  public static resolveGuildChannel(guild: Guild, channel: string): GuildChannel | null {
+  public static async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
     const parsedChnl = DjsUtils.parseMention(channel);
 
     const finder = (val: GuildChannel): boolean => {
@@ -95,14 +96,13 @@ export class DjsUtils {
     return guild.channels.get(parsedChnl) || guild.channels.find(finder) || null;
   }
 
-  public static async resolveUser(client: Client, user: string): Promise<User | null> {
+  public static async resolveUser(client: CitrineClient, user: string): Promise<User | null> {
     const parsedUser = DjsUtils.parseMention(user);
     try {
       const fetched = await client.fetchUser(parsedUser);
       return fetched || null;
-    }	catch(err) {
-      const tsIsDumb: any = client;
-      tsIsDumb.logger.warn(`<Client>.fetchUser() failed for [${user}]`);
+    }	catch (err) {
+      client.logger.warn(`<Client>.fetchUser() failed for [${user}]`);
       return null;
     }
   }

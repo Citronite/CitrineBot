@@ -38,5 +38,5 @@ const citrine = new CitrineClient(options);
   }
 })();
 
-process.on('uncaughtException', err => citrine.logger.error());
-process.on('unhandledRejection', err => citrine.logger.error());
+process.on('uncaughtException', err => citrine.logger.error(err));
+process.on('unhandledRejection', err => citrine.logger.error(err));

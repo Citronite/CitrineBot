@@ -19,7 +19,7 @@ module.exports = {
       await cmdHandler.processCommand(message, config);
 
     } catch (err) {
-      client.logger.error();
+      client.logger.error(err);
     }
   }
 };

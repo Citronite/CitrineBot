@@ -10,19 +10,19 @@ export class CitrineLogger {
     this.client = client;
   }
 
-  public error(): void {
+  public error(str: string | Error): void {
     return;
   }
 
-  public info(): void {
+  public info(str: string): void {
     return;
   }
 
-  public warn(): void {
+  public warn(str: string): void {
     return;
   }
 
-  public log(): void {
+  public log(str: string): void {
     return;
   }
 }

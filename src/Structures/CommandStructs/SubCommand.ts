@@ -1,8 +1,6 @@
 import { AbstractCommand, Command } from './AbstractCommand';
 import { BaseCommand } from './BaseCommand';
 import { CommandOptions } from 'typings';
-import { QuickEmbed } from '../../Utils/QuickEmbed';
-import { Context } from '../../Utils/Context';
 
 export class SubCommand extends AbstractCommand {
   private parent?: Command;
