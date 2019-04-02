@@ -101,9 +101,9 @@ declare module 'typings' {
     blockCode: (str: string | string[], lang?: string) => string | string[];
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
-    resolveRole: (guild: Guild, role: string) => Role | null;
-    resolveGuildChannel: (guild: Guild, channel: string) => GuildChannel | null;
-    resolveUser: (client: Client, user: string) => Promise<User | null>;
+    resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
+    resolveGuildChannel: (guild: Guild, channel: string) => Promise<GuildChannel | null>;
+    resolveUser: (client: any, user: string) => Promise<User | null>;
     resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
   }
 
