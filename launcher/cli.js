@@ -39,7 +39,7 @@ function printHeader() {
 function input(str) {
   return new Promise((res) => {
     rl.question(`\n${str}\n${prompt}`, (ans) => {
-      res(ans);
+      res(ans.trim());
       return;
     });
   });
@@ -73,15 +73,7 @@ async function printMenu(menu) {
     x++;
   }
 
-  if (menu.code === 0) {
-    print('\n0. Exit launcher\n');
-  }
-  else {
-    print('\n0. Go back to the homepage\n');
-  }
-
   rl.currMenu = menu;
-  rl.prompt();
 }
 
 // Clear console screen. By default, it clears everything BELOW the header
@@ -110,6 +102,11 @@ function execute(...args) {
   });
 }
 
+async function open(url, cwd) {
+  const cmd = (process.platform == 'darwin' ? 'open' : process.platform == 'win32' ? 'start' : 'xdg-open');
+  await execute(`${cmd} ${url}`, cwd);
+}
+
 // Exports
 module.exports = {
   print,
@@ -122,4 +119,5 @@ module.exports = {
   cls,
   confirm,
   execute,
+  open,
 };

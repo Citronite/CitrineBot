@@ -21,6 +21,9 @@ async function printHomepage() {
   printHeader();
   await sleep(500);
   await printMenu(Home);
+
+  println('\n0. Exit Launcher');
+  rl.prompt();
 }
 
 // Compiles code.
@@ -73,8 +76,25 @@ async function startLauncher() {
     else {
       cls();
       println('');
+      const code = rl.currMenu.code;
+
       // Run whatever option the user chose
-      await rl.currMenu.run(line);
+      try {
+        await rl.currMenu.run(line);
+      }
+      catch (err) {
+        println(err);
+      }
+
+      // Check whether the code changed or not.
+      // If it did, it means a new menu was printed, so
+      // no need for the code below because it is handled
+      // by the printMenu() function
+      if (code !== rl.currMenu.code) return;
+      await sleep();
+      const str = rl.currMenu.code === 0 ? '0. Exit Launcher' : '0. Go back to the homepage';
+      println(`\n${str}`);
+      rl.prompt();
     }
   });
 
@@ -101,7 +121,8 @@ async function startLauncher() {
       data = fs.readdirSync('./data/core');
     }
     catch(err) {
-      println('Directory ./data/core seems to be missing. Please make sure\nyou installed Citrine correctly and try again.');
+      println('The directory ./data/core seems to be missing. Please make\n' +
+              'sure you installed Citrine correctly and try again.');
       return;
     }
 

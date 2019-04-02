@@ -8,8 +8,6 @@ class RepairsMenu extends AbstractMenu {
       choices: [
         'Recompile source code',
         'Reinstall dependencies',
-        'Reinstall modules',
-        'Delete modules',
         'Full reinstallation',
       ],
     });
@@ -17,11 +15,20 @@ class RepairsMenu extends AbstractMenu {
     this.code = 2;
   }
 
-  1() { println('Recompile'); }
-  2() { println('Reinstall deps'); }
-  3() { println('Reinstall modules'); }
-  4() { println('Delete modules'); }
-  5() { println('Full reinstallation'); }
+  // Recompile TS code
+  1() {
+    println('Unimplemented');
+  }
+
+  // Reinstall npm dependencies
+  2() {
+    println('Unimplemented');
+  }
+
+  // Factory reset
+  3() {
+    println('Unimplemented');
+  }
 }
 
 module.exports = RepairsMenu;

@@ -1,5 +1,5 @@
 const AbstractMenu = require('./AbstractMenu.js');
-const { rl, sleep, println } = require('../cli.js');
+const { sleep, println } = require('../cli.js');
 
 class CreditsMenu extends AbstractMenu {
   constructor() {
@@ -14,28 +14,17 @@ class CreditsMenu extends AbstractMenu {
     this.code = 4;
   }
 
+  // View Credits
   async 1() {
-    rl.currMenu = { code: 9 };
-
     await sleep(500);
     println('Show Credits (or just link to github repo)');
-
-    await sleep(500);
-    println('0. Go back to the homepage');
-
-    rl.prompt();
   }
 
+  // View License
   async 2() {
-    rl.currMenu = { code: 9 };
-
     await sleep(500);
     println('Show License (or just link to github repo)');
 
-    await sleep(500);
-    println('0. Go back to the homepage');
-
-    rl.prompt();
   }
 }
 
