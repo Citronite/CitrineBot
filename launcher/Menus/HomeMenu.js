@@ -7,7 +7,8 @@ const {
   println,
   printMenu,
   sleep,
-  execute,
+  open,
+  rl,
 } = require('../cli.js');
 
 const Chips = new ChipsMenu();
@@ -34,7 +35,8 @@ class HomeMenu extends AbstractMenu {
     await sleep(500);
     println('Launching Citrine. . .');
 
-    await execute('node ./bin/citrine.js', { cwd: process.cwd() });
+    await open('start_citrine.bat', process.cwd());
+    rl.close();
   }
 
   2() {

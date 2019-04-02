@@ -17,17 +17,17 @@ class RepairsMenu extends AbstractMenu {
 
   // Recompile TS code
   1() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 
   // Reinstall npm dependencies
   2() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 
   // Factory reset
   3() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 }
 

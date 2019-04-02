@@ -104,7 +104,7 @@ function execute(...args) {
 
 async function open(url, cwd) {
   const cmd = (process.platform == 'darwin' ? 'open' : process.platform == 'win32' ? 'start' : 'xdg-open');
-  await execute(`${cmd} ${url}`, cwd);
+  await execute(`${cmd} ${url}`, { cwd });
 }
 
 // Exports

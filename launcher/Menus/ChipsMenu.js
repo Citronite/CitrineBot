@@ -1,5 +1,6 @@
 const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
+const path = require('path');
 const {
   println,
   confirm,
@@ -29,8 +30,8 @@ class ChipsMenu extends AbstractMenu {
   async 1() {
     println('Downloaded Chips:');
     await sleep();
-    const files = fs.readdirSync('./bin/Chips/');
-    println(files.join('\n'));
+    const chips = fs.readdirSync('./bin/Chips/');
+    println(chips.join('\n'));
   }
 
   // Download Chip from GitHub
@@ -45,9 +46,13 @@ class ChipsMenu extends AbstractMenu {
 
   // Create new Chip
   async 4() {
+    const chips = fs.readdirSync('./bin/Chips/');
+
     let chipName = (await input('Please enter the name of your new chip:')).toLowerCase();
+    if (chips.includes(chipName)) chipName = false;
     while (!chipName) {
       chipName = (await input('Please enter a valid name:')).toLowerCase();
+      if (chips.includes(chipName)) chipName = false;
     }
 
     try {
@@ -75,8 +80,8 @@ class ChipsMenu extends AbstractMenu {
           println(err);
         }
       }
-
-      open(`./bin/Chips/${chipName}`, process.cwd());
+      const p = path.resolve(process.cwd(), './bin/Chips');
+      open(p);
     }
     catch (err) {
       println(err);

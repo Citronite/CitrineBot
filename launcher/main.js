@@ -182,12 +182,12 @@ async function startLauncher() {
       fs.mkdirSync(path, { recursive: true });
 
       println('Creating file: ./data/core/_settings.json');
-      const _settings = JSON.stringify({ TOKEN, prefix }, null, '\t');
+      const _settings = JSON.stringify({ TOKEN, prefix }, null, '\n\t');
       fs.writeFileSync('./data/core/_settings.json', _settings);
 
       if (!dir.includes('start_citrine.bat')) {
         println('Creating file: ./start_citrine.bat');
-        const start_citrine = ':: Simply run the node script for starting the bot.\nnode run\n';
+        const start_citrine = ':: Simply run the node script for starting the bot.\nnode ./bin/citrine.js\n';
         fs.writeFileSync('./start_citrine.bat', start_citrine);
       }
     }

@@ -18,28 +18,28 @@ class GuidesMenu extends AbstractMenu {
 
   // Citrine Installation Guides
   1() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
 
   }
 
   // Citrine Documentation
   2() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 
   // djs Documentation
   3() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 
   // Nodejs Documentation
   4() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 
   // djs Official Guide
   5() {
-    println('Unimplemented');
+    println('This feature is yet to be implemented!');
   }
 }
 
