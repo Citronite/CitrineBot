@@ -1,6 +1,13 @@
 const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
-const { println, confirm, execute, input } = require('../cli.js');
+const {
+  println,
+  confirm,
+  execute,
+  input,
+  sleep,
+  open,
+} = require('../cli.js');
 
 // Allows managing chips through the launcher.
 class ChipsMenu extends AbstractMenu {
@@ -19,11 +26,11 @@ class ChipsMenu extends AbstractMenu {
   }
 
   // List downloaded Chips
-  1() {
+  async 1() {
+    println('Downloaded Chips:');
+    await sleep();
     const files = fs.readdirSync('./bin/Chips/');
-    for (const file of files) {
-      println(file);
-    }
+    println(files.join('\n'));
   }
 
   // Download Chip from GitHub
@@ -48,11 +55,11 @@ class ChipsMenu extends AbstractMenu {
       fs.mkdirSync(`./data/${chipName}`);
 
       println(`Creating path: ./bin/Chips/${chipName}`);
-      fs.mkdirSync(`./src/Chips/${chipName}`);
+      fs.mkdirSync(`./bin/Chips/${chipName}`);
 
       println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const _meta = 'module.exports = {\n\tauthor: "<YOUR NAME>"\n\tdescription: "<DESCRIPTION OF CHIP>"\n};\n';
-      fs.writeFileSync(`./src/Chips/${chipName}/_meta.js`, _meta);
+      const _meta = 'module.exports = {\n\tauthor: "<YOUR NAME>",\n\tdescription: "<DESCRIPTION OF CHIP>",\n};\n';
+      fs.writeFileSync(`./bin/Chips/${chipName}/_meta.js`, _meta);
 
       const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
 
@@ -68,6 +75,8 @@ class ChipsMenu extends AbstractMenu {
           println(err);
         }
       }
+
+      open(`./bin/Chips/${chipName}`, process.cwd());
     }
     catch (err) {
       println(err);
