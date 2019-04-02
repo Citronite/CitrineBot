@@ -114,7 +114,7 @@ async function startLauncher() {
   // before trying to start the launcher.
   const dir = fs.readdirSync('.');
 
-  if (dir.includes('data') && dir.includes('bin')) {
+  if (dir.includes('data') && dir.includes('bin') && dir.includes('node_modules')) {
     const bin = fs.readdirSync('./bin');
     let data = [];
     try {
@@ -135,16 +135,20 @@ async function startLauncher() {
 
       if (recompile) {
         const finished = await compileCitrine();
-        if (!finished) return;
+        if (!finished) {
+          rl.close();
+          return;
+        }
 
         println('Please restart the launcher. If problems persist, you\n' +
                 'can visit the official support server for more help:\n' +
-                'Official Support Server: https://discord.gg/rEM9gFN');
+                'Support Server: https://discord.gg/rEM9gFN');
         return;
       }
       else {
         println('\nAlright then. Please make sure Citrine is installed properly\n' +
                 'on your device, and then try running the launcher again.');
+        rl.close();
         return;
       }
     }
@@ -174,7 +178,10 @@ async function startLauncher() {
 
     // Compile source code
     const finished = await compileCitrine();
-    if (!finished) return;
+    if (!finished) {
+      rl.close();
+      return;
+    }
 
     try {
       println('Creating path: ./data/core');
@@ -198,10 +205,24 @@ async function startLauncher() {
       println('You may configure the files manually and try again.\n' +
               'If the problem persists, you can visit the official\n' +
               'support server for more help:\n' +
-              'Official Support Server: https://discord.gg/rEM9gFN');
+              'Support Server: https://discord.gg/rEM9gFN');
+      rl.close();
       return;
     }
 
+    try {
+      println('Installing dependencies. . .');
+      await execute('npm install', { cwd: process.cwd() });
+    }
+    catch (err) {
+      println(err);
+      println('Error installing dependencies.\n\n' +
+              'Please try running `npm install` to manually install dependencies.\n' +
+              'If a problem persists, you can visit the support server for help.\n' +
+              'Support Server: https://discord.gg/rEM9gFN');
+      rl.close();
+      return;
+    }
     // Start the launcher!
     println('\nStarting launcher. . .');
     await sleep();
