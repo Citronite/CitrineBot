@@ -1,7 +1,7 @@
 import { RichEmbed } from 'discord.js';
 import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { ErrorCodes } from './ErrorCodes';
-import { ExceptionParser } from './ExceptionParser';
+import { ErrorMessages } from './ErrorMessages';
 
 export class BaseError extends Error {
   public readonly code: number;
@@ -15,7 +15,7 @@ export class BaseError extends Error {
     this.code = Object.values(ErrorCodes).includes(code) ? code : 999;
     this.type = Object.keys(ErrorCodes).find(val => ErrorCodes[val] === code) || 'UNKNOWN_ERROR';
     this.name = `${this.type}:${this.code}`;
-    this.errors = errors || ExceptionParser.getDefaultMessages()[this.code];
+    this.errors = errors || ErrorMessages[this.code];
     this.message = `Error(s):\n\t${errors.join('\n')}`;
   }
 
@@ -28,6 +28,6 @@ export class BaseError extends Error {
   public toEmbed(): RichEmbed {
     return QuickEmbed.error(this.message)
       .setTitle('Exception Occurred!')
-      .setFooter(`Error: ${this.type}`);
+      .setFooter(`Error: ${this.name}`);
   }
 }
