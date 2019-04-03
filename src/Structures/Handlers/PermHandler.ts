@@ -22,7 +22,7 @@ export class PermHandler {
     const { settings: globalConfig } = client;
     try {
       const config: GuildConfig | null = await client.db.getGuild(message.guild.id);
-      if (!config) throw new BaseError(ErrorCodes.NOT_FOUND, ['GuildConfig not found']);
+      if (!config) throw new BaseError(ErrorCodes.NOT_FOUND, ['GuildConfig not found!']);
 
       const errors = [];
 

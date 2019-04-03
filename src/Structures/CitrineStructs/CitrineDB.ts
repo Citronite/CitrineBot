@@ -28,20 +28,20 @@ export class CitrineDB implements ICitrineDB {
     }
   }
 
-  public async getGuild(id: GuildID): Promise<GuildConfig> {
+  public async getGuild(id: GuildID): Promise<GuildConfig | null> {
     try {
       const jsonData = await this.guilds.get(id);
       if (jsonData) {
         const conf = new GuildConfig(jsonData);
         return Promise.resolve(conf);
       }
-      throw new Error(`Unable to find GuildConfig for id: ${id}`);
+      return Promise.resolve(null);
     } catch (err) {
       return Promise.reject(err);
     }
   }
 
-  public async setGuild(guild: Guild | GuildConfig | any): Promise<GuildConfig> {
+  public async setGuild(guild: Guild | GuildConfig | any): Promise<GuildConfig | null> {
     try {
       const conf = new GuildConfig(guild);
       await this.guilds.set(guild.id, conf.toJSON());

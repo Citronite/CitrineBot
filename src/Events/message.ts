@@ -18,7 +18,7 @@ module.exports = {
       await cmdHandler.processCommand(message, config);
 
     } catch (err) {
-      client.logger.error(err);
+      client.logger.error(err.stack);
     }
   }
 };
