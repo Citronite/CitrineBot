@@ -2,11 +2,11 @@
   "name": "citrine-ts",
   "version": "0.1.0",
   "description": "Citrine - A powerful, fully modular, easily extensible Discord bot!",
-  "main": "bin/citrine.js",
+  "main": "./bin/citrine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "launcher": "node launcher\\main.js",
-    "citrine": "node bin\\citrine.js"
+    "launcher": "node ./launcher/main.js",
+    "citrine": "node ./bin/citrine.js"
   },
   "keywords": [
     "discord",
