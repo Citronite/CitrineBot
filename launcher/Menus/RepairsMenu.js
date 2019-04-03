@@ -1,5 +1,6 @@
 const AbstractMenu = require('./AbstractMenu.js');
-const { println } = require('../cli.js');
+const { println, execute, rl } = require('../cli.js');
+const fs = require('fs');
 
 class RepairsMenu extends AbstractMenu {
   constructor() {
@@ -16,8 +17,32 @@ class RepairsMenu extends AbstractMenu {
   }
 
   // Recompile TS code
-  1() {
-    println('This feature is yet to be implemented!');
+  async 1() {
+    println('Recompiling source code...');
+    try {
+      println('\nPlease wait...');
+      const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
+      if (stderr) println(stderr);
+      if (stdout) println(stdout);
+      const bin = fs.readdirSync('./bin');
+      if (bin && bin.includes('citrine.js')) {
+        println('Successfully recompiled code!');
+        return true;
+      }
+      else {
+        throw 'Missing file citrine.js';
+      }
+    }
+    catch (err) {
+      println('Uh-oh! An unknown error occurred while compiling code!');
+      println(err);
+      println('Please make sure Citrine is installed properly, and try again.\n' +
+              'For further help, you can join the official support server:\n' +
+              'Official Support Server: https://discord.gg/rEM9gFN');
+      rl.close();
+      process.exit();
+      return;
+    }
   }
 
   // Reinstall npm dependencies

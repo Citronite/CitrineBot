@@ -31,26 +31,32 @@ class HomeMenu extends AbstractMenu {
     this.code = 0;
   }
 
+  // Launches Citrine and exits launcher.
   async 1() {
     await sleep(500);
     println('Launching Citrine. . .');
-
-    await open('start_citrine.bat', process.cwd());
     rl.close();
+    await open('start_citrine.bat', process.cwd());
+    process.exit();
+    return;
   }
 
+  // Print ChipsMenu
   2() {
     printMenu(Chips);
   }
 
+  // Print RepairsMenu
   3() {
     printMenu(Repairs);
   }
 
+  // Print GuidesMenu
   4() {
     printMenu(Guides);
   }
 
+  // Print CreditsMenu
   5() {
     printMenu(Credits);
   }
