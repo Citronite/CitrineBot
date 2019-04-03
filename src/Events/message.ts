@@ -6,7 +6,6 @@ import { ErrorMessages } from '../Structures/ErrorStructs/ErrorMessages';
 
 module.exports = {
   name: 'message',
-  maxListeners: 1,
   listener: async (client: CitrineClient, message: Message): Promise<void> => {
     const { cmdHandler, db } = client;
     let config: GuildConfig | null = null;
