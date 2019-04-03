@@ -28,8 +28,8 @@ declare module 'typings' {
     description? : string,
     usage? : string,
   }
-
-  export interface IContext {
+/*
+  interface IContext {
     readonly client: Client;
     readonly invokedPrefix: string;
     readonly message: Message;
@@ -44,7 +44,7 @@ declare module 'typings' {
     reply: (...args: any) => Promise<Message | Message[]>;
     sendDM: (...args: any) => Promise<Message | Message[]>;
   }
-/*
+
   export interface IGuildConfig {
     readonly id: string;
     prefix: string;
@@ -123,7 +123,7 @@ declare module 'typings' {
     codeblock: (str: string | string[], lang?: string) => string | string[];
     commandHelp(cmd: any, maxWidth?: number, useCodeBlocks?: boolean): object;
   }
-/*
+
   interface IAbstractCommand {
     subcommands?: Collection<string, ISubCommand>;
     readonly name: string;
@@ -133,8 +133,7 @@ declare module 'typings' {
   }
 
   export interface IBaseCommand extends IAbstractCommand {
-    readonly module: string;
-    execute: (ctx: IContext, ...args: string[]) => void;
+    readonly chip: string;
   }
   export interface ISubCommand extends IAbstractCommand {
     readonly parent: ISubCommand | IBaseCommand;
@@ -143,9 +142,8 @@ declare module 'typings' {
     getParent: () => Command | undefined;
     setBase: (cmd: Command) => void | Error;
     getBase: () => IBaseCommand | undefined;
-    execute: (ctx: IContext, ...args: string[]) => void;
   }
 
-  type Command = ISubCommand | IBaseCommand;
-*/
+  export type Command = ISubCommand | IBaseCommand;
+
 }
