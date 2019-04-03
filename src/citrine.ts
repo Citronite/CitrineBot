@@ -17,7 +17,7 @@ import { ClientOptions } from 'discord.js';
 *          ###############################
 */
 
-const defaultChips: string[] = [];
+const defaultChips: string[] = ['dev-utils'];
 
 const options: ClientOptions = {
   disableEveryone: true,

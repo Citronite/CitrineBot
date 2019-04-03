@@ -57,7 +57,6 @@ export class CitrineClient extends Client {
           const onload = require(`../Chips/${chip}/_onload.js`);
           if (typeof onload === 'function') onload(null);
         }
-        this.logger.info(`Loaded Chip [${chip}]`);
       }
 
       this.logger.info('Successfully initialized default Chips!');
