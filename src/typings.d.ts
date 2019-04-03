@@ -28,39 +28,7 @@ declare module 'typings' {
     description? : string,
     usage? : string,
   }
-/*
-  interface IContext {
-    readonly client: Client;
-    readonly invokedPrefix: string;
-    readonly message: Message;
-    readonly author: User;
-    readonly channel: Channel;
-    success: (msg: string, embed: boolean) => Promise<Message | Message[]>;
-    error: (msg: string, embed: boolean) => Promise<Message | Message[]>;
-    confirm: (msg: string, timeOut: number) => Promise<boolean | null>;
-    prompt: (msg: string, contentOnly: boolean, timeOut: number) => Promise<Message | string | null>;
-    promptReaction: (msg: string, emojis: string[], limit: number, timeOut: number) => Promise<MessageReaction[] | null>;
-    send: (...args: any) => Promise<Message | Message[]>;
-    reply: (...args: any) => Promise<Message | Message[]>;
-    sendDM: (...args: any) => Promise<Message | Message[]>;
-  }
 
-  export interface IGuildConfig {
-    readonly id: string;
-    prefix: string;
-    disabledRole: RoleID;
-    deleteCmdCalls: boolean;
-    deleteCmdCallsDelay: number;
-    readMsgEdits: boolean;
-    disabledUsers: Set<UserID>;
-    disabledChannels: Set<ChannelID>;
-    disabledCommands: Set<string>;
-    reqRoles: { [cmd in string]: RoleID | undefined };
-    setReqRole: (cmd: any, role: RoleID) => void;
-    unsetReqRole: (cmd: any) => void;
-    toJSON: () => object;
-  }
-*/
   export interface IGlobalConfig {
     owner: UserID;
     globalPrefix: string;
@@ -82,10 +50,7 @@ declare module 'typings' {
 
   export interface IPermHandler {
     checkCustomFilters: (cmd: any, message: Message, client: any) => Promise<boolean>;
-    checkDiscordPerms: (channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin?: boolean) => void | Error;
-    checkManageMessages: (channel: TextChannel, member: GuildMember, checkAdmin?: boolean) => boolean;
-    checkBan: (channel: TextChannel, member: GuildMember, checkAdmin?: boolean) => boolean;
-    checkKick(channel: TextChannel, member: GuildMember, checkAdmin?: boolean): boolean;
+    checkDiscordPerms: (channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin?: boolean) => void;
     checkGuildOwner: (guild: Guild, member: GuildMember) => boolean;
     checkBotOwner: (user: User | GuildMember) => boolean;
     checkBotDev: (user: User | GuildMember) => boolean;
@@ -128,14 +93,14 @@ declare module 'typings' {
     subcommands?: Collection<string, ISubCommand>;
     readonly name: string;
     readonly description: string;
-    readonly usage: Array<string[]>;
+    readonly usage: string;
     registerSubCommands: (...subCmds: ISubCommand[]) => IAbstractCommand;
   }
 
-  export interface IBaseCommand extends IAbstractCommand {
+  interface IBaseCommand extends IAbstractCommand {
     readonly chip: string;
   }
-  export interface ISubCommand extends IAbstractCommand {
+  interface ISubCommand extends IAbstractCommand {
     readonly parent: ISubCommand | IBaseCommand;
     readonly base: IBaseCommand;
     setParent: (cmd: Command) => void | Error;
