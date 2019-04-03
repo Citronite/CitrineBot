@@ -7,8 +7,8 @@ import { ClientOptions } from 'discord.js';
 *             user experience in mind!
 *
 *	    By @PandaHappy 🍂#8851 | @Quantomistro3178
-*	       Discord: https://discord.gg/rEM9gFN
 *     GitHub: https://github.com/Quantomistro3178
+*	    Support Server: https://discord.gg/rEM9gFN
 *
 *          ###############################
 *          #                             #
@@ -37,8 +37,5 @@ const citrine = new CitrineClient(options);
   }
 })();
 
-citrine.on('error', () => citrine.logger.error('Connection error...'));
-citrine.on('ready', () => citrine.logger.info('Ready!'));
-citrine.on('reconnecting', () => citrine.logger.info('Reconnecting...'));
 process.on('uncaughtException', err => citrine.logger.error(err));
 process.on('unhandledRejection', err => citrine.logger.error(err));
