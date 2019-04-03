@@ -6,7 +6,6 @@ import { ExceptionParser } from '../Structures/ErrorStructs/ExceptionParser';
 
 module.exports = {
   name: 'message',
-  maxListeners: 1,
   listener: async (client: CitrineClient, message: Message): Promise<void> => {
     const { cmdHandler, db } = client;
     let config: GuildConfig | null = null;
@@ -19,7 +18,7 @@ module.exports = {
       await cmdHandler.processCommand(message, config);
 
     } catch (err) {
-      client.logger.error();
+      client.logger.error(err);
     }
   }
 };
