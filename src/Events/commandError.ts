@@ -9,7 +9,9 @@ module.exports = {
       ctx.send(QuickEmbed.commandHelp(ctx, error.cmd));
       return;
     }
+
     ctx.send(error.toEmbed());
     if (error.code === 999) ctx.client.logger.error(error);
+    ctx.client.lastException = error;
   }
 };

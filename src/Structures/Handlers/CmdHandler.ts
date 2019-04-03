@@ -112,15 +112,11 @@ export class CmdHandler {
 
         // Execute the command. Note that args are not passed as an array.
         cmd.execute(ctx, ...finalArgs);
-
       } catch (err) {
-        // If the error occurred within the command, or the customFilterCheck,
-        // then send the error to the chat and return.
-        // If the error was unknown, then also log it to the console for
-        // debugging.
+        // If error occurred while executing the command,
+        // emit the commandError event
         const parsedError = ExceptionParser.parse(err, cmd);
         message.client.emit('commandError', ctx, parsedError);
-        message.client.lastException = err;
       }
     } catch (err) {
       // If the error occurred within the above code, then log it to the console as well
