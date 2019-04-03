@@ -4,6 +4,7 @@
 		"linebreak-style": false,
 		"no-implicit-dependencies": false,
 		"no-unnecessary-class": false,
-		"indent": [true, "spaces", 2]
+		"indent": [true, "spaces", 2],
+		"no-dynamic-delete": false
 	}
 }
