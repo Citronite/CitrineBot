@@ -8,8 +8,9 @@ import {
   Role,
   Guild,
   User,
-  GuildChannel,
-  GuildMember
+  Channel,
+  GuildMember,
+  GuildChannel
 } from 'discord.js';
 
 /**
@@ -84,7 +85,7 @@ export class DjsUtils {
     return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
   }
 
-  public static async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
+  public static async resolveGuildChannel(guild: Guild, channel: string): Promise<Channel | null> {
     const parsedChnl = DjsUtils.parseMention(channel);
 
     const finder = (val: GuildChannel): boolean => {
@@ -100,9 +101,18 @@ export class DjsUtils {
     const parsedUser = DjsUtils.parseMention(user);
     try {
       const fetched = await client.fetchUser(parsedUser);
-      return fetched || null;
+      if (fetched) return fetched;
+
+      const rgx = new RegExp(`${parsedUser}`, 'i');
+      const finder = (val: User) => {
+        return val.username === parsedUser ||
+        val.tag === parsedUser ||
+        rgx.test(val.username);
+      };
+
+      return client.users.find(finder) || null;
     }	catch (err) {
-      client.logger.warn(`<Client>.fetchUser() failed for [${user}]`);
+      client.logger.warn(`CitrineClient#resolveUser() failed for [${user}]`);
       return null;
     }
   }
@@ -126,10 +136,9 @@ export class DjsUtils {
       };
 
       return fetchedGuild.members.find(finder) || null;
-
     }	catch (err) {
       const client: any = guild.client;
-      client.logger.warn(`<Client>.fetchMembers() failed for [${member}]`);
+      client.logger.warn(`CitrineClient#resolveGuildMember() failed for [${member}]`);
       return null;
     }
   }

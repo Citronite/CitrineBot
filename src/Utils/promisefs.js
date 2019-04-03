@@ -4,19 +4,19 @@ async function readdir() {
 
 }
 
-async function readFile() {
-
-}
-
-async function writeFile() {
-
-}
-
 async function mkdir() {
 
 }
 
 async function rmdir() {
+
+}
+
+async function readFile() {
+
+}
+
+async function writeFile() {
 
 }
 
