@@ -46,7 +46,7 @@ export class QuickEmbed {
       .addField('Chip', help.chip, true)
       .addField('Base Command', help.base, true);
 
-    if (help.usage) embed.addField('Usage', help.usage, false);
+    if (help.usage) embed.addField('Usage', help.usage.replace('[p]', ctx.prefix), false);
     if (help.subcommands) embed.addField('SubCommands', help.subcommands, false);
 
     return embed;
