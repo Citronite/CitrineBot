@@ -1,6 +1,6 @@
-import { BaseCommand } from '../../exports';
+const { BaseCommand } = require('../../exports');
 
-class Ping extends BaseCommand {
+class CMD extends BaseCommand {
   constructor() {
     super({
       name: 'ping',
@@ -14,4 +14,4 @@ class Ping extends BaseCommand {
   }
 }
 
-module.exports = new Ping();
+module.exports = new CMD();

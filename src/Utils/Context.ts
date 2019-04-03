@@ -15,6 +15,7 @@ import {
   GuildMember,
   Guild
 } from 'discord.js';
+import { GuildConfig } from './GuildConfig';
 
 type reaction = string | Emoji | ReactionEmoji;
 
@@ -27,7 +28,7 @@ export class Context {
   public readonly channel: TextChannel | DMChannel | GroupDMChannel;
   public readonly guild: Guild | null;
 
-  constructor(message: Message, iPrefix: string) {
+  constructor(message: Message, config: GuildConfig, iPrefix: string) {
     this.client = message.client;
     // The prefix used to invoke the command.
     // If it was a bot mention, then this will be the global prefic for the bot.

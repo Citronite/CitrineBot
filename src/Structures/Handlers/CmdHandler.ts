@@ -12,14 +12,12 @@ export class CmdHandler {
     throw new Error('This class may not be instantiated with the new keyword!');
   }
 
-  public static checkPrefix(message: any, config: GuildConfig): string | null {
+  public static checkPrefix(message: any, config?: GuildConfig): string | null {
     if (message.author.bot) return null;
-
     const gPrefix = message.client.settings.globalPrefix;
-    const lPrefix = config.prefix;
     const id = message.client.user.id;
-    const rgx = new RegExp(`^(<@!?\\${id}>|\\${lPrefix})\\|\\${gPrefix})\\s*`);
-
+    let rgx = new RegExp(`^(<@!?${id}>|\\${gPrefix})\\s*`);
+    if (config) rgx = new RegExp(`^(<@!?${id}>|\\${gPrefix}|\\${config.prefix})\\s*`);
     return rgx.test(message.content) ? message.content.match(rgx)[0] : null;
   }
 
@@ -105,7 +103,7 @@ export class CmdHandler {
       // config.deleteCmdCalls is set for this guild. If so, delete the message.
       if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
 
-      const ctx = new Context(message, invokedPrefix);
+      const ctx = new Context(message, config, invokedPrefix);
 
       try {
         // Check Citrine's custom filters. This automatically throws a BaseError if
@@ -122,13 +120,15 @@ export class CmdHandler {
         // debugging.
         const parsedError = ExceptionParser.parse(err, cmd);
         message.client.emit('commandError', ctx, parsedError);
+        message.client.lastException = err;
       }
     } catch (err) {
       // If the error occurred within the above code, then log it to the console as well
       // as the chat, and then return.
-      const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
+      const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, [err.message]);
       message.channel.send(error.toEmbed());
       message.client.logger.error(err);
+      message.client.lastException = err;
     }
   }
 }

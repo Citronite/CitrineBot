@@ -25,6 +25,7 @@ export class CitrineClient extends Client {
   public readonly cmdHandler: ICmdHandler;
   public readonly permHandler: IPermHandler;
   public readonly commands: Collection<string, BaseCommand>;
+  public lastException: Error | null;
 
   constructor(options: ClientOptions) {
     super(options);
@@ -38,6 +39,7 @@ export class CitrineClient extends Client {
     this.permHandler = PermHandler;
 
     this.commands = new Collection();
+    this.lastException = null;
   }
 
   public initChips(defaultChips: string[]): boolean {

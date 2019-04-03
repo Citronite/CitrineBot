@@ -37,7 +37,7 @@ const citrine = new CitrineClient(options);
   }
 })();
 
-citrine.on('error', err => citrine.logger.error('Connection error...'));
+citrine.on('error', () => citrine.logger.error('Connection error...'));
 citrine.on('ready', () => citrine.logger.info('Ready!'));
 citrine.on('reconnecting', () => citrine.logger.info('Reconnecting...'));
 process.on('uncaughtException', err => citrine.logger.error(err));
