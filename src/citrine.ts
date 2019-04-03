@@ -30,7 +30,6 @@ const citrine = new CitrineClient(options);
   try {
     citrine.initChips(defaultChips);
     citrine.initEvents();
-    citrine.initDB();
 
     await citrine.launch();
   } catch (err) {

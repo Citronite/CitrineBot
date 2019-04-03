@@ -85,7 +85,7 @@ export class DjsUtils {
     return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
   }
 
-  public static async resolveGuildChannel(guild: Guild, channel: string): Promise<Channel | null> {
+  public static async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
     const parsedChnl = DjsUtils.parseMention(channel);
 
     const finder = (val: GuildChannel): boolean => {
