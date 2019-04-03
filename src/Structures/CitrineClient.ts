@@ -75,7 +75,6 @@ export class CitrineClient extends Client {
       }
 
       await this.settings.save();
-
     } catch (err) {
       this.logger.error(err);
       return Promise.reject(err);
