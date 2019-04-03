@@ -44,7 +44,7 @@ export class PermHandler {
     }
   }
 
-  public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void | BaseError {
+  public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void {
     const memberPerms = channel.memberPermissions(member);
     if (memberPerms === null) throw new BaseError(ErrorCodes.NOT_FOUND, [`Member permissions not found (id: ${member.id})`]);
 
@@ -56,28 +56,16 @@ export class PermHandler {
     throw new BaseError(code, missingFlags);
   }
 
-  public static checkManageMessages(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): boolean {
-    return false;
-  }
-
-  public static checkBan(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): boolean {
-    return false;
-  }
-
-  public static checkKick(channel: TextChannel, member: GuildMember, checkAdmin: boolean = true): boolean {
-    return false;
-  }
-
   public static checkGuildOwner(guild: Guild, member: GuildMember): boolean {
-    return false;
+    return guild.ownerID === member.id;
   }
 
-  public static checkBotOwner(user: User | GuildMember): boolean {
-    return false;
+  public static checkBotOwner(user: User | GuildMember | any): boolean {
+    return user.id === user.client.settings.owner;
   }
 
-  public static checkBotDev(): boolean {
-    return false;
+  public static checkBotDev(user: User | GuildMember | any): boolean {
+    return user.client.settings.devs.includes(user.id);
   }
 
 }
