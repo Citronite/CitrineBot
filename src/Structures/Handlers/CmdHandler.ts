@@ -77,7 +77,7 @@ export class CmdHandler {
     throw new Error('To be implemented!');
   }
 
-  public static async processCommand(message: any, config: GuildConfig): Promise<void> {
+  public static async processCommand(message: any, config?: GuildConfig): Promise<void> {
 
     try {
       // Check if the message was prefixed. If so, obtain the invoked prefix.
@@ -101,30 +101,25 @@ export class CmdHandler {
 
       // Now we know that the message is a bot command, check if
       // config.deleteCmdCalls is set for this guild. If so, delete the message.
-      if (config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
-
-      const ctx = new Context(message, config, invokedPrefix);
-
+      if (config && config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
+      const ctx = new Context(message, invokedPrefix);
       try {
         // Check Citrine's custom filters. This automatically throws a BaseError if
         // the filter isn't passed successfully
         await message.client.permHandler.checkCustomFilters(cmd, message, message.client);
-
         // Execute the command. Note that args are not passed as an array.
         cmd.execute(ctx, ...finalArgs);
       } catch (err) {
         // If error occurred while executing the command,
         // emit the commandError event
         const parsedError = ExceptionParser.parse(err, cmd);
-        message.client.emit('commandError', ctx, parsedError);
+        message.client.emit('cmdException', ctx, parsedError);
       }
     } catch (err) {
       // If the error occurred within the above code, then log it to the console as well
       // as the chat, and then return.
-      const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, [err.message]);
-      message.channel.send(error.toEmbed());
-      message.client.logger.error(err);
-      message.client.lastException = err;
+      const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
+      message.client.emit('exception', message, error);
     }
   }
 }
