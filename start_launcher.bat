@@ -6,3 +6,4 @@ cls
 title Citrine Launcher
 echo Starting launcher...
 node ./launcher/main.js
+pause
