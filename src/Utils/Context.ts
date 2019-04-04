@@ -1,7 +1,9 @@
 import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { BaseError } from '../Structures/ErrorStructs/BaseError';
-import { ErrorCodes } from '../Structures/ErrorStructs/ErrorCodes';
+import { ErrorMessages } from '../Structures/ErrorStructs/ErrorMessages';
+import { GuildConfig } from './GuildConfig';
+import { LockOptions, Reaction } from 'typings';
 import {
   Message,
   User,
@@ -15,9 +17,6 @@ import {
   GuildMember,
   Guild
 } from 'discord.js';
-import { GuildConfig } from './GuildConfig';
-
-type reaction = string | Emoji | ReactionEmoji;
 
 export class Context {
   public readonly client: CitrineClient | any;
@@ -28,7 +27,7 @@ export class Context {
   public readonly channel: TextChannel | DMChannel | GroupDMChannel;
   public readonly guild: Guild | null;
 
-  constructor(message: Message, config: GuildConfig, iPrefix: string) {
+  constructor(message: Message, iPrefix: string) {
     this.client = message.client;
     // The prefix used to invoke the command.
     // If it was a bot mention, then this will be the global prefic for the bot.
@@ -45,7 +44,7 @@ export class Context {
       const embed = QuickEmbed.success(msg);
       return this.channel.send(embed);
     } else {
-      return this.channel.send(`✅ **Success:** ${msg}`);
+      return this.channel.send(`✅ ${msg}`);
     }
   }
 
@@ -54,7 +53,7 @@ export class Context {
       const embed = QuickEmbed.error(msg);
       return this.channel.send(embed);
     } else {
-      return this.channel.send(`⛔ **Error:** ${msg}`);
+      return this.channel.send(`⛔ ${msg}`);
     }
   }
 
@@ -69,7 +68,7 @@ export class Context {
     return Promise.reject('Not Implemented');
   }
 
-  public async promptReaction(msg: string, emojis: reaction[], limit: number = 1, timeOut: number = 30000): Promise<MessageReaction[] | null> {
+  public async promptReaction(msg: string, emojis: Reaction[], limit: number = 1, timeOut: number = 30000): Promise<MessageReaction[] | null> {
     return Promise.reject('Not Implemented');
     // Waits for a reaction on the bot message.
     // First param would be msg to send, second param list of reactions to await.
@@ -92,14 +91,14 @@ export class Context {
     const { checkDiscordPerms } = this.client.permHandler;
 
     if (!this.member) {
-      throw new BaseError(ErrorCodes.PERMISSION_ERROR, ['Permission checks will only work on guild members, not users!']);
+      throw new BaseError(100, 'Permission checks will only work on guild members, not users!');
     }
 
     checkDiscordPerms(this.channel, this.member, perms, checkAdmin);
 
     if (checkBot) {
       if (!this.guild) {
-        throw new BaseError(ErrorCodes.PERMISSION_ERROR, ['Permission checks will only work inside guilds!']);
+        throw new BaseError(100, 'Permission checks will only work inside guilds!');
       }
       checkDiscordPerms(this.channel, this.guild.me, perms, checkAdmin);
     }
@@ -107,11 +106,22 @@ export class Context {
 
   public checkBotDev(): void {
     if (this.client.settings.devs.includes(this.author.id)) return;
-    throw new BaseError(ErrorCodes.PERMISSION_ERROR, ['Only bot developers may perform this action!']);
+    throw new BaseError(100, 'Only bot developers may perform this action!');
   }
 
   public checkBotOwner(): void {
     if (this.client.settings.owner === this.author.id) return;
-    throw new BaseError(ErrorCodes.PERMISSION_ERROR, ['Only bot owners may perform this action!']);
+    throw new BaseError(100, 'Only bot owners may perform this action!');
+  }
+
+  public lock(condition: boolean, lockOptions?: LockOptions): void {
+    if (condition) return;
+
+    // 100 === ErrorCodes.PERMISSION_ERROR
+    const options = {
+      errCode: lockOptions && lockOptions.errCode || 100,
+      errMessages: lockOptions && lockOptions.errMessages || ErrorMessages[100]
+    };
+    throw new BaseError(options.errCode, options.errMessages);
   }
 }
