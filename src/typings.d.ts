@@ -16,7 +16,9 @@ declare module 'typings' {
     SplitOptions,
     DeconstructedSnowflake,
     Role,
-    GuildChannel
+    GuildChannel,
+    Emoji,
+    ReactionEmoji,
   } from 'discord.js';
 
   export type GuildID = Snowflake;
@@ -29,9 +31,17 @@ declare module 'typings' {
     usage? : string,
   }
 
+  export type LockOptions = {
+    errCode?: number,
+    errMessages?: string | string[],
+  }
+
+  export type Reaction = string | Emoji | ReactionEmoji;
+
   export interface IGlobalConfig {
     owner: UserID;
     globalPrefix: string;
+    verbose: boolean;
     devs: Set<UserID>;
     disabledUsers: Set<UserID>;
     disabledGuilds: Set<GuildID>;
@@ -49,11 +59,11 @@ declare module 'typings' {
   }
 
   export interface IPermHandler {
-    checkCustomFilters: (cmd: any, message: Message, client: any) => Promise<boolean>;
+    checkCustomFilters: (cmd: any, message: Message | any, ) => Promise<boolean>;
     checkDiscordPerms: (channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin?: boolean) => void;
-    checkGuildOwner: (guild: Guild, member: GuildMember) => boolean;
-    checkBotOwner: (user: User | GuildMember) => boolean;
-    checkBotDev: (user: User | GuildMember) => boolean;
+    checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
+    checkBotOwner: (user: User | GuildMember) => void;
+    checkBotDev: (user: User | GuildMember) => void;
   }
 
   export interface IDjsUtils {
@@ -86,7 +96,7 @@ declare module 'typings' {
   export interface IFormatter {
     inline: (str: string | string[]) => string | string[];
     codeblock: (str: string | string[], lang?: string) => string | string[];
-    commandHelp(cmd: any, maxWidth?: number, useCodeBlocks?: boolean): object;
+    cmdHelp(cmd: any, maxWidth?: number, useCodeBlocks?: boolean): object;
   }
 
   interface IAbstractCommand {
