@@ -4,7 +4,7 @@ import { ErrorCodes } from './ErrorCodes';
 import { Command } from '../CommandStructs/AbstractCommand';
 import { ErrorMessages } from './ErrorMessages';
 
-type Exception = number | string | CommandError | BaseError;
+type Exception = number | string | CommandError | BaseError | Error;
 
 export class ExceptionParser {
   constructor() {
@@ -13,7 +13,6 @@ export class ExceptionParser {
 
   public static parse(err: Exception, cmd?: Command): CommandError | BaseError {
     if (err instanceof BaseError) {
-
       return cmd ? new CommandError(cmd, err.code, err.errors) : err;
     } else {
       let parsedError: CommandError | BaseError;
@@ -27,7 +26,7 @@ export class ExceptionParser {
         const msg = ErrorMessages[code];
         parsedError = new BaseError(code, msg);
       } else {
-        parsedError = new BaseError(999, ErrorMessages[999]);
+        parsedError = new BaseError(999, err.message);
       }
 
       if (cmd) {

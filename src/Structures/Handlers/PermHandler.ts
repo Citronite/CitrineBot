@@ -20,6 +20,8 @@ export class PermHandler {
   public static async checkCustomFilters(cmd: Command, message: Message | any): Promise<boolean> {
     const { settings: globalConfig, db } = message.client;
     try {
+      if (message.author.id === globalConfig.owner) return Promise.resolve(true);
+
       const errors = [];
       const config: GuildConfig | null = await db.getGuild(message.guild.id);
       if (config) {
@@ -27,7 +29,6 @@ export class PermHandler {
         if (config.disabledChannels.includes(message.channel.id)) errors.push('Disabled Channel');
         if (config.disabledCommands.includes(cmd.name)) errors.push('Disabled Command [Local]');
       }
-      if (message.author.id === globalConfig.owner) return Promise.resolve(true);
       if (globalConfig.disabledUsers.includes(message.author.id)) errors.push('Disabled User [Global]');
       if (globalConfig.disabledCommands.includes(cmd.name)) errors.push('Disabled Command [Global]');
 

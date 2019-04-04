@@ -106,7 +106,7 @@ export class CmdHandler {
       try {
         // Check Citrine's custom filters. This automatically throws a BaseError if
         // the filter isn't passed successfully
-        await message.client.permHandler.checkCustomFilters(cmd, message, message.client);
+        await message.client.permHandler.checkCustomFilters(cmd, message);
         // Execute the command. Note that args are not passed as an array.
         cmd.execute(ctx, ...finalArgs);
       } catch (err) {

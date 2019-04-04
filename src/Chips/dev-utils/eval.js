@@ -9,9 +9,9 @@ class Eval extends BaseCommand {
   }
 
   execute(ctx, ...args) {
+    // First, lock the command to only dm channels!
+    ctx.lock(ctx.channel.type === 'dm', { errMessages: 'This command can only be used in DMs!'});
     try {
-      // First, lock the command to only dm channels!
-      ctx.lock(ctx.channel.type === 'dm');
       // Then check if the author is the bot owner
       ctx.checkBotOwner();
     }

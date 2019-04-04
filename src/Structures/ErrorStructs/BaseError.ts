@@ -18,7 +18,7 @@ export class BaseError extends Error {
     this.type = Object.keys(ErrorCodes).find(val => ErrorCodes[val] === code) || 'UNKNOWN_ERROR';
     this.name = `${this.type}:${this.code}`;
     this.errors = errors || ErrorMessages[this.code];
-    this.message = `**Error(s):**\n\t${this.errors.join('\n')}`;
+    this.message = `Error(s):\n\t${this.errors.join('\n')}`;
   }
 
   public toString(code: boolean = true): string {

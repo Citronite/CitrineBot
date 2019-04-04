@@ -33,7 +33,7 @@ declare module 'typings' {
 
   export type LockOptions = {
     errCode?: number,
-    errMessages?: string | string[],
+    errMessage?: string | string[],
   }
 
   export type Reaction = string | Emoji | ReactionEmoji;

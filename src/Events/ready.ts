@@ -17,8 +17,8 @@ module.exports = {
     console.log(`   ${name}   `);
     console.log(`===${'='.repeat(name.length)}===`);
 
-    console.log('\n\n');
-    console.log(`${client.user.username} is active in ${client.guilds.size} servers!`);
+    console.log('\n');
+    console.log(`${client.user.username} is active in ${client.guilds.size} server(s)!`);
     console.log(`Global Prefix: ${client.settings.globalPrefix}`);
     console.log(`Bot Owner: ${app.owner.tag}`);
     console.log('Invite Link:');

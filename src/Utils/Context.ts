@@ -120,8 +120,8 @@ export class Context {
     // 100 === ErrorCodes.PERMISSION_ERROR
     const options = {
       errCode: lockOptions && lockOptions.errCode || 100,
-      errMessages: lockOptions && lockOptions.errMessages || ErrorMessages[100]
+      errMessage: lockOptions && lockOptions.errMessage || ErrorMessages[100]
     };
-    throw new BaseError(options.errCode, options.errMessages);
+    throw new BaseError(options.errCode, options.errMessage);
   }
 }

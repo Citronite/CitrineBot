@@ -10,9 +10,12 @@ class Exception extends BaseCommand {
   }
 
   execute(ctx) {
+    ctx.checkBotDev();
+
     const { lastException } = ctx.client;
     if (lastException) {
-      const msg = `\`\`\`js\n${JSON.stringify(lastException, null, '\t')}\n\`\`\``;
+      const cls = lastException.constructor.name;
+      const msg = `\`\`\`js\n[${cls}]\n${JSON.stringify(lastException, null, '\t')}\n\`\`\``;
       ctx.send(QuickEmbed.error(msg).setTitle('Last Exception:'));
     }
     else {
