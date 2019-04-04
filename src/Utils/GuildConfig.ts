@@ -1,4 +1,5 @@
 import { Guild } from 'discord.js';
+import { CitrineClient } from '../Structures/CitrineClient';
 import {
   GuildID,
   ChannelID,
@@ -27,7 +28,7 @@ export class GuildConfig {
     if (guild instanceof Guild) {
       // Have to use any here since TS doesn't know guild.client
       // would be CitrineClient instead of Client.
-      const client: any = guild.client;
+      const client: CitrineClient | any = guild.client;
       this.id = guild.id;
       this.data = {
         id: guild.id,
@@ -44,6 +45,7 @@ export class GuildConfig {
 
     }	else {
 
+      // Ensure all proper keys are present in the data provided
       Object.keys(guild).forEach(val => {
         if (!props.includes(val)) throw new Error('Invalid data provided to GuildConfig constructor!');
       });

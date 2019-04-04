@@ -10,9 +10,10 @@ export class BaseError extends Error {
   public readonly errors: string[];
   public readonly message: string;
 
-  constructor(code: number, errors: string[]) {
-    super();
+  constructor(code: number, errors: string | string[]) {
     errors = typeof errors === 'string' ? [errors] : errors;
+
+    super();
     this.code = Object.values(ErrorCodes).includes(code) ? code : 999;
     this.type = Object.keys(ErrorCodes).find(val => ErrorCodes[val] === code) || 'UNKNOWN_ERROR';
     this.name = `${this.type}:${this.code}`;

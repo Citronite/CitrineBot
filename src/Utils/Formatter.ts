@@ -22,7 +22,7 @@ export class Formatter {
     }
   }
 
-  public static commandHelp(cmd: Command, maxWidth: number = 80, useCodeBlocks: boolean = true): object {
+  public static cmdHelp(cmd: Command, maxWidth: number = 80, useCodeBlocks: boolean = true): object {
     const name = cmd.name;
     const description = cmd.description;
     let chip;

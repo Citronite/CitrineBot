@@ -24,22 +24,19 @@ export class QuickEmbed {
 
   public static basic(user: User | GuildMember): RichEmbed {
     if (user instanceof GuildMember) {
-      const color = user.displayColor;
-
       return new RichEmbed().setTimestamp()
         .setFooter(`Requested by ${user.user.username}`, user.user.avatarURL)
-        .setColor(color);
+        .setColor(user.displayColor);
     } else {
-      const color = Colors.BOT;
       return new RichEmbed().setTimestamp()
         .setFooter(`Requested by ${user.username}`, user.avatarURL)
-        .setColor(color);
+        .setColor(Colors.BOT);
     }
   }
 
-  public static commandHelp(ctx: Context, cmd: Command): RichEmbed {
+  public static cmdHelp(ctx: Context, cmd: Command): RichEmbed {
     const embed = this.basic(ctx.message.member || ctx.author);
-    const help = ctx.client.utils.format.commandHelp(cmd);
+    const help = ctx.client.utils.format.cmdHelp(cmd);
 
     embed.setTitle(help.name)
       .setDescription(help.description)

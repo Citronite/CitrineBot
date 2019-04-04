@@ -39,6 +39,8 @@ export class CitrineClient extends Client {
     this.permHandler = PermHandler;
 
     this.commands = new Collection();
+    // Eventually, move lastException and other stats
+    // inside Client#settings
     this.lastException = null;
   }
 
@@ -102,13 +104,13 @@ export class CitrineClient extends Client {
   public async launch(): Promise<void> {
     // Starts bot!
     try {
-      this.logger.info('Fetching data. . .');
+      this.logger.info('\nFetching data. . .');
       const { TOKEN, prefix } = require('../../data/core/_settings.json');
       await this.settings.load();
 
       if (this.settings.globalPrefix === 'DEFAULT') this.settings.globalPrefix = prefix;
 
-      this.logger.info('Logging in to Discord. . .');
+      this.logger.info('\nLogging in to Discord. . .');
       await this.login(TOKEN);
 
       if (this.settings.owner === 'DEFAULT') {
