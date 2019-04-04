@@ -1,4 +1,5 @@
-const { BaseCommand } = require('../../exports');
+const { BaseCommand } = require('../../exports.js');
+const { QuickEmbed } = require('../../exports.js');
 
 class Exception extends BaseCommand {
   constructor() {
@@ -11,8 +12,8 @@ class Exception extends BaseCommand {
   execute(ctx) {
     const { lastException } = ctx.client;
     if (lastException) {
-      const msg = `\`\`\`js\n${JSON.stringify(lastException, null, '  \n')}\n\`\`\``;
-      ctx.error(msg);
+      const msg = `\`\`\`js\n${JSON.stringify(lastException, null, '\t')}\n\`\`\``;
+      ctx.send(QuickEmbed.error(msg).setTitle('Last Exception:'));
     }
     else {
       ctx.success('No exceptions!')

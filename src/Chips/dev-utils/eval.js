@@ -9,16 +9,15 @@ class Eval extends BaseCommand {
   }
 
   execute(ctx, ...args) {
-    // Permission checks!
     try {
-      // First check if the author is the bot owner
+      // First, lock the command to only dm channels!
+      ctx.lock(ctx.channel.type === 'dm');
+      // Then check if the author is the bot owner
       ctx.checkBotOwner();
     }
     catch (_) {
       // If not, check if the author is a bot developer
       ctx.checkBotDev();
-      // Finally, lock the command to only dm channels!
-      ctx.lock(ctx.channel.type === 'dm');
     }
 
     const code = args.join(' ');
