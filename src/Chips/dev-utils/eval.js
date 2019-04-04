@@ -2,15 +2,16 @@ const { BaseCommand } = require('../../exports');
 
 class Eval extends BaseCommand {
   constructor() {
-    super('eval', 'dev-utils', {
+    super({
+      name: 'eval',
       description: 'Evaluate arbitrary JavaScript code.',
       usage: '[p]eval <code>'
-    });
+    }, 'dev-utils');
   }
 
   execute(ctx, ...args) {
     // First, lock the command to only dm channels!
-    ctx.lock(ctx.channel.type === 'dm', { errMessages: 'This command can only be used in DMs!'});
+    ctx.lock(ctx.channel.type === 'dm', { errMessage: 'This command can only be used in DMs!'});
     try {
       // Then check if the author is the bot owner
       ctx.checkBotOwner();

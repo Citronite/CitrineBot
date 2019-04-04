@@ -2,7 +2,8 @@ const { BaseCommand } = require('../../exports');
 
 class Ping extends BaseCommand {
   constructor() {
-    super('ping', 'core', {
+    super({
+      name: 'ping',
       description: 'Check bot ping!',
       usage: '[p]ping'
     });

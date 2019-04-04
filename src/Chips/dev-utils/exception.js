@@ -3,15 +3,15 @@ const { QuickEmbed } = require('../../exports.js');
 
 class Exception extends BaseCommand {
   constructor() {
-    super('exception', 'dev-utils', {
+    super({
+      name: 'exception',
       description: 'View last exception tracked by the bot',
       usage: '[p]exception'
-    });
+    }, 'dev-utils');
   }
 
   execute(ctx) {
     ctx.checkBotDev();
-
     const { lastException } = ctx.client;
     if (lastException) {
       const cls = lastException.constructor.name;

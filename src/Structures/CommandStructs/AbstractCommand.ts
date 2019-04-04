@@ -14,10 +14,12 @@ export abstract class AbstractCommand {
   public readonly description: string;
   public readonly usage?: string;
 
-  constructor(name: string, options: CommandOptions) {
-    this.name = name;
-    this.description = (options && options.description) || 'No description provided';
-    this.usage = (options && options.usage) || undefined;
+  constructor(options: CommandOptions) {
+    if (!options) throw new Error('Invalid CommandOptions provided!');
+    this.name = options.name;
+    if (!this.name) throw new Error('Invalid command name provided!');
+    this.description = options.description || 'No description provided';
+    this.usage = options.usage || undefined;
   }
 
   public async execute(ctx: Context, ...args: any[]): Promise<void> {
@@ -28,7 +30,6 @@ export abstract class AbstractCommand {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
       const instance = new subCmd();
-
       // Hacky check for whether its a subcommand or not.
       // Couldn't use instanceof SubCommand because of circular dependency.
       if (instance.getParent) {

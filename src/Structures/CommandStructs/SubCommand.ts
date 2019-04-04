@@ -6,8 +6,8 @@ export class SubCommand extends AbstractCommand {
   private parent?: Command;
   private base?: BaseCommand;
 
-  constructor(name: string, options: CommandOptions) {
-    super(name, options);
+  constructor(options: CommandOptions) {
+    super(options);
   }
 
   public setParent(cmd: Command): void | Error {
