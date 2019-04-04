@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { CitrineClient } from '../CitrineClient';
 import { IGlobalConfig } from 'typings';
 
@@ -12,6 +11,7 @@ export class CitrineSettings {
     this.data = {
       owner: 'DEFAULT',
       globalPrefix: 'DEFAULT',
+      verbose: true,
       devs: new Set(),
       disabledUsers: new Set(),
       disabledGuilds: new Set(),
@@ -35,6 +35,14 @@ export class CitrineSettings {
 
   set globalPrefix(str) {
     this.data.globalPrefix = str;
+  }
+
+  get verbose(): boolean {
+    return this.data.verbose;
+  }
+
+  set verbose(val: boolean) {
+    this.data.verbose = val;
   }
 
   get devs(): string[] {
@@ -142,6 +150,7 @@ export class CitrineSettings {
     return {
       owner: conf.owner,
       globalPrefix: conf.globalPrefix,
+      verbose: conf.verbose,
       devs: new Set(conf.devs),
       disabledGuilds: new Set(conf.disabledGuilds),
       disabledCommands: new Set(conf.disabledCommands),
