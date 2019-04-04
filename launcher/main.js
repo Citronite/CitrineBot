@@ -66,6 +66,7 @@ async function startLauncher() {
       // If the current menu is the homepage, then exit the launcher
       if (rl.currMenu.code === 0) {
         rl.close();
+        process.exit(0);
         return;
       }
       // Otherwise, go back to the homepage
@@ -85,13 +86,9 @@ async function startLauncher() {
       catch (err) {
         println(err);
       }
-
-      // Check whether the code changed or not.
-      // If it did, it means a new menu was printed, so
-      // no need for the code below because it is handled
-      // by the printMenu() function
+      // Check whether the menu code is the same.
       if (code !== rl.currMenu.code) return;
-      await sleep();
+      await sleep(500);
       const str = rl.currMenu.code === 0 ? '0. Exit Launcher' : '0. Go back to the homepage';
       println(`\n${str}`);
       rl.prompt();

@@ -4,9 +4,9 @@ import { Message } from 'discord.js';
 
 module.exports = {
   name: 'exception',
-  listener: (client: CitrineClient, msg: Message, error: BaseError): void => {
+  listener: async (client: CitrineClient, msg: Message, error: BaseError) => {
     if (client.settings.verbose) {
-      msg.channel.send(error.toEmbed());
+      await msg.channel.send(error.toEmbed());
     }
     if (error.code === 999) client.logger.error(error);
     client.lastException = error;

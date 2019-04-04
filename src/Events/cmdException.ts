@@ -5,7 +5,7 @@ import { CitrineClient } from '../Structures/CitrineClient';
 
 module.exports = {
   name: 'cmdException',
-  listener: async (client: CitrineClient, ctx: Context, error: CommandError): void => {
+  listener: async (client: CitrineClient, ctx: Context, error: CommandError) => {
     if ([200, 201, 202].includes(error.code)) {
       await ctx.send(QuickEmbed.cmdHelp(ctx, error.cmd));
       return;

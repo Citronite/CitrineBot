@@ -8,7 +8,6 @@ const {
   printMenu,
   sleep,
   open,
-  rl,
 } = require('../cli.js');
 
 const Chips = new ChipsMenu();
@@ -35,9 +34,7 @@ class HomeMenu extends AbstractMenu {
   async 1() {
     await sleep(500);
     println('Launching Citrine. . .');
-    rl.close();
     await open('start_citrine.bat', process.cwd());
-    process.exit();
     return;
   }
 
