@@ -2,8 +2,9 @@ import { CitrineClient } from '../Structures/CitrineClient';
 
 module.exports = {
   name: 'disconnect',
-  listener: (client: CitrineClient) => {
+  listener: async (client: CitrineClient) => {
     client.logger.error('Connection error, client disconnected!');
-    client.settings.save();
+    await client.settings.save();
+    process.exit(1);
   },
 };

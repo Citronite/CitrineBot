@@ -2,7 +2,6 @@ import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { BaseError } from '../Structures/ErrorStructs/BaseError';
 import { ErrorMessages } from '../Structures/ErrorStructs/ErrorMessages';
-import { GuildConfig } from './GuildConfig';
 import { LockOptions, Reaction } from 'typings';
 import {
   Message,
@@ -11,8 +10,6 @@ import {
   DMChannel,
   GroupDMChannel,
   MessageReaction,
-  Emoji,
-  ReactionEmoji,
   PermissionResolvable,
   GuildMember,
   Guild

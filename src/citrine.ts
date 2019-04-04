@@ -30,7 +30,6 @@ const citrine = new CitrineClient(options);
   try {
     citrine.initChips(defaultChips);
     citrine.initEvents();
-
     await citrine.launch();
   } catch (_) {
     process.exit(1);
@@ -39,3 +38,4 @@ const citrine = new CitrineClient(options);
 
 process.on('uncaughtException', err => citrine.logger.error(err));
 process.on('unhandledRejection', err => citrine.logger.error(err));
+process.on('exit', code => citrine.logger.warn(`Process exited with code ${code}`));

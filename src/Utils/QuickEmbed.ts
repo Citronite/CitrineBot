@@ -10,14 +10,16 @@ export class QuickEmbed {
 
   public static error(info: string = 'An unknown error occurred!'): RichEmbed {
     return new RichEmbed().setColor(Colors.RED)
-      .setDescription(`⛔ ${info}`)
+      .setTitle('⛔')
+      .setDescription(`${info}`)
       .setFooter('This wasn\'t supposed to happen...')
       .setTimestamp();
   }
 
   public static success(info: string = 'Success!'): RichEmbed {
     return new RichEmbed().setColor(Colors.GREEN)
-      .setDescription(`✅ ${info}`)
+      .setTitle('✅')
+      .setDescription(`${info}`)
       .setFooter('Yay!')
       .setTimestamp();
   }

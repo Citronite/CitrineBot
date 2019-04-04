@@ -27,6 +27,7 @@ declare module 'typings' {
   export type UserID = Snowflake;
 
   export type CommandOptions = {
+    name: string,
     description? : string,
     usage? : string,
   }
@@ -38,16 +39,16 @@ declare module 'typings' {
 
   export type Reaction = string | Emoji | ReactionEmoji;
 
-  export interface IGlobalConfig {
-    owner: UserID;
-    globalPrefix: string;
-    verbose: boolean;
-    devs: Set<UserID>;
-    disabledUsers: Set<UserID>;
-    disabledGuilds: Set<GuildID>;
-    disabledCommands: Set<string>;
-    loadedModules: Set<string>;
-    aliases: { [cmd in string]: string[] };
+  export type IGlobalConfig = {
+    owner: UserID,
+    globalPrefix: string,
+    verbose: boolean,
+    devs: Set<UserID>,
+    disabledUsers: Set<UserID>,
+    disabledGuilds: Set<GuildID>,
+    disabledCommands: Set<string>,
+    loadedModules: Set<string>,
+    aliases: { [cmd in string]: string[] },
   }
 
   export interface ICmdHandler {
@@ -103,7 +104,7 @@ declare module 'typings' {
     subcommands?: Collection<string, ISubCommand>;
     readonly name: string;
     readonly description: string;
-    readonly usage: string;
+    readonly usage: string | undefined;
     registerSubCommands: (...subCmds: ISubCommand[]) => IAbstractCommand;
   }
 
