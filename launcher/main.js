@@ -188,8 +188,8 @@ async function startLauncher() {
 
       if (!dir.includes('start_citrine.bat')) {
         println('Creating file: ./start_citrine.bat');
-        const start_citrine = ':: Execute citrine.js\n' +
-                              '@echo off\n\n' +
+        const start_citrine = '@echo off\n' +
+                              'REM Execute citrine.js\n\n' +
                               'cls\n' +
                               'title Citrine Launcher\n\n' +
                               'echo --------------\n' +
