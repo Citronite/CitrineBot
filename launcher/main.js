@@ -19,7 +19,7 @@ const Home = new HomeMenu();
 async function printHomepage() {
   cls(0, 0);
   printHeader();
-  await sleep(500);
+  await sleep(200);
   await printMenu(Home);
 
   println('\n0. Exit Launcher');
@@ -88,7 +88,7 @@ async function startLauncher() {
       }
       // Check whether the menu code is the same.
       if (code !== rl.currMenu.code) return;
-      await sleep(500);
+      await sleep(200);
       const str = rl.currMenu.code === 0 ? '0. Exit Launcher' : '0. Go back to the homepage';
       println(`\n${str}`);
       rl.prompt();
@@ -102,9 +102,9 @@ async function startLauncher() {
 // MAIN FUNCTION
 (async function main() {
   cls(0, 0);
-  await sleep();
+  await sleep(200);
   printHeader();
-  await sleep();
+  await sleep(200);
 
   // Kinda hacky but whatever :P
   // This here sorta checks to make sure everything is in place
@@ -151,11 +151,8 @@ async function startLauncher() {
     }
   }
   else {
-    cls(0, 0);
-    printHeader();
-    await sleep();
     println('Hello there! Seems like this is your first time running Citrine!');
-    await sleep(2000);
+    await sleep();
 
     // Obtain the bot token
     let TOKEN = await input('Please insert your bot token. If it is stored\n' +
@@ -191,7 +188,15 @@ async function startLauncher() {
 
       if (!dir.includes('start_citrine.bat')) {
         println('Creating file: ./start_citrine.bat');
-        const start_citrine = ':: Simply run the node script for starting the bot.\nnode ./bin/citrine.js\n';
+        const start_citrine = ':: Execute citrine.js\n' +
+                              '@echo off\n\n' +
+                              'cls\n' +
+                              'title Citrine Launcher\n\n' +
+                              'echo --------------\n' +
+                              'echo %DATE%' +
+                              'echo --------------\n' +
+                              'node ./bin/citrine.js\n' +
+                              'pause\n';
         fs.writeFileSync('./start_citrine.bat', start_citrine);
       }
     }

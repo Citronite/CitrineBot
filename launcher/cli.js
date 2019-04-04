@@ -65,7 +65,7 @@ async function printMenu(menu) {
 
   println(menu.title);
 
-  await sleep(500);
+  await sleep(200);
 
   let x = 1;
   for (const choice of menu.choices) {
