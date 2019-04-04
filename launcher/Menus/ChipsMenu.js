@@ -36,12 +36,12 @@ class ChipsMenu extends AbstractMenu {
 
   // Download Chip from GitHub
   2() {
-    println('To be implemented!');
+    println('This feature is yet to be implemented!');
   }
 
   // Delete Chip
   3() {
-    println('To be implemented!');
+    println('This feature is yet to be implemented!');
   }
 
   // Create new Chip

@@ -74,7 +74,7 @@ export class CmdHandler {
     // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
     // At the end, it would also return the remaining arguments.
     // But not sure how to implement this =/
-    throw new Error('To be implemented!');
+    throw new Error('This feature is yet to be implemented!');
   }
 
   public static async processCommand(message: any, config?: GuildConfig): Promise<void> {

@@ -56,17 +56,17 @@ export class Context {
 
   public async confirm(msg: string, timeOut: number = 30000): Promise<boolean | null> {
     // Use reactions instead of yes/no replies bc why not :P
-    return Promise.reject('Not Implemented');
+    return Promise.reject('This feature is yet to be implemented!');
   }
 
   public async prompt(msg: string, contentOnly: boolean = true, timeOut: number = 30000): Promise<Message | string | null> {
     // contentOnly specifies whether this function will return only the content of the answer, or
     // the entire Message object from the user.
-    return Promise.reject('Not Implemented');
+    return Promise.reject('This feature is yet to be implemented!');
   }
 
   public async promptReaction(msg: string, emojis: Reaction[], limit: number = 1, timeOut: number = 30000): Promise<MessageReaction[] | null> {
-    return Promise.reject('Not Implemented');
+    return Promise.reject('This feature is yet to be implemented!');
     // Waits for a reaction on the bot message.
     // First param would be msg to send, second param list of reactions to await.
     // Limit is number of reactions to wait for.
@@ -113,7 +113,6 @@ export class Context {
 
   public lock(condition: boolean, lockOptions?: LockOptions): void {
     if (condition) return;
-
     // 100 === ErrorCodes.PERMISSION_ERROR
     const options = {
       errCode: lockOptions && lockOptions.errCode || 100,
