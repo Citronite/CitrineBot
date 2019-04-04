@@ -2,19 +2,19 @@ import { CitrineClient } from './Structures/CitrineClient';
 import { ClientOptions } from 'discord.js';
 
 /*
-*    CitrineBot - A powerful, open-source, modular
-*        discord bot, built with developer and
-*             user experience in mind!
+*     CitrineBot - A powerful, open-source, modular
+*         discord bot, built with developer and
+*              user experience in mind!
 *
-*	    By @PandaHappy 🍂#8851 | @Quantomistro3178
-*     GitHub: https://github.com/Quantomistro3178
-*	    Support Server: https://discord.gg/rEM9gFN
+*	               By @Quantomistro3178
+*      GitHub: https://github.com/Quantomistro3178
+*	     Support Server: https://discord.gg/rEM9gFN
 *
-*          ###############################
-*          #                             #
-*          #     C  I  T  R  I  N  E     #
-*          #                             #
-*          ###############################
+*           ###############################
+*           #                             #
+*           #     C  I  T  R  I  N  E     #
+*           #                             #
+*           ###############################
 */
 
 const defaultChips: string[] = ['dev-utils'];
@@ -32,7 +32,7 @@ const citrine = new CitrineClient(options);
     citrine.initEvents();
 
     await citrine.launch();
-  } catch (err) {
+  } catch (_) {
     process.exit(1);
   }
 })();

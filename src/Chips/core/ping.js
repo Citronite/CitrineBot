@@ -1,6 +1,6 @@
 const { BaseCommand } = require('../../exports');
 
-class CMD extends BaseCommand {
+class Ping extends BaseCommand {
   constructor() {
     super('ping', 'core', {
       description: 'Check bot ping!',
@@ -13,4 +13,4 @@ class CMD extends BaseCommand {
   }
 }
 
-module.exports = new CMD();
+module.exports = new Ping();

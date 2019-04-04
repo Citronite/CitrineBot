@@ -6,19 +6,19 @@ export class CitrineLogger {
 
   constructor(client: CitrineClient) {
     // Implement this :P
-
     this.client = client;
   }
 
   public error(err: string | Error): void {
-    console.log(err.toString());
+    if (err instanceof Error) console.log(err.stack);
+    else console.log(err);
   }
 
   public info(str: string): void {
-    console.log(str.toString());
+    console.log(str);
   }
 
   public warn(str: string): void {
-    console.log(str.toString());
+    console.log(str);
   }
 }

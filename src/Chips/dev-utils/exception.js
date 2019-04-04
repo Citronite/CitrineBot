@@ -1,8 +1,8 @@
 const { BaseCommand } = require('../../exports');
 
-class CMD extends BaseCommand {
+class Exception extends BaseCommand {
   constructor() {
-    super('exception', 'dev-util', {
+    super('exception', 'dev-utils', {
       description: 'View last exception tracked by the bot',
       usage: '[p]exception'
     });
@@ -20,4 +20,4 @@ class CMD extends BaseCommand {
   }
 }
 
-module.exports = new CMD();
+module.exports = new Exception();

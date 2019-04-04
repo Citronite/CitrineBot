@@ -63,7 +63,7 @@ export class CitrineClient extends Client {
       return true;
     } catch (err) {
       this.logger.error(`Error initializing default Chips:\n  ${err.stack}`);
-      return false;
+      throw 0;
     }
   }
 
@@ -83,7 +83,7 @@ export class CitrineClient extends Client {
       return true;
     } catch (err) {
       this.logger.error(`Error initializing event listeners:\n  ${err.stack}`);
-      return false;
+      throw 0;
     }
   }
 
