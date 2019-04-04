@@ -9,7 +9,7 @@ class Eval extends BaseCommand {
     }, 'dev-utils');
   }
 
-  execute(ctx, ...args) {
+  async execute(ctx, ...args) {
     // First, lock the command to only dm channels!
     ctx.lock(ctx.channel.type === 'dm', { errMessage: 'This command can only be used in DMs!'});
     try {
@@ -20,15 +20,14 @@ class Eval extends BaseCommand {
       // If not, check if the author is a bot developer
       ctx.checkBotDev();
     }
-
-    const code = args.join(' ');
-    ctx.send(`[Code]\n${code}`, { code: 'js', split: true });
 		try {
+      const code = args.join(' ');
+      await ctx.send(`[Code]\n${code}`, { code: 'js', split: true });
 			const result = eval(code);
-      ctx.send(`[Result]\n${result}`, { code: 'js', split: true });
+      await ctx.send(`[Result]\n${result}`, { code: 'js', split: true });
 		}
 		catch (err) {
-			ctx.send(`[Error]\n${err}`, { code: 'js', split: true });
+			await ctx.send(`[Error]\n${err}`, { code: 'js', split: true });
 		}
   }
 }

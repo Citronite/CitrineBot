@@ -6,11 +6,11 @@ class Ping extends BaseCommand {
       name: 'ping',
       description: 'Check bot ping!',
       usage: '[p]ping'
-    });
+    }, 'core');
   }
 
-  execute(ctx) {
-    ctx.send(`**Pong!**\n${Math.floor(ctx.client.ping)}ms`);
+  async execute(ctx) {
+    await ctx.send(`**Pong!**\n${Math.floor(ctx.client.ping)}ms`);
   }
 }
 
