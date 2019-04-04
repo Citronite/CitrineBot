@@ -1,8 +1,6 @@
 import { Message } from 'discord.js';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { GuildConfig } from '../Utils/GuildConfig';
-import { BaseError } from '../Structures/ErrorStructs/BaseError';
-import { ErrorMessages } from '../Structures/ErrorStructs/ErrorMessages';
 
 module.exports = {
   name: 'message',
@@ -11,9 +9,10 @@ module.exports = {
     let config: GuildConfig | null = null;
 
     try {
-      config = await db.getGuild(message.guild.id);
-      if (!config) config =  await db.setGuild(message.guild);
-      if (!config) throw new BaseError(999, ErrorMessages[999]);
+      if (message.guild) {
+        config = await db.getGuild(message.guild.id);
+        if (!config) config =  await db.setGuild(message.guild);
+      }
 
       await cmdHandler.processCommand(message, config);
 
