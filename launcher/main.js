@@ -17,37 +17,110 @@ const Home = new HomeMenu();
 
 // Self-explanatory
 async function printHomepage() {
-  cls(0, 0);
-  printHeader();
+  cls();
   await sleep(200);
+  println('');
   await printMenu(Home);
-
   println('\n0. Exit Launcher');
   rl.prompt();
+}
+
+// Obtain bot token
+async function getToken() {
+  let TOKEN = await input('Please insert your bot token. If it is stored as\n' +
+                          'an environment variable, enter ENV:<VARIABLE>');
+  if (TOKEN.startsWith('ENV:')) TOKEN = process.env[TOKEN.slice(4)];
+  while (!TOKEN) {
+    TOKEN = await input('Please insert a valid bot token:');
+    if (TOKEN.startsWith('ENV:')) TOKEN = process.env[TOKEN.slice(4)];
+  }
+  return TOKEN;
+}
+
+// Obtain global prefix
+async function getPrefix() {
+  let prefix = await input('Please choose a global prefix for your bot:');
+  while (!prefix) {
+    prefix = await input('Please choose a valid prefix for your bot:');
+  }
+  return prefix;
+}
+
+// Install NPM Dependencies
+async function installDeps() {
+  try {
+    println('Installing dependencies. . .');
+    println('This may take several minutes. . .');
+    const { stdout, stderr } = await execute('npm install --production', { cwd: process.cwd() });
+    if (stdout) println(stdout);
+    if (stderr) println(stderr);
+    // Check if it exists
+    fs.readdirSync('./node_modules');
+    println('Dependencies installed successfully!');
+    return true;
+  }
+  catch (err) {
+    println(err);
+    println('Error installing dependencies.\n\n' +
+            'You can try running `npm install` to manually install dependencies.\n' +
+            'If a problem persists, you can visit the support server for help.\n' +
+            'Support Server: https://discord.gg/rEM9gFN');
+    return false;
+  }
 }
 
 // Compiles code.
 async function compileCitrine() {
   try {
     println('\nPlease wait...');
-    const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
-    if (stderr) println(stderr);
-    if (stdout) println(stdout);
-    const bin = fs.readdirSync('./bin');
-    if (bin && bin.includes('citrine.js')) {
-      println('Successfully recompiled code!');
-      return true;
+    try {
+      const { stdout, stderr } = await execute('node_modules/.bin/tsc', { cwd: process.cwd() });
+      if (stderr) println(stderr);
+      if (stdout) println(stdout);
     }
-    else {
-      throw 'Missing file citrine.js';
+    catch (_) {
+      // In case typescript is installed globally
+      const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
+      if (stderr) println(stderr);
+      if (stdout) println(stdout);
     }
+    // Check if it exists
+    fs.readdirSync('./bin');
+    println('Successfully recompiled code!');
+    return true;
   }
   catch (err) {
     println('Uh-oh! An unknown error occurred while compiling code!');
     println(err);
     println('Please make sure Citrine is installed properly, and try again.\n' +
-            'For further help, you can join the official support server:\n' +
-            'Official Support Server: https://discord.gg/rEM9gFN');
+            'For further help, you can join the support server:\n' +
+            'Support Server: https://discord.gg/rEM9gFN');
+    return false;
+  }
+}
+
+// Create ./data and core/_settings.json
+async function createDataFiles(TOKEN, prefix) {
+  try {
+    // Create data directory
+    println('Creating path: ./data/core');
+    fs.mkdirSync('./data/core', { recursive: true });
+
+    // Create _settings for storing token
+    println('Creating file: ./data/core/_settings.json');
+    const _settings = JSON.stringify({ TOKEN, prefix }, null, '\n');
+    fs.writeFileSync('./data/core/_settings.json', _settings);
+    // Check if it exists
+    fs.readFileSync('./data/core/_settings.json');
+    println('Success!');
+    return true;
+  }
+  catch (err) {
+    println('Error creating files!');
+    println(err);
+    println('You may configure the files manually and try again.\n' +
+            'If the problem persists, you can visit the support\n' +
+            'server for more help: https://discord.gg/rEM9gFN\n');
     return false;
   }
 }
@@ -61,7 +134,6 @@ async function startLauncher() {
       rl.prompt();
       return;
     }
-
     if (line === '0') {
       // If the current menu is the homepage, then exit the launcher
       if (rl.currMenu.code === 0) {
@@ -78,7 +150,6 @@ async function startLauncher() {
       cls();
       println('');
       const code = rl.currMenu.code;
-
       // Run whatever option the user chose
       try {
         await rl.currMenu.run(line);
@@ -94,134 +165,79 @@ async function startLauncher() {
       rl.prompt();
     }
   });
-
   await printHomepage();
-
 }
 
-// MAIN FUNCTION
 (async function main() {
   cls(0, 0);
   await sleep(200);
   printHeader();
   await sleep(200);
 
-  // Kinda hacky but whatever :P
-  // This here sorta checks to make sure everything is in place
-  // before trying to start the launcher.
+  // Kinda hacky but oh well :P
   const dir = fs.readdirSync('.');
+  const first_run = !dir.includes('data') && !dir.includes('bin') && !dir.includes('node_modules');
 
-  if (dir.includes('data') && dir.includes('bin') && dir.includes('node_modules')) {
-    const bin = fs.readdirSync('./bin');
-    let data = [];
-    try {
-      data = fs.readdirSync('./data/core');
-    }
-    catch(err) {
-      println('The directory ./data/core seems to be missing. Please make\n' +
-              'sure you installed Citrine correctly and try again.');
-      return;
-    }
-
-    // Just a very minimal check to see if the initial setup was successful
-    if (bin.includes('citrine.js') && data.includes('_settings.json')) {
-      await startLauncher();
-    }
-    else {
-      const recompile = await confirm('It seems like you are missing some important files in your bin folder.\nWould you like to try re-compiling Citrine?');
-
-      if (recompile) {
-        const finished = await compileCitrine();
-        if (!finished) {
-          rl.close();
-          return;
-        }
-
-        println('Please restart the launcher. If problems persist, you\n' +
-                'can visit the official support server for more help:\n' +
-                'Support Server: https://discord.gg/rEM9gFN');
-        return;
-      }
-      else {
-        println('\nAlright then. Please make sure Citrine is installed properly\n' +
-                'on your device, and then try running the launcher again.');
-        rl.close();
-        return;
-      }
-    }
-  }
-  else {
+  if (first_run) {
     println('Hello there! Seems like this is your first time running Citrine!');
     await sleep();
 
-    // Obtain the bot token
-    let TOKEN = await input('Please insert your bot token. If it is stored\n' +
-                            'on your path, simply enter PATH:<VARIABLE>');
+    // Obtain the bot token & global prefix
+    const TOKEN = await getToken();
+    const prefix = await getPrefix();
 
-    if (TOKEN.startsWith('PATH:')) TOKEN = process.env[TOKEN.slice(5)];
-    while (!TOKEN) {
-      TOKEN = await input('Please insert a valid bot token:');
-      if (TOKEN.startsWith('PATH:')) TOKEN = process.env[TOKEN.slice(5)];
+    // Install dependencies & compile code
+    const installed = await installDeps();
+    if (!installed) {
+      rl.close();
+      return;
+    }
+    const compiled = await compileCitrine();
+    if (!compiled) {
+      rl.close();
+      return;
     }
 
-    // Obtain global prefix
-    let prefix = await input('Please choose a global prefix for your bot:');
-    while (!prefix) {
-      prefix = await input('Please choose a valid prefix for your bot:');
-    }
-
-    // Compile source code
-    const finished = await compileCitrine();
-    if (!finished) {
+    // Create data dir & files
+    const created = await createDataFiles(TOKEN, prefix);
+    if (!created) {
       rl.close();
       return;
     }
 
     try {
-      println('Creating path: ./data/core');
-      const path = './data/core';
-      fs.mkdirSync(path, { recursive: true });
-
-      println('Creating file: ./data/core/_settings.json');
-      const _settings = JSON.stringify({ TOKEN, prefix }, null, '\n\t');
-      fs.writeFileSync('./data/core/_settings.json', _settings);
-
-      if (!dir.includes('start_citrine.bat')) {
-        println('Creating file: ./start_citrine.bat');
-        const start_citrine = '@echo off\n' +
-                              'REM Execute citrine.js\n\n' +
-                              'cls\n' +
-                              'title Citrine Launcher\n\n' +
-                              'echo --------------\n' +
-                              'echo %DATE%' +
-                              'echo --------------\n' +
-                              'node ./bin/citrine.js\n' +
-                              'pause\n';
-        fs.writeFileSync('./start_citrine.bat', start_citrine);
+      const { platform } = process;
+      if (!dir.includes('start_citrine.bat') && !dir.includes('start_citrine.sh')) {
+        if (platform === 'win32') {
+          println('Creating file: ./start_citrine.bat');
+          const start_citrine = '@echo off\n' +
+            'REM Execute citrine.js\n\n' +
+            'cls\n' +
+            'title Citrine Launcher\n\n' +
+            'echo --------------\n' +
+            'echo %DATE%' +
+            'echo --------------\n' +
+            'node ./bin/citrine.js\n' +
+            'pause\n';
+          fs.writeFileSync('./start_citrine.bat', start_citrine);
+        }
+        else if (platform === 'linux') {
+          const start_citrine = '#!/bin/sh\n\n' +
+            'node ./bin/citrine.js\n';
+          fs.writeFileSync('./start_citrine.sh', start_citrine);
+        }
+        else {
+          println('Unsupported platform!\n' +
+                  'You may run `node ./bin/citrine.js`\n' +
+                  'to directly launch citrine!');
+        }
       }
     }
     catch (err) {
-      println('Error creating files.');
+      println('Error creating file ./start_citrine');
       println(err);
-      await sleep();
-      println('You may configure the files manually and try again.\n' +
-              'If the problem persists, you can visit the official\n' +
-              'support server for more help:\n' +
-              'Support Server: https://discord.gg/rEM9gFN');
-      rl.close();
-      return;
-    }
-
-    try {
-      println('Installing dependencies. . .');
-      await execute('npm install', { cwd: process.cwd() });
-    }
-    catch (err) {
-      println(err);
-      println('Error installing dependencies.\n\n' +
-              'You can try running `npm install` to manually install dependencies.\n' +
-              'If a problem persists, you can visit the support server for help.\n' +
-              'Support Server: https://discord.gg/rEM9gFN');
+      println('You may launch citrine through the main launcher, or run\n' +
+              '`node ./bin/citrine.js` to launch citrine directly.');
       rl.close();
       return;
     }
@@ -230,5 +246,58 @@ async function startLauncher() {
     await sleep();
     await startLauncher();
 
+  }
+  else {
+    if (!dir.includes('data')) {
+      // TODO: Obtain token + prefix again and createDataFiles() again!
+      println('It seems like the ./data directory is missing.');
+      const TOKEN = await getToken();
+      const prefix = await getPrefix();
+      const created = await createDataFiles(TOKEN, prefix);
+      if (!created) {
+        rl.close();
+        return;
+      }
+    }
+    if (!dir.includes('bin')) {
+      // Recompile.
+      const str = 'It seems like the ./bin directory is missing.\n' +
+                  'Would you like to try recompiling Citrine?';
+      const recompile = await confirm(str);
+      if (recompile) {
+        const compiled = await compileCitrine();
+        if (!compiled) {
+          rl.close();
+          return;
+        }
+      }
+      else {
+        println('Alright. Please make sure Citrine is installed correctly and try again!');
+        rl.close();
+        return;
+      }
+    }
+    if (!dir.includes('node_modules')) {
+      // Install npm dependencies again
+      const str = 'It seems like the ./node_modules directory is missing.\n' +
+                  'Would you like to try reinstalling the dependencies?';
+      const reinstall = await confirm(str);
+      if (reinstall) {
+        const installed = await installDeps();
+        if (!installed) {
+          rl.close();
+          return;
+        }
+      }
+      else {
+        println('Alright. Please make sure Citrine is installed correctly and try again!');
+        rl.close();
+        return;
+      }
+    }
+    // Start Launcher!
+    println('\nStarting launcher. . .');
+    await sleep();
+    await startLauncher();
   }
 })();

@@ -16,13 +16,13 @@ class CreditsMenu extends AbstractMenu {
 
   // View Credits
   async 1() {
-    await sleep(500);
+    await sleep(200);
     println('Show Credits (or just link to github repo)');
   }
 
   // View License
   async 2() {
-    await sleep(500);
+    await sleep(200);
     println('Show License (or just link to github repo)');
 
   }

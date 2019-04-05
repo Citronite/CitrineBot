@@ -29,7 +29,7 @@ class ChipsMenu extends AbstractMenu {
   // List downloaded Chips
   async 1() {
     println('Downloaded Chips:');
-    await sleep();
+    await sleep(200);
     const chips = fs.readdirSync('./bin/Chips/');
     println(chips.join('\n'));
   }

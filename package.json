@@ -1,7 +1,7 @@
 {
   "name": "citrine-ts",
   "version": "0.1.0",
-  "description": "Citrine - A powerful, fully modular, easily extensible Discord bot!",
+  "description": "CitrineBot - A powerful, fully modular, easily extensible Discord bot!",
   "main": "./bin/citrine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,9 +14,9 @@
     "javascript",
     "typescript",
     "bot",
-    "discordbot",
     "citrine",
-    "discord-bot"
+    "modular",
+    "extensible"
   ],
   "author": "Quantomistro3178",
   "license": "ISC",
@@ -26,10 +26,10 @@
     "tslint-config-fire": "^1.0.1"
   },
   "dependencies": {
+    "typescript": "^3.3.3",
     "@keyv/sqlite": "^2.0.0",
     "discord.js": "^11.4.2",
     "keyv": "^3.1.0",
-    "uws": "^100.0.1",
     "winston": "^3.2.1"
   }
 }

@@ -4,10 +4,11 @@ const RepairsMenu = require('./RepairsMenu.js');
 const GuidesMenu = require('./GuidesMenu.js');
 const CreditsMenu = require('./CreditsMenu.js');
 const {
+  cls,
   println,
   printMenu,
   sleep,
-  open,
+  execute,
 } = require('../cli.js');
 
 const Chips = new ChipsMenu();
@@ -32,9 +33,10 @@ class HomeMenu extends AbstractMenu {
 
   // Launches Citrine and exits launcher.
   async 1() {
-    await sleep(500);
+    cls(0, 0);
+    await sleep(200);
     println('Launching Citrine. . .');
-    await open('start_citrine.bat', process.cwd());
+    await execute('node ./bin/citrine.js', { cwd: process.cwd() });
     return;
   }
 
