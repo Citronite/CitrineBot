@@ -31,31 +31,34 @@ class HomeMenu extends AbstractMenu {
     this.code = 0;
   }
 
-  // Launches Citrine and exits launcher.
   async 1() {
     cls(0, 0);
     await sleep(200);
     println('Launching Citrine. . .');
-    await execute('node ./bin/citrine.js', { cwd: process.cwd() });
-    return;
+    try {
+      // TODO: This starts the bot, but in the "background"
+      // Fix this. might have to use { spawn } = require('child_process');
+      const { stdout, stderr } = await execute('node ./bin/citrine.js', { cwd: process.cwd() });
+      if (stdout) println(stdout);
+      if (stderr) println(stderr);
+    }
+    catch (err) {
+      println(err);
+    }
   }
 
-  // Print ChipsMenu
   2() {
     printMenu(Chips);
   }
 
-  // Print RepairsMenu
   3() {
     printMenu(Repairs);
   }
 
-  // Print GuidesMenu
   4() {
     printMenu(Guides);
   }
 
-  // Print CreditsMenu
   5() {
     printMenu(Credits);
   }

@@ -27,7 +27,7 @@ class RepairsMenu extends AbstractMenu {
         if (stdout) println(stdout);
       }
       catch (_) {
-        const { stderr, stdout } = await execute('tsc', { cwd: process.cwd() });
+        const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
         if (stderr) println(stderr);
         if (stdout) println(stdout);
       }

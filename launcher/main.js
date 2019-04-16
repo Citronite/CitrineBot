@@ -138,7 +138,6 @@ async function startLauncher() {
       // If the current menu is the homepage, then exit the launcher
       if (rl.currMenu.code === 0) {
         rl.close();
-        process.exit(0);
         return;
       }
       // Otherwise, go back to the homepage
@@ -205,36 +204,48 @@ async function startLauncher() {
       return;
     }
 
+    const { platform } = process;
     try {
-      const { platform } = process;
-      if (!dir.includes('start_citrine.bat') && !dir.includes('start_citrine.sh')) {
-        if (platform === 'win32') {
-          println('Creating file: ./start_citrine.bat');
-          const start_citrine = '@echo off\n' +
-            'REM Execute citrine.js\n\n' +
-            'cls\n' +
-            'title Citrine Launcher\n\n' +
-            'echo --------------\n' +
-            'echo %DATE%' +
-            'echo --------------\n' +
-            'node ./bin/citrine.js\n' +
-            'pause\n';
-          fs.writeFileSync('./start_citrine.bat', start_citrine);
-        }
-        else if (platform === 'linux') {
-          const start_citrine = '#!/bin/sh\n\n' +
-            'node ./bin/citrine.js\n';
-          fs.writeFileSync('./start_citrine.sh', start_citrine);
-        }
-        else {
-          println('Unsupported platform!\n' +
-                  'You may run `node ./bin/citrine.js`\n' +
-                  'to directly launch citrine!');
-        }
+      if (platform === 'win32') {
+        if (dir.includes('start_citrine.bat')) return;
+
+        println('Creating file: ./start_citrine.bat');
+        const start_citrine =
+          '@echo off\n' +
+          'REM Execute citrine.js\n\n' +
+          'cls\n' +
+          'title Citrine Launcher\n\n' +
+          'echo --------------\n' +
+          'echo %DATE%' +
+          'echo --------------\n' +
+          'node ./bin/citrine.js\n' +
+          'pause\n';
+        fs.writeFileSync('./start_citrine.bat', start_citrine);
+      }
+      else if (platform === 'linux') {
+        if (dir.includes('start_citrine.sh')) return;
+
+        println('Creating file: ./start_citrine.sh');
+        const start_citrine =
+          '#!/bin/sh\n\n' +
+          'node ./bin/citrine.js\n';
+        fs.writeFileSync('./start_citrine.sh', start_citrine);
+      }
+      else {
+        println('Unsupported platform!\n' +
+                'You may run `node ./bin/citrine.js` in your\n' +
+                'console to directly launch citrine!');
       }
     }
     catch (err) {
-      println('Error creating file ./start_citrine');
+      const ext = platform === 'win32' ? '.bat' : platform === 'linux' ? '.sh' : null;
+      if (!ext) {
+        println('Unsupported platform!\n' +
+                'You may run `node ./bin/citrine.js` in your\n' +
+                'console to directly launch citrine!');
+        return;
+      }
+      println(`Error creating file ./start_citrine${ext}`);
       println(err);
       println('You may launch citrine through the main launcher, or run\n' +
               '`node ./bin/citrine.js` to launch citrine directly.');
@@ -249,7 +260,7 @@ async function startLauncher() {
   }
   else {
     if (!dir.includes('data')) {
-      // TODO: Obtain token + prefix again and createDataFiles() again!
+      // Create ./data again
       println('It seems like the ./data directory is missing.');
       const TOKEN = await getToken();
       const prefix = await getPrefix();

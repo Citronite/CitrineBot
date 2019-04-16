@@ -64,7 +64,6 @@ async function printMenu(menu) {
   if (!(menu instanceof AbstractMenu)) return;
 
   println(menu.title);
-
   await sleep(200);
 
   let x = 1;
@@ -72,7 +71,6 @@ async function printMenu(menu) {
     print(`${x}. ${choice}`);
     x++;
   }
-
   rl.currMenu = menu;
 }
 

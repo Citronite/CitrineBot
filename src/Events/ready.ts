@@ -11,13 +11,13 @@ module.exports = {
     const name = client.user.tag;
     const inv = await client.generateInvite();
 
-    console.log(`   ===${'='.repeat(name.length)}===`);
-    console.log(`      ${name}   `);
-    console.log(`   ===${'='.repeat(name.length)}===\n`);
+    console.log(`=====${'='.repeat(name.length)}=====`);
+    console.log(`     ${name}   `);
+    console.log(`=====${'='.repeat(name.length)}=====\n`);
 
-    console.log(` ${client.user.username} is active in ${client.guilds.size} server(s)!`);
-    console.log(` Global Prefix: ${client.settings.globalPrefix}`);
-    console.log(` Bot Owner: ${app.owner.tag}`);
-    console.log(` Invite Link:\n ${inv}`);
+    console.log(`${client.user.username} is active in ${client.guilds.size} server(s)!`);
+    console.log(`Global Prefix: ${client.settings.globalPrefix}`);
+    console.log(`Bot Owner: ${app.owner.tag}`);
+    console.log(`Invite Link:\n ${inv}`);
   }
 };

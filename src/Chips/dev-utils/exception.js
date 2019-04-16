@@ -10,7 +10,7 @@ class Exception extends BaseCommand {
     }, 'dev-utils');
   }
 
-  execute(ctx) {
+  async execute(ctx) {
     ctx.checkBotDev();
     const { lastException } = ctx.client;
     if (lastException) {
