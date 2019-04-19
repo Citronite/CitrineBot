@@ -20,15 +20,15 @@ class Eval extends BaseCommand {
       // If not, check if the author is a bot developer
       ctx.checkBotDev();
     }
-		try {
+    try {
       const code = args.join(' ');
       await ctx.send(`[Code]\n${code}`, { code: 'js', split: true });
-			const result = eval(code);
+      const result = eval(code);
       await ctx.send(`[Result]\n${result}`, { code: 'js', split: true });
-		}
-		catch (err) {
-			await ctx.send(`[Error]\n${err}`, { code: 'js', split: true });
-		}
+    }
+    catch (err) {
+      await ctx.send(`[Error]\n${err}`, { code: 'js', split: true });
+    }
   }
 }
 

@@ -111,13 +111,13 @@ export class CmdHandler {
         cmd.execute(ctx, ...finalArgs);
       } catch (err) {
         // If error occurred while executing the command,
-        // emit the commandError event
+        // emit the cmdException event
         const parsedError = ExceptionParser.parse(err, cmd);
         message.client.emit('cmdException', ctx, parsedError);
       }
     } catch (err) {
-      // If the error occurred within the above code, then log it to the console as well
-      // as the chat, and then return.
+      // If the error occurred with the code,
+      // emit the exception event, with an unknown error.
       const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
       message.client.emit('exception', message, error);
     }
