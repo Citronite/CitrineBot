@@ -29,7 +29,7 @@ export class BaseError extends Error {
 
   public toEmbed(): RichEmbed {
     return QuickEmbed.error(this.message)
-      .setTitle('Exception Occurred!')
+      .setTitle('⛔ Exception Occurred!')
       .setFooter(`Error: ${this.name}`);
   }
 }

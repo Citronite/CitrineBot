@@ -32,10 +32,7 @@ declare module 'typings' {
     usage? : string,
   }
 
-  export type LockOptions = {
-    errCode?: number,
-    errMessage?: string | string[],
-  }
+  export type LockOption = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
 
   export type Reaction = string | Emoji | ReactionEmoji;
 

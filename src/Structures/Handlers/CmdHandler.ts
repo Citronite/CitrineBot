@@ -22,8 +22,7 @@ export class CmdHandler {
   }
 
   public static getArgs(message: any, prefix: string, parseQuotes: boolean = true): string[] | null {
-    const sliceLength = prefix.length;
-    const text = message.content.slice(sliceLength);
+    const text = message.content.slice(prefix.length);
     const args = parseQuotes ? message.client.utils.djs.parseQuotes(text) : text.split(/ +/);
     return args.length ? args : null;
   }
@@ -33,11 +32,13 @@ export class CmdHandler {
 
     const copy: any = Array.from(args);
     const name = copy.shift().toLowerCase();
-    const cmd = message.client.commands.get(name) ||
-      message.client.commands.find((val: Command) => {
-        const aliases = message.client.settings.aliases[val.name];
-        return aliases && aliases.includes(name);
-      }) ||	null;
+    const finder = (val: Command) => {
+      const aliases = message.client.settings.aliases[val.name];
+      return aliases && aliases.includes(name);
+    };
+    const cmd = message.client.commands.get(name)
+      || message.client.commands.find(finder)
+      || null;
 
     return cmd ? [cmd, copy] : [null, null];
   }
@@ -47,77 +48,58 @@ export class CmdHandler {
 
     // I hate typescript :')
     const [base, argsCopy]: [any, any] = this.getBaseCmd(message, args);
-
     if (!base) return [null, null];
     if (!base.subcommands) return [base, argsCopy];
 
     let subCmd = base;
-    while (true) {
-      if (!subCmd.subcommands.size) break;
+    while (subCmd.subcommands) {
       const name = argsCopy.shift().toLowerCase();
       if (subCmd.subcommands.has(name)) {
         subCmd = subCmd.subcommands.get(name);
-      } else {
-        break;
-      }
+      } else break;
     }
-
     return [subCmd, argsCopy];
   }
 
+  // Basic idea is that this returns a generator for command calls
+  // Example:
+  // Command: [p]basecmd subcmd1 subcmd2 subcmd3 arg1 arg2
+  // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
+  // At the end, it will also return the remaining arguments.
   public static *getCmdChainIterator(message: Message, args: string[]): IterableIterator<Command> {
-    // Implement this!
-    // Basic idea is that this returns a generator, which can be used
-    // to iterate over a command chain
-    // Example:
-    // If the command is: [p]basecmd subcmd1 subcmd2 subcmd3 arg1 arg2
-    // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
-    // At the end, it would also return the remaining arguments.
-    // But not sure how to implement this =/
     throw new Error('This feature is yet to be implemented!');
   }
 
   public static async processCommand(message: any, config?: GuildConfig): Promise<void> {
 
     try {
-      // Check if the message was prefixed. If so, obtain the invoked prefix.
-      // Otherwise, return (since the message wasn't a bot command)
+      // Check if the message was prefixed
       const invokedPrefix = this.checkPrefix(message, config);
       if (!invokedPrefix) return;
 
-      // Check if the message contains any arguments (including the base command call)
-      // If not, return.
+      // Obtain all arguments
       const args = this.getArgs(message, invokedPrefix);
       if (!args) return;
 
-      // Get the last command in the "command chain", and the remaining args.
-      // If no command is found, return silently.
-      // Example:
-      // If the command is: [p]basecmd subcmd1 subcmd2 @randomMention anArgument
-      // This would return: [subcmd2, ['@randomMention', 'anArgument']]
+      // Obtain final subcommand and the rest of the arguments
       let [cmd, finalArgs]: [Command | null, string[] | null] = this.getFinalCmd(message, args);
       if (!cmd) return;
       if (!finalArgs) finalArgs = [];
 
-      // Now we know that the message is a bot command, check if
-      // config.deleteCmdCalls is set for this guild. If so, delete the message.
       if (config && config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
       const ctx = new Context(message, invokedPrefix);
       try {
-        // Check Citrine's custom filters. This automatically throws a BaseError if
-        // the filter isn't passed successfully
+        // Check Citrine's custom filters. Throws a BaseError if failed
         await message.client.permHandler.checkCustomFilters(cmd, message);
         // Execute the command. Note that args are not passed as an array.
-        cmd.execute(ctx, ...finalArgs);
+        await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
-        // If error occurred while executing the command,
-        // emit the cmdException event
+        // Fire cmdException if error occurred with the filters or command
         const parsedError = ExceptionParser.parse(err, cmd);
         message.client.emit('cmdException', ctx, parsedError);
       }
     } catch (err) {
-      // If the error occurred with the code,
-      // emit the exception event, with an unknown error.
+      // Fire exception if error occurred elsewhere
       const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
       message.client.emit('exception', message, error);
     }
