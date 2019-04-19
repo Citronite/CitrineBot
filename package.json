@@ -21,12 +21,12 @@
   "author": "Quantomistro3178",
   "license": "ISC",
   "devDependencies": {
-    "@types/keyv": "^3.1.0",
-    "@types/node": "^11.9.4",
     "tslint-config-fire": "^1.0.1"
   },
   "dependencies": {
     "typescript": "^3.3.3",
+    "@types/keyv": "^3.1.0",
+    "@types/node": "^11.9.4",
     "@keyv/sqlite": "^2.0.0",
     "discord.js": "^11.4.2",
     "keyv": "^3.1.0",
