@@ -11,7 +11,7 @@ class Exception extends BaseCommand {
   }
 
   async execute(ctx) {
-    ctx.checkBotDev();
+    ctx.lock('botDev');
     const { lastException } = ctx.client;
     if (lastException) {
       const cls = lastException.constructor.name;

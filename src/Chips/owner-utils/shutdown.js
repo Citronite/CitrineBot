@@ -10,7 +10,7 @@ class Shutdown extends BaseCommand {
   }
 
   async execute(ctx) {
-    ctx.checkBotOwner();
+    ctx.lock('botOwner');
     await ctx.send('Shutting down...');
     await ctx.client.settings.save();
     process.exit(0);

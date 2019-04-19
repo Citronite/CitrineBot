@@ -10,15 +10,12 @@ class Eval extends BaseCommand {
   }
 
   async execute(ctx, ...args) {
-    // First, lock the command to only dm channels!
-    ctx.lock(ctx.channel.type === 'dm', { errMessage: 'This command can only be used in DMs!'});
+    ctx.lock('dm');
     try {
-      // Then check if the author is the bot owner
-      ctx.checkBotOwner();
+      ctx.lock('botDev');
     }
     catch (_) {
-      // If not, check if the author is a bot developer
-      ctx.checkBotDev();
+      ctx.lock('botOwner');
     }
     try {
       const code = args.join(' ');

@@ -2,7 +2,7 @@ import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { BaseError } from '../Structures/ErrorStructs/BaseError';
 import { ErrorMessages } from '../Structures/ErrorStructs/ErrorMessages';
-import { LockOptions, Reaction } from 'typings';
+import { LockOption, Reaction } from 'typings';
 import {
   Message,
   User,
@@ -54,11 +54,6 @@ export class Context {
     }
   }
 
-  public async confirm(msg: string, timeOut: number = 30000): Promise<boolean | null> {
-    // Use reactions instead of yes/no replies bc why not :P
-    return Promise.reject('This feature is yet to be implemented!');
-  }
-
   public async prompt(msg: string, contentOnly: boolean = true, timeOut: number = 30000): Promise<Message | string | null> {
     // contentOnly specifies whether this function will return only the content of the answer, or
     // the entire Message object from the user.
@@ -76,15 +71,11 @@ export class Context {
     return this.channel.send(...args);
   }
 
-  public async reply(...args: any): Promise<Message | Message[]> {
-    return this.message.reply(...args);
-  }
-
   public async sendDM(...args: any): Promise<Message | Message[]> {
     return this.author.send(...args);
   }
 
-  public checkPerms(perms: PermissionResolvable, checkBot: boolean = true, checkAdmin: boolean = true): void {
+  public lockPerms(perms: PermissionResolvable, checkBot: boolean = true, checkAdmin: boolean = true): void {
     const { checkDiscordPerms } = this.client.permHandler;
 
     if (!this.member) {
@@ -101,23 +92,30 @@ export class Context {
     }
   }
 
-  public checkBotDev(): void {
-    if (this.client.settings.devs.includes(this.author.id)) return;
-    throw new BaseError(100, 'Only bot developers may perform this action!');
-  }
-
-  public checkBotOwner(): void {
-    if (this.client.settings.owner === this.author.id) return;
-    throw new BaseError(100, 'Only bot owners may perform this action!');
-  }
-
-  public lock(condition: boolean, lockOptions?: LockOptions): void {
-    if (condition) return;
-    // 100 === ErrorCodes.PERMISSION_ERROR
-    const options = {
-      errCode: lockOptions && lockOptions.errCode || 100,
-      errMessage: lockOptions && lockOptions.errMessage || ErrorMessages[100]
-    };
-    throw new BaseError(options.errCode, options.errMessage);
+  public lock(...locks: LockOption[]): void {
+    for (const lock of locks) {
+      if (typeof lock === 'boolean') {
+        // 100 === ErrorCodes.PERMISSION_ERROR
+        if (lock) continue;
+        throw new BaseError(100, ErrorMessages[100]);
+      } else {
+        switch (lock) {
+          case 'botOwner':
+            if (this.client.settings.owner === this.author.id) continue;
+            throw new BaseError(100, 'Only the bot owner may perform this action!');
+          case 'botDev':
+            if (this.client.settings.devs.includes(this.author.id)) continue;
+            throw new BaseError(100, 'Only bot developers may perform this action!');
+          case 'dm':
+            if (this.message.channel.type === 'dm') continue;
+            throw new BaseError(100, 'This command can only be used in DM channels!');
+          case 'guild':
+            if (this.guild) continue;
+            throw new BaseError(100, 'This command can only be used in guild channels!');
+          default:
+            throw new Error('Invalid LockOption provided!');
+        }
+      }
+    }
   }
 }
