@@ -1,3 +1,4 @@
+const { spawnSync } = require('child_process');
 const AbstractMenu = require('./AbstractMenu.js');
 const ChipsMenu = require('./ChipsMenu.js');
 const RepairsMenu = require('./RepairsMenu.js');
@@ -8,7 +9,6 @@ const {
   println,
   printMenu,
   sleep,
-  execute,
 } = require('../cli.js');
 
 const Chips = new ChipsMenu();
@@ -36,11 +36,12 @@ class HomeMenu extends AbstractMenu {
     await sleep(200);
     println('Launching Citrine. . .');
     try {
-      // TODO: This starts the bot, but in the "background"
-      // Fix this. might have to use { spawn } = require('child_process');
-      const { stdout, stderr } = await execute('node ./bin/citrine.js', { cwd: process.cwd() });
-      if (stdout) println(stdout);
-      if (stderr) println(stderr);
+      const options = {
+        cwd: process.cwd(),
+        shell: true,
+        stdio: 'inherit',
+      };
+      await spawnSync('node', ['./bin/citrine.js'], options);
     }
     catch (err) {
       println(err);

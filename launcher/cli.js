@@ -64,7 +64,7 @@ async function printMenu(menu) {
   if (!(menu instanceof AbstractMenu)) return;
 
   println(menu.title);
-  await sleep(200);
+  await sleep(100);
 
   let x = 1;
   for (const choice of menu.choices) {
@@ -100,9 +100,9 @@ function execute(...args) {
   });
 }
 
-async function open(url, cwd) {
+async function open(arg, options) {
   const cmd = (process.platform == 'darwin' ? 'open' : process.platform == 'win32' ? 'start' : 'xdg-open');
-  await execute(`${cmd} ${url}`, { cwd });
+  await execute(`${cmd} ${arg}`, options);
 }
 
 // Exports

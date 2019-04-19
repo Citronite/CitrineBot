@@ -18,7 +18,7 @@ const Home = new HomeMenu();
 // Self-explanatory
 async function printHomepage() {
   cls();
-  await sleep(200);
+  await sleep(100);
   println('');
   await printMenu(Home);
   println('\n0. Exit Launcher');
@@ -148,7 +148,7 @@ async function startLauncher() {
     else {
       cls();
       println('');
-      const code = rl.currMenu.code;
+      // const code = rl.currMenu.code; // Here--
       // Run whatever option the user chose
       try {
         await rl.currMenu.run(line);
@@ -157,7 +157,7 @@ async function startLauncher() {
         println(err);
       }
       // Check whether the menu code is the same.
-      if (code !== rl.currMenu.code) return;
+      // if (code !== rl.currMenu.code) return; // Here--
       await sleep(200);
       const str = rl.currMenu.code === 0 ? '0. Exit Launcher' : '0. Go back to the homepage';
       println(`\n${str}`);
@@ -179,7 +179,7 @@ async function startLauncher() {
 
   if (first_run) {
     println('Hello there! Seems like this is your first time running Citrine!');
-    await sleep();
+    await sleep(500);
 
     // Obtain the bot token & global prefix
     const TOKEN = await getToken();
