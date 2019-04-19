@@ -1,3 +1,5 @@
+// Do I even need this? 🤔
+
 const fs = require('fs');
 
 async function readdir() {

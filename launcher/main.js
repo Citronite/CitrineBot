@@ -1,5 +1,4 @@
 const fs = require('fs');
-// const path = require('path');
 const HomeMenu = require('./Menus/HomeMenu.js');
 const {
   cls,
@@ -212,7 +211,7 @@ async function startLauncher() {
         println('Creating file: ./start_citrine.bat');
         const start_citrine =
           '@echo off\n' +
-          'REM Execute citrine.js\n\n' +
+          'rem start citrine.js\n\n' +
           'cls\n' +
           'title Citrine Launcher\n\n' +
           'echo --------------\n' +
@@ -228,7 +227,13 @@ async function startLauncher() {
         println('Creating file: ./start_citrine.sh');
         const start_citrine =
           '#!/bin/sh\n\n' +
-          'node ./bin/citrine.js\n';
+          'echo -ne "\033]0;Citrine Launcher\007"\n' +
+          'clear\n' +
+          'echo -----------------------------\n' +
+          'date\n' +
+          'echo -----------------------------\n' +
+          'node ./bin/citrine.js\n' +
+          'read -n1 -r -p "Press any key to continue..."\n';
         fs.writeFileSync('./start_citrine.sh', start_citrine);
       }
       else {
@@ -259,6 +264,7 @@ async function startLauncher() {
 
   }
   else {
+    // Check if any of the important directories are missing
     if (!dir.includes('data')) {
       // Create ./data again
       println('It seems like the ./data directory is missing.');
