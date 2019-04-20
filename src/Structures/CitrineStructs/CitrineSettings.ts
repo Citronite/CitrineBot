@@ -76,9 +76,7 @@ export class CitrineSettings {
   public disableGuild(id: string): void {
     this.data.disabledGuilds.add(id);
     const guild = this.client.guilds.get(id);
-    if (guild) {
-      guild.leave();
-    }
+    if (guild) guild.leave();
   }
 
   public enableGuild(id: string): void {
@@ -174,6 +172,6 @@ export class CitrineSettings {
 
   public toString(): string {
     const obj = this.toJSON();
-    return JSON.stringify(obj, null, '\n\t');
+    return JSON.stringify(obj, null, '\t');
   }
 }

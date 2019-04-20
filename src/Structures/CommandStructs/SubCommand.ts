@@ -10,29 +10,31 @@ export class SubCommand extends AbstractCommand {
     super(options);
   }
 
-  public setParent(cmd: Command): void | Error {
+  public setParent(cmd: Command): void {
     if (this.parent) throw new Error('Parent commands cannot be reset!');
-
     if (cmd instanceof BaseCommand || cmd instanceof SubCommand) {
       this.parent = cmd;
+    } else {
+      throw new Error('Parent commands must be instances of BaseCommand or SubCommand!');
     }
   }
 
-  public getParent(): Command | undefined {
-    return this.parent;
+  public getParent(): Command | false {
+    return this.parent || false;
   }
 
-  public setBase(cmd: Command): void | Error {
+  public setBase(cmd: Command): void {
     if (this.base) throw new Error('Base commands cannot be reset!');
-
     if (cmd instanceof BaseCommand) {
       this.base = cmd;
     }	else if (cmd instanceof SubCommand) {
       this.base = cmd.base;
+    } else {
+      throw new Error('Base commands must be instance of BaseCommand!');
     }
   }
 
-  public getBase(): BaseCommand | undefined {
-    return this.base;
+  public getBase(): BaseCommand | false {
+    return this.base || false;
   }
 }

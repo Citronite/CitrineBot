@@ -22,7 +22,7 @@ export abstract class AbstractCommand {
     this.usage = options.usage || undefined;
   }
 
-  public async execute(ctx: Context, ...args: any[]): Promise<void> {
+  public async execute(): Promise<void> {
     return;
   }
 
@@ -32,7 +32,9 @@ export abstract class AbstractCommand {
       const instance = new subCmd();
       // Hacky check for whether its a subcommand or not.
       // Couldn't use instanceof SubCommand because of circular dependency.
-      if (instance.getParent) {
+      if (instance.setParent && instance.setBase) {
+        instance.setParent(this);
+        instance.setBase(this);
         this.subcommands.set(instance.name, instance);
         continue;
       }

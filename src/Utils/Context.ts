@@ -31,9 +31,22 @@ export class Context {
     this.prefix = iPrefix;
     this.message = message;
     this.author = message.author;
-    this.member = message.member || null;
     this.channel = message.channel;
+    this.member = message.member || null;
     this.guild = message.guild || null;
+  }
+
+  public async send(...args: any): Promise<Message | Message[]> {
+    return this.channel.send(...args);
+  }
+
+  public async sendDM(...args: any): Promise<Message | Message[]> {
+    try {
+      const res = await this.author.send(...args);
+      return res;
+    } catch (err) {
+      return this.channel.send('Failed to send DM. Please make sure your DMs are enabled.');
+    }
   }
 
   public async success(msg: string, embed: boolean = true): Promise<Message | Message[]> {
@@ -54,42 +67,30 @@ export class Context {
     }
   }
 
+  // contentOnly specifies whether this function will return
+  // the entire Message object or just message.content
   public async prompt(msg: string, contentOnly: boolean = true, timeOut: number = 30000): Promise<Message | string | null> {
-    // contentOnly specifies whether this function will return only the content of the answer, or
-    // the entire Message object from the user.
     return Promise.reject('This feature is yet to be implemented!');
   }
 
+  // Waits for a reaction on the bot message.
+  // First param would be msg to send, second param list of reactions to await.
+  // Limit is number of reactions to wait for.
   public async promptReaction(msg: string, emojis: Reaction[], limit: number = 1, timeOut: number = 30000): Promise<MessageReaction[] | null> {
     return Promise.reject('This feature is yet to be implemented!');
-    // Waits for a reaction on the bot message.
-    // First param would be msg to send, second param list of reactions to await.
-    // Limit is number of reactions to wait for.
-  }
-
-  public async send(...args: any): Promise<Message | Message[]> {
-    return this.channel.send(...args);
-  }
-
-  public async sendDM(...args: any): Promise<Message | Message[]> {
-    return this.author.send(...args);
   }
 
   public lockPerms(perms: PermissionResolvable, checkBot: boolean = true, checkAdmin: boolean = true): void {
     const { checkDiscordPerms } = this.client.permHandler;
-
     if (!this.member) {
-      throw new BaseError(100, 'Permission checks will only work on guild members, not users!');
+      throw new BaseError(100, 'Permission checks only work on guild members, not users!');
+    }
+    if (!this.guild) {
+      throw new BaseError(100, 'Permission checks only work inside guilds!');
     }
 
     checkDiscordPerms(this.channel, this.member, perms, checkAdmin);
-
-    if (checkBot) {
-      if (!this.guild) {
-        throw new BaseError(100, 'Permission checks will only work inside guilds!');
-      }
-      checkDiscordPerms(this.channel, this.guild.me, perms, checkAdmin);
-    }
+    if (checkBot) checkDiscordPerms(this.channel, this.guild.me, perms, checkAdmin);
   }
 
   public lock(...locks: LockOption[]): void {
