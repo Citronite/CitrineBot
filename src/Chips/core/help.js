@@ -10,10 +10,10 @@ class Help extends BaseCommand {
   }
 
   async execute(ctx, arg) {
-    if (cmd) {
+    if (arg) {
       const finder = (val) => {
         const aliases = ctx.client.settings.aliases[val.name];
-        return aliases && aliases.includes(name);
+        return aliases && aliases.includes(arg);
       };
       const cmd = ctx.client.commands.get(arg)
         || ctx.client.commands.find(finder);

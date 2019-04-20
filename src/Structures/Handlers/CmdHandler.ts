@@ -49,14 +49,20 @@ export class CmdHandler {
     // I hate typescript :')
     const [base, argsCopy]: [any, any] = this.getBaseCmd(message, args);
     if (!base) return [null, null];
-    if (!base.subcommands) return [base, argsCopy];
+    if (!base.subcommands || !argsCopy.length) return [base, argsCopy];
 
+    // Set initial value of subCmd
     let subCmd = base;
+    // Run loop as long as the subCmd has more subcommands
     while (subCmd.subcommands) {
-      const name = argsCopy.shift().toLowerCase();
-      if (subCmd.subcommands.has(name)) {
-        subCmd = subCmd.subcommands.get(name);
-      } else break;
+      const name = argsCopy[0];
+      if (!name) break;
+      if (subCmd.subcommands.has(name.toLowerCase())) {
+        subCmd = subCmd.subcommands.get(name.toLowerCase());
+        argsCopy.shift();
+      } else {
+        break;
+      }
     }
     return [subCmd, argsCopy];
   }

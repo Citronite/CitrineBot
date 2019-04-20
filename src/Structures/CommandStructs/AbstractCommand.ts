@@ -1,6 +1,5 @@
 import { Collection } from 'discord.js';
 import { CommandOptions } from 'typings';
-import { Context } from '../../Utils/Context';
 
 // Hacky fix for circular dependencies. :(
 export type Command = AbstractCommand | any;
@@ -22,20 +21,21 @@ export abstract class AbstractCommand {
     this.usage = options.usage || undefined;
   }
 
+  // By default, throws an invalid args error
+  // which will show a help message in chat
   public async execute(): Promise<void> {
-    return;
+    throw 200;
   }
 
-  public registerSubCommands(...subCmds: Array<tClass>): Command {
+  public registerSubCommands(...subCmds: Array<Command>): Command {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
-      const instance = new subCmd();
       // Hacky check for whether its a subcommand or not.
       // Couldn't use instanceof SubCommand because of circular dependency.
-      if (instance.setParent && instance.setBase) {
-        instance.setParent(this);
-        instance.setBase(this);
-        this.subcommands.set(instance.name, instance);
+      if (subCmd.setParent && subCmd.setBase) {
+        subCmd.setParent(this);
+        subCmd.setBase(this);
+        this.subcommands.set(subCmd.name, subCmd);
         continue;
       }
       throw new Error('Only instances of the SubCommand class can be registered!');
