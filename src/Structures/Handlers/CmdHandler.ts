@@ -66,7 +66,7 @@ export class CmdHandler {
   // Command: [p]basecmd subcmd1 subcmd2 subcmd3 arg1 arg2
   // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
   // At the end, it will also return the remaining arguments.
-  public static *getCmdChainIterator(message: Message, args: string[]): IterableIterator<Command> {
+  public static *getCmdChainIterator(/*message: Message, args: string[]*/): IterableIterator<Command> {
     throw new Error('This feature is yet to be implemented!');
   }
 

@@ -9,12 +9,10 @@ import { ICmdHandler, IPermHandler } from 'typings';
 import { BaseCommand } from './CommandStructs/BaseCommand';
 import { Collection } from 'discord.js';
 import * as fs from 'fs';
-import * as pfs from '../Utils/promisefs';
+// import * as pfs from '../Utils/promisefs';
 
 function fileFilter(arr: string[]): string[] {
-  return arr.filter(val => {
-    return !val.startsWith('_') && val.endsWith('.js');
-  });
+  return arr.filter(val => !val.startsWith('_') && val.endsWith('.js'));
 }
 
 export class CitrineClient extends Client {

@@ -37,7 +37,7 @@ export class DjsUtils {
     return SnowflakeUtil.deconstruct(snowflake);
   }
 
-  public static generateSnowflake(timestamp?: number | Date): Snowflake {
+  public static generateSnowflake(/*timestamp?: number | Date*/): Snowflake {
     return SnowflakeUtil.generate(/*timestamp*/);
   }
 
@@ -81,7 +81,6 @@ export class DjsUtils {
         return val.name === parsedRole;
       }
     };
-
     return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
   }
 
@@ -93,7 +92,6 @@ export class DjsUtils {
       if (parsedChnl.startsWith('#') && (val.name === parsedChnl.slice(1))) return true;
       return false;
     };
-
     return guild.channels.get(parsedChnl) || guild.channels.find(finder) || null;
   }
 
@@ -109,7 +107,6 @@ export class DjsUtils {
         val.tag === parsedUser ||
         rgx.test(val.username);
       };
-
       return client.users.find(finder) || null;
     }	catch (err) {
       client.logger.warn(`CitrineClient#resolveUser() failed for [${user}]`);

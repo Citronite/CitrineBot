@@ -32,7 +32,6 @@ export class ExceptionParser {
       if (cmd) {
         parsedError = new CommandError(cmd, parsedError.code, parsedError.errors);
       }
-
       return parsedError;
     }
   }
