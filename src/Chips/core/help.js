@@ -28,3 +28,5 @@ class Help extends BaseCommand {
     }
   }
 }
+
+module.exports = new Help();
