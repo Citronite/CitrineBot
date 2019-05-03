@@ -9,15 +9,17 @@ module.exports = {
   once: async (client: CitrineClient) => {
     const app: OAuth2Application = await client.fetchApplication();
     const name = client.user.tag;
-    const inv = await client.generateInvite();
+    const invite = await client.generateInvite();
 
-    console.log(`=====${'='.repeat(name.length)}=====`);
-    console.log(`     ${name}   `);
-    console.log(`=====${'='.repeat(name.length)}=====\n`);
+    client.logger.info(`=====${'='.repeat(name.length)}=====`);
+    client.logger.info(`     ${name}   `);
+    client.logger.info(`=====${'='.repeat(name.length)}=====\n`);
 
-    console.log(`${client.user.username} is active in ${client.guilds.size} server(s)!`);
-    console.log(`Global Prefix: ${client.settings.globalPrefix}`);
-    console.log(`Bot Owner: ${app.owner.tag}`);
-    console.log(`Invite Link:\n ${inv}`);
+    servers = client.guilds.size
+    client.logger.info(`Active in : ${servers} ${servers == 1 ? 'server' : 'servers'}`);
+    client.logger.info(`Bot Owner : ${app.owner.tag}`);
+    client.logger.info(`Global Prefix : ${client.settings.globalPrefix}`);
+    client.logger.info(`Invite Link:\n${invite}`);
+    client.logger.info('\n(Note: Closing this window will shut down the bot as well!)\n')
   }
 };
