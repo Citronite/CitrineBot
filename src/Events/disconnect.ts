@@ -5,6 +5,6 @@ module.exports = {
   listener: async (client: CitrineClient) => {
     client.logger.error('Connection error, client disconnected!');
     await client.settings.save();
-    process.exit(8);
+    process.exit(1);
   },
 };

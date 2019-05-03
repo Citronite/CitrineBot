@@ -32,7 +32,7 @@ const citrine = new CitrineClient(options);
     citrine.initEvents();
     await citrine.launch();
   } catch (_) {
-    process.exit(8);
+    process.exit(1);
   }
 })();
 

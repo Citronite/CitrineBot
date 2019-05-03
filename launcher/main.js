@@ -14,6 +14,11 @@ const {
 
 const Home = new HomeMenu();
 
+function exit(code = 0) {
+  rl.close();
+  process.exit(code);
+}
+
 // Self-explanatory
 async function printHomepage() {
   cls();
@@ -136,8 +141,7 @@ async function startLauncher() {
     if (line === '0') {
       // If the current menu is the homepage, then exit the launcher
       if (rl.currMenu.code === 0) {
-        rl.close();
-        return;
+        exit();
       }
       // Otherwise, go back to the homepage
       else {
@@ -172,6 +176,13 @@ async function startLauncher() {
   printHeader();
   await sleep(200);
 
+  const version = parseInt(process.version.split('.')[0]);
+  if (version < 10) {
+    println('Please update Node.js.');
+    println('Citrine requires at least version 10 to run smoothly.');
+    exit(1);
+  }
+
   // Kinda hacky but oh well :P
   const dir = fs.readdirSync('.');
   const first_run = !dir.includes('data') && !dir.includes('bin') && !dir.includes('node_modules');
@@ -186,22 +197,14 @@ async function startLauncher() {
 
     // Install dependencies & compile code
     const installed = await installDeps();
-    if (!installed) {
-      rl.close();
-      return;
-    }
+    if (!installed) exit(1);
+
     const compiled = await compileCitrine();
-    if (!compiled) {
-      rl.close();
-      return;
-    }
+    if (!compiled) exit(1);
 
     // Create data dir & files
     const created = await createDataFiles(TOKEN, prefix);
-    if (!created) {
-      rl.close();
-      return;
-    }
+    if (!created) exit(1);
 
     const { platform } = process;
     try {
@@ -254,8 +257,7 @@ async function startLauncher() {
       println(err);
       println('You may launch citrine through the main launcher, or run\n' +
               '`node ./bin/citrine.js` to launch citrine directly.');
-      rl.close();
-      return;
+      exit(1);
     }
     // Start the launcher!
     println('\nStarting launcher. . .');
@@ -271,10 +273,7 @@ async function startLauncher() {
       const TOKEN = await getToken();
       const prefix = await getPrefix();
       const created = await createDataFiles(TOKEN, prefix);
-      if (!created) {
-        rl.close();
-        return;
-      }
+      if (!created) exit(1);
     }
     if (!dir.includes('bin')) {
       // Recompile.
@@ -283,15 +282,11 @@ async function startLauncher() {
       const recompile = await confirm(str);
       if (recompile) {
         const compiled = await compileCitrine();
-        if (!compiled) {
-          rl.close();
-          return;
-        }
+        if (!compiled) exit(1);
       }
       else {
         println('Alright. Please make sure Citrine is installed correctly and try again!');
-        rl.close();
-        return;
+        exit();
       }
     }
     if (!dir.includes('node_modules')) {
@@ -301,15 +296,11 @@ async function startLauncher() {
       const reinstall = await confirm(str);
       if (reinstall) {
         const installed = await installDeps();
-        if (!installed) {
-          rl.close();
-          return;
-        }
+        if (!installed) exit(1);
       }
       else {
         println('Alright. Please make sure Citrine is installed correctly and try again!');
-        rl.close();
-        return;
+        exit();
       }
     }
     // Start Launcher!

@@ -41,7 +41,7 @@ class RepairsMenu extends AbstractMenu {
               'For further help, you can join the support server:\n' +
               'Support Server: https://discord.gg/rEM9gFN');
       rl.close();
-      process.exit(8);
+      process.exit(1);
     }
   }
 
