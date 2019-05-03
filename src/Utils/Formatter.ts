@@ -1,4 +1,4 @@
-import { Command } from '../Structures/CommandStructs/AbstractCommand';
+import { Command, FormatHelpOptions } from 'typings';
 import { BaseCommand } from '../Structures/CommandStructs/BaseCommand';
 
 export class Formatter {
@@ -14,7 +14,7 @@ export class Formatter {
     }
   }
 
-  public static codeblock(str: string | string[], lang: string = ''): string | string[] {
+  public static block(str: string | string[], lang: string = ''): string | string[] {
     if (typeof str === 'string') {
       return `\`\`\`${lang}\n${str}\`\`\``;
     } else {
@@ -22,16 +22,17 @@ export class Formatter {
     }
   }
 
-  public static cmdHelp(cmd: Command, maxWidth: number = 80, useCodeBlocks: boolean = true): object {
-    const name = cmd.name;
-    const description = cmd.description;
+  public static cmdHelp(cmd: Command, options?: FormatHelpOptions): object {
     let chip;
     let parent;
     let base;
     let usage;
     let subcommands;
+    const name = cmd.name;
+    const description = cmd.description;
+    const maxWidth = options && options.maxWidth ? options.maxWidth : 80;
+    const useCodeBlocks = options && options.useCodeBlocks ? options.useCodeBlocks : true;
 
-    // TypeScript is so dumb, who told me it was a good idea to use it?!?
     if (cmd instanceof BaseCommand) {
       chip = cmd.chip;
       parent = '--/--';
@@ -59,11 +60,10 @@ export class Formatter {
       }
 
       const max: number = names.reduce((acc, cur) => acc > cur.length ? acc : cur.length, 0);
-
       for (let x = 0; x < names.length; x++) {
         const paddedName: string = names[x].padEnd(max + 2);
         const sliceLength: number = (maxWidth - (max + 2)) - 3;
-        const slicedDescrip: string = `${descrips[x].slice(0, sliceLength)}...`;
+        const slicedDescrip: string = descrips[x].length >= max ? `${descrips[x].slice(0, sliceLength)}...` : descrips[x];
         const str: string = paddedName + slicedDescrip;
         final.push(str);
       }

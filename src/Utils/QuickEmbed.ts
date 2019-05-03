@@ -1,7 +1,12 @@
 import { RichEmbed, User, GuildMember } from 'discord.js';
-import { Colors } from './Constants';
-import { Command } from '../Structures/CommandStructs/AbstractCommand';
+import { Command } from 'typings';
 import { Context } from './Context';
+
+const Colors: { [key: string]: number } = {
+  RED: 0xCB4154,
+  GREEN: 0x00FF40,
+  BOT: 0xFFEF00
+};
 
 export class QuickEmbed {
   constructor() {
@@ -35,9 +40,8 @@ export class QuickEmbed {
   }
 
   public static cmdHelp(ctx: Context, cmd: Command): RichEmbed {
-    const embed = this.basic(ctx.message.member || ctx.author);
     const help = ctx.client.utils.format.cmdHelp(cmd);
-
+    const embed = this.basic(ctx.message.member || ctx.author);
     embed.setTitle(help.name)
       .setDescription(help.description)
       .addField('Chip', help.chip, true)
@@ -45,8 +49,6 @@ export class QuickEmbed {
 
     if (help.usage) embed.addField('Usage', help.usage.replace('[p]', ctx.prefix), false);
     if (help.subcommands) embed.addField('SubCommands', help.subcommands, false);
-
     return embed;
   }
-
 }

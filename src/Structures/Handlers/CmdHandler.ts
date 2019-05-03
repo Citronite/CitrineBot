@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
+import { Command } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../CommandStructs/BaseCommand';
-import { Command } from '../CommandStructs/AbstractCommand';
 import { BaseError } from '../ErrorStructs/BaseError';
 import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
 import { Context } from '../../Utils/Context';

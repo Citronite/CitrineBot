@@ -1,6 +1,4 @@
-
 declare module 'typings' {
-
   import { 
     Collection, 
     Client, 
@@ -25,16 +23,20 @@ declare module 'typings' {
   export type ChannelID = Snowflake;
   export type RoleID = Snowflake;
   export type UserID = Snowflake;
+  export type LockOption = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
+  export type Reaction = string | Emoji | ReactionEmoji;
+  export type Command = any; // :(
 
   export type CommandOptions = {
     name: string,
-    description? : string,
-    usage? : string,
+    description: string,
+    usage?: string
   }
 
-  export type LockOption = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
-
-  export type Reaction = string | Emoji | ReactionEmoji;
+  export type FormatHelpOptions = {
+    maxWidth?: number,
+    useCodeBlocks?: boolean
+  }
 
   export type IGlobalConfig = {
     owner: UserID,
@@ -65,13 +67,6 @@ declare module 'typings' {
   }
 
   export interface IDjsUtils {
-    escapeMarkdown: (text: string, onlyCodeBlock?: boolean, onlyInlineCode?: boolean) => string;
-    fetchRecommendedShards: (token: string, guildsPerShard?: number) => Promise<number>;
-    splitMessage: (text: string, options?: SplitOptions) => string | string[];
-    deconstructSnowflake: (snowflake: string) => DeconstructedSnowflake;
-    generateSnowflake: (timestamp?: number | Date) => Snowflake;
-    inlineCode: (str: string | string[]) => string | string[];
-    blockCode: (str: string | string[], lang?: string) => string | string[];
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
     resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
@@ -80,43 +75,9 @@ declare module 'typings' {
     resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
   }
 
-  export interface IJsUtils {
-    cloneData: (obj: object) => object;
-    arrRandom: (arr: any[]) => any[];
-    objRandom: (obj: any[]) => any[];
-    arrErase: (arr: any[], ...args: any[]) => any[];
-    arrToggle: (original: any[], toggleArr: any[]) => any[];
-    objToMap: (obj: any) => Collection<any, any>;
-    mapToObj: (map: Map<any, any> | Collection<any, any>) => object;
-    isInstance: (obj: object, cls: any) => boolean;
-  }
-
   export interface IFormatter {
     inline: (str: string | string[]) => string | string[];
-    codeblock: (str: string | string[], lang?: string) => string | string[];
-    cmdHelp(cmd: any, maxWidth?: number, useCodeBlocks?: boolean): object;
+    block: (str: string | string[], lang?: string) => string | string[];
+    cmdHelp(cmd: any, options: any): object;
   }
-
-  interface IAbstractCommand {
-    subcommands?: Collection<string, ISubCommand>;
-    readonly name: string;
-    readonly description: string;
-    readonly usage: string | undefined;
-    registerSubCommands: (...subCmds: ISubCommand[]) => IAbstractCommand;
-  }
-
-  interface IBaseCommand extends IAbstractCommand {
-    readonly chip: string;
-  }
-  interface ISubCommand extends IAbstractCommand {
-    readonly parent: ISubCommand | IBaseCommand;
-    readonly base: IBaseCommand;
-    setParent: (cmd: Command) => void | Error;
-    getParent: () => Command | undefined;
-    setBase: (cmd: Command) => void | Error;
-    getBase: () => IBaseCommand | undefined;
-  }
-
-  export type Command = ISubCommand | IBaseCommand;
-
 }
