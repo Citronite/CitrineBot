@@ -12,14 +12,14 @@ const {
   execute,
 } = require('./cli.js');
 
-const Home = new HomeMenu();
-
+// Exit the launcher.
 function exit(code = 0) {
   rl.close();
   process.exit(code);
 }
 
-// Self-explanatory
+const Home = new HomeMenu();
+// Print the homepage (the HomeMenu)
 async function printHomepage() {
   cls();
   await sleep(100);
@@ -41,7 +41,7 @@ async function getToken() {
   return TOKEN;
 }
 
-// Obtain global prefix
+// Obtain global prefix for the bot
 async function getPrefix() {
   let prefix = await input('Please choose a global prefix for your bot:');
   while (!prefix) {
@@ -176,10 +176,11 @@ async function startLauncher() {
   printHeader();
   await sleep(200);
 
-  const version = parseInt(process.version.split('.')[0]);
+  const version = parseInt(process.version.split('.')[0].slice(1));
   if (version < 10) {
     println('Please update Node.js.');
     println('Citrine requires at least version 10 to run smoothly.');
+    println(`You are running: ${process.version}`);
     exit(1);
   }
 
