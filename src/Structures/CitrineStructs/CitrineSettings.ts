@@ -7,7 +7,6 @@ export class CitrineSettings {
 
   constructor(client: CitrineClient) {
     this.client = client;
-
     this.data = {
       owner: 'DEFAULT',
       globalPrefix: 'DEFAULT',
@@ -168,10 +167,5 @@ export class CitrineSettings {
       disabledCommands: [...conf.disabledCommands],
       loadedModules: [...conf.loadedModules]
     };
-  }
-
-  public toString(): string {
-    const obj = this.toJSON();
-    return JSON.stringify(obj, null, '\t');
   }
 }

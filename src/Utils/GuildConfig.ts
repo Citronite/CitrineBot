@@ -7,28 +7,12 @@ import {
   UserID
 } from 'typings';
 
-const props = [
-  'id',
-  'prefix',
-  'disabledRole',
-  'deleteCmdCalls',
-  'deleteCmdCallsDelay',
-  'readMsgEdits',
-  'disabledUsers',
-  'disabledChannels',
-  'disabledCommands',
-  'reqRoles'
-];
-
 export class GuildConfig {
-  public readonly id: GuildID;
   private readonly data: any;
 
   constructor(guild: Guild | GuildConfig) {
     if (guild instanceof Guild) {
-      // Have to use any here since TS doesn't know guild.client
-      // would be CitrineClient instead of Client.
-      const client: CitrineClient | any = guild.client;
+      const client: any = guild.client;
       this.id = guild.id;
       this.data = {
         id: guild.id,
@@ -42,14 +26,7 @@ export class GuildConfig {
         disabledCommands: new Set(),
         reqRoles: {},
       };
-
     }	else {
-
-      // Ensure all proper keys are present in the data provided
-      Object.keys(guild).forEach(val => {
-        if (!props.includes(val)) throw new Error('Invalid data provided to GuildConfig constructor!');
-      });
-
       this.id = guild.id;
       this.data = {
         id: guild.id,
@@ -63,8 +40,15 @@ export class GuildConfig {
         disabledCommands: new Set(guild.disabledCommands),
         reqRoles: guild.reqRoles,
       };
-
     }
+  }
+
+  get id(): string {
+    return this.data.id
+  }
+
+  set id(v: any) {
+    return;
   }
 
   get prefix(): string {
@@ -167,10 +151,5 @@ export class GuildConfig {
       disabledChannels: [...conf.disabledChannels],
       disabledCommands: [...conf.disabledCommands],
     };
-  }
-
-  public toString(): string {
-    const obj = this.toJSON();
-    return JSON.stringify(obj, null, '\n\t');
   }
 }
