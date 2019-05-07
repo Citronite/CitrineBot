@@ -1,6 +1,6 @@
 import { GuildConfig } from '../../Utils/GuildConfig';
-import { BaseError } from '../ErrorStructs/BaseError';
-import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
+import { BaseError } from '../ErrorStructs/Exception';
+import { ErrorCodes } from '../ErrorStructs/ExceptionCodes';
 import { Command } from '../CommandStructs/AbstractCommand';
 import {
   Message,

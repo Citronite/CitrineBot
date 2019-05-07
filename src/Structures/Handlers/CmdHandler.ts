@@ -2,8 +2,8 @@ import { Message } from 'discord.js';
 import { Command } from '../CommandStructs/AbstractCommand';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../CommandStructs/BaseCommand';
-import { BaseError } from '../ErrorStructs/BaseError';
-import { ErrorCodes } from '../ErrorStructs/ErrorCodes';
+import { BaseError } from '../ErrorStructs/Exception';
+import { ErrorCodes } from '../ErrorStructs/ExceptionCodes';
 import { Context } from '../../Utils/Context';
 import { ExceptionParser } from '../ErrorStructs/ExceptionParser';
 

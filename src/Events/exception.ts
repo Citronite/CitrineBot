@@ -1,4 +1,4 @@
-import { BaseError } from '../Structures/ErrorStructs/BaseError';
+import { BaseError } from '../Structures/ErrorStructs/Exception';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { Message } from 'discord.js';
 

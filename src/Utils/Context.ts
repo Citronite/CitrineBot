@@ -1,7 +1,7 @@
 import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
-import { BaseError } from '../Structures/ErrorStructs/BaseError';
-import { ErrorMessages } from '../Structures/ErrorStructs/ErrorMessages';
+import { BaseError } from '../Structures/ErrorStructs/Exception';
+import { ErrorMessages } from '../Structures/ErrorStructs/ExceptionMessages';
 import { LockOption, Reaction } from 'typings';
 import {
   Message,
