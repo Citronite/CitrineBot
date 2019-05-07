@@ -1,4 +1,4 @@
-import { Command } from '../CommandStructs/AbstractCommand';
+import { Command } from 'typings';
 import { BaseError } from './BaseError';
 
 export class CommandError extends BaseError {

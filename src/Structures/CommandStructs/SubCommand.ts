@@ -1,6 +1,6 @@
-import { AbstractCommand, Command } from './AbstractCommand';
+import { AbstractCommand } from './AbstractCommand';
 import { BaseCommand } from './BaseCommand';
-import { CommandOptions } from 'typings';
+import { CommandOptions, Command } from 'typings';
 
 export class SubCommand extends AbstractCommand {
   private parent?: Command;
