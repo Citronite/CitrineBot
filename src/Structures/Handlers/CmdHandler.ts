@@ -2,10 +2,8 @@ import { Message } from 'discord.js';
 import { Command } from '../CommandStructs/AbstractCommand';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../CommandStructs/BaseCommand';
-import { BaseError } from '../ErrorStructs/Exception';
-import { ErrorCodes } from '../ErrorStructs/ExceptionCodes';
+import { Exception } from '../ErrorStructs/Exception';
 import { Context } from '../../Utils/Context';
-import { ExceptionParser } from '../ErrorStructs/ExceptionParser';
 
 export class CmdHandler {
   constructor() {
@@ -77,7 +75,6 @@ export class CmdHandler {
   }
 
   public static async processCommand(message: any, config?: GuildConfig): Promise<void> {
-
     try {
       // Check if the message was prefixed
       const invokedPrefix = this.checkPrefix(message, config);
@@ -94,20 +91,26 @@ export class CmdHandler {
 
       if (config && config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
       const ctx = new Context(message, invokedPrefix);
+
       try {
-        // Check Citrine's custom filters. Throws a BaseError if failed
+        // Check Citrine's custom filters. Throws a Exception if failed
         await message.client.permHandler.checkCustomFilters(cmd, message);
         // Execute the command. Note that args are not passed as an array.
         await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
-        // Fire cmdException if error occurred with the filters or command
-        const parsedError = ExceptionParser.parse(err, cmd);
-        message.client.emit('cmdException', ctx, parsedError);
+        // Fire exception with context/command
+        // if the exeption occurred within the
+        // custom filter checks or the command execution.
+        const error = Exception.parse(err);
+        message.client.emit('exception', error, ctx, cmd);
+        return;
       }
     } catch (err) {
-      // Fire exception if error occurred elsewhere
-      const error = new BaseError(ErrorCodes.UNKNOWN_ERROR, err.message);
-      message.client.emit('exception', message, error);
+      // Fire exception without context/command
+      // if the exception occurred elsewhere
+      const error = Exception.parse(err);
+      message.client.emit('exception', error);
+      return;
     }
   }
 }

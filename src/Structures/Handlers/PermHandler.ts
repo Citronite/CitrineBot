@@ -1,6 +1,6 @@
 import { GuildConfig } from '../../Utils/GuildConfig';
-import { BaseError } from '../ErrorStructs/Exception';
-import { ErrorCodes } from '../ErrorStructs/ExceptionCodes';
+import { Exception } from '../ErrorStructs/Exception';
+import { ExceptionCodes } from '../ErrorStructs/ExceptionCodes';
 import { Command } from '../CommandStructs/AbstractCommand';
 import {
   Message,
@@ -32,7 +32,7 @@ export class PermHandler {
       if (globalConfig.disabledUsers.includes(message.author.id)) errors.push('Disabled User [Global]');
       if (globalConfig.disabledCommands.includes(cmd.name)) errors.push('Disabled Command [Global]');
 
-      return errors.length ? Promise.reject(new BaseError(ErrorCodes.FAILED_CUSTOM_FILTERS, errors)) : Promise.resolve(true);
+      return errors.length ? Promise.reject(new Exception(ExceptionCodes.FAILED_CUSTOM_FILTERS, errors)) : Promise.resolve(true);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -40,29 +40,29 @@ export class PermHandler {
 
   public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void {
     const memberPerms = channel.memberPermissions(member);
-    if (memberPerms === null) throw new BaseError(ErrorCodes.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
+    if (memberPerms === null) throw new Exception(ExceptionCodes.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
 
     const missing = memberPerms.missing(perms, checkAdmin);
     if (!missing) return;
 
     const missingFlags = new Permissions(missing).toArray(checkAdmin);
-    const code = channel.client.user.id === member.id ? ErrorCodes.MISSING_BOT_PERMS : ErrorCodes.MISSING_MEMBER_PERMS;
-    throw new BaseError(code, missingFlags);
+    const code = channel.client.user.id === member.id ? ExceptionCodes.MISSING_BOT_PERMS : ExceptionCodes.MISSING_MEMBER_PERMS;
+    throw new Exception(code, missingFlags);
   }
 
   public static checkGuildOwner(guild: Guild, user: User | GuildMember): void {
     if (guild.ownerID === user.id) return;
-    throw new BaseError(ErrorCodes.PERMISSION_ERROR, 'Only guild owners may perform that action!');
+    throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only guild owners may perform that action!');
   }
 
   public static checkBotOwner(user: User | GuildMember | any): void {
     if (user.id === user.client.settings.owner) return;
-    throw new BaseError(ErrorCodes.PERMISSION_ERROR, 'Only bot owners may perform that action!');
+    throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only bot owners may perform that action!');
   }
 
   public static checkBotDev(user: User | GuildMember | any): void {
     if (user.client.settings.devs.includes(user.id)) return;
-    throw new BaseError(ErrorCodes.PERMISSION_ERROR, 'Only bot developers may perform that action!');
+    throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only bot developers may perform that action!');
   }
 
 }

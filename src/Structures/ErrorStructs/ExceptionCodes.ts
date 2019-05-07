@@ -1,4 +1,4 @@
-export const ErrorCodes: { [key: string]: number } = {
+export const ExceptionCodes: { [key: string]: number } = {
   // 100 -> permissions
   PERMISSION_ERROR: 100,
   MISSING_BOT_PERMS: 101,

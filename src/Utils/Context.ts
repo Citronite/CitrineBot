@@ -1,7 +1,7 @@
 import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
-import { BaseError } from '../Structures/ErrorStructs/Exception';
-import { ErrorMessages } from '../Structures/ErrorStructs/ExceptionMessages';
+import { Exception } from '../Structures/ErrorStructs/Exception';
+import { ExceptionMessages } from '../Structures/ErrorStructs/ExceptionMessages';
 import { LockOption, Reaction } from 'typings';
 import {
   Message,
@@ -83,10 +83,10 @@ export class Context {
   public lockPerms(perms: PermissionResolvable, checkBot: boolean = true, checkAdmin: boolean = true): void {
     const { checkDiscordPerms } = this.client.permHandler;
     if (!this.member) {
-      throw new BaseError(100, 'Permission checks only work on guild members, not users!');
+      throw new Exception(100, 'Permission checks only work on guild members, not users!');
     }
     if (!this.guild) {
-      throw new BaseError(100, 'Permission checks only work inside guilds!');
+      throw new Exception(100, 'Permission checks only work inside guilds!');
     }
 
     checkDiscordPerms(this.channel, this.member, perms, checkAdmin);
@@ -96,23 +96,23 @@ export class Context {
   public lock(...locks: LockOption[]): void {
     for (const lock of locks) {
       if (typeof lock === 'boolean') {
-        // 100 === ErrorCodes.PERMISSION_ERROR
+        // 100 === ExceptionCodes.PERMISSION_ERROR
         if (lock) continue;
-        throw new BaseError(100, ErrorMessages[100]);
+        throw new Exception(100, ExceptionMessages[100]);
       } else {
         switch (lock) {
           case 'botOwner':
             if (this.client.settings.owner === this.author.id) continue;
-            throw new BaseError(100, 'Only the bot owner may perform this action!');
+            throw new Exception(100, 'Only the bot owner may perform this action!');
           case 'botDev':
             if (this.client.settings.devs.includes(this.author.id)) continue;
-            throw new BaseError(100, 'Only bot developers may perform this action!');
+            throw new Exception(100, 'Only bot developers may perform this action!');
           case 'dm':
             if (this.message.channel.type === 'dm') continue;
-            throw new BaseError(100, 'This command can only be used in DM channels!');
+            throw new Exception(100, 'This command can only be used in DM channels!');
           case 'guild':
             if (this.guild) continue;
-            throw new BaseError(100, 'This command can only be used in guild channels!');
+            throw new Exception(100, 'This command can only be used in guild channels!');
           default:
             throw new Error('Invalid LockOption provided!');
         }

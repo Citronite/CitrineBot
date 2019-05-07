@@ -1,7 +1,7 @@
 import { RichEmbed } from 'discord.js';
 import { QuickEmbed } from '../../Utils/QuickEmbed';
-import { ErrorCodes } from './ExceptionCodes';
-import { ErrorMessages } from './ExceptionMessages';
+import { ExceptionCodes } from './ExceptionCodes';
+import { ExceptionMessages } from './ExceptionMessages';
 import { Command } from '../CommandStructs/AbstractCommand';
 
 export class Exception extends Error {
@@ -14,11 +14,11 @@ export class Exception extends Error {
 
   constructor(code: number, errors: string | string[]) {
     super();
-    this.code = Object.values(ErrorCodes).includes(code) ? code : 999;
-    this.type = Object.keys(ErrorCodes).find(val => ErrorCodes[val] === code) || 'UNKNOWN_ERROR';
+    this.code = Object.values(ExceptionCodes).includes(code) ? code : 999;
+    this.type = Object.keys(ExceptionCodes).find(val => ExceptionCodes[val] === code) || 'UNKNOWN_ERROR';
 
     errors = typeof errors === 'string' ? [errors] : errors;
-    this.errors = errors || ErrorMessages[this.code];
+    this.errors = errors || ExceptionMessages[this.code];
     this.name = `${this.type}:${this.code}`;
     this.info = `Error(s):\n\t${this.errors.join('\n')}`;
   }
@@ -37,13 +37,13 @@ export class Exception extends Error {
 
   public static parse(err: string | number | Exception | Error): Exception {
     if (typeof err === 'string') {
-      const code = ErrorCodes[err] || 999;
-      const errMsg = ErrorMessages[code];
+      const code = ExceptionCodes[err] || 999;
+      const errMsg = ExceptionMessages[code];
       return new Exception(code, errMsg);
     }
     if (typeof err === 'number') {
-      const code = Object.values(ErrorCodes).includes(err) ? err : 999;
-      const errMsg = ErrorMessages[code];
+      const code = Object.values(ExceptionCodes).includes(err) ? err : 999;
+      const errMsg = ExceptionMessages[code];
       return new Exception(code, errMsg);
     }
     return new Exception(999, err.message);
