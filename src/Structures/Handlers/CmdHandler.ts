@@ -98,17 +98,17 @@ export class CmdHandler {
         // Execute the command. Note that args are not passed as an array.
         await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
-        // Fire exception with context/command
+        // Fire exception *with* context/command
         // if the exeption occurred within the
         // custom filter checks or the command execution.
-        const error = Exception.parse(err);
+        const error: Exception = Exception.parse(err);
         message.client.emit('exception', error, ctx, cmd);
         return;
       }
     } catch (err) {
-      // Fire exception without context/command
+      // Fire exception *without* context/command
       // if the exception occurred elsewhere
-      const error = Exception.parse(err);
+      const error: Exception = Exception.parse(err);
       message.client.emit('exception', error);
       return;
     }

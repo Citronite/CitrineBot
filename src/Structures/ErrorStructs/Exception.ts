@@ -25,17 +25,23 @@ export class Exception extends Error {
 
   public toString(code: boolean = true): string {
     const top = `⛔ ${this.name} ⛔`;
-    const msg = this.message;
+    const msg = this.info;
     return code ? `\`\`\`\n${top}\n\n${msg}\n\`\`\`` : `${top}\n\n${msg}`;
   }
 
   public toEmbed(): RichEmbed {
-    return QuickEmbed.error(this.message)
+    return QuickEmbed.error(this.info)
       .setTitle('⛔ Exception Occurred!')
       .setFooter(`Error: ${this.name}`);
   }
 
   public static parse(err: string | number | Exception | Error): Exception {
+    if (err instanceof Exception) {
+      return err;
+    }
+    if (err instanceof Error) {
+      return new Exception(999, err.message);
+    }
     if (typeof err === 'string') {
       const code = ExceptionCodes[err] || 999;
       const errMsg = ExceptionMessages[code];
@@ -46,6 +52,6 @@ export class Exception extends Error {
       const errMsg = ExceptionMessages[code];
       return new Exception(code, errMsg);
     }
-    return new Exception(999, err.message);
+    return new Exception(999, ExceptionMessages[999]);
   }
 }
