@@ -44,10 +44,10 @@ export class GuildConfig {
   }
 
   get id(): string {
-    return this.data.id
+    return this.data.id;
   }
 
-  set id(v: any) {
+  set id(v: string) {
     return;
   }
 
