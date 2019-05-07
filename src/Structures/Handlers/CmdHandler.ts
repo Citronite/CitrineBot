@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { Command } from 'typings';
+import { Command } from '../CommandStructs/AbstractCommand';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../CommandStructs/BaseCommand';
 import { BaseError } from '../ErrorStructs/BaseError';

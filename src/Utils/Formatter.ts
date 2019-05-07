@@ -1,5 +1,8 @@
-import { Command, FormatHelpOptions } from 'typings';
+import { FormatHelpOptions } from 'typings';
 import { BaseCommand } from '../Structures/CommandStructs/BaseCommand';
+import { SubCommand } from '../Structures/CommandStructs/SubCommand';
+
+type tCommand = BaseCommand | SubCommand;
 
 export class Formatter {
   constructor() {
@@ -22,7 +25,7 @@ export class Formatter {
     }
   }
 
-  public static cmdHelp(cmd: Command, options?: FormatHelpOptions): object {
+  public static cmdHelp(cmd: tCommand, options?: FormatHelpOptions): object {
     let chip;
     let parent;
     let base;

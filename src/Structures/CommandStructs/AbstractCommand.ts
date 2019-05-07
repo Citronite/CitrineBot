@@ -1,6 +1,5 @@
 import { Collection } from 'discord.js';
 import { CommandOptions } from 'typings';
-import { Command } from 'typings';
 
 function validateCommandOptions(options: any): CommandOptions {
   if (!options) throw new Error('Invalid CommandOptions provided!');
@@ -9,7 +8,7 @@ function validateCommandOptions(options: any): CommandOptions {
   return options;
 }
 
-export abstract class AbstractCommand {
+export abstract class Command {
   public subcommands?: Collection<string, Command>;
   public readonly name: string;
   public readonly description: string;
@@ -22,15 +21,16 @@ export abstract class AbstractCommand {
     this.usage = options.usage;
   }
 
-  // By default, throws an invalid args error
-  // which will show a help message in chat.
-  public async execute(): Promise<void> {
+  // By default, throws an invalid args error,
+  // which will show a help message in discord.
+  public async execute(...args: any[]): Promise<void> {
     throw 200;
   }
 
   // Clunky bit of code, but couldn't think of any other way
-  // to do this because of circular dependencies
-  public registerSubCommands(...subCmds: Array<Command>): Command {
+  // to do this because of circular dependencies.
+  // I'm not smart enough.
+  public registerSubCommands(...subCmds: Array<any>) {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
       if (subCmd.setParent && subCmd.setBase) {

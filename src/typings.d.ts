@@ -19,37 +19,6 @@ declare module 'typings' {
     ReactionEmoji,
   } from 'discord.js';
 
-  export type GuildID = Snowflake;
-  export type ChannelID = Snowflake;
-  export type RoleID = Snowflake;
-  export type UserID = Snowflake;
-  export type LockOption = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
-  export type Reaction = string | Emoji | ReactionEmoji;
-  export type Command = any; // :(
-
-  export type CommandOptions = {
-    name: string,
-    description: string,
-    usage?: string
-  }
-
-  export type FormatHelpOptions = {
-    maxWidth?: number,
-    useCodeBlocks?: boolean
-  }
-
-  export type IGlobalConfig = {
-    owner: UserID,
-    globalPrefix: string,
-    verbose: boolean,
-    devs: Set<UserID>,
-    disabledUsers: Set<UserID>,
-    disabledGuilds: Set<GuildID>,
-    disabledCommands: Set<string>,
-    loadedModules: Set<string>,
-    aliases: { [cmd in string]: string[] },
-  }
-
   export interface ICmdHandler {
     checkPrefix: (message: any, config: any) => string | null;
     getArgs: (message: any, prefix: string, parseQuotes: boolean) => string[] | null;
@@ -79,5 +48,35 @@ declare module 'typings' {
     inline: (str: string | string[]) => string | string[];
     block: (str: string | string[], lang?: string) => string | string[];
     cmdHelp(cmd: any, options: any): object;
+  }
+
+  export type GuildID = Snowflake;
+  export type ChannelID = Snowflake;
+  export type RoleID = Snowflake;
+  export type UserID = Snowflake;
+  export type LockOption = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
+  export type Reaction = string | Emoji | ReactionEmoji;
+
+  export type CommandOptions = {
+    name: string,
+    description: string,
+    usage?: string
+  }
+
+  export type FormatHelpOptions = {
+    maxWidth?: number,
+    useCodeBlocks?: boolean
+  }
+
+  export type IGlobalConfig = {
+    owner: UserID,
+    globalPrefix: string,
+    verbose: boolean,
+    devs: Set<UserID>,
+    disabledUsers: Set<UserID>,
+    disabledGuilds: Set<GuildID>,
+    disabledCommands: Set<string>,
+    loadedModules: Set<string>,
+    aliases: { [cmd in string]: string[] },
   }
 }
