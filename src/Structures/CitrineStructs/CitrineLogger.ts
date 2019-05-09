@@ -5,7 +5,6 @@ export class CitrineLogger {
   public readonly client: CitrineClient;
 
   constructor(client: CitrineClient) {
-    // Implement this :P
     this.client = client;
   }
 

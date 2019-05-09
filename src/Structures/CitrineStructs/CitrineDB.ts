@@ -1,5 +1,4 @@
 import Keyv = require('keyv');
-import { mkdir } from 'fs';
 import { GuildID } from 'typings';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { Guild } from 'discord.js';
@@ -7,11 +6,7 @@ import { resolve } from 'path';
 
 const cwd = process.cwd();
 
-interface ICitrineDB {
-  [key: string]: any;
-}
-
-export class CitrineDB implements ICitrineDB {
+export class CitrineDB {
   [key: string]: any;
   public readonly guilds: Keyv<any>;
 
@@ -27,6 +22,14 @@ export class CitrineDB implements ICitrineDB {
       return Promise.reject(err);
     }
   }
+
+  public async drop(): Promise<boolean> {
+  try {
+    return Promise.reject('Unimplemented');
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
 
   public async getGuild(id: GuildID): Promise<GuildConfig | null> {
     try {

@@ -128,7 +128,7 @@ export class CitrineSettings {
       const jsonData = this.toJSON();
       await this.client.db.guilds.set('GLOBAL', jsonData);
     }	catch (err) {
-      Promise.reject(err);
+      return Promise.reject(err);
     }
   }
 
@@ -139,7 +139,7 @@ export class CitrineSettings {
       const parsed = this.fromJSON(jsonData);
       this.data = parsed;
     } catch (err) {
-      Promise.reject(err);
+      return Promise.reject(err);
     }
   }
 
