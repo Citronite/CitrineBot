@@ -50,25 +50,7 @@ declare module 'typings' {
     cmdHelp(cmd: any, options: any): object;
   }
 
-  export type GuildID = Snowflake;
-  export type ChannelID = Snowflake;
-  export type RoleID = Snowflake;
-  export type UserID = Snowflake;
-  export type LockOption = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
-  export type Reaction = string | Emoji | ReactionEmoji;
-
-  export type CommandOptions = {
-    name: string,
-    description: string,
-    usage?: string
-  }
-
-  export type FormatHelpOptions = {
-    maxWidth?: number,
-    useCodeBlocks?: boolean
-  }
-
-  export type IGlobalConfig = {
+  export interface IGlobalConfig = {
     owner: UserID,
     globalPrefix: string,
     verbose: boolean,
@@ -78,5 +60,30 @@ declare module 'typings' {
     disabledCommands: Set<string>,
     loadedModules: Set<string>,
     aliases: { [cmd in string]: string[] },
+  }
+
+  export type GuildID = Snowflake;
+  export type ChannelID = Snowflake;
+  export type RoleID = Snowflake;
+  export type UserID = Snowflake;
+  export type Reaction = string | Emoji | ReactionEmoji;
+  export type LockType = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
+  export type LockPermsOptions = {
+    checkAdmin?: boolean,
+    checkBot?: boolean
+  }
+  export type PromptOptions = {
+    contentOnly?: boolean,
+    timeOut?: number,
+    author?: UserID
+  }
+  export type CommandOptions = {
+    name: string,
+    description: string,
+    usage?: string
+  }
+  export type FormatHelpOptions = {
+    maxWidth?: number,
+    useCodeBlocks?: boolean
   }
 }

@@ -21,7 +21,6 @@ export class PermHandler {
     const { settings: globalConfig, db } = message.client;
     try {
       if (message.author.id === globalConfig.owner) return Promise.resolve(true);
-
       const errors = [];
       const config: GuildConfig | null = await db.getGuild(message.guild.id);
       if (config) {
@@ -38,9 +37,9 @@ export class PermHandler {
     }
   }
 
-  public static checkDiscordPerms(channel: TextChannel, member: GuildMember, perms: PermissionResolvable, checkAdmin: boolean = true): void {
+  public static checkDiscordPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): void {
     const memberPerms = channel.memberPermissions(member);
-    if (memberPerms === null) throw new Exception(ExceptionCodes.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
+    if (!memberPerms) throw new Exception(ExceptionCodes.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
 
     const missing = memberPerms.missing(perms, checkAdmin);
     if (!missing) return;

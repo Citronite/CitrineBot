@@ -1,5 +1,5 @@
 {
-  "name": "CitrineBot",
+  "name": "citrine",
   "version": "0.1.0",
   "description": "CitrineBot - A powerful, fully modular, easily extensible Discord bot!",
   "main": "./bin/citrine.js",
