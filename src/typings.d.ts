@@ -50,16 +50,16 @@ declare module 'typings' {
     cmdHelp(cmd: any, options: any): object;
   }
 
-  export interface IGlobalConfig = {
-    owner: UserID,
-    globalPrefix: string,
-    verbose: boolean,
-    devs: Set<UserID>,
-    disabledUsers: Set<UserID>,
-    disabledGuilds: Set<GuildID>,
-    disabledCommands: Set<string>,
-    loadedModules: Set<string>,
-    aliases: { [cmd in string]: string[] },
+  export interface IGlobalConfig {
+    owner: UserID;
+    globalPrefix: string;
+    verbose: boolean;
+    devs: Set<UserID>;
+    disabledUsers: Set<UserID>;
+    disabledGuilds: Set<GuildID>;
+    disabledCommands: Set<string>;
+    loadedModules: Set<string>;
+    aliases: { [cmd in string]: string[] };
   }
 
   export type GuildID = Snowflake;

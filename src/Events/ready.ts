@@ -16,8 +16,8 @@ module.exports = {
     client.logger.info(`=====${'='.repeat(name.length)}=====\n`);
 
     const servers = client.guilds.size;
-    client.logger.info(`Active in : ${servers} ${servers === 1 ? 'server' : 'servers'}`);
-    client.logger.info(`Bot Owner : ${app.owner.tag}`);
+    client.logger.info(`Active in     : ${servers} ${servers === 1 ? 'server' : 'servers'}`);
+    client.logger.info(`Bot Owner     : ${app.owner.tag}`);
     client.logger.info(`Global Prefix : ${client.settings.globalPrefix}`);
     client.logger.info(`Invite Link:\n${invite}`);
     client.logger.info('\n(Note: Closing this window will shut down the bot as well!)\n');
