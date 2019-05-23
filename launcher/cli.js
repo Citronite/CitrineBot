@@ -13,17 +13,12 @@ const rl = readline.createInterface({
 // Keep track of the current Menu being displayed in the console
 rl.currMenu = undefined;
 
-// Simple shorthand function for console.log
+// Shorthand for console.log
 function println(str) {
   console.log(`${str}\n`);
 }
 
-// Another rather redundant shorthand :P
-function print(...args) {
-  console.log(...args);
-}
-
-// Self-explanatory
+// Prints header
 function printHeader() {
   console.log('\n' +
   '\t#############################\n' +
@@ -47,7 +42,6 @@ function input(str) {
 
 // For yes/no questions
 async function confirm(str) {
-  // Basically an infinite loop, only stops after receiving proper input
   while (str) {
     const ans = await input(str);
     if (['yes', 'y'].includes(ans.toLowerCase())) return true;
@@ -55,7 +49,7 @@ async function confirm(str) {
   }
 }
 
-// Takes a Menu (must be instance of an extension of the AbstractMenu class)
+// Takes a Menu (must be instance of the AbstractMenu class)
 // and prints it to console.
 // Also sets rl.currMenu to that menu. This, along with <Menu>.code can be helpful
 // For identifying which menu is currently displayed to the user.
@@ -68,7 +62,7 @@ async function printMenu(menu) {
 
   let x = 1;
   for (const choice of menu.choices) {
-    print(`${x}. ${choice}`);
+    console.log(`${x}. ${choice}`);
     x++;
   }
   rl.currMenu = menu;
@@ -81,7 +75,7 @@ function cls(x = 0, y = 8) {
   readline.clearScreenDown(process.stdout);
 }
 
-// Useful sleep function for better UX
+// Useful sleep function
 async function sleep(time = 1000) {
   return new Promise((res) => {
     setTimeout(() => {
@@ -107,7 +101,6 @@ async function open(arg, options) {
 
 // Exports
 module.exports = {
-  print,
   println,
   rl,
   sleep,
