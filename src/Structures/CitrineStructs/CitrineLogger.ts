@@ -9,8 +9,7 @@ export class CitrineLogger {
   }
 
   public error(err: string | Error): void {
-    if (err instanceof Error) console.log(err.stack);
-    else console.log(err);
+    console.log(err);
   }
 
   public info(str: string): void {

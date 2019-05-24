@@ -24,14 +24,14 @@ export class Exception extends Error {
   }
 
   public toString(code: boolean = true): string {
-    const top = `⛔ ${this.name} ⛔`;
+    const top = `\⛔ ${this.name} \⛔`;
     const msg = this.info;
     return code ? `\`\`\`\n${top}\n\n${msg}\n\`\`\`` : `${top}\n\n${msg}`;
   }
 
   public toEmbed(): RichEmbed {
     return QuickEmbed.error(this.info)
-      .setTitle('⛔ Exception Occurred!')
+      .setTitle('\⛔ Exception Occurred!')
       .setFooter(`Error: ${this.name}`);
   }
 

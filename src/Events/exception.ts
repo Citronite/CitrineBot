@@ -13,6 +13,7 @@ module.exports = {
     if (ctx) {
       if (cmd && [200, 201, 202].includes(error.code)) {
         await ctx.send(QuickEmbed.cmdHelp(ctx, cmd));
+        return;
       } else if (client.settings.verbose) {
         await ctx.send(error.toEmbed());
       } else {
