@@ -10,13 +10,16 @@ type tCommand = BaseCommand | SubCommand;
 module.exports = {
   name: 'exception',
   listener: async (client: CitrineClient, error: Exception, ctx?: Context, cmd?: tCommand) => {
-    if (ctx && cmd && [200, 201, 202].includes(error.code)) {
-      await ctx.send(QuickEmbed.cmdHelp(ctx, cmd));
-      return;
+    if (ctx) {
+      if (cmd && [200, 201, 202].includes(error.code)) {
+        await ctx.send(QuickEmbed.cmdHelp(ctx, cmd));
+      } else if (client.settings.verbose) {
+        await ctx.send(error.toEmbed());
+      } else {
+        ctx.send(QuickEmbed.error('Unknown error occurred! Check console for more details.'));
+      }
     }
-
-    if (ctx && client.settings.verbose) await ctx.send(error.toEmbed());
-    if (error.code === 999) client.logger.error(error);
+    client.logger.error(error);
     client.lastException = error;
   }
 };
