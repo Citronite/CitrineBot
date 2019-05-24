@@ -17,6 +17,7 @@ declare module 'typings' {
     GuildChannel,
     Emoji,
     ReactionEmoji,
+    ClientOptions
   } from 'discord.js';
 
   export interface ICmdHandler {
@@ -60,6 +61,10 @@ declare module 'typings' {
     disabledCommands: Set<string>;
     loadedModules: Set<string>;
     aliases: { [cmd in string]: string[] };
+  }
+
+  export interface CitrineOptions extends ClientOptions {
+    defaultChips: string[];
   }
 
   export type GuildID = Snowflake;
