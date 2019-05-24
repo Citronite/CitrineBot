@@ -1,5 +1,5 @@
 import { CitrineClient } from './Structures/CitrineClient';
-import { ClientOptions } from 'discord.js';
+import { CitrineOptions } from 'typings';
 
 /*
 *       CitrineBot - A powerful, open-source,
@@ -10,25 +10,24 @@ import { ClientOptions } from 'discord.js';
 *       GitHub: https://github.com/Quantomistro3178
 *	      Support Server: https://discord.gg/rEM9gFN
 *
-*           ###############################
-*           #                             #
-*           #     C  I  T  R  I  N  E     #
-*           #                             #
-*           ###############################
+*       ###############################
+*       #                             #
+*       #     C  I  T  R  I  N  E     #
+*       #                             #
+*       ###############################
 */
 
-const defaultChips: string[] = ['dev-utils'];
-
-const options: ClientOptions = {
+const options: CitrineOptions = {
   disableEveryone: true,
-  disabledEvents: ['TYPING_START']
+  disabledEvents: ['TYPING_START'],
+  defaultChips: ['dev-utils']
 };
 
 const citrine = new CitrineClient(options);
 
 (async function main() {
   try {
-    citrine.initChips(defaultChips);
+    citrine.initChips();
     citrine.initEvents();
     await citrine.launch();
   } catch (_) {
