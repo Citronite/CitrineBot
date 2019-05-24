@@ -17,7 +17,7 @@ class Load extends BaseCommand {
     ctx.lock('botOwner');
 
     const allChips = await readdirAsync('./bin/Chips');
-    let filteredChips = chips.includes('all') ? allChips : chips.filter(name => allChip.includes(name));
+    let filteredChips = chips.includes('all') ? allChips : chips.filter(name => allChips.includes(name));
     for (const chip of filteredChips) {
         if (chips.includes('-re')) {
             await ctx.client.clearCachedChip(chip);

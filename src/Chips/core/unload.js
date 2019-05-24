@@ -12,7 +12,7 @@ class Unload extends BaseCommand {
   async execute(ctx, ...chips) {
     ctx.lock('botOwner');
 
-    const filteredChips = chips.filter(val => allChip.includes(val) && val !== 'core');
+    const filteredChips = chips.filter(val => val !== 'core');
     for (const chip of filteredChips) {
         await ctx.client.unloadChip(chip);
     }
