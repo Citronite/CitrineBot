@@ -9,17 +9,11 @@ class Help extends BaseCommand {
     }, 'core');
   }
 
-  async execute(ctx, arg) {
-    if (arg) {
-      const finder = (val) => {
-        const aliases = ctx.client.settings.aliases[val.name];
-        return aliases && aliases.includes(arg);
-      };
-      const cmd = ctx.client.commands.get(arg)
-        || ctx.client.commands.find(finder);
-
+  async execute(ctx, ...args) {
+    if (args.length) {
+      const [cmd,] = ctx.client.cmdHandler.getFinalCmd(ctx.message, args);
       if (!cmd) {
-        ctx.send(`Unable to find command: \`${arg}\``);
+        ctx.send(`Unable to find command: \`${args}\``);
       } else {
         ctx.send(QuickEmbed.cmdHelp(ctx, cmd));
       }
