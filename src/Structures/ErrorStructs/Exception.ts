@@ -2,25 +2,27 @@ import { RichEmbed } from 'discord.js';
 import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { ExceptionCodes } from './ExceptionCodes';
 import { ExceptionMessages } from './ExceptionMessages';
-import { Command } from '../CommandStructs/AbstractCommand';
 
 export class Exception extends Error {
   public readonly code: number;
   public readonly type: string;
-  public readonly cmd?: Command;
   public readonly errors: string[];
-  public readonly name: string;
-  public readonly info: string;
 
-  constructor(code: number, errors: string | string[]) {
+  constructor(code: number, errors: string | string[], original?: Error) {
     super();
+    if (original) this.stack = original.stack;
     this.code = Object.values(ExceptionCodes).includes(code) ? code : 999;
     this.type = Object.keys(ExceptionCodes).find(val => ExceptionCodes[val] === code) || 'UNKNOWN_ERROR';
-
     errors = typeof errors === 'string' ? [errors] : errors;
     this.errors = errors || ExceptionMessages[this.code];
-    this.name = `${this.type}:${this.code}`;
-    this.info = `Error(s):\n\t${this.errors.join('\n')}`;
+  }
+
+  get name(): string {
+    return `${this.type}:${this.code}`;
+  }
+
+  get info(): string {
+    return `Error(s):\n\t${this.errors.join('\n')}`;
   }
 
   public toString(code: boolean = true): string {
@@ -31,8 +33,8 @@ export class Exception extends Error {
 
   public toEmbed(): RichEmbed {
     return QuickEmbed.error(this.info)
-      .setTitle('\⛔ Exception Occurred!')
-      .setFooter(`Error: ${this.name}`);
+      .setTitle('Exception Occurred!')
+      .setFooter(`\⛔ ${this.name}`);
   }
 
   public static parse(err: string | number | Exception | Error): Exception {
@@ -40,7 +42,7 @@ export class Exception extends Error {
       return err;
     }
     if (err instanceof Error) {
-      return new Exception(999, err.message);
+      return new Exception(999, err.message, err);
     }
     if (typeof err === 'string') {
       const code = ExceptionCodes[err] || 999;
