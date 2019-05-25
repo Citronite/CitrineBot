@@ -1,4 +1,4 @@
-const { BaseCommand, QuickEmbed } = require('../../exports');
+const { BaseCommand } = require('../../exports');
 
 class Unload extends BaseCommand {
   constructor() {
@@ -12,14 +12,24 @@ class Unload extends BaseCommand {
   async execute(ctx, ...chips) {
     ctx.lock('botOwner');
 
-    const filteredChips = chips.filter(val => val !== 'core');
-    for (const chip of filteredChips) {
-        await ctx.client.unloadChip(chip);
+    if (chips.length) {
+      const filteredChips = chips.filter(val => val !== 'core');
+      const unloaded = [];
+      for (const chip of filteredChips) {
+          await ctx.client.unloadChip(chip);
+          unloaded.push(chip);
+      }
+      if (unloaded.length) {
+        await ctx.success(`Successfully unloaded chip(s):\n${unloaded.join('\n')}`);
+      }
+      else {
+        await ctx.error(`No chips were unloaded. Are you sure you provided the correct name(s)?`);
+      }
     }
-    const embed = QuickEmbed.success(`Successfully unloaded chip(s):\n${filteredChips.join('\n')}`);
-    await ctx.send(embed);
-    return;
+    else {
+      throw 'INSUFFICIENT_ARGS';
     }
+  }
 }
 
 module.exports = new Unload();
