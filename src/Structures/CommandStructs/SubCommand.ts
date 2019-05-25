@@ -11,7 +11,6 @@ export class SubCommand extends Command {
   }
 
   public setParent(cmd: Command): void {
-    if (this.parent) throw new Error('Parent commands cannot be reset!');
     if (cmd instanceof BaseCommand || cmd instanceof SubCommand) {
       this.parent = cmd;
     } else {
@@ -19,12 +18,11 @@ export class SubCommand extends Command {
     }
   }
 
-  public getParent(): Command | false {
-    return this.parent || false;
+  public getParent(): Command | null {
+    return this.parent || null;
   }
 
   public setBase(cmd: Command): void {
-    if (this.base) throw new Error('Base commands cannot be reset!');
     if (cmd instanceof BaseCommand) {
       this.base = cmd;
     }	else if (cmd instanceof SubCommand) {
@@ -34,7 +32,7 @@ export class SubCommand extends Command {
     }
   }
 
-  public getBase(): BaseCommand | false {
-    return this.base || false;
+  public getBase(): BaseCommand | null {
+    return this.base || null;
   }
 }
