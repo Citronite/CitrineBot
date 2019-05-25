@@ -7,7 +7,7 @@ class Exception extends BaseCommand {
       name: 'exception',
       description: 'View last exception tracked by the bot',
       usage: '[p]exception'
-    }, 'dev-utils');
+    }, 'dev');
   }
 
   async execute(ctx) {

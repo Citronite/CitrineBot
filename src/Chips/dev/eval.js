@@ -6,7 +6,7 @@ class Eval extends BaseCommand {
       name: 'eval',
       description: 'Evaluate arbitrary JavaScript code.',
       usage: '[p]eval <code>'
-    }, 'dev-utils');
+    }, 'dev');
   }
 
   async execute(ctx, ...args) {
