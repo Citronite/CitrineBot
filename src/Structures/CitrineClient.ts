@@ -132,7 +132,8 @@ export class CitrineClient extends Client {
   public async clearCachedChip(chip: string): Promise<void> {
     try {
       const dir = await readdirAsync(`./bin/Chips/${chip}`);
-      for (const file of dir) {
+      const cmdFiles = fileFilter(dir);
+      for (const file of cmdFiles) {
         delete require.cache[require.resolve(`../Chips/${chip}/${file}`)];
       }
       this.logger.info(`Successfully cleared cache for chip: ${chip}`);
