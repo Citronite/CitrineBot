@@ -2,12 +2,10 @@ import { CitrineClient } from './Structures/CitrineClient';
 import { CitrineOptions } from 'typings';
 
 /*
-*       CitrineBot - A powerful, open-source,
-*       modular discord bot, built with
-*       developer and user experience in mind!
+*       CitrineBot - A powerful, modular discord bot!
 *
-*	      By @Quantomistro3178
-*       GitHub: https://github.com/Quantomistro3178
+*	      By @Quantomistro3178 (https://github.com/Quantomistro3178)
+*       GitHub: https://github.com/Quantomistro3178/CitrineBot
 *	      Support Server: https://discord.gg/rEM9gFN
 *
 *       ###############################
@@ -35,6 +33,6 @@ const citrine = new CitrineClient(options);
   }
 })();
 
-process.on('uncaughtException', err => citrine.logger.error(err));
-process.on('unhandledRejection', err => citrine.logger.error(err));
+process.on('uncaughtException', citrine.logger.error);
+process.on('unhandledRejection', citrine.logger.error);
 process.on('exit', code => citrine.logger.warn(`Process exited with code ${code}`));
