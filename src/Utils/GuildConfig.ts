@@ -1,7 +1,5 @@
 import { Guild } from 'discord.js';
-import { CitrineClient } from '../Structures/CitrineClient';
 import {
-  GuildID,
   ChannelID,
   RoleID,
   UserID
@@ -13,7 +11,6 @@ export class GuildConfig {
   constructor(guild: Guild | GuildConfig) {
     if (guild instanceof Guild) {
       const client: any = guild.client;
-      this.id = guild.id;
       this.data = {
         id: guild.id,
         prefix: client.settings.globalPrefix,
@@ -27,7 +24,6 @@ export class GuildConfig {
         reqRoles: {},
       };
     }	else {
-      this.id = guild.id;
       this.data = {
         id: guild.id,
         prefix: guild.prefix,

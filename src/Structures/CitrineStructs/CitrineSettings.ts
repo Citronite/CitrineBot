@@ -32,7 +32,7 @@ export class CitrineSettings {
     return this.data.globalPrefix;
   }
 
-  set globalPrefix(str) {
+  set globalPrefix(str: string) {
     this.data.globalPrefix = str;
   }
 
