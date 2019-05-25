@@ -34,8 +34,6 @@ class TestSubOne extends SubCommand {
   }
 }
 
-const testSubOne = new TestSubOne().registerSubCommands(new TestSubOneA(), new TestSubOneB());
-
 class TestSubTwo extends SubCommand {
   constructor() {
     super({
@@ -49,8 +47,6 @@ class TestSubTwo extends SubCommand {
   }
 }
 
-const testSubTwo = new TestSubTwo();
-
 class Test extends BaseCommand {
   constructor() {
     super({
@@ -60,4 +56,6 @@ class Test extends BaseCommand {
   }
 }
 
+const testSubTwo = new TestSubTwo();
+const testSubOne = new TestSubOne().registerSubCommands(new TestSubOneA(), new TestSubOneB());
 module.exports = new Test().registerSubCommands(testSubOne, testSubTwo);
