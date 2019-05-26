@@ -30,10 +30,10 @@ class DisableCmd extends SubCommand {
             }
         }
         else {
-            const { inline, bold } = ctx.client.utils.format;
+            const { inline } = ctx.client.utils.format;
             const disabled = ctx.client.settings.disabledCommands;
             if (disabled.length) {
-                await ctx.send(`Disabled Commands: ${bold(inline(disabled)).join(', ')}`);
+                await ctx.send(`Disabled Commands: ${inline(disabled).join(', ')}`);
             }
             else {
                 await ctx.send('No commands disabled currently.');

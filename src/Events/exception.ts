@@ -16,8 +16,9 @@ module.exports = {
         return;
       } else if (client.settings.verbose) {
         await ctx.send(error.toEmbed());
+        if ([100, 101, 102, 103].includes(error.code)) return;
       } else {
-        ctx.send(QuickEmbed.error('Unknown error occurred! Check console for more details.'));
+        ctx.send(QuickEmbed.error('Unknown error occurred!').setFooter('\⛔ Check console for more details!'));
       }
     }
     client.logger.error(error);

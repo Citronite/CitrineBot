@@ -20,8 +20,8 @@ class Unload extends BaseCommand {
           unloaded.push(chip);
       }
       if (unloaded.length) {
-        const { inline, bold } = ctx.client.utils.format;
-        await ctx.success(`Successfully unloaded chip(s):\n${bold(inline(unloaded)).join('\n')}`);
+        const { inline } = ctx.client.utils.format;
+        await ctx.success(`Successfully unloaded chip(s):\n${inline(unloaded).join('\n')}`);
       }
       else {
         await ctx.error(`No chips were unloaded. Are you sure you provided the correct name(s)?`);

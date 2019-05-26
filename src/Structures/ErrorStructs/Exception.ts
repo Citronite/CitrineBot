@@ -22,7 +22,7 @@ export class Exception extends Error {
   }
 
   get info(): string {
-    return `Error(s):\n\t${this.errors.join('\n')}`;
+    return this.errors.join('\n');
   }
 
   public toString(code: boolean = true): string {
