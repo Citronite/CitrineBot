@@ -15,7 +15,7 @@ export class CitrineSettings {
       disabledUsers: new Set(),
       disabledGuilds: new Set(),
       disabledCommands: new Set(),
-      loadedModules: new Set(),
+      loadedChips: new Set(),
       aliases: {}
     };
   }
@@ -94,16 +94,16 @@ export class CitrineSettings {
     this.data.disabledCommands.delete(name);
   }
 
-  get loadedModules(): string[] {
-    return [...this.data.loadedModules];
+  get loadedChips(): string[] {
+    return [...this.data.loadedChips];
   }
 
-  public addLoadedModule(name: string): void {
-    this.data.loadedModules.add(name);
+  public addLoadedChip(name: string): void {
+    this.data.loadedChips.add(name);
   }
 
-  public removeLoadedModule(name: string): void {
-    this.data.loadedModules.delete(name);
+  public removeLoadedChip(name: string): void {
+    this.data.loadedChips.delete(name);
   }
 
   get aliases(): object {
@@ -152,7 +152,7 @@ export class CitrineSettings {
       disabledGuilds: new Set(conf.disabledGuilds),
       disabledCommands: new Set(conf.disabledCommands),
       disabledUsers: new Set(conf.disabledUsers),
-      loadedModules: new Set(conf.loadedModules),
+      loadedChips: new Set(conf.loadedChips),
       aliases: conf.aliases
     };
   }
@@ -165,7 +165,7 @@ export class CitrineSettings {
       disabledUsers: [...conf.disabledUsers],
       disabledGuilds: [...conf.disabledGuilds],
       disabledCommands: [...conf.disabledCommands],
-      loadedModules: [...conf.loadedModules]
+      loadedChips: [...conf.loadedChips]
     };
   }
 }
