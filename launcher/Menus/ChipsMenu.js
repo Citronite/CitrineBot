@@ -10,6 +10,47 @@ const {
   open,
 } = require('../cli.js');
 
+const baseCmdTemplate = `
+const { BaseCommand } = require('../../exports');
+
+class Name extends BaseCommand {
+  constructor() {
+    super({
+      name: 'name',
+      description: 'description',
+      usage: '[p]name'
+    }, {{chip}});
+  }
+
+  async execute(ctx) {
+    await ctx.send('Hello World!');
+  }
+}
+
+module.exports = new Name();
+
+`
+const subCmdTemplate = `
+const { SubCommand } = require('../../exports');
+
+class Name extends SubCommand {
+  constructor() {
+    super({
+      name: 'name',
+      description: 'description',
+      usage: '[p]name'
+    });
+  }
+
+  async execute(ctx) {
+    await ctx.send('Hello World!');
+  }
+}
+
+module.exports = new Name();
+
+`
+
 // Allows managing chips through the launcher.
 class ChipsMenu extends AbstractMenu {
   constructor() {
@@ -50,9 +91,11 @@ class ChipsMenu extends AbstractMenu {
 
     let chipName = (await input('Please enter the name of your new chip:')).toLowerCase();
     if (chips.includes(chipName)) chipName = false;
+    if (/\s|\d/.test(chipName)) chipName = false;
     while (!chipName) {
       chipName = (await input('Please enter a valid name:')).toLowerCase();
       if (chips.includes(chipName)) chipName = false;
+      if (/\s|\d/.test(chipName)) chipName = false;
     }
 
     try {
@@ -63,11 +106,17 @@ class ChipsMenu extends AbstractMenu {
       fs.mkdirSync(`./bin/Chips/${chipName}`);
 
       println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const _meta = 'module.exports = {\n\tauthor: "<YOUR NAME>",\n\tdescription: "<DESCRIPTION OF CHIP>",\n};\n';
-      fs.writeFileSync(`./bin/Chips/${chipName}/_meta.js`, _meta);
+      const metaContent = 'module.exports = {\n\tauthor: "<YOUR NAME>",\n\tdescription: "<DESCRIPTION OF CHIP>",\n};\n';
+      fs.writeFileSync(`./bin/Chips/${chipName}/_meta.js`, metaContent);
+
+      println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
+      const baseCmdContent = baseCmdTemplate.replace('{{chip}}', chipName);
+      fs.writeFileSync(`./bin/Chips/${chipName}/cmd.js`, baseCmdContent);
+
+      println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
+      fs.writeFileSync(`./bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
 
       const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
-
       if (createBranch) {
         try {
           println('Creating branch...');
