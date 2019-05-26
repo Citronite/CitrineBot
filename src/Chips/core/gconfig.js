@@ -24,4 +24,6 @@ class GConfig extends BaseCommand {
 
 const p = require('./_gconfig/prefix.js');
 const v = require('./_gconfig/verbose.js');
-module.exports = new GConfig().registerSubCommands(p, v);
+const d = require('./_gconfig/disable.js');
+const e = require('./_gconfig/enable.js');
+module.exports = new GConfig().registerSubCommands(p, v, d, e);
