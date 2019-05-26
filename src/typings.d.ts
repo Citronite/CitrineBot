@@ -59,8 +59,8 @@ declare module 'typings' {
     disabledUsers: Set<UserID>;
     disabledGuilds: Set<GuildID>;
     disabledCommands: Set<string>;
-    loadedModules: Set<string>;
-    aliases: { [cmd in string]: string[] };
+    loadedChips: Set<string>;
+    aliases: { [cmd: string]: string[] };
   }
 
   export interface CitrineOptions extends ClientOptions {
