@@ -9,6 +9,38 @@ export class Formatter {
     throw new Error('This class may not be instantiated with the new keyword!');
   }
 
+  public static italic(str: string | string[]): string | string[] {
+    if (typeof str === 'string') {
+      return `*${str}*`;
+    } else {
+      return str.map(val => `*${val}*`);
+    }
+  }
+
+  public static lined(str: string | string[]): string | string[] {
+    if (typeof str === 'string') {
+      return `__${str}__`;
+    } else {
+      return str.map(val => `__${val}__`);
+    }
+  }
+
+  public static striked(str: string | string[]): string | string[] {
+    if (typeof str === 'string') {
+      return `~~${str}~~`;
+    } else {
+      return str.map(val => `~~${val}~~`);
+    }
+  }
+
+  public static bold(str: string | string[]): string | string[] {
+    if (typeof str === 'string') {
+      return `**${str}**`;
+    } else {
+      return str.map(val => `**${val}**`);
+    }
+  }
+
   public static inline(str: string | string[]): string | string[] {
     if (typeof str === 'string') {
       return `\`${str}\``;

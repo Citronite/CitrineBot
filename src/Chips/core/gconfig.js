@@ -5,7 +5,7 @@ class GConfig extends BaseCommand {
     super({
       name: 'gconfig',
       description: 'Change Citrine\'s global settings. If 0 arguments are provided, it will list current settings. If 1 argument is provided, it will list the current settings for the given argument.',
-      usage: '[p]gconfig [setting] [new value]'
+      usage: '[p]gconfig'
     }, 'core');
   }
 
@@ -23,5 +23,5 @@ class GConfig extends BaseCommand {
 }
 
 const p = require('./_gconfig/prefix.js');
-
-module.exports = new GConfig().registerSubCommands(p);
+const v = require('./_gconfig/verbose.js');
+module.exports = new GConfig().registerSubCommands(p, v);

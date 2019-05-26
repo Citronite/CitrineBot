@@ -10,21 +10,15 @@ class Eval extends BaseCommand {
   }
 
   async execute(ctx, ...args) {
-    ctx.lock('dm');
-    try {
-      ctx.lock('botDev');
-    }
-    catch (_) {
-      ctx.lock('botOwner');
-    }
+    ctx.lock('dm', 'botDev');
+
     try {
       const code = args.join(' ');
-      await ctx.send(`[Code]\n${code}`, { code: 'js', split: true });
       const result = eval(code);
-      await ctx.send(`[Result]\n${result}`, { code: 'js', split: true });
+      await ctx.send(`[Code]\n${code}\n\n[Result]\n${result}`, { code: 'js', split: true });
     }
     catch (err) {
-      await ctx.send(`[Error]\n${err}`, { code: 'js', split: true });
+      await ctx.send(`[Code]\n${code}\n\n[Error]\n${err}`, { code: 'js', split: true });
     }
   }
 }

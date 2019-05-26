@@ -4,7 +4,7 @@ class Unload extends BaseCommand {
   constructor() {
     super({
       name: 'unload',
-      description: 'Unloads a chip. Separate multiple names with spaces.',
+      description: 'Unloads a chip. Separate multiple names with spaces. The `core` chip cannot be unloaded.',
       usage: '[p]unload <...chips>'
     }, 'core');
   }
@@ -20,7 +20,8 @@ class Unload extends BaseCommand {
           unloaded.push(chip);
       }
       if (unloaded.length) {
-        await ctx.success(`Successfully unloaded chip(s):\n${unloaded.join('\n')}`);
+        const { inline, bold } = ctx.client.utils.format;
+        await ctx.success(`Successfully unloaded chip(s):\n${bold(inline(unloaded)).join('\n')}`);
       }
       else {
         await ctx.error(`No chips were unloaded. Are you sure you provided the correct name(s)?`);

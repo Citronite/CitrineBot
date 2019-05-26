@@ -4,8 +4,8 @@ class Prefix extends SubCommand {
     constructor() {
       super({
         name: 'prefix',
-        description: 'Change Citrine\'s global prefix.',
-        usage: '[p]gconfig prefix <new prefix>'
+        description: 'View or change Citrine\'s global prefix.',
+        usage: '[p]gconfig prefix [new prefix]'
       });
     }
   

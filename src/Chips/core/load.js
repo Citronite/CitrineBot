@@ -32,7 +32,8 @@ class Load extends BaseCommand {
           loaded.push(chip);
       }
       if (loaded.length) {
-        await ctx.success(`Successfully loaded chip(s):\n${loaded.join('\n')}`);
+        const { inline, bold } = ctx.client.utils.format;
+        await ctx.success(`Successfully loaded chip(s):\n${bold(inline(loaded)).join('\n')}`);
       }
       else {
         await ctx.error('No chips were loaded. Are you sure you provided the correct name(s)?');
