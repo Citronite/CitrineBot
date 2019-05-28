@@ -20,7 +20,7 @@ declare module 'typings' {
     ClientOptions
   } from 'discord.js';
 
-  export interface CmdHandler {
+  export interface ICmdHandler {
     checkPrefix: (message: any, config?: any) => string | null;
     getArgs: (message: any, prefix: string, parseQuotes?: boolean) => string[] | null;
     getBaseCmd: (message: any, args: string[]) => [any, string[]] | [null, null];
@@ -28,7 +28,7 @@ declare module 'typings' {
     processCommand: (message: any, config?: any) => Promise<void>;
   }
 
-  export interface PermHandler {
+  export interface IPermHandler {
     checkCustomFilters: (cmd: any, message: Message | any, ) => Promise<boolean>;
     checkDiscordPerms: (perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin?: boolean) => void;
     checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
@@ -95,11 +95,11 @@ declare module 'typings' {
   */
   export interface CitrineOptions extends ClientOptions {
     defaultChips?: string[];
-    cmdHandler?: CmdHandler;
-    permHandler?: PermHandler;
-    utils?: Utils;
-    logger?: Logger;
-    dbProvider?: DbProvider;
+    utils?: new () => Utils;
+    logger?: new () => Logger;
+    dbProvider?: new () => DbProvider;
+    cmdHandler?: new () => ICmdHandler;
+    permHandler?: new () => IPermHandler;
   }
 
   export type GuildID = Snowflake;
