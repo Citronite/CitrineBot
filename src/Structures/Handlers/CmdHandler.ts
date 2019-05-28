@@ -6,11 +6,8 @@ import { Exception } from '../ErrorStructs/Exception';
 import { Context } from '../../Utils/Context';
 
 export class CmdHandler {
-  constructor() {
-    throw new Error('This class may not be instantiated with the new keyword!');
-  }
 
-  public static checkPrefix(message: any, config?: GuildConfig): string | null {
+  public checkPrefix(message: any, config?: GuildConfig): string | null {
     if (message.author.bot) return null;
     const gPrefix = message.client.settings.globalPrefix;
     const id = message.client.user.id;
@@ -19,13 +16,13 @@ export class CmdHandler {
     return rgx.test(message.content) ? message.content.match(rgx)[0] : null;
   }
 
-  public static getArgs(message: any, prefix: string, parseQuotes: boolean = true): string[] | null {
+  public getArgs(message: any, prefix: string, parseQuotes: boolean = true): string[] | null {
     const text = message.content.slice(prefix.length);
     const args = parseQuotes ? message.client.utils.djs.parseQuotes(text) : text.split(/ +/);
     return args.length ? args : null;
   }
 
-  public static getBaseCmd(message: any, args: string[]): [BaseCommand, string[]] | [null, null] {
+  public getBaseCmd(message: any, args: string[]): [BaseCommand, string[]] | [null, null] {
     if (!args || !args.length || !args[0]) return [null, null];
 
     const copy: any = Array.from(args);
@@ -41,7 +38,7 @@ export class CmdHandler {
     return cmd ? [cmd, copy] : [null, null];
   }
 
-  public static getFinalCmd(message: Message, args: string[]): [Command, string[]] | [null, null] {
+  public getFinalCmd(message: Message, args: string[]): [Command, string[]] | [null, null] {
     if (!args || !args.length || !args[0]) return [null, null];
 
     // I hate typescript :')
@@ -70,11 +67,11 @@ export class CmdHandler {
   // Command: [p]basecmd subcmd1 subcmd2 subcmd3 arg1 arg2
   // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
   // At the end, it will also return the remaining arguments.
-  public static *getCmdChainIterator(/*message: Message, args: string[]*/): any {
+  public *getCmdChainIterator(/*message: Message, args: string[]*/): any {
     throw new Error('This feature is yet to be implemented!');
   }
 
-  public static async processCommand(message: any, config?: GuildConfig): Promise<void> {
+  public async processCommand(message: any, config?: GuildConfig): Promise<void> {
     try {
       // Check if the message was prefixed
       const invokedPrefix = this.checkPrefix(message, config);

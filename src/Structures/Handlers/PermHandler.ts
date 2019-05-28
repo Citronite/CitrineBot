@@ -13,11 +13,8 @@ import {
 } from 'discord.js';
 
 export class PermHandler {
-  constructor() {
-    throw new Error('This class may not be instantiated with the new keyword!');
-  }
 
-  public static async checkCustomFilters(cmd: Command, message: Message | any): Promise<boolean> {
+  public async checkCustomFilters(cmd: Command, message: Message | any): Promise<boolean> {
     const { settings: globalConfig, db } = message.client;
     try {
       if (message.author.id === globalConfig.owner) return Promise.resolve(true);
@@ -37,7 +34,7 @@ export class PermHandler {
     }
   }
 
-  public static checkDiscordPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): void {
+  public checkDiscordPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): void {
     const memberPerms = channel.memberPermissions(member);
     if (!memberPerms) throw new Exception(ExceptionCodes.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
 
@@ -49,17 +46,17 @@ export class PermHandler {
     throw new Exception(code, missingFlags);
   }
 
-  public static checkGuildOwner(guild: Guild, user: User | GuildMember): void {
+  public checkGuildOwner(guild: Guild, user: User | GuildMember): void {
     if (guild.ownerID === user.id) return;
     throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only guild owners may perform that action!');
   }
 
-  public static checkBotOwner(user: User | GuildMember | any): void {
+  public checkBotOwner(user: User | GuildMember | any): void {
     if (user.id === user.client.settings.owner) return;
     throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only bot owners may perform that action!');
   }
 
-  public static checkBotDev(user: User | GuildMember | any): void {
+  public checkBotDev(user: User | GuildMember | any): void {
     if (user.client.settings.devs.includes(user.id)) return;
     throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only bot developers may perform that action!');
   }
