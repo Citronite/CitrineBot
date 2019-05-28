@@ -5,10 +5,10 @@ import { CommandOptions } from 'typings';
 export class BaseCommand extends Command {
   public readonly chip: string;
 
-  constructor(options: CommandOptions, chip: string) {
-    if (!chip) throw Error('Please provide the chip name!');
-    if (typeof chip !== 'string') throw Error('Invalid chip name provided!');
+  constructor(options: CommandOptions) {
+    if (!options.chip) throw Error('Please provide the chip name!');
+    if (typeof options.chip !== 'string') throw Error('Invalid chip name provided!');
     super(options);
-    this.chip = chip;
+    this.chip = options.chip;
   }
 }
