@@ -6,7 +6,8 @@ export class BaseCommand extends Command {
   public readonly chip: string;
 
   constructor(options: CommandOptions, chip: string) {
-    if (!chip || typeof chip !== 'string') throw Error('Invalid chip name provided!');
+    if (!chip) throw Error('Please provide the chip name!');
+    if (typeof chip !== 'string') throw Error('Invalid chip name provided!');
     super(options);
     this.chip = chip;
   }
