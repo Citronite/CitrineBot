@@ -1,6 +1,6 @@
 import Keyv = require('keyv');
 import { GuildID } from 'typings';
-import { GuildConfig } from '../../Utils/GuildConfig';
+import { GuildConfig } from '../Utils/GuildConfig';
 import { Guild } from 'discord.js';
 import { resolve } from 'path';
 
