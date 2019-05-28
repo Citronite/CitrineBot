@@ -1,17 +1,21 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
-import { CitrineOptions } from 'typings';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
-import { CitrineDB } from './CitrineStructs/CitrineDB';
+import { SQLiteKV } from '../DBProviders/SQLiteKV';
 import { BaseCommand } from './CommandStructs/BaseCommand';
 import { CitrineUtils } from './CitrineStructs/CitrineUtils';
 import { CitrineLogger } from './CitrineStructs/CitrineLogger';
 import { CitrineSettings } from './CitrineStructs/CitrineSettings';
+import { Client, Collection } from 'discord.js';
 import {
-  Client,
-  Collection
-} from 'discord.js';
+  CitrineOptions,
+  DbProvider,
+  Utils,
+  Logger,
+  ICmdHandler,
+  IPermHandler
+} from 'typings';
 
 const readdirSync = fs.readdirSync;
 const readdirAsync = promisify(fs.readdir);
@@ -21,11 +25,11 @@ function fileFilter(arr: string[]): string[] {
 
 export class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
-  public readonly logger: CitrineLogger;
-  public readonly utils: CitrineUtils;
-  public readonly db: CitrineDB;
-  public readonly cmdHandler: CmdHandler;
-  public readonly permHandler: PermHandler;
+  public readonly logger: Logger;
+  public readonly utils: Utils;
+  public readonly db: DbProvider;
+  public readonly cmdHandler: ICmdHandler;
+  public readonly permHandler: IPermHandler;
   public readonly commands: Collection<string, BaseCommand>;
   public readonly defaultChips: Set<string>;
   public lastException: Error | null; // Temporary
@@ -33,14 +37,15 @@ export class CitrineClient extends Client {
   constructor(options?: CitrineOptions) {
     super(options);
     this.settings = new CitrineSettings(this);
-    this.db = new CitrineDB();
-    this.utils = new CitrineUtils();
-    this.logger = new CitrineLogger();
-    this.cmdHandler = CmdHandler;
-    this.permHandler = PermHandler;
     this.commands = new Collection();
 
+    this.db = options && options.dbProvider ? new options.dbProvider() : new SQLiteKV();
+    this.utils = options && options.utils ? new options.utils() : new CitrineUtils();
+    this.logger = options && options.logger ? new options.logger() : new CitrineLogger();
+    this.cmdHandler = options && options.cmdHandler ? new options.cmdHandler() : new CmdHandler();
+    this.permHandler = options && options.permHandler ? new options.permHandler() : new PermHandler();
     this.defaultChips = new Set(['core']);
+
     if (options && options.defaultChips) {
       this.defaultChips = new Set(['core', ...options.defaultChips]);
     }
@@ -66,9 +71,9 @@ export class CitrineClient extends Client {
             delete require.cache[require.resolve(`../Chips/core/${file}`)];
           }
         }
-        if (dir.includes('_onload.js')) {
-          const onload = require(`../Chips/${chip}/_onload.js`);
-          if (typeof onload === 'function') onload(this);
+        if (dir.includes('_setup.js')) {
+          const { load } = require(`../Chips/${chip}/_setup.js`);
+          if (typeof load === 'function') load(this);
         }
       }
       this.logger.info('Successfully initialized default Chips!');
@@ -108,9 +113,9 @@ export class CitrineClient extends Client {
         const cmd = require(`../Chips/${chip}/${file}`);
         this.commands.set(cmd.name, cmd);
       }
-      if (dir.includes('_onload.js')) {
-        const onload = require(`../Chips/${chip}/_onload.js`);
-        if (typeof onload === 'function') onload(this);
+      if (dir.includes('_setup.js')) {
+        const { load } = require(`../Chips/${chip}/_setup.js`);
+        if (typeof load === 'function') load(this);
       }
       this.logger.info(`Successfully loaded chip: ${chip}`);
       return Promise.resolve();
@@ -122,6 +127,11 @@ export class CitrineClient extends Client {
 
   public async unloadChip(chip: string): Promise<void> {
     try {
+      const dir = await readdirAsync(`./bin/Chips/${chip}`);
+      if (dir.includes('_setup.js')) {
+        const { unload } = require(`../Chips/${chip}/_setup.js`);
+        if (typeof unload === 'function') unload(this);
+      }
       this.commands.sweep((cmd) => cmd.chip === chip);
       this.logger.info(`Successfully unloaded chip: ${chip}`);
       return Promise.resolve();
