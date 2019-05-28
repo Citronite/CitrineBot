@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
-import { ICmdHandler, IPermHandler, CitrineOptions } from 'typings';
+import { CitrineOptions } from 'typings';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
 import { CitrineDB } from './CitrineStructs/CitrineDB';
@@ -24,24 +24,26 @@ export class CitrineClient extends Client {
   public readonly logger: CitrineLogger;
   public readonly utils: CitrineUtils;
   public readonly db: CitrineDB;
-  public readonly cmdHandler: ICmdHandler;
-  public readonly permHandler: IPermHandler;
+  public readonly cmdHandler: CmdHandler;
+  public readonly permHandler: PermHandler;
   public readonly commands: Collection<string, BaseCommand>;
   public readonly defaultChips: Set<string>;
   public lastException: Error | null; // Temporary
 
-  constructor(options: CitrineOptions) {
+  constructor(options?: CitrineOptions) {
     super(options);
+    this.settings = new CitrineSettings(this);
     this.db = new CitrineDB();
     this.utils = new CitrineUtils();
-    this.logger = new CitrineLogger(this);
-    this.settings = new CitrineSettings(this);
+    this.logger = new CitrineLogger();
     this.cmdHandler = CmdHandler;
     this.permHandler = PermHandler;
     this.commands = new Collection();
 
-    const defaultChips = options && options.defaultChips;
-    this.defaultChips = new Set(['core', ...defaultChips]);
+    this.defaultChips = new Set(['core']);
+    if (options && options.defaultChips) {
+      this.defaultChips = new Set(['core', ...options.defaultChips]);
+    }
 
     // Eventually, move lastException and other
     // misc. properties inside CitrineClient#settings
