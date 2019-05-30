@@ -42,7 +42,7 @@ async function getToken() {
 }
 
 // Obtain global prefix for the bot
-async function getPrefix() {
+async function getInitialPrefix() {
   let prefix = await input('Please choose a global prefix for your bot:');
   while (!prefix) {
     prefix = await input('Please choose a valid prefix for your bot:');
@@ -67,7 +67,7 @@ async function installDeps() {
     println(err);
     println('Error installing dependencies.\n\n' +
             'You can try running `npm install` to manually install dependencies.\n' +
-            'If a problem persists, you can visit the support server for help.\n' +
+            'If a problem persists, you can visit the support server for help:\n' +
             'Support Server: https://discord.gg/rEM9gFN');
     return false;
   }
@@ -103,19 +103,19 @@ async function compileCitrine() {
   }
 }
 
-// Create ./data and core/_settings.json
-async function createDataFiles(TOKEN, prefix) {
+// Create ./data and core/_instance.json
+async function createDataFiles(TOKEN, initialPrefix) {
   try {
     // Create data directory
     println('Creating path: ./data/core');
     fs.mkdirSync('./data/core', { recursive: true });
 
-    // Create _settings for storing token
-    println('Creating file: ./data/core/_settings.json');
-    const _settings = JSON.stringify({ TOKEN, prefix }, null, '\n');
-    fs.writeFileSync('./data/core/_settings.json', _settings);
+    // Create _instance for storing token + prefix
+    println('Creating file: ./data/core/_instance.json');
+    const content = JSON.stringify({ TOKEN, initialPrefix }, null, '\n');
+    fs.writeFileSync('./data/core/_instance.json', content);
     // Check if it exists
-    fs.readFileSync('./data/core/_settings.json');
+    fs.readFileSync('./data/core/_instance.json');
     println('Success!');
     return true;
   }
@@ -194,7 +194,7 @@ async function startLauncher() {
 
     // Obtain the bot token & global prefix
     const TOKEN = await getToken();
-    const prefix = await getPrefix();
+    const initialPrefix = await getInitialPrefix();
 
     // Install dependencies & compile code
     const installed = await installDeps();
@@ -204,7 +204,7 @@ async function startLauncher() {
     if (!compiled) exit(1);
 
     // Create data dir & files
-    const created = await createDataFiles(TOKEN, prefix);
+    const created = await createDataFiles(TOKEN, initialPrefix);
     if (!created) exit(1);
 
     const { platform } = process;
@@ -242,7 +242,7 @@ async function startLauncher() {
       }
       else {
         println('Unsupported platform!\n' +
-                'You may run `node ./bin/citrine.js` in your\n' +
+                'You can run `node ./bin/citrine.js` in your\n' +
                 'console to directly launch citrine!');
       }
     }
@@ -256,7 +256,7 @@ async function startLauncher() {
       }
       println(`Error creating file ./start_citrine${ext}`);
       println(err);
-      println('You may launch citrine through the main launcher, or run\n' +
+      println('You may launch Citrine through the main launcher, or run\n' +
               '`node ./bin/citrine.js` to launch citrine directly.');
       exit(1);
     }
@@ -272,7 +272,7 @@ async function startLauncher() {
       // Create ./data again
       println('It seems like the ./data directory is missing.');
       const TOKEN = await getToken();
-      const prefix = await getPrefix();
+      const prefix = await getInitialPrefix();
       const created = await createDataFiles(TOKEN, prefix);
       if (!created) exit(1);
     }
