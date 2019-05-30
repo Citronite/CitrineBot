@@ -4,7 +4,17 @@ node_modules/
 # tsc outDir
 bin/
 
+# data dir
+data/
+
+# Created batch/shell files
+start_citrine.*
+
+# Temp dir
+temp/
+
 # extra stuff
 *.txt
-data/
-start_citrine.*
+
+# Editors
+.vscode
