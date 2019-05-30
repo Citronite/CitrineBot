@@ -112,7 +112,7 @@ async function createDataFiles(TOKEN, initialPrefix) {
 
     // Create _instance for storing token + prefix
     println('Creating file: ./data/core/_instance.json');
-    const content = JSON.stringify({ TOKEN, initialPrefix }, null, '\n');
+    const content = JSON.stringify({ TOKEN, initialPrefix }, null, '\t');
     fs.writeFileSync('./data/core/_instance.json', content);
     // Check if it exists
     fs.readFileSync('./data/core/_instance.json');
