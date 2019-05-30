@@ -52,7 +52,8 @@ class Test extends BaseCommand {
     super({
       name: 'test',
       description: 'Test command',
-    }, 'dev');
+      chip: 'dev'
+    });
   }
 }
 

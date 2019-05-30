@@ -5,8 +5,9 @@ class Emote extends BaseCommand {
         super({
             name: 'e',
             description: 'No nitro? No problem! Just enter the name of the emote and I\'ll come rescue you!',
-            usage: '[p]e <emote>'
-        }, 'utils');
+            usage: '[p]e <emote>',
+            chip: 'utils'
+        });
     }
 
     async execute(ctx, emote) {

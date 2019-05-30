@@ -6,8 +6,9 @@ class Exception extends BaseCommand {
     super({
       name: 'exception',
       description: 'View last exception tracked by the bot',
-      usage: '[p]exception'
-    }, 'dev');
+      usage: '[p]exception',
+      chip: 'dev'
+    });
   }
 
   async execute(ctx) {

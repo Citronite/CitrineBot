@@ -5,8 +5,9 @@ class Eval extends BaseCommand {
     super({
       name: 'eval',
       description: 'Evaluate arbitrary JavaScript code.',
-      usage: '[p]eval <code>'
-    }, 'dev');
+      usage: '[p]eval <code>',
+      chip: 'dev'
+    });
   }
 
   async execute(ctx, ...args) {
