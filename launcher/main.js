@@ -151,7 +151,6 @@ async function startLauncher() {
     else {
       cls();
       println('');
-      // const code = rl.currMenu.code; // Here--
       // Run whatever option the user chose
       try {
         await rl.currMenu.run(line);
@@ -159,8 +158,6 @@ async function startLauncher() {
       catch (err) {
         println(err);
       }
-      // Check whether the menu code is the same.
-      // if (code !== rl.currMenu.code) return; // Here--
       await sleep(200);
       const str = rl.currMenu.code === 0 ? '0. Exit Launcher' : '0. Go back to the homepage';
       println(`\n${str}`);
