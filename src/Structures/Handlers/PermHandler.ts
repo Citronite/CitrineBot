@@ -19,7 +19,7 @@ export class PermHandler {
     try {
       if (message.author.id === globalConfig.owner) return Promise.resolve(true);
       const errors = [];
-      const config: GuildConfig | null = await db.getGuild(message.guild.id);
+      const config: GuildConfig | null = await db.guilds.read(message.guild.id);
       if (config) {
         if (config.disabledUsers.includes(message.author.id)) errors.push('Disabled User [Local]');
         if (config.disabledChannels.includes(message.channel.id)) errors.push('Disabled Channel');

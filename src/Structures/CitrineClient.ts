@@ -27,7 +27,7 @@ export class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: Logger;
   public readonly utils: Utils;
-  public readonly db: DbProvider;
+  public readonly db: DbProvider | any;
   public readonly cmdHandler: ICmdHandler;
   public readonly permHandler: IPermHandler;
   public readonly commands: Collection<string, BaseCommand>;
@@ -141,7 +141,7 @@ export class CitrineClient extends Client {
     }
   }
 
-  public async clearCachedChip(chip: string): Promise<void> {
+  public async clearChipCache(chip: string): Promise<void> {
     try {
       const dir = await readdirAsync(`./bin/Chips/${chip}`);
       const cmdFiles = fileFilter(dir);
@@ -160,10 +160,10 @@ export class CitrineClient extends Client {
   public async launch(): Promise<void> {
     try {
       this.logger.info('\nFetching data. . .');
-      const { TOKEN, prefix } = require('../../data/core/_settings.json');
+      const { TOKEN, initialPrefix } = require('../../data/core/_instance.json');
       await this.settings.load();
       if (this.settings.globalPrefix === 'DEFAULT') {
-        this.settings.globalPrefix = prefix;
+        this.settings.globalPrefix = initialPrefix;
       }
 
       this.logger.info('\nLogging in to Discord. . .');

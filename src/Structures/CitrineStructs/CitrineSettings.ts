@@ -126,7 +126,7 @@ export class CitrineSettings {
   public async save(): Promise<void> {
     try {
       const jsonData = this.toJSON();
-      await this.client.db.guilds.set('GLOBAL', jsonData);
+      await this.client.db.guilds.update('GLOBAL', jsonData);
     }	catch (err) {
       return Promise.reject(err);
     }
@@ -134,7 +134,7 @@ export class CitrineSettings {
 
   public async load(): Promise<void> {
     try {
-      const jsonData = await this.client.db.guilds.get('GLOBAL');
+      const jsonData = await this.client.db.guilds.read('GLOBAL');
       if (!jsonData) return;
       const parsed = this.fromJSON(jsonData);
       this.data = parsed;

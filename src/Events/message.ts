@@ -10,8 +10,8 @@ module.exports = {
 
     try {
       if (message.guild) {
-        config = await db.getGuild(message.guild.id);
-        if (!config) config = await db.setGuild(message.guild);
+        config = await db.guilds.read(message.guild.id);
+        if (!config) config = await db.guilds.create(message.guild);
       }
       await cmdHandler.processCommand(message, config);
     } catch (err) {
