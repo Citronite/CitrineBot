@@ -4,9 +4,9 @@ import { CitrineOptions } from 'typings';
 /*
 *       CitrineBot - A powerful, modular discord bot!
 *
-*	      By @Quantomistro3178 (https://github.com/Quantomistro3178)
+*       By @Quantomistro3178 (https://github.com/Quantomistro3178)
 *       GitHub: https://github.com/Quantomistro3178/CitrineBot
-*	      Support Server: https://discord.gg/rEM9gFN
+*       Support Server: https://discord.gg/rEM9gFN
 *
 *       ###############################
 *       #                             #
@@ -18,7 +18,7 @@ import { CitrineOptions } from 'typings';
 const options: CitrineOptions = {
   disableEveryone: true,
   disabledEvents: ['TYPING_START'],
-  defaultChips: ['dev-utils']
+  defaultChips: ['utils']
 };
 
 const citrine = new CitrineClient(options);
