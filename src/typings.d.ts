@@ -63,13 +63,14 @@ declare module 'typings' {
   }
 
   export interface DbProvider {
-    connect: (name: string, ...options: any[]) => DbConnection;
+    connect: (...options: any[]) => DbConnection;
     disconnect: (...args: any[]) => any;
   }
 
   export interface DbConnection {
-    get: (...args: any[]) => any;
-    set: (...args: any[]) => any;
+    create: (...args: any[]) => any;
+    read: (...args: any[]) => any;
+    update: (...args: any[]) => any;
     delete: (...args: any[]) => any;
   }
 
@@ -107,23 +108,26 @@ declare module 'typings' {
   export type RoleID = Snowflake;
   export type UserID = Snowflake;
   export type Reaction = string | Emoji | ReactionEmoji;
-  export type LockType = 'dm' | 'guild' | 'botOwner' | 'botDev' | boolean;
+  export type LockType = 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean;
   export type LockPermsOptions = {
     checkAdmin?: boolean,
     checkBot?: boolean
   }
+
   export type PromptOptions = {
     contentOnly?: boolean,
     timeOut?: number,
     author?: UserID,
     filter?: (...args: any[]) => any;
   }
+
   export type CommandOptions = {
     name: string,
     description: string,
     usage?: string,
     chip?: string;
   }
+
   export type FormatHelpOptions = {
     maxWidth?: number,
     useCodeBlocks?: boolean
