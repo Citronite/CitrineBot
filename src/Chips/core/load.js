@@ -12,8 +12,9 @@ class Load extends BaseCommand {
     super({
       name: 'load',
       description: 'Loads a chip. Separate multiple names with spaces, or enter `all` to load all. Optionally, add the `-re` flag to hot-reload chips',
-      usage: '[p]load <...chips | "all"> [-re]'
-    }, 'core');
+      usage: '[p]load <...chips | "all"> [-re]',
+      chip: 'core'
+    });
   }
 
   async execute(ctx, ...chips) {
@@ -26,7 +27,7 @@ class Load extends BaseCommand {
       const loaded = [];
       for (const chip of filteredChips) {
           if (reload) {
-              await ctx.client.clearCachedChip(chip);
+              await ctx.client.clearChipCache(chip);
           }
           await ctx.client.loadChip(chip);
           loaded.push(chip);

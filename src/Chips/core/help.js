@@ -5,8 +5,9 @@ class Help extends BaseCommand {
     super({
       name: 'help',
       description: 'Help command',
-      usage: '[p]help [command]'
-    }, 'core');
+      usage: '[p]help [command]',
+      chip: 'core'
+    });
   }
 
   async execute(ctx, ...args) {

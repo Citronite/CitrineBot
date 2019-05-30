@@ -5,13 +5,14 @@ class Shutdown extends BaseCommand {
     super({
       name: 'shutdown',
       description: 'Shuts down the bot, with a zero exit code.',
-      usage: '[p]shutdown'
-    }, 'core');
+      usage: '[p]shutdown',
+      chip: 'core'
+    });
   }
 
   async execute(ctx) {
     ctx.lock('botOwner');
-    await ctx.send('Shutting down...');
+    await ctx.send('Goodbye 👋');
     await ctx.client.settings.save();
     process.exit(0);
   }

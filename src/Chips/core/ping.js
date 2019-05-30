@@ -5,8 +5,9 @@ class Ping extends BaseCommand {
     super({
       name: 'ping',
       description: 'Check bot ping!',
-      usage: '[p]ping'
-    }, 'core');
+      usage: '[p]ping',
+      chip: 'core'
+    });
   }
 
   async execute(ctx) {

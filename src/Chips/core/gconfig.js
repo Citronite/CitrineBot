@@ -4,9 +4,10 @@ class GConfig extends BaseCommand {
   constructor() {
     super({
       name: 'gconfig',
-      description: 'Change Citrine\'s global settings. If 0 arguments are provided, it will list current settings. If 1 argument is provided, it will list the current settings for the given argument.',
-      usage: '[p]gconfig'
-    }, 'core');
+      description: 'View or change Citrine\'s global settings.',
+      usage: '[p]gconfig',
+      chip: 'core'
+    });
   }
 
   async execute(ctx) {
