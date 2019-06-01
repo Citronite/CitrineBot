@@ -1,4 +1,3 @@
-import Keyv = require('keyv');
 import { resolve } from 'path';
 import { DbProvider, DbConnection } from 'typings';
 import { KeyvWrapper } from './Utils/KeyvWrapper';
