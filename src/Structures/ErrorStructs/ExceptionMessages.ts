@@ -6,6 +6,6 @@ export const ExceptionMessages: { [key in number]: string } = {
   200: 'Insufficient / Invalid arguments provided!',
   201: 'Insufficient arguments provided! You can use the help command to view command usage!',
   202: 'Invalid arguments provided! You can use the help command to view command usage!',
-  404: 'Uh-oh! You just got 404\'d!',
-  999: 'Whoops! Something went wrong and I have no idea what it is. I\'m sorry! :C'
+  404: 'Uh-oh! You just got 404\'d! (I couldn\'t find what you\'re looking for!)',
+  999: 'Whoops! Something went wrong and I have no idea what it is. I\'m sorry! :('
 };

@@ -2,6 +2,25 @@ import { RichEmbed } from 'discord.js';
 import { QuickEmbed } from '../../Utils/QuickEmbed';
 import { ExceptionCodes } from './ExceptionCodes';
 import { ExceptionMessages } from './ExceptionMessages';
+import { RawException, RawExceptionArray } from 'typings';
+
+// Type guard
+function isExceptionArray(err: any): err is RawExceptionArray {
+  const isArr = err.constructor.name === 'Array';
+  const hasType = ['string', 'number'].includes(typeof err[0]);
+  const hasMsg = typeof(err[1]) === 'string' || typeof(err[1][0]) === 'string';
+  return isArr && hasType && hasMsg;
+}
+
+/*
+// Type guard
+function isExceptionObject(err: any): err is RawExceptionObject {
+  const isObj = err.constructor.name === 'Object';
+  const hasType = ['string', 'number'].includes(typeof err.type);
+  const hasMsg = typeof err.msg === 'string' || typeof err.msg[0] === 'string';
+  return isObj && hasType && hasMsg;
+}
+*/
 
 export class Exception extends Error {
   public readonly code: number;
@@ -37,23 +56,46 @@ export class Exception extends Error {
       .setFooter(`\⛔ ${this.name}`);
   }
 
-  public static parse(err: string | number | Exception | Error): Exception {
-    if (err instanceof Exception) {
-      return err;
+  public static resolveCode(err: any): number {
+    if (typeof err === 'string') {
+      return ExceptionCodes[err] || ExceptionCodes.UNKNOWN_ERROR;
+    } else if (typeof err === 'number') {
+      return Object.values(ExceptionCodes).includes(err) ? err : ExceptionCodes.UNKNOWN_ERROR;
+    } else {
+      return 999;
     }
+  }
+
+  public static resolveDefaultMessage(err: any): string {
+    const code = this.resolveCode(err);
+    return ExceptionMessages[code];
+  }
+
+  public static parse(err: RawException | Exception): Exception {
+    if (err instanceof Exception) return err;
+
     if (err instanceof Error) {
       return new Exception(999, err.message, err);
     }
-    if (typeof err === 'string') {
-      const code = ExceptionCodes[err] || 999;
-      const errMsg = ExceptionMessages[code];
-      return new Exception(code, errMsg);
+
+    if (typeof err === 'string' || typeof err === 'number') {
+      const code = this.resolveCode(err);
+      const msg = this.resolveDefaultMessage(code);
+      return new Exception(code, msg);
     }
-    if (typeof err === 'number') {
-      const code = Object.values(ExceptionCodes).includes(err) ? err : 999;
-      const errMsg = ExceptionMessages[code];
-      return new Exception(code, errMsg);
+
+    if (isExceptionArray(err)) {
+      const code = this.resolveCode(err[0]);
+      return new Exception(code, err[1]);
     }
+
+    /*
+    if (isExceptionObject(err)) {
+      const code = this.resolveCode(err.type);
+      return new Exception(code, err.msg);
+    }
+    */
+
     return new Exception(999, ExceptionMessages[999]);
   }
 }
