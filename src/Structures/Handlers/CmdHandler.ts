@@ -67,7 +67,7 @@ export class CmdHandler {
   // Command: [p]basecmd subcmd1 subcmd2 subcmd3 arg1 arg2
   // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
   // At the end, it will also return the remaining arguments.
-  public *getCmdChainIterator(/*message: Message, args: string[]*/): any {
+  public *getCmdChain(/*message: Message, args: string[]*/): any {
     throw new Error('This feature is yet to be implemented!');
   }
 
@@ -86,24 +86,24 @@ export class CmdHandler {
       if (!cmd) return;
       if (!finalArgs) finalArgs = [];
 
-      if (config && config.deleteCmdCalls) message.delete(config.deleteCmdCallsDelay);
       const ctx = new Context(message, invokedPrefix);
 
       try {
-        // Check Citrine's custom filters. Throws a Exception if failed
+        if (config && config.deleteCmdCalls) {
+          message.delete(config.deleteCmdCallsDelay);
+        }
         await message.client.permHandler.checkCustomFilters(cmd, message);
-        // Execute the command. Note that args are not passed as an array.
         await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
-        // Fire exception *with* context/command
-        // if the exeption occurred within the
-        // custom filter checks or the command execution.
+        // Fire exception *with* context & command,
+        // if the exception occurred within the
+        // filter checks or the command execution.
         const error: Exception = Exception.parse(err);
         message.client.emit('exception', error, ctx, cmd);
         return;
       }
     } catch (err) {
-      // Fire exception *without* context/command
+      // Fire exception *without* context/command,
       // if the exception occurred elsewhere
       const error: Exception = Exception.parse(err);
       message.client.emit('exception', error);

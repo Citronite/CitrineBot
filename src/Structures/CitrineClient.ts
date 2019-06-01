@@ -50,8 +50,6 @@ export class CitrineClient extends Client {
       this.defaultChips = new Set(['core', ...options.defaultChips]);
     }
 
-    // Eventually, move lastException and other
-    // misc. properties inside CitrineClient#settings
     this.lastException = null;
   }
 
@@ -169,6 +167,7 @@ export class CitrineClient extends Client {
       this.logger.info('\nLogging in to Discord. . .');
       await this.login(TOKEN);
 
+      // TODO: Over here, update _instance.json with more information from the OAuth2Application
       if (this.settings.owner === 'DEFAULT') {
         const app = await this.fetchApplication();
         this.settings.owner = app.owner.id;
