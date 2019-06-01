@@ -108,6 +108,9 @@ declare module 'typings' {
   export type RoleID = Snowflake;
   export type UserID = Snowflake;
   export type Reaction = string | Emoji | ReactionEmoji;
+  export type RawExceptionArray = [string | number, string | string[]];
+  // export type RawExceptionObject = { type: string | number, msg: string | string[] };
+  export type RawException = string | number | RawExceptionArray | /* RawExceptionObject | */ Error;
   export type LockType = 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean;
   export type LockPermsOptions = {
     checkAdmin?: boolean,
