@@ -5,7 +5,7 @@ import { Context } from './Context';
 const Colors: { [key: string]: number } = {
   RED: 0xCB4154,
   GREEN: 0x00FF40,
-  BOT: 0xFFC712
+  BOT: 0x9DFFBE
 };
 
 export class QuickEmbed {
