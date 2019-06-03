@@ -1,5 +1,5 @@
 import { RichEmbed, User, GuildMember } from 'discord.js';
-import { Command } from '../Structures/CommandStructs/AbstractCommand';
+import { Command } from '../Structures/Command/AbstractCommand';
 import { Context } from './Context';
 
 const Colors: { [key: string]: number } = {

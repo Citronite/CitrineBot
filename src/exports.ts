@@ -1,8 +1,8 @@
-import { BaseCommand } from './Structures/CommandStructs/BaseCommand';
-import { SubCommand } from './Structures/CommandStructs/SubCommand';
-import { Exception } from './Structures/ErrorStructs/Exception';
-import { ExceptionCodes } from './Structures/ErrorStructs/ExceptionCodes';
-import { ExceptionMessages } from './Structures/ErrorStructs/ExceptionMessages';
+import { BaseCommand } from './Structures/Command/BaseCommand';
+import { SubCommand } from './Structures/Command/SubCommand';
+import { Exception } from './Structures/Error/Exception';
+import { ExceptionCodes } from './Structures/Error/ExceptionCodes';
+import { ExceptionMessages } from './Structures/Error/ExceptionMessages';
 import { QuickEmbed } from './Utils/QuickEmbed';
 
 module.exports = {

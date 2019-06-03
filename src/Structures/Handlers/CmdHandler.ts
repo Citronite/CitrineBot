@@ -1,8 +1,8 @@
 import { Message } from 'discord.js';
-import { Command } from '../CommandStructs/AbstractCommand';
+import { Command } from '../Command/AbstractCommand';
 import { GuildConfig } from '../../Utils/GuildConfig';
-import { BaseCommand } from '../CommandStructs/BaseCommand';
-import { Exception } from '../ErrorStructs/Exception';
+import { BaseCommand } from '../Command/BaseCommand';
+import { Exception } from '../Error/Exception';
 import { Context } from '../../Utils/Context';
 
 export class CmdHandler {

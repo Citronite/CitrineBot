@@ -1,6 +1,6 @@
 import { FormatHelpOptions } from 'typings';
-import { BaseCommand } from '../Structures/CommandStructs/BaseCommand';
-import { SubCommand } from '../Structures/CommandStructs/SubCommand';
+import { BaseCommand } from '../Structures/Command/BaseCommand';
+import { SubCommand } from '../Structures/Command/SubCommand';
 
 type tCommand = BaseCommand | SubCommand;
 

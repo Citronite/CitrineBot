@@ -1,7 +1,7 @@
 import { GuildConfig } from '../../Utils/GuildConfig';
-import { Exception } from '../ErrorStructs/Exception';
-import { ExceptionCodes } from '../ErrorStructs/ExceptionCodes';
-import { Command } from '../CommandStructs/AbstractCommand';
+import { Exception } from '../Error/Exception';
+import { ExceptionCodes } from '../Error/ExceptionCodes';
+import { Command } from '../Command/AbstractCommand';
 import {
   Message,
   GuildMember,

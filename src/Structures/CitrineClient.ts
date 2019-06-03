@@ -3,10 +3,10 @@ import { promisify } from 'util';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
 import { SQLiteKV } from '../DBProviders/SQLiteKV';
-import { BaseCommand } from './CommandStructs/BaseCommand';
-import { CitrineUtils } from './CitrineStructs/CitrineUtils';
-import { CitrineLogger } from './CitrineStructs/CitrineLogger';
-import { CitrineSettings } from './CitrineStructs/CitrineSettings';
+import { BaseCommand } from './Command/BaseCommand';
+import { CitrineUtils } from './Citrine/CitrineUtils';
+import { CitrineLogger } from './Citrine/CitrineLogger';
+import { CitrineSettings } from './Citrine/CitrineSettings';
 import { Client, Collection } from 'discord.js';
 import {
   CitrineOptions,
