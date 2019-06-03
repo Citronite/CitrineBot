@@ -1,9 +1,9 @@
 import { CitrineClient } from '../CitrineClient';
-import { IGlobalConfig } from 'typings';
+import { GlobalConfig } from 'typings';
 
 export class CitrineSettings {
   public readonly client: CitrineClient;
-  private data: IGlobalConfig;
+  private data: GlobalConfig;
 
   constructor(client: CitrineClient) {
     this.client = client;
@@ -143,7 +143,7 @@ export class CitrineSettings {
     }
   }
 
-  private fromJSON(conf: any): IGlobalConfig {
+  private fromJSON(conf: any): GlobalConfig {
     return {
       owner: conf.owner,
       globalPrefix: conf.globalPrefix,

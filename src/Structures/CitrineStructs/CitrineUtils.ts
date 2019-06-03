@@ -1,13 +1,13 @@
-import { DjsUtils } from '../../Utils/DjsUtils';
-import { Formatter } from '../../Utils/Formatter';
-import { IDjsUtils, IFormatter } from 'typings';
+import { DjsUtils as djs } from '../../Utils/DjsUtils';
+import { Formatter as format } from '../../Utils/Formatter';
+import { DjsUtils, Formatter } from 'typings';
 
 export class CitrineUtils {
-  public readonly djs: IDjsUtils;
-  public readonly format: IFormatter;
+  public readonly djs: DjsUtils;
+  public readonly format: Formatter;
 
   constructor() {
-    this.djs = DjsUtils;
-    this.format = Formatter;
+    this.djs = djs;
+    this.format = format;
   }
 }
