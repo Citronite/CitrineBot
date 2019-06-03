@@ -1,6 +1,6 @@
 import { GuildConfig } from '../../Utils/GuildConfig';
-import { Exception } from '../Error/Exception';
-import { ExceptionCodes } from '../Error/ExceptionCodes';
+import { Exception } from '../Exceptions/Exception';
+import { ExceptionCodes } from '../Exceptions/ExceptionCodes';
 import { Command } from '../Command/AbstractCommand';
 import {
   Message,
@@ -13,11 +13,10 @@ import {
 } from 'discord.js';
 
 export class PermHandler {
-
-  public async checkCustomFilters(cmd: Command, message: Message | any): Promise<boolean> {
+  public async checkFilters(cmd: Command, message: Message | any): Promise<void> {
     const { settings: globalConfig, db } = message.client;
     try {
-      if (message.author.id === globalConfig.owner) return Promise.resolve(true);
+      if (message.author.id === globalConfig.owner) return;
       const errors = [];
       const config: GuildConfig | null = await db.guilds.read(message.guild.id);
       if (config) {
@@ -28,13 +27,14 @@ export class PermHandler {
       if (globalConfig.disabledUsers.includes(message.author.id)) errors.push('Disabled User [Global]');
       if (globalConfig.disabledCommands.includes(cmd.name)) errors.push('Disabled Command [Global]');
 
-      return errors.length ? Promise.reject(new Exception(ExceptionCodes.FAILED_CUSTOM_FILTERS, errors)) : Promise.resolve(true);
+      const code = ExceptionCodes.FAILED_CUSTOM_FILTERS;
+      if (errors.length) return Promise.reject(new Exception(code, errors));
     } catch (err) {
       return Promise.reject(err);
     }
   }
 
-  public checkDiscordPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): void {
+  public async checkDiscordPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): Promise<void> {
     const memberPerms = channel.memberPermissions(member);
     if (!memberPerms) throw new Exception(ExceptionCodes.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
 
@@ -42,7 +42,8 @@ export class PermHandler {
     if (!missing) return;
 
     const missingFlags = new Permissions(missing).toArray(checkAdmin);
-    const code = channel.client.user.id === member.id ? ExceptionCodes.MISSING_BOT_PERMS : ExceptionCodes.MISSING_MEMBER_PERMS;
+    const { MISSING_BOT_PERMS, MISSING_MEMBER_PERMS } = ExceptionCodes;
+    const code = channel.client.user.id === member.id ? MISSING_BOT_PERMS : MISSING_MEMBER_PERMS;
     throw new Exception(code, missingFlags);
   }
 
@@ -60,5 +61,4 @@ export class PermHandler {
     if (user.client.settings.devs.includes(user.id)) return;
     throw new Exception(ExceptionCodes.PERMISSION_ERROR, 'Only bot developers may perform that action!');
   }
-
 }

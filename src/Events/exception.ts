@@ -1,6 +1,6 @@
 import { BaseCommand } from '../Structures/Command/BaseCommand';
 import { SubCommand } from '../Structures/Command/SubCommand';
-import { Exception } from '../Structures/Error/Exception';
+import { Exception } from '../Structures/Exceptions/Exception';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { QuickEmbed } from '../Utils/QuickEmbed';
 import { Context } from '../Utils/Context';

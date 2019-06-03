@@ -29,7 +29,7 @@ declare module 'typings' {
   }
 
   export interface IPermHandler {
-    checkCustomFilters: (cmd: any, message: Message | any, ) => Promise<boolean>;
+    checkFilters: (cmd: any, message: Message | any, ) => Promise<boolean>;
     checkDiscordPerms: (perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin?: boolean) => void;
     checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
     checkBotOwner: (user: User | GuildMember) => void;

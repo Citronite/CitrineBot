@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 import { Command } from '../Command/AbstractCommand';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../Command/BaseCommand';
-import { Exception } from '../Error/Exception';
+import { Exception } from '../Exceptions/Exception';
 import { Context } from '../../Utils/Context';
 
 export class CmdHandler {
@@ -92,7 +92,7 @@ export class CmdHandler {
         if (config && config.deleteCmdCalls) {
           message.delete(config.deleteCmdCallsDelay);
         }
-        await message.client.permHandler.checkCustomFilters(cmd, message);
+        await message.client.permHandler.checkFilters(cmd, message);
         await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
         // Fire exception *with* context & command,

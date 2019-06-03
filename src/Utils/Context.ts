@@ -1,7 +1,7 @@
 import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
-import { Exception } from '../Structures/Error/Exception';
-import { ExceptionMessages } from '../Structures/Error/ExceptionMessages';
+import { Exception } from '../Structures/Exceptions/Exception';
+import { ExceptionMessages } from '../Structures/Exceptions/ExceptionMessages';
 import { LockType, LockPermsOptions, PromptOptions, Reaction } from 'typings';
 import {
   Message,
