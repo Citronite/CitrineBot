@@ -4,14 +4,12 @@ node_modules/
 # tsc outDir
 bin/
 
-# data dir
+# data dirs
 data/
+temp/
 
 # Created batch/shell files
 start_citrine.*
-
-# Temp dir
-temp/
 
 # extra stuff
 *.txt
