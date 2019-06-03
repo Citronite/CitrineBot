@@ -24,7 +24,7 @@ export abstract class Command {
   // By default, throws an invalid args error,
   // which will show a help message in discord.
   public async execute(...args: any[]): Promise<void> {
-    throw 200;
+    throw 201;
   }
 
   // Clunky bit of code, but couldn't think of any other way
