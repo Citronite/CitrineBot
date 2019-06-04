@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
-import { SQLiteKV } from '../DBProviders/SQLiteKV';
+import { MemoryKV } from '../DBProviders/MemoryKV';
 import { BaseCommand } from './Command/BaseCommand';
 import { CitrineUtils } from './Citrine/CitrineUtils';
 import { CitrineLogger } from './Citrine/CitrineLogger';
@@ -39,7 +39,7 @@ export class CitrineClient extends Client {
     this.settings = new CitrineSettings(this);
     this.commands = new Collection();
 
-    this.db = options && options.dbProvider ? new options.dbProvider() : new SQLiteKV();
+    this.db = options && options.dbProvider ? new options.dbProvider() : new MemoryKV();
     this.utils = options && options.utils ? new options.utils() : new CitrineUtils();
     this.logger = options && options.logger ? new options.logger() : new CitrineLogger();
     this.cmdHandler = options && options.cmdHandler ? new options.cmdHandler() : new CmdHandler();
@@ -116,7 +116,6 @@ export class CitrineClient extends Client {
         if (typeof load === 'function') load(this);
       }
       this.logger.info(`Successfully loaded chip: ${chip}`);
-      return Promise.resolve();
     } catch (err) {
       this.logger.warn(`Failed to load chip: ${chip}`);
       return Promise.reject(err);
@@ -132,18 +131,17 @@ export class CitrineClient extends Client {
       }
       this.commands.sweep((cmd) => cmd.chip === chip);
       this.logger.info(`Successfully unloaded chip: ${chip}`);
-      return Promise.resolve();
     } catch (err) {
       this.logger.warn(`Failed to unload chip: ${chip}`);
       return Promise.reject(err);
     }
   }
 
-  public async clearChipCache(chip: string): Promise<void> {
+  public async clearChipCache(chip: string, all = false): Promise<void> {
     try {
       const dir = await readdirAsync(`./bin/Chips/${chip}`);
-      const cmdFiles = fileFilter(dir);
-      for (const file of cmdFiles) {
+      const files = all ? dir : fileFilter(dir);
+      for (const file of files) {
         delete require.cache[require.resolve(`../Chips/${chip}/${file}`)];
       }
       this.logger.info(`Successfully cleared cache for chip: ${chip}`);
@@ -167,10 +165,13 @@ export class CitrineClient extends Client {
       this.logger.info('\nLogging in to Discord. . .');
       await this.login(TOKEN);
 
-      // TODO: Over here, update _instance.json with more information from the OAuth2Application
       if (this.settings.owner === 'DEFAULT') {
         const app = await this.fetchApplication();
         this.settings.owner = app.owner.id;
+        const data = require('../../data/core/_instance.json');
+        data.ownerId = app.owner.id;
+        data.appId = app.id;
+        fs.writeFile(`${__dirname}/../../data/core/_instace.json`, JSON.stringify(data, null, '  '), this.logger.warn);
       }
       await this.settings.save();
     } catch (err) {
