@@ -59,7 +59,9 @@ export class CitrineClient extends Client {
     try {
       const allChips = readdirSync('./bin/Chips');
       for (const chip of this.defaultChips) {
-        if (!allChips.includes(chip)) continue;
+        if (!allChips.includes(chip)) {
+          throw new Error(`Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`);
+        }
         const dir = readdirSync(`./bin/Chips/${chip}`);
         const cmdFiles = fileFilter(dir);
         for (const file of cmdFiles) {
@@ -70,8 +72,8 @@ export class CitrineClient extends Client {
           }
         }
         if (dir.includes('_setup.js')) {
-          const { load } = require(`../Chips/${chip}/_setup.js`);
-          if (typeof load === 'function') load(this);
+          const { load: fn } = require(`../Chips/${chip}/_setup.js`);
+          if (typeof fn === 'function') fn(this);
         }
       }
       this.logger.info('Successfully initialized default Chips!');
@@ -112,8 +114,8 @@ export class CitrineClient extends Client {
         this.commands.set(cmd.name, cmd);
       }
       if (dir.includes('_setup.js')) {
-        const { load } = require(`../Chips/${chip}/_setup.js`);
-        if (typeof load === 'function') load(this);
+        const { load: fn } = require(`../Chips/${chip}/_setup.js`);
+        if (typeof fn === 'function') fn(this);
       }
       this.logger.info(`Successfully loaded chip: ${chip}`);
     } catch (err) {
@@ -124,12 +126,12 @@ export class CitrineClient extends Client {
 
   public async unloadChip(chip: string): Promise<void> {
     try {
+      this.commands.sweep((cmd) => cmd.chip === chip);
       const dir = await readdirAsync(`./bin/Chips/${chip}`);
       if (dir.includes('_setup.js')) {
-        const { unload } = require(`../Chips/${chip}/_setup.js`);
-        if (typeof unload === 'function') unload(this);
+        const { unload: fn } = require(`../Chips/${chip}/_setup.js`);
+        if (typeof fn === 'function') fn(this);
       }
-      this.commands.sweep((cmd) => cmd.chip === chip);
       this.logger.info(`Successfully unloaded chip: ${chip}`);
     } catch (err) {
       this.logger.warn(`Failed to unload chip: ${chip}`);
@@ -171,7 +173,7 @@ export class CitrineClient extends Client {
         const data = require('../../data/core/_instance.json');
         data.ownerId = app.owner.id;
         data.appId = app.id;
-        fs.writeFile(`${__dirname}/../../data/core/_instace.json`, JSON.stringify(data, null, '  '), this.logger.warn);
+        fs.writeFile(`${__dirname}/../../data/core/_instance.json`, JSON.stringify(data, null, '  '), this.logger.warn);
       }
       await this.settings.save();
     } catch (err) {
