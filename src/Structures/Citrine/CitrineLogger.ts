@@ -1,15 +1,15 @@
 // import * as winston from 'winston';
 
 export class CitrineLogger {
-  public info(str: string): void {
-    console.log(str);
+  public info(...args: any[]): void {
+    console.log(...args);
   }
 
-  public warn(str: string): void {
-    console.log(str);
+  public warn(...args: any[]): void {
+    console.log(...args);
   }
 
-  public error(err: string | Error): void {
-    console.log(err);
+  public error(...args: any[]): void {
+    console.log(...args);
   }
 }
