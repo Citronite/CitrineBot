@@ -6,7 +6,7 @@ module.exports = {
     load: (client) => {
         client.db.connect('guilds', path);
     },
-	unload: (client) => {
-        client.db.disconnect('guilds');
+	unload: () => {
+        throw new Error('The core chip must not be unloaded!');
     }
 };
