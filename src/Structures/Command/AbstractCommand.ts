@@ -21,15 +21,14 @@ export abstract class Command {
     this.usage = options.usage;
   }
 
-  // By default, throws an invalid args error,
+  // By default, throws an INSUFFICIENT_ARGS error,
   // which will show a help message in discord.
   public async execute(...args: any[]): Promise<void> {
     throw 201;
   }
 
-  // Clunky bit of code, but couldn't think of any other way
-  // to do this because of circular dependencies.
-  // I'm not smart enough.
+  // Couldn't think of any better way
+  // to do this. I'm not smart enough.
   public registerSubCommands(...subCmds: Array<any>) {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
