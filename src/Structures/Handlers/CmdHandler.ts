@@ -6,7 +6,6 @@ import { Exception } from '../Exceptions/Exception';
 import { Context } from '../../Utils/Context';
 
 export class CmdHandler {
-
   public checkPrefix(message: any, config?: GuildConfig): string | null {
     if (message.author.bot) return null;
     const gPrefix = message.client.settings.globalPrefix;
@@ -60,15 +59,6 @@ export class CmdHandler {
       }
     }
     return [subCmd, argsCopy];
-  }
-
-  // Basic idea is that this returns a generator for command calls
-  // Example:
-  // Command: [p]basecmd subcmd1 subcmd2 subcmd3 arg1 arg2
-  // This would return a generator to iterate over basecmd, subcm1, subcmd2 etc.
-  // At the end, it will also return the remaining arguments.
-  public *getCmdChain(/*message: Message, args: string[]*/): any {
-    throw new Error('This feature is yet to be implemented!');
   }
 
   public async processCommand(message: any, config?: GuildConfig): Promise<void> {
