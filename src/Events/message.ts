@@ -8,13 +8,12 @@ module.exports = {
   listener: async (client: CitrineClient, message: Message): Promise<void> => {
     const { cmdHandler, db } = client;
     let config: GuildConfig | null = null;
-
     try {
       if (message.guild) {
         config = await db.guilds.read(message.guild.id);
         if (!config) {
-          const data = new GuildConfig(message.guild).toJSON();
-          config = await db.guilds.create(message.guild.id, data);
+          config = new GuildConfig(message.guild);
+          await db.guilds.create(message.guild.id, config.toJSON());
         }
       }
       await cmdHandler.processCommand(message, config);
