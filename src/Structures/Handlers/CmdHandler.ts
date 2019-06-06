@@ -51,15 +51,21 @@ export class CmdHandler {
     if (!result) return null;
     const [base, finalArgs] = result;
 
-    let subcmd: Command | undefined = base;
-    while (subcmd.subcommands) {
-      if (!finalArgs[0]) break;
+    let cmd: Command | undefined = base;
+    if (!cmd.subcommands) return result;
+    if (!finalArgs.length) return result;
+
+    while (cmd.subcommands) {
       const name = finalArgs[0];
-      subcmd = subcmd.subcommands.get(name.toLowerCase());
-      if (!subcmd) return null;
-      finalArgs.shift();
+      const subcmd: Command | undefined = cmd.subcommands.get(name.toLowerCase());
+      if (subcmd) {
+        cmd = subcmd;
+        finalArgs.shift();
+      } else {
+        break;
+      }
     }
-    return [subcmd, finalArgs];
+    return [cmd, finalArgs];
   }
 
   public *getCmdGenerator(message: Message, args: string[]): IterableIterator<[Command, string[]] | undefined> {
@@ -69,15 +75,15 @@ export class CmdHandler {
     if (!result) return;
 
     const [base, finalArgs] = result;
-    let subcmd: Command | undefined = base;
-    while (subcmd.subcommands) {
-      yield [subcmd, finalArgs];
-      if (!finalArgs[0]) break;
+    let cmd: Command | undefined = base;
+    do {
+      yield [cmd, finalArgs];
+      if (!finalArgs.length) break;
+      if (!cmd.subcommands) break;
       const name = finalArgs[0];
-      subcmd = subcmd.subcommands.get(name.toLowerCase());
-      if (!subcmd) return;
-      finalArgs.shift();
-    }
+      cmd = cmd.subcommands.get(name.toLowerCase());
+      if (!cmd) break;
+    } while (finalArgs.shift());
   }
 
   public async processCommand(message: any, config?: GuildConfig): Promise<void> {
