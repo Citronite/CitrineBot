@@ -2,7 +2,14 @@ import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { Exception } from '../Structures/Exceptions/Exception';
 import { ExceptionMessages } from '../Structures/Exceptions/ExceptionMessages';
-import { LockType, LockPermsOptions, PromptOptions, Reaction } from 'typings';
+import {
+  LockType,
+  LockPermsOptions,
+  PromptOptions,
+  PromptReactionOptions,
+  Reaction,
+  ContextData
+} from 'typings';
 import {
   Message,
   User,
@@ -14,6 +21,16 @@ import {
   GuildMember,
   Guild
 } from 'discord.js';
+import { Command } from '../Structures/Command/AbstractCommand';
+import { SubCommand } from '../Structures/Command/SubCommand';
+
+function validateContextData(data: any): data is ContextData {
+  if (!data) throw new Error('ContextData is required!');
+  if (!data.message) throw new Error('ContextData#message is required!');
+  if (!data.prefix) throw new Error('ContextData#prefix is required!');
+  if (!data.command) throw new Error('ContextData#cmd is required!');
+  return true;
+}
 
 export class Context {
   public readonly client: CitrineClient | any;
@@ -23,15 +40,21 @@ export class Context {
   public readonly member: GuildMember | null;
   public readonly channel: TextChannel | DMChannel | GroupDMChannel;
   public readonly guild: Guild | null;
+  public readonly command: Command;
+  public readonly subcommand?: SubCommand;
 
-  constructor(message: Message, iPrefix: string) {
+  constructor(data: ContextData) {
+    validateContextData(data);
+    const { message } = data;
     this.client = message.client;
-    this.prefix = iPrefix;
     this.message = message;
     this.author = message.author;
     this.channel = message.channel;
     this.member = message.member || null;
     this.guild = message.guild || null;
+    this.prefix = data.prefix;
+    this.command = data.command;
+    this.subcommand = data.subcommand;
   }
 
   public async send(...args: any): Promise<Message | Message[]> {
@@ -72,7 +95,7 @@ export class Context {
   // Waits for a reaction on the bot message.
   // First param would be msg to send, second param list of reactions to await.
   // Limit is number of reactions to wait for.
-  public async promptReaction(msg: string, emojis: Reaction[], limit: number = 1, timeOut: number = 30000): Promise<MessageReaction | null> {
+  public async promptReaction(msg: string, emojis: Reaction[], options?: PromptReactionOptions): Promise<MessageReaction | null> {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
