@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { GuildConfig } from '../Utils/GuildConfig';
+import { Exception } from '../Structures/Exceptions/Exception';
 
 module.exports = {
   name: 'message',
@@ -15,7 +16,8 @@ module.exports = {
       }
       await cmdHandler.processCommand(message, config);
     } catch (err) {
-      client.logger.error(err.stack);
+      const error: Exception = Exception.parse(err);
+      message.client.emit('exception', error);
     }
   }
 };
