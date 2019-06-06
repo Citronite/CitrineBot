@@ -20,11 +20,49 @@ declare module 'typings' {
     ClientOptions
   } from 'discord.js';
 
+  /*
+  interface CitrineClient {
+    loadChip: (chip: string) => Promise<void>;
+    unloadChip: (chip: string) => Promise<void>;
+    launch: () => Promise<void>;
+    initEvents: () => void;
+    initChips: () => void;
+    permHandler: IPermHandler;
+    cmdHandler: ICmdHandler;
+    utils: Utils;
+    commands: Collection<string, Command>;
+    logger: Logger;
+    lastException: any;
+    defaultChips: Set<string>;
+    db: DbProvider;
+    settings: 
+  }
+  */
+
+  interface Command {
+    name: string;
+    description: string;
+    usage?: string;
+    execute: (...args: any[]) => Promise<void>;
+    registerSubCommands: (...args: Command[]) => this;
+  }
+
+  interface BaseCommand extends Command {
+    chip: string;
+  }
+
+  interface SubCommand extends Command {
+    setParent: (cmd: Command) => void;
+    getParent: () => Command | null;
+    setBase: (cmd: BaseCommand) => void;
+    getBase: () => BaseCommand | null;
+  }
+
   export interface ICmdHandler {
     checkPrefix: (message: any, config?: any) => string | null;
     getArgs: (message: any, prefix: string, parseQuotes?: boolean) => string[] | null;
-    getBaseCmd: (message: any, args: string[]) => [any, string[]] | [null, null];
-    getFinalCmd: (message: Message, args: string[]) => [any, string[]] | [null, null];
+    getBaseCmd: (message: any, args: string[]) => [Command, string[]] | null;
+    getFinalCmd: (message: Message, args: string[]) => [Command, string[]] | null;
     processCommand: (message: any, config?: any) => Promise<void>;
   }
 
@@ -111,7 +149,8 @@ declare module 'typings' {
   export type RawExceptionArray = [string | number, string | string[]];
   // export type RawExceptionObject = { type: string | number, msg: string | string[] };
   export type RawException = string | number | RawExceptionArray | /* RawExceptionObject | */ Error;
-  export type LockType = 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean;
+  export type LockType = 'nsfw' | 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean;
+  
   export type LockPermsOptions = {
     checkAdmin?: boolean,
     checkBot?: boolean
@@ -120,8 +159,13 @@ declare module 'typings' {
   export type PromptOptions = {
     contentOnly?: boolean,
     timeOut?: number,
-    author?: UserID,
     filter?: (...args: any[]) => any;
+  }
+
+  export type PromptReactionOptions = {
+    limit?: number,
+    timeOut?: number,
+    filter?: (...args: any[]) => any; // TODO: Add proper typings here.
   }
 
   export type CommandOptions = {
@@ -134,5 +178,12 @@ declare module 'typings' {
   export type FormatHelpOptions = {
     maxWidth?: number,
     useCodeBlocks?: boolean
+  }
+
+  export type ContextData = {
+    message: Message,
+    prefix: string,
+    command: Command,
+    subcommand?: SubCommand
   }
 }
