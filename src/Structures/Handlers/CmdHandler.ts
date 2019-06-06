@@ -71,15 +71,13 @@ export class CmdHandler {
     if (!result) return;
 
     const [base, finalArgs] = result;
-    if (!base.subcommands || !finalArgs.length) return [base, finalArgs];
-
     let subcmd: Command | undefined = base;
     while (subcmd.subcommands) {
+      yield [subcmd, finalArgs];
       if (!finalArgs[0]) break;
       const name = finalArgs[0];
       subcmd = subcmd.subcommands.get(name.toLowerCase());
       if (!subcmd) return;
-      yield [subcmd, finalArgs];
       finalArgs.shift();
     }
   }
@@ -107,7 +105,7 @@ export class CmdHandler {
     const len = cmdChain.length;
     for (let i = 0; i < len; i++) {
       const [cmd, finalArgs]: [Command, string[]] = cmdChain[i];
-      const subcmd = cmdChain[i + 1][0];
+      const subcmd = cmdChain[i + 1] ? cmdChain[i + 1][0] : undefined;
       const ctx = new Context({
         message,
         prefix: invokedPrefix,
