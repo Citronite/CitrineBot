@@ -49,12 +49,12 @@ export class PermHandler {
     throw new Exception(ErrCode.PERMISSION_ERROR, 'Only guild owners may perform that action!');
   }
 
-  public checkBotOwner(user: User | GuildMember | any): void {
+  public checkBotOwner(user: User | GuildMember & any): void {
     if (user.id === user.client.settings.owner) return;
     throw new Exception(ErrCode.PERMISSION_ERROR, 'Only bot owners may perform that action!');
   }
 
-  public checkBotDev(user: User | GuildMember | any): void {
+  public checkBotDev(user: User | GuildMember & any): void {
     if (user.client.settings.devs.includes(user.id)) return;
     throw new Exception(ErrCode.PERMISSION_ERROR, 'Only bot developers may perform that action!');
   }

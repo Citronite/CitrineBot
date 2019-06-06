@@ -96,9 +96,9 @@ export class Formatter {
 
       const max: number = names.reduce((acc, cur) => acc > cur.length ? acc : cur.length, 0);
       for (let x = 0; x < names.length; x++) {
-        const paddedName: string = names[x].padEnd(max + 2);
-        const sliceLength: number = (maxWidth - (max + 2)) - 3;
-        const slicedDescrip: string = descrips[x].length >= max ? `${descrips[x].slice(0, sliceLength)}...` : descrips[x];
+        const paddedName = names[x].padEnd(max + 2);
+        const sliceLength = (maxWidth - (max + 2)) - 3;
+        const slicedDescrip = descrips[x].length >= max ? `${descrips[x].slice(0, sliceLength)}...` : descrips[x];
         const str: string = paddedName + slicedDescrip;
         final.push(str);
       }

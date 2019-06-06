@@ -4,13 +4,14 @@ import {
   RoleID,
   UserID
 } from 'typings';
+import { CitrineClient } from '../Structures/CitrineClient';
 
 export class GuildConfig {
   private readonly data: any;
 
   constructor(guild: Guild | GuildConfig) {
     if (guild instanceof Guild) {
-      const client: any = guild.client;
+      const client: CitrineClient & any = guild.client;
       this.data = {
         id: guild.id,
         prefix: client.settings.globalPrefix,

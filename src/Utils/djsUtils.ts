@@ -64,7 +64,7 @@ export class DjsUtils {
       };
       return client.users.find(finder) || null;
     }	catch (err) {
-      client.logger.warn(`CitrineClient#resolveUser() failed for [${user}]`);
+      client.logger.warn(`resolveUser() failed for [${user}]`);
       return null;
     }
   }
@@ -89,7 +89,7 @@ export class DjsUtils {
 
       return fetchedGuild.members.find(finder) || null;
     }	catch (err) {
-      const client: CitrineClient | any = guild.client;
+      const client: CitrineClient & any = guild.client;
       client.logger.warn(`resolveGuildMember() failed for [${member}]`);
       return null;
     }

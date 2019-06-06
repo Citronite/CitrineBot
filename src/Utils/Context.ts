@@ -33,7 +33,7 @@ function validateContextData(data: any): data is ContextData {
 }
 
 export class Context {
-  public readonly client: CitrineClient | any;
+  public readonly client: CitrineClient & any;
   public readonly prefix: string;
   public readonly message: Message;
   public readonly author: User;

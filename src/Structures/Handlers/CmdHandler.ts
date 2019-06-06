@@ -49,9 +49,7 @@ export class CmdHandler {
 
     const result = this.getBaseCmd(message, args);
     if (!result) return null;
-
     const [base, finalArgs] = result;
-    if (!base.subcommands || !finalArgs.length) return [base, finalArgs];
 
     let subcmd: Command | undefined = base;
     while (subcmd.subcommands) {
@@ -104,7 +102,7 @@ export class CmdHandler {
 
     const len = cmdChain.length;
     for (let i = 0; i < len; i++) {
-      const [cmd, finalArgs]: [Command, string[]] = cmdChain[i];
+      const [cmd, finalArgs] = cmdChain[i];
       const subcmd = cmdChain[i + 1] ? cmdChain[i + 1][0] : undefined;
       const ctx = new Context({
         message,
@@ -117,7 +115,7 @@ export class CmdHandler {
         message.client.permHandler.checkFilters(ctx, config);
         await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
-        const error: Exception = Exception.parse(err);
+        const error = Exception.parse(err);
         message.client.emit('exception', error, ctx);
         return;
       }
