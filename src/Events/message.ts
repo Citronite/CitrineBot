@@ -12,11 +12,14 @@ module.exports = {
     try {
       if (message.guild) {
         config = await db.guilds.read(message.guild.id);
-        if (!config) config = await db.guilds.create(message.guild);
+        if (!config) {
+          const data = new GuildConfig(message.guild).toJSON();
+          config = await db.guilds.create(message.guild.id, data);
+        }
       }
       await cmdHandler.processCommand(message, config);
     } catch (err) {
-      const error: Exception = Exception.parse(err);
+      const error = Exception.parse(err);
       message.client.emit('exception', error);
     }
   }
