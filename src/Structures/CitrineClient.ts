@@ -27,7 +27,7 @@ export class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: Logger;
   public readonly utils: Utils;
-  public readonly db: DbProvider | any;
+  public readonly db: DbProvider & any;
   public readonly cmdHandler: ICmdHandler;
   public readonly permHandler: IPermHandler;
   public readonly commands: Collection<string, BaseCommand>;
@@ -172,7 +172,12 @@ export class CitrineClient extends Client {
         this.settings.owner = app.owner.id;
         data.ownerId = app.owner.id;
         data.appId = app.id;
-        fs.writeFile(`${__dirname}/../../data/core/_instance.json`, JSON.stringify(data, null, '  '), this.logger.warn);
+
+        const path = `${__dirname}/../../data/core/_instance.json`;
+        const content = JSON.stringify(data, null, '  ');
+        fs.writeFile(path, content, (err) => {
+          if (err) this.logger.warn(err);
+        });
       }
       await this.settings.save();
     } catch (err) {
