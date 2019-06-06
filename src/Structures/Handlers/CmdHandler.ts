@@ -4,9 +4,14 @@ import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../Command/BaseCommand';
 import { Exception } from '../Exceptions/Exception';
 import { Context } from '../../Utils/Context';
+import { SubCommand } from '../Command/SubCommand';
+
+function isSubcommand(subcmd: any): subcmd is SubCommand {
+  return subcmd instanceof SubCommand;
+}
 
 export class CmdHandler {
-  public checkPrefix(message: any, config?: GuildConfig): string | null {
+  public checkPrefix(message: Message & any, config?: GuildConfig): string | null {
     if (message.author.bot) return null;
     const gPrefix = message.client.settings.globalPrefix;
     const id = message.client.user.id;
@@ -15,17 +20,19 @@ export class CmdHandler {
     return rgx.test(message.content) ? message.content.match(rgx)[0] : null;
   }
 
-  public getArgs(message: any, prefix: string, parseQuotes: boolean = true): string[] | null {
+  public getArgs(message: Message & any, prefix: string, parseQuotes: boolean = true): string[] | null {
     const text = message.content.slice(prefix.length);
     const args = parseQuotes ? message.client.utils.djs.parseQuotes(text) : text.split(/ +/);
     return args.length ? args : null;
   }
 
-  public getBaseCmd(message: any, args: string[]): [BaseCommand, string[]] | [null, null] {
-    if (!args || !args.length || !args[0]) return [null, null];
+  public getBaseCmd(message: Message & any, args: string[]): [BaseCommand, string[]] | null {
+    if (!args || !args.length) return null;
 
-    const copy: any = Array.from(args);
-    const name = copy.shift().toLowerCase();
+    let name = args.shift();
+    if (!name) return null;
+    else name = name.toLowerCase();
+
     const finder = (val: Command) => {
       const aliases = message.client.settings.aliases[val.name];
       return aliases && aliases.includes(name);
@@ -34,70 +41,88 @@ export class CmdHandler {
       || message.client.commands.find(finder)
       || null;
 
-    return cmd ? [cmd, copy] : [null, null];
+    return cmd ? [cmd, args] : null;
   }
 
-  public getFinalCmd(message: Message, args: string[]): [Command, string[]] | [null, null] {
-    if (!args || !args.length || !args[0]) return [null, null];
+  public getFinalCmd(message: Message, args: string[]): [Command, string[]] | null {
+    if (!args || !args.length) return null;
 
-    // I hate typescript :')
-    const [base, argsCopy]: [any, any] = this.getBaseCmd(message, args);
-    if (!base) return [null, null];
-    if (!base.subcommands || !argsCopy.length) return [base, argsCopy];
+    const result = this.getBaseCmd(message, args);
+    if (!result) return null;
 
-    // Set initial value of subCmd
-    let subCmd = base;
-    // Run loop as long as the subCmd has more subcommands
-    while (subCmd.subcommands) {
-      const name = argsCopy[0];
-      if (!name) break;
-      if (subCmd.subcommands.has(name.toLowerCase())) {
-        subCmd = subCmd.subcommands.get(name.toLowerCase());
-        argsCopy.shift();
-      } else {
-        break;
-      }
+    const [base, finalArgs] = result;
+    if (!base.subcommands || !finalArgs.length) return [base, finalArgs];
+
+    let subcmd: Command | undefined = base;
+    while (subcmd.subcommands) {
+      if (!finalArgs[0]) break;
+      const name = finalArgs[0];
+      subcmd = subcmd.subcommands.get(name.toLowerCase());
+      if (!subcmd) return null;
+      finalArgs.shift();
     }
-    return [subCmd, argsCopy];
+    return [subcmd, finalArgs];
+  }
+
+  public *getCmdGenerator(message: Message, args: string[]): IterableIterator<[Command, string[]] | undefined> {
+    if (!args || !args.length) return;
+
+    const result = this.getBaseCmd(message, args);
+    if (!result) return;
+
+    const [base, finalArgs] = result;
+    if (!base.subcommands || !finalArgs.length) return [base, finalArgs];
+
+    let subcmd: Command | undefined = base;
+    while (subcmd.subcommands) {
+      if (!finalArgs[0]) break;
+      const name = finalArgs[0];
+      subcmd = subcmd.subcommands.get(name.toLowerCase());
+      if (!subcmd) return;
+      yield [subcmd, finalArgs];
+      finalArgs.shift();
+    }
   }
 
   public async processCommand(message: any, config?: GuildConfig): Promise<void> {
-    try {
-      // Check if the message was prefixed
-      const invokedPrefix = this.checkPrefix(message, config);
-      if (!invokedPrefix) return;
+    const invokedPrefix = this.checkPrefix(message, config);
+    if (!invokedPrefix) return;
 
-      // Obtain all arguments
-      const args = this.getArgs(message, invokedPrefix);
-      if (!args) return;
+    const args = this.getArgs(message, invokedPrefix);
+    if (!args) return;
 
-      // Obtain final subcommand and the rest of the arguments
-      let [cmd, finalArgs]: [Command | null, string[] | null] = this.getFinalCmd(message, args);
-      if (!cmd) return;
-      if (!finalArgs) finalArgs = [];
+    const cmdGenerator = this.getCmdGenerator(message, args);
+    if (!cmdGenerator) return;
 
-      const ctx = new Context(message, invokedPrefix);
+    if (config && config.deleteCmdCalls) {
+      message.delete(config.deleteCmdCallsDelay);
+    }
+
+    const cmdChain: Array<[Command, string[]]> = [];
+    for (const value of cmdGenerator) {
+      if (!value) break;
+      cmdChain.push(value);
+    }
+
+    const len = cmdChain.length;
+    for (let i = 0; i < len; i++) {
+      const [cmd, finalArgs]: [Command, string[]] = cmdChain[i];
+      const subcmd = cmdChain[i + 1][0];
+      const ctx = new Context({
+        message,
+        prefix: invokedPrefix,
+        command: cmd,
+        subcommand: isSubcommand(subcmd) ? subcmd : undefined
+      });
 
       try {
-        if (config && config.deleteCmdCalls) {
-          message.delete(config.deleteCmdCallsDelay);
-        }
-        await message.client.permHandler.checkFilters(cmd, message);
+        message.client.permHandler.checkFilters(ctx, config);
         await cmd.execute(ctx, ...finalArgs);
       } catch (err) {
-        // Fire exception *with* context & command,
-        // if the exception occurred within the
-        // filter checks or the command execution.
         const error: Exception = Exception.parse(err);
-        message.client.emit('exception', error, ctx, cmd);
+        message.client.emit('exception', error, ctx);
         return;
       }
-    } catch (err) {
-      // Fire exception *without* context/command,
-      // if the exception occurred elsewhere
-      const error: Exception = Exception.parse(err);
-      message.client.emit('exception', error);
-      return;
     }
   }
 }
