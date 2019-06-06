@@ -18,8 +18,9 @@ class Name extends BaseCommand {
     super({
       name: 'name',
       description: 'description',
-      usage: '[p]name'
-    }, {{chip}});
+      usage: '[p]name',
+      chip: {{chip}}
+    });
   }
 
   async execute(ctx) {
@@ -29,11 +30,12 @@ class Name extends BaseCommand {
 
 module.exports = new Name();
 
-`
+`;
+
 const subCmdTemplate = `
 const { SubCommand } = require('../../exports');
 
-class Name extends SubCommand {
+class Name extends Subcommand {
   constructor() {
     super({
       name: 'name',
@@ -49,7 +51,7 @@ class Name extends SubCommand {
 
 module.exports = new Name();
 
-`
+`;
 
 // Allows managing chips through the launcher.
 class ChipsMenu extends AbstractMenu {
