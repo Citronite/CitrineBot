@@ -52,7 +52,7 @@ export class Exception extends Error {
 
   public toEmbed(): RichEmbed {
     return QuickEmbed.error(this.info)
-      .setTitle('Exception Occurred!')
+      .setTitle('Exception')
       .setFooter(`⛔ ${this.name}`);
   }
 
