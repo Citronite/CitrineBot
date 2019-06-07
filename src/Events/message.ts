@@ -13,7 +13,7 @@ module.exports = {
         config = await db.guilds.read(message.guild.id);
         if (!config) {
           config = new GuildConfig(message.guild);
-          await db.guilds.create(message.guild.id, config.toJSON());
+          await db.guilds.create(message.guild.id, config);
         }
       }
       await cmdHandler.processCommand(message, config);

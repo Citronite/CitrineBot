@@ -125,8 +125,7 @@ export class CitrineSettings {
 
   public async save(): Promise<void> {
     try {
-      const jsonData = this.toJSON();
-      await this.client.db.guilds.update('GLOBAL', jsonData);
+      await this.client.db.guilds.update('GLOBAL', this.data);
     }	catch (err) {
       return Promise.reject(err);
     }
@@ -136,13 +135,12 @@ export class CitrineSettings {
     try {
       const jsonData = await this.client.db.guilds.read('GLOBAL');
       if (!jsonData) return;
-      const parsed = this.fromJSON(jsonData);
-      this.data = parsed;
+      this.data = jsonData;
     } catch (err) {
       return Promise.reject(err);
     }
   }
-
+/*
   private fromJSON(conf: any): GlobalConfig {
     return {
       owner: conf.owner,
@@ -156,7 +154,7 @@ export class CitrineSettings {
       aliases: conf.aliases
     };
   }
-
+*/
   public toJSON(): object {
     const conf = this.data;
     return {

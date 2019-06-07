@@ -75,6 +75,7 @@ export class CitrineClient extends Client {
           const { load: fn } = require(`../Chips/${chip}/_setup.js`);
           if (typeof fn === 'function') fn(this);
         }
+        this.settings.addLoadedChip(chip);
       }
       this.logger.info('Successfully initialized default Chips!');
     } catch (err) {
@@ -118,6 +119,8 @@ export class CitrineClient extends Client {
         if (typeof fn === 'function') fn(this);
       }
       this.logger.info(`Successfully loaded chip: ${chip}`);
+      this.settings.addLoadedChip(chip);
+      await this.settings.save();
     } catch (err) {
       this.logger.warn(`Failed to load chip: ${chip}`);
       return Promise.reject(err);
@@ -133,6 +136,8 @@ export class CitrineClient extends Client {
         if (typeof fn === 'function') fn(this);
       }
       this.logger.info(`Successfully unloaded chip: ${chip}`);
+      this.settings.removeLoadedChip(chip);
+      await this.settings.save();
     } catch (err) {
       this.logger.warn(`Failed to unload chip: ${chip}`);
       return Promise.reject(err);

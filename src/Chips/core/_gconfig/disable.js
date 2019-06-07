@@ -4,7 +4,7 @@ class DisableGuild extends SubCommand {
   constructor() {
     super({
       name: 'guild',
-      description: 'Globally disable guilds from using Citrine.',
+      description: 'Globally disable guilds from using this bot.',
       usage: '[p]gconfig disable user [...UserID/@User]'
     });
   }
@@ -14,7 +14,7 @@ class DisableUser extends SubCommand {
   constructor() {
     super({
       name: 'user',
-      description: 'Globally disable users from using Citrine.',
+      description: 'Globally disable users from using this bot.',
       usage: '[p]gconfig disable user [...UserID/@User]'
     });
   }

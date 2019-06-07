@@ -1,5 +1,6 @@
 import { Collection } from 'discord.js';
 import { CommandOptions } from 'typings';
+import { Context } from '../../Utils/Context';
 
 function validateCommandOptions(options: any): void {
   if (!options) throw new Error('Invalid CommandOptions provided!');
@@ -22,7 +23,8 @@ export abstract class Command {
 
   // By default, throws an INSUFFICIENT_ARGS error,
   // which will show a help message in discord.
-  public async execute(...args: any[]): Promise<void> {
+  public async execute(ctx: Context, ...args: any[]): Promise<void> {
+    if (ctx.subcommand) return;
     throw 201;
   }
 

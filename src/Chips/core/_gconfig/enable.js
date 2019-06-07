@@ -5,7 +5,7 @@ class Enable extends SubCommand {
         super({
             name: 'enable',
             description: 'Lol',
-            usage: ''
+            usage: '[p]enable <...command>'
         });
     }
 }

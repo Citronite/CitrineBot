@@ -4,8 +4,8 @@ export const ExceptionMessages: { [key in number]: string } = {
   102: 'Are you sure I have the proper permissions to execute this command?',
   103: 'You failed to pass the custom filters!',
   200: 'Insufficient / Invalid arguments provided!',
-  201: 'Insufficient arguments provided! You can use the help command to view command usage!',
-  202: 'Invalid arguments provided! You can use the help command to view command usage!',
+  201: 'Insufficient arguments provided!',
+  202: 'Invalid arguments provided!',
   404: 'Uh-oh! You just got 404\'d! (I couldn\'t find what you\'re looking for!)',
   999: 'Whoops! Something went wrong and I have no idea what it is. I\'m sorry! :('
 };

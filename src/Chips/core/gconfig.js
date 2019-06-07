@@ -5,21 +5,19 @@ class GConfig extends BaseCommand {
     super({
       name: 'gconfig',
       description: 'View or change Citrine\'s global settings.',
-      usage: '[p]gconfig',
+      usage: '[p]gconfig [-dm]',
       chip: 'core'
     });
   }
 
-  async execute(ctx) {
+  async execute(ctx, flag) {
     ctx.lock('botOwner');
+    if (ctx.subcommand) return;
 
     const settings = JSON.stringify(ctx.client.settings.toJSON(), null, '  ');
-    try {
-        await ctx.author.send(settings, { code: 'json' });
-    }
-    catch (_) {
-        await ctx.send(settings, { code: 'json' });
-    } 
+    const dm = flag === '-dm';
+    if (dm) await ctx.sendDM(settings, { code: 'json' });
+    else await ctx.send(settings, { code: 'json' });
   }
 }
 

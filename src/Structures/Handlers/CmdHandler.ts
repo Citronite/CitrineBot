@@ -57,6 +57,7 @@ export class CmdHandler {
 
     while (cmd.subcommands) {
       const name = finalArgs[0];
+      if (!name) break;
       const subcmd: Command | undefined = cmd.subcommands.get(name.toLowerCase());
       if (subcmd) {
         cmd = subcmd;
@@ -81,6 +82,7 @@ export class CmdHandler {
       if (!finalArgs.length) break;
       if (!cmd.subcommands) break;
       const name = finalArgs[0];
+      if (!name) break;
       cmd = cmd.subcommands.get(name.toLowerCase());
       if (!cmd) break;
     } while (finalArgs.shift());
