@@ -28,7 +28,7 @@ export class SubCommand extends Command {
     }	else if (cmd instanceof SubCommand) {
       this.base = cmd.base;
     } else {
-      throw new Error('Base commands must be instance of BaseCommand!');
+      throw new Error('Base commands must be instances of BaseCommand!');
     }
   }
 

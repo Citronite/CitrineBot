@@ -1,11 +1,10 @@
 import { Collection } from 'discord.js';
 import { CommandOptions } from 'typings';
 
-function validateCommandOptions(options: any): CommandOptions {
+function validateCommandOptions(options: any): void {
   if (!options) throw new Error('Invalid CommandOptions provided!');
   if (!options.name) throw new Error('Invalid command name provided!');
-  if (!options.description) options.description = 'No description provided';
-  return options;
+  if (!options.description) throw new Error('No description provided!');
 }
 
 export abstract class Command {
@@ -15,7 +14,7 @@ export abstract class Command {
   public readonly usage?: string;
 
   constructor(options: CommandOptions) {
-    options = validateCommandOptions(options);
+    validateCommandOptions(options);
     this.name = options.name;
     this.description = options.description;
     this.usage = options.usage;

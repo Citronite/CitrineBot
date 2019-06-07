@@ -7,7 +7,6 @@ export class BaseCommand extends Command {
 
   constructor(options: CommandOptions) {
     if (!options.chip) throw Error('Please provide the chip name!');
-    if (typeof options.chip !== 'string') throw Error('Invalid chip name provided!');
     super(options);
     this.chip = options.chip;
   }
