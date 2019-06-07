@@ -73,7 +73,7 @@ class ChipsMenu extends AbstractMenu {
   async 1() {
     println('Downloaded Chips:');
     await sleep(200);
-    const chips = fs.readdirSync('./bin/Chips/');
+    const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
     println(chips.join('\n'));
   }
 
@@ -89,7 +89,7 @@ class ChipsMenu extends AbstractMenu {
 
   // Create new Chip
   async 4() {
-    const chips = fs.readdirSync('./bin/Chips/');
+    const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
 
     let chipName = (await input('Please enter the name of your new chip:')).toLowerCase();
     if (chips.includes(chipName)) chipName = false;
@@ -102,36 +102,36 @@ class ChipsMenu extends AbstractMenu {
 
     try {
       println(`Creating path: ./data/${chipName}`);
-      fs.mkdirSync(`./data/${chipName}`);
+      fs.mkdirSync(`${super.CWD}/data/${chipName}`);
 
       println(`Creating path: ./bin/Chips/${chipName}`);
-      fs.mkdirSync(`./bin/Chips/${chipName}`);
+      fs.mkdirSync(`${super.CWD}/bin/Chips/${chipName}`);
 
       println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const metaContent = 'module.exports = {\n\tauthor: "<YOUR NAME>",\n\tdescription: "<DESCRIPTION OF CHIP>",\n};\n';
-      fs.writeFileSync(`./bin/Chips/${chipName}/_meta.js`, metaContent);
+      const metaContent = JSON.stringify({author: '<YOUR NAME>', description: '<DESCRIPTION>'}, null, '  ');
+      fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_meta.json`, metaContent);
 
       println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
       const baseCmdContent = baseCmdTemplate.replace('{{chip}}', chipName);
-      fs.writeFileSync(`./bin/Chips/${chipName}/cmd.js`, baseCmdContent);
+      fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/cmd.js`, baseCmdContent);
 
       println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
-      fs.writeFileSync(`./bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
+      fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
 
       const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
       if (createBranch) {
         try {
           println('Creating branch...');
-          await execute(`git branch ${chipName}`, { cwd: process.cwd() });
+          await execute(`git branch ${chipName}`, { cwd: super.CWD });
           println('Checking out...');
-          await execute(`git checkout ${chipName}`, { cwd: process.cwd() });
+          await execute(`git checkout ${chipName}`, { cwd: super.CWD });
           println('Successful!');
         }
         catch (err) {
           println(err);
         }
       }
-      const p = path.resolve(process.cwd(), './bin/Chips');
+      const p = path.resolve(super.CWD, './bin/Chips');
       open(p);
     }
     catch (err) {

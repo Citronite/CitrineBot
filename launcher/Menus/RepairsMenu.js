@@ -22,16 +22,16 @@ class RepairsMenu extends AbstractMenu {
     try {
       println('\nPlease wait...');
       try {
-        const { stdout, stderr } = await execute('node_modules/.bin/tsc', { cwd: process.cwd() });
+        const { stdout, stderr } = await execute('node_modules/.bin/tsc', { cwd: super.CWD });
         if (stderr) println(stderr);
         if (stdout) println(stdout);
       }
       catch (_) {
-        const { stdout, stderr } = await execute('tsc', { cwd: process.cwd() });
+        const { stdout, stderr } = await execute('tsc', { cwd: super.CWD });
         if (stderr) println(stderr);
         if (stdout) println(stdout);
       }
-      fs.readdirSync('./bin');
+      fs.readdirSync(`${super.CWD}/bin`);
       println('Successfully recompiled code!');
     }
     catch (err) {

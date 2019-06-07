@@ -2,6 +2,7 @@ class AbstractMenu {
   constructor(options) {
     this.title = options.title;
     this.choices = options.choices;
+    super.CWD = `${__dirname}/../..`;
   }
 
   // Execute which option the user chose in the launcher menu
