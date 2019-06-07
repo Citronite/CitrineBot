@@ -24,12 +24,11 @@ import {
 import { Command } from '../Structures/Command/AbstractCommand';
 import { SubCommand } from '../Structures/Command/SubCommand';
 
-function validateContextData(data: any): data is ContextData {
+function validateContextData(data: any): void {
   if (!data) throw new Error('ContextData is required!');
   if (!data.message) throw new Error('ContextData#message is required!');
   if (!data.prefix) throw new Error('ContextData#prefix is required!');
   if (!data.command) throw new Error('ContextData#cmd is required!');
-  return true;
 }
 
 export class Context {
@@ -100,7 +99,7 @@ export class Context {
   }
 
   public lockPerms(perms: PermissionResolvable, options?: LockPermsOptions): void {
-    const { checkDiscordPerms } = this.client.permHandler;
+    const { checkPerms } = this.client.permHandler;
     if (!this.member) {
       throw new Exception(100, 'Permission checks only work on guild members, not users!');
     }
@@ -110,8 +109,8 @@ export class Context {
 
     const checkAdmin = options && options.checkAdmin ? options.checkAdmin : true;
     const checkBot = options && options.checkBot ? options.checkBot : true;
-    checkDiscordPerms(perms, this.member, this.channel, checkAdmin);
-    if (checkBot) checkDiscordPerms(perms, this.guild.me, this.channel, checkAdmin);
+    checkPerms(perms, this.member, this.channel, checkAdmin);
+    if (checkBot) checkPerms(perms, this.guild.me, this.channel, checkAdmin);
   }
 
   public lock(...locks: LockType[]): void {

@@ -31,7 +31,7 @@ export class PermHandler {
     if (errors.length) throw new Exception(code, errors);
   }
 
-  public checkDiscordPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): void {
+  public checkPerms(perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin: boolean = true): void {
     const memberPerms = channel.memberPermissions(member);
     if (!memberPerms) throw new Exception(ErrCode.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
 
