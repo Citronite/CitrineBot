@@ -11,7 +11,7 @@ class Ping extends BaseCommand {
   }
 
   async execute(ctx) {
-    await ctx.send(`🏓 **Pong!**\n${Math.floor(ctx.client.ping)}ms`);
+    await ctx.send(`🏓 **Pong!** ${Math.floor(ctx.client.ping)}ms`);
   }
 }
 
