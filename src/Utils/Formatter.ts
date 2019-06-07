@@ -94,12 +94,12 @@ export class Formatter {
         descrips.push(val.description);
       }
 
-      const max: number = names.reduce((acc, cur) => acc > cur.length ? acc : cur.length, 0);
+      const max = names.reduce((acc, cur) => acc > cur.length ? acc : cur.length, 0);
       for (let x = 0; x < names.length; x++) {
-        const paddedName = names[x].padEnd(max + 2);
-        const sliceLength = (maxWidth - (max + 2)) - 3;
+        const paddedName = names[x].padEnd(max + 1);
+        const sliceLength = (maxWidth - (max + 1)) - 3;
         const slicedDescrip = descrips[x].length >= max ? `${descrips[x].slice(0, sliceLength)}...` : descrips[x];
-        const str: string = paddedName + slicedDescrip;
+        const str = paddedName + slicedDescrip;
         final.push(str);
       }
       subcommands = useCodeBlocks ? `\`\`\`\n${final.join('\n')}\n\`\`\`` : final.join('\n');
