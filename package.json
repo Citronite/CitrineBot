@@ -8,6 +8,9 @@
     "launcher": "node ./launcher/main.js",
     "citrine": "node ./bin/citrine.js"
   },
+  "engines": {
+    "node": ">=10.1.0"
+  },
   "keywords": [
     "discord",
     "discord.js",
@@ -20,9 +23,6 @@
   ],
   "author": "Quantomistro3178",
   "license": "ISC",
-  "devDependencies": {
-    "tslint-config-fire": "^1.0.1"
-  },
   "dependencies": {
     "typescript": "^3.3.3",
     "@types/keyv": "^3.1.0",
@@ -31,5 +31,9 @@
     "discord.js": "^11.4.2",
     "keyv": "^3.1.0",
     "winston": "^3.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Quantomistro3178/CitrineBot"
   }
 }
