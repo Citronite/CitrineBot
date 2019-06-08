@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "launcher": "node ./launcher/main.js",
-    "citrine": "node ./bin/citrine.js"
+    "citrine": "node ./bin/citrine.js",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix"
   },
   "engines": {
     "node": ">=10.1.0"
@@ -23,6 +25,10 @@
   ],
   "author": "Quantomistro3178",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Quantomistro3178/CitrineBot/issues"
+  },
+  "homepage": "https://github.com/Quantomistro3178/CitrineBot#README",
   "peerDependencies": {
     "@types/keyv": "^3.1.0",
     "@keyv/sqlite": "^2.0.0",
