@@ -128,10 +128,6 @@ declare module 'typings' {
     //TODO
   }
 
-  /*
-    cmdHandler, permHandler, utils must *extend* the current ones.
-    The others (logger, db) must expose the same API as the current ones.
-  */
   export interface CitrineOptions extends ClientOptions {
     defaultChips?: string[];
     utils?: new () => IUtils;
@@ -150,7 +146,6 @@ declare module 'typings' {
   // export type RawExceptionObject = { type: string | number, msg: string | string[] };
   export type RawException = string | number | RawExceptionArray | /* RawExceptionObject | */ Error;
   export type LockType = 'nsfw' | 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean;
-  
   export type LockPermsOptions = {
     checkAdmin?: boolean,
     checkBot?: boolean
