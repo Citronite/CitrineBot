@@ -1,6 +1,4 @@
-// import * as winston from 'winston';
-
-export class CitrineLogger {
+export class ConsoleLogger {
   public info(...args: any[]): void {
     console.log(...args);
   }

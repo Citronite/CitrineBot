@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
-import { Memory } from '../DBDrivers/Memory';
+import { Memory } from './DbDrivers/Memory';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
 import { BaseCommand } from './Command/BaseCommand';
 import { CitrineUtils } from './Citrine/CitrineUtils';
-import { CitrineLogger } from './Citrine/CitrineLogger';
+import { ConsoleLogger } from './Loggers/Console';
 import { CitrineSettings } from './Citrine/CitrineSettings';
 import { Client, Collection } from 'discord.js';
 import {
@@ -41,7 +41,7 @@ export class CitrineClient extends Client {
 
     this.db = options && options.dbDriver ? new options.dbDriver() : new Memory();
     this.utils = options && options.utils ? new options.utils() : new CitrineUtils();
-    this.logger = options && options.logger ? new options.logger() : new CitrineLogger();
+    this.logger = options && options.logger ? new options.logger() : new ConsoleLogger();
     this.cmdHandler = options && options.cmdHandler ? new options.cmdHandler() : new CmdHandler();
     this.permHandler = options && options.permHandler ? new options.permHandler() : new PermHandler();
     this.defaultChips = new Set(['core']);
