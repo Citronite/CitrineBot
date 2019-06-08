@@ -1,9 +1,9 @@
 import { CitrineClient } from '../CitrineClient';
-import { GlobalConfig } from 'typings';
+import { IGlobalConfig } from 'typings';
 
 export class CitrineSettings {
   public readonly client: CitrineClient;
-  private data: GlobalConfig;
+  private data: IGlobalConfig;
 
   constructor(client: CitrineClient) {
     this.client = client;

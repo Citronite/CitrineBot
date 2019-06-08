@@ -1,10 +1,10 @@
 import { Guild } from 'discord.js';
+import { CitrineClient } from '../Structures/CitrineClient';
 import {
   ChannelID,
   RoleID,
   UserID
 } from 'typings';
-import { CitrineClient } from '../Structures/CitrineClient';
 
 export class GuildConfig {
   private readonly data: any;
@@ -17,7 +17,7 @@ export class GuildConfig {
         prefix: client.settings.globalPrefix,
         disabledRole: '',
         deleteCmdCalls: false,
-        deleteCmdCallsDelay: 2000,
+        deleteCmdCallsDelay: 5000,
         readMsgEdits: false,
         disabledUsers: new Set(),
         disabledChannels: new Set(),

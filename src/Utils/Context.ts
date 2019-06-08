@@ -2,6 +2,8 @@ import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { Exception } from '../Structures/Exceptions/Exception';
 import { ExceptionMessages } from '../Structures/Exceptions/ExceptionMessages';
+import { Command } from '../Structures/Command/AbstractCommand';
+import { SubCommand } from '../Structures/Command/SubCommand';
 import {
   LockType,
   LockPermsOptions,
@@ -10,6 +12,7 @@ import {
   Reaction,
   ContextData
 } from 'typings';
+
 import {
   Message,
   User,
@@ -21,8 +24,6 @@ import {
   GuildMember,
   Guild
 } from 'discord.js';
-import { Command } from '../Structures/Command/AbstractCommand';
-import { SubCommand } from '../Structures/Command/SubCommand';
 
 function validateContextData(data: any): void {
   if (!data) throw new Error('ContextData is required!');
