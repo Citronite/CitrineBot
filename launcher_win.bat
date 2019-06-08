@@ -4,6 +4,5 @@ rem But eventually, it will also check if node is on path
 
 cls
 title Citrine Launcher
-echo Starting launcher...
-node ./launcher/main.js
+node  "%~dp0\launcher\main.js" %*
 pause
