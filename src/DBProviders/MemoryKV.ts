@@ -1,7 +1,7 @@
-import { IDbProvider, IDbConnection } from 'typings';
+import { IDbDriver, IDbConnection } from 'typings';
 import { KeyvWrapper } from './Utils/KeyvWrapper';
 
-export class MemoryKV implements IDbProvider {
+export class MemoryKV implements IDbDriver {
   [key: string]: any;
 
   public connect(name: string): IDbConnection {

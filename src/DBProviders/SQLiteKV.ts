@@ -1,8 +1,8 @@
 import { resolve } from 'path';
-import { IDbProvider, IDbConnection } from 'typings';
+import { IDbDriver, IDbConnection } from 'typings';
 import { KeyvWrapper } from './Utils/KeyvWrapper';
 
-export class SQLiteKV implements IDbProvider {
+export class SQLiteKV implements IDbDriver {
   [key: string]: any;
 
   public connect(name: string, path: string): IDbConnection {

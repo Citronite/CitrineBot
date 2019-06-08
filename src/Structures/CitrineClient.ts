@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
-import { Memory } from '../DBProviders/Memory';
+import { Memory } from '../DBDrivers/Memory';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
 import { BaseCommand } from './Command/BaseCommand';
@@ -10,7 +10,7 @@ import { CitrineSettings } from './Citrine/CitrineSettings';
 import { Client, Collection } from 'discord.js';
 import {
   CitrineOptions,
-  IDbProvider,
+  IDbDriver,
   IUtils,
   ILogger,
   ICmdHandler,
@@ -27,7 +27,7 @@ export class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: ILogger;
   public readonly utils: IUtils;
-  public readonly db: IDbProvider & any;
+  public readonly db: IDbDriver & any;
   public readonly cmdHandler: ICmdHandler;
   public readonly permHandler: IPermHandler;
   public readonly commands: Collection<string, BaseCommand>;
@@ -39,7 +39,7 @@ export class CitrineClient extends Client {
     this.settings = new CitrineSettings(this);
     this.commands = new Collection();
 
-    this.db = options && options.dbProvider ? new options.dbProvider() : new Memory();
+    this.db = options && options.dbDriver ? new options.dbDriver() : new Memory();
     this.utils = options && options.utils ? new options.utils() : new CitrineUtils();
     this.logger = options && options.logger ? new options.logger() : new CitrineLogger();
     this.cmdHandler = options && options.cmdHandler ? new options.cmdHandler() : new CmdHandler();

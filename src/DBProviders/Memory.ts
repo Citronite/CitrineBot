@@ -1,7 +1,7 @@
-import { IDbProvider, IDbConnection } from 'typings';
+import { IDbDriver, IDbConnection } from 'typings';
 import { MapWrapper } from './Utils/MapWrapper';
 
-export class Memory implements IDbProvider {
+export class Memory implements IDbDriver {
   [key: string]: any;
 
   public connect(name: string): IDbConnection {

@@ -34,7 +34,7 @@ declare module 'typings' {
     logger: Logger;
     lastException: any;
     defaultChips: Set<string>;
-    db: DbProvider;
+    db: DbDriver;
     settings: 
   }
   */
@@ -107,7 +107,7 @@ declare module 'typings' {
     delete: (...args: any[]) => any;
   }
 
-  export interface IDbProvider {
+  export interface IDbDriver {
     connect: (...options: any[]) => IDbConnection;
     disconnect: (...args: any[]) => any;
   }
@@ -132,7 +132,7 @@ declare module 'typings' {
     defaultChips?: string[];
     utils?: new () => IUtils;
     logger?: new () => ILogger;
-    dbProvider?: new () => IDbProvider;
+    dbDriver?: new () => IDbDriver;
     cmdHandler?: new () => ICmdHandler;
     permHandler?: new () => IPermHandler;
   }
