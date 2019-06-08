@@ -2,12 +2,12 @@ const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
 const path = require('path');
 const {
-  println,
-  confirm,
-  execute,
-  input,
-  sleep,
-  open,
+    println,
+    confirm,
+    execute,
+    input,
+    sleep,
+    open,
 } = require('../cli.js');
 
 const baseCmdTemplate = `
@@ -55,89 +55,89 @@ module.exports = new Name();
 
 // Allows managing chips through the launcher.
 class ChipsMenu extends AbstractMenu {
-  constructor() {
-    super({
-      title: 'What would you like to do?',
-      choices: [
-        'List downloaded Chips',
-        'Download Chip from GitHub',
-        'Delete Chip',
-        'Create new Chip',
-      ],
-    });
+    constructor() {
+        super({
+            title: 'What would you like to do?',
+            choices: [
+                'List downloaded Chips',
+                'Download Chip from GitHub',
+                'Delete Chip',
+                'Create new Chip',
+            ],
+        });
 
-    this.code = 1;
-  }
-
-  // List downloaded Chips
-  async 1() {
-    println('Downloaded Chips:');
-    await sleep(200);
-    const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
-    println(chips.join('\n'));
-  }
-
-  // Download Chip from GitHub
-  2() {
-    println('This feature is yet to be implemented!');
-  }
-
-  // Delete Chip
-  3() {
-    println('This feature is yet to be implemented!');
-  }
-
-  // Create new Chip
-  async 4() {
-    const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
-
-    let chipName = (await input('Please enter the name of your new chip:')).toLowerCase();
-    if (chips.includes(chipName)) chipName = false;
-    if (/\s|\d/.test(chipName)) chipName = false;
-    while (!chipName) {
-      chipName = (await input('Please enter a valid name:')).toLowerCase();
-      if (chips.includes(chipName)) chipName = false;
-      if (/\s|\d/.test(chipName)) chipName = false;
+        this.code = 1;
     }
 
-    try {
-      println(`Creating path: ./data/${chipName}`);
-      fs.mkdirSync(`${super.CWD}/data/${chipName}`);
+    // List downloaded Chips
+    async 1() {
+        println('Downloaded Chips:');
+        await sleep(200);
+        const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
+        println(chips.join('\n'));
+    }
 
-      println(`Creating path: ./bin/Chips/${chipName}`);
-      fs.mkdirSync(`${super.CWD}/bin/Chips/${chipName}`);
+    // Download Chip from GitHub
+    2() {
+        println('This feature is yet to be implemented!');
+    }
 
-      println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const metaContent = JSON.stringify({author: '<YOUR NAME>', description: '<DESCRIPTION>'}, null, '  ');
-      fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_meta.json`, metaContent);
+    // Delete Chip
+    3() {
+        println('This feature is yet to be implemented!');
+    }
 
-      println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
-      const baseCmdContent = baseCmdTemplate.replace('{{chip}}', chipName);
-      fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/cmd.js`, baseCmdContent);
+    // Create new Chip
+    async 4() {
+        const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
 
-      println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
-      fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
+        let chipName = (await input('Please enter the name of your new chip:')).toLowerCase();
+        if (chips.includes(chipName)) chipName = false;
+        if (/\s|\d/.test(chipName)) chipName = false;
+        while (!chipName) {
+            chipName = (await input('Please enter a valid name:')).toLowerCase();
+            if (chips.includes(chipName)) chipName = false;
+            if (/\s|\d/.test(chipName)) chipName = false;
+        }
 
-      const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
-      if (createBranch) {
         try {
-          println('Creating branch...');
-          await execute(`git branch ${chipName}`, { cwd: super.CWD });
-          println('Checking out...');
-          await execute(`git checkout ${chipName}`, { cwd: super.CWD });
-          println('Successful!');
+            println(`Creating path: ./data/${chipName}`);
+            fs.mkdirSync(`${super.CWD}/data/${chipName}`);
+
+            println(`Creating path: ./bin/Chips/${chipName}`);
+            fs.mkdirSync(`${super.CWD}/bin/Chips/${chipName}`);
+
+            println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
+            const metaContent = JSON.stringify({author: '<YOUR NAME>', description: '<DESCRIPTION>'}, null, '  ');
+            fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_meta.json`, metaContent);
+
+            println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
+            const baseCmdContent = baseCmdTemplate.replace('{{chip}}', chipName);
+            fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/cmd.js`, baseCmdContent);
+
+            println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
+            fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
+
+            const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
+            if (createBranch) {
+                try {
+                    println('Creating branch...');
+                    await execute(`git branch ${chipName}`, { cwd: super.CWD });
+                    println('Checking out...');
+                    await execute(`git checkout ${chipName}`, { cwd: super.CWD });
+                    println('Successful!');
+                }
+                catch (err) {
+                    println(err);
+                }
+            }
+            const p = path.resolve(super.CWD, './bin/Chips');
+            open(p);
         }
         catch (err) {
-          println(err);
+            println(err);
         }
-      }
-      const p = path.resolve(super.CWD, './bin/Chips');
-      open(p);
     }
-    catch (err) {
-      println(err);
-    }
-  }
 }
 
 module.exports = ChipsMenu;

@@ -16,21 +16,21 @@ import { CitrineOptions } from 'typings';
 */
 
 const options: CitrineOptions = {
-  disableEveryone: true,
-  disabledEvents: ['TYPING_START'],
-  defaultChips: ['utils'],
+    disableEveryone: true,
+    disabledEvents: ['TYPING_START'],
+    defaultChips: ['utils'],
 };
 
 const citrine = new CitrineClient(options);
 
 (async function main() {
-  try {
-    citrine.initChips();
-    citrine.initEvents();
-    await citrine.launch();
-  } catch (_) {
-    process.exit(1);
-  }
+    try {
+        citrine.initChips();
+        citrine.initEvents();
+        await citrine.launch();
+    } catch (_) {
+        process.exit(1);
+    }
 })();
 
 process.on('uncaughtException', citrine.logger.error);

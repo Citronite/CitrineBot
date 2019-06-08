@@ -6,10 +6,10 @@ import { ExceptionMessages } from './Structures/Exceptions/ExceptionMessages';
 import { QuickEmbed } from './Utils/QuickEmbed';
 
 module.exports = {
-  BaseCommand,
-  SubCommand,
-  Exception,
-  ExceptionCodes,
-  ExceptionMessages,
-  QuickEmbed,
+    BaseCommand,
+    SubCommand,
+    Exception,
+    ExceptionCodes,
+    ExceptionMessages,
+    QuickEmbed,
 };

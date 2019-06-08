@@ -5,10 +5,10 @@ const RepairsMenu = require('./RepairsMenu.js');
 const GuidesMenu = require('./GuidesMenu.js');
 const CreditsMenu = require('./CreditsMenu.js');
 const {
-  cls,
-  println,
-  printMenu,
-  sleep,
+    cls,
+    println,
+    printMenu,
+    sleep,
 } = require('../cli.js');
 
 const Chips = new ChipsMenu();
@@ -17,52 +17,52 @@ const Guides = new GuidesMenu();
 const Credits = new CreditsMenu();
 
 class HomeMenu extends AbstractMenu {
-  constructor() {
-    super({
-      title: 'Welcome to the Citrine Launcher! What would you like to do?',
-      choices: [
-        'Launch Citrine',
-        'Manage Chips',
-        'Repairs / Maintenance',
-        'View Guides / Documentations',
-        'View Credits / License',
-      ],
-    });
-    this.code = 0;
-  }
-
-  async 1() {
-    cls(0, 0);
-    await sleep(200);
-    println('Launching Citrine. . .');
-    try {
-      const options = {
-        cwd: super.CWD,
-        shell: true,
-        stdio: 'inherit',
-      };
-      await spawnSync('node', ['./bin/citrine.js'], options);
+    constructor() {
+        super({
+            title: 'Welcome to the Citrine Launcher! What would you like to do?',
+            choices: [
+                'Launch Citrine',
+                'Manage Chips',
+                'Repairs / Maintenance',
+                'View Guides / Documentations',
+                'View Credits / License',
+            ],
+        });
+        this.code = 0;
     }
-    catch (err) {
-      println(err);
+
+    async 1() {
+        cls(0, 0);
+        await sleep(200);
+        println('Launching Citrine. . .');
+        try {
+            const options = {
+                cwd: super.CWD,
+                shell: true,
+                stdio: 'inherit',
+            };
+            await spawnSync('node', ['./bin/citrine.js'], options);
+        }
+        catch (err) {
+            println(err);
+        }
     }
-  }
 
-  2() {
-    printMenu(Chips);
-  }
+    2() {
+        printMenu(Chips);
+    }
 
-  3() {
-    printMenu(Repairs);
-  }
+    3() {
+        printMenu(Repairs);
+    }
 
-  4() {
-    printMenu(Guides);
-  }
+    4() {
+        printMenu(Guides);
+    }
 
-  5() {
-    printMenu(Credits);
-  }
+    5() {
+        printMenu(Credits);
+    }
 }
 
 module.exports = HomeMenu;

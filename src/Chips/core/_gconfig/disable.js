@@ -1,32 +1,32 @@
 const { SubCommand } = require('../../../exports');
 
 class DisableGuild extends SubCommand {
-  constructor() {
-    super({
-      name: 'guild',
-      description: 'Globally disable guilds from using this bot.',
-      usage: '[p]gconfig disable user [...UserID/@User]'
-    });
-  }
+    constructor() {
+        super({
+            name: 'guild',
+            description: 'Globally disable guilds from using this bot.',
+            usage: '[p]gconfig disable user [...UserID/@User]'
+        });
+    }
 }
 
 class DisableUser extends SubCommand {
-  constructor() {
-    super({
-      name: 'user',
-      description: 'Globally disable users from using this bot.',
-      usage: '[p]gconfig disable user [...UserID/@User]'
-    });
-  }
+    constructor() {
+        super({
+            name: 'user',
+            description: 'Globally disable users from using this bot.',
+            usage: '[p]gconfig disable user [...UserID/@User]'
+        });
+    }
 }
 
 class DisableCmd extends SubCommand {
     constructor() {
-      super({
-        name: 'cmd',
-        description: 'Globally disable commands. Only base commands may be disabled. Commands from the `core` chip cannot be disabled.',
-        usage: '[p]gconfig disable cmd [...commands]'
-      });
+        super({
+            name: 'cmd',
+            description: 'Globally disable commands. Only base commands may be disabled. Commands from the `core` chip cannot be disabled.',
+            usage: '[p]gconfig disable cmd [...commands]'
+        });
     }
   
     async execute(ctx, ...cmds) {
@@ -65,11 +65,11 @@ class DisableCmd extends SubCommand {
 
 class Disable extends SubCommand {
     constructor() {
-      super({
-        name: 'disable',
-        description: 'Disable guilds/users/commands globally.',
-        usage: '[p]gconfig disable <"guild" | "user" | "cmd">'
-      });
+        super({
+            name: 'disable',
+            description: 'Disable guilds/users/commands globally.',
+            usage: '[p]gconfig disable <"guild" | "user" | "cmd">'
+        });
     }
 }
 

@@ -2,11 +2,11 @@ const { SubCommand } = require('../../../exports');
 
 class Verbose extends SubCommand {
     constructor() {
-      super({
-        name: 'verbose',
-        description: 'View or toggle verbose mode setting.',
-        usage: '[p]gconfig verbose ["on" | "off"]'
-      });
+        super({
+            name: 'verbose',
+            description: 'View or toggle verbose mode setting.',
+            usage: '[p]gconfig verbose ["on" | "off"]'
+        });
     }
   
     async execute(ctx, choice) {
