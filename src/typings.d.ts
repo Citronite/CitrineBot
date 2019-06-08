@@ -39,30 +39,30 @@ declare module 'typings' {
   }
   */
 
-  interface Command {
+  interface ICommand {
     name: string;
     description: string;
     usage?: string;
     execute: (...args: any[]) => Promise<void>;
-    registerSubCommands: (...args: Command[]) => this;
+    registerSubCommands: (...args: ICommand[]) => this;
   }
 
-  interface BaseCommand extends Command {
+  interface IBaseCommand extends ICommand {
     chip: string;
   }
 
-  interface SubCommand extends Command {
-    setParent: (cmd: Command) => void;
-    getParent: () => Command | null;
-    setBase: (cmd: BaseCommand) => void;
-    getBase: () => BaseCommand | null;
+  interface ISubCommand extends ICommand {
+    setParent: (cmd: ICommand) => void;
+    getParent: () => ICommand | null;
+    setBase: (cmd: IBaseCommand) => void;
+    getBase: () => IBaseCommand | null;
   }
 
   export interface ICmdHandler {
     checkPrefix: (message: any, config?: any) => string | null;
     getArgs: (message: any, prefix: string, parseQuotes?: boolean) => string[] | null;
-    getBaseCmd: (message: any, args: string[]) => [Command, string[]] | null;
-    getFinalCmd: (message: Message, args: string[]) => [Command, string[]] | null;
+    getBaseCmd: (message: any, args: string[]) => [ICommand, string[]] | null;
+    getFinalCmd: (message: Message, args: string[]) => [ICommand, string[]] | null;
     processCommand: (message: any, config?: any) => Promise<void>;
   }
 
@@ -74,7 +74,7 @@ declare module 'typings' {
     checkBotDev: (user: User | GuildMember) => void;
   }
 
-  export interface DjsUtils {
+  export interface IDjsUtils {
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
     resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
@@ -83,36 +83,36 @@ declare module 'typings' {
     resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
   }
 
-  export interface Formatter {
+  export interface IFormatter {
     inline: (str: string | string[]) => string | string[];
     block: (str: string | string[], lang?: string) => string | string[];
     cmdHelp(cmd: any, options: any): object;
   }
 
-  export interface Utils {
-    djs: DjsUtils;
-    format: Formatter;
+  export interface IUtils {
+    djs: IDjsUtils;
+    format: IFormatter;
   }
   
-  export interface Logger {
+  export interface ILogger {
     info: (...args: any[]) => void;
     error: (...args: any[]) => void;
     warn: (...args: any[]) => void;
   }
 
-  export interface DbProvider {
-    connect: (...options: any[]) => DbConnection;
-    disconnect: (...args: any[]) => any;
-  }
-
-  export interface DbConnection {
+  export interface IDbConnection {
     create: (...args: any[]) => any;
     read: (...args: any[]) => any;
     update: (...args: any[]) => any;
     delete: (...args: any[]) => any;
   }
 
-  export interface GlobalConfig {
+  export interface IDbProvider {
+    connect: (...options: any[]) => IDbConnection;
+    disconnect: (...args: any[]) => any;
+  }
+
+  export interface IGlobalConfig {
     owner: UserID;
     globalPrefix: string;
     verbose: boolean;
@@ -124,7 +124,7 @@ declare module 'typings' {
     aliases: { [cmd: string]: string[] };
   }
 
-  export interface GuildConfig {
+  export interface IGuildConfig {
     //TODO
   }
 
@@ -134,9 +134,9 @@ declare module 'typings' {
   */
   export interface CitrineOptions extends ClientOptions {
     defaultChips?: string[];
-    utils?: new () => Utils;
-    logger?: new () => Logger;
-    dbProvider?: new () => DbProvider;
+    utils?: new () => IUtils;
+    logger?: new () => ILogger;
+    dbProvider?: new () => IDbProvider;
     cmdHandler?: new () => ICmdHandler;
     permHandler?: new () => IPermHandler;
   }
@@ -183,7 +183,7 @@ declare module 'typings' {
   export type ContextData = {
     message: Message,
     prefix: string,
-    command: Command,
-    subcommand?: SubCommand
+    command: ICommand,
+    subcommand?: ISubCommand
   }
 }
