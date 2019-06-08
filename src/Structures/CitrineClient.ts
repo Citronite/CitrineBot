@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
+import { Memory } from '../DBProviders/Memory';
 import { CmdHandler } from './Handlers/CmdHandler';
 import { PermHandler } from './Handlers/PermHandler';
-import { MemoryKV } from '../DBProviders/MemoryKV';
 import { BaseCommand } from './Command/BaseCommand';
 import { CitrineUtils } from './Citrine/CitrineUtils';
 import { CitrineLogger } from './Citrine/CitrineLogger';
@@ -10,9 +10,9 @@ import { CitrineSettings } from './Citrine/CitrineSettings';
 import { Client, Collection } from 'discord.js';
 import {
   CitrineOptions,
-  DbProvider,
-  Utils,
-  Logger,
+  IDbProvider,
+  IUtils,
+  ILogger,
   ICmdHandler,
   IPermHandler
 } from 'typings';
@@ -25,9 +25,9 @@ function fileFilter(arr: string[]): string[] {
 
 export class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
-  public readonly logger: Logger;
-  public readonly utils: Utils;
-  public readonly db: DbProvider & any;
+  public readonly logger: ILogger;
+  public readonly utils: IUtils;
+  public readonly db: IDbProvider & any;
   public readonly cmdHandler: ICmdHandler;
   public readonly permHandler: IPermHandler;
   public readonly commands: Collection<string, BaseCommand>;
@@ -39,7 +39,7 @@ export class CitrineClient extends Client {
     this.settings = new CitrineSettings(this);
     this.commands = new Collection();
 
-    this.db = options && options.dbProvider ? new options.dbProvider() : new MemoryKV();
+    this.db = options && options.dbProvider ? new options.dbProvider() : new Memory();
     this.utils = options && options.utils ? new options.utils() : new CitrineUtils();
     this.logger = options && options.logger ? new options.logger() : new CitrineLogger();
     this.cmdHandler = options && options.cmdHandler ? new options.cmdHandler() : new CmdHandler();

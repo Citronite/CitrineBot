@@ -18,7 +18,7 @@ import { CitrineOptions } from 'typings';
 const options: CitrineOptions = {
   disableEveryone: true,
   disabledEvents: ['TYPING_START'],
-  defaultChips: ['utils']
+  defaultChips: ['utils'],
 };
 
 const citrine = new CitrineClient(options);

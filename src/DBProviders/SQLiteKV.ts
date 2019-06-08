@@ -1,11 +1,11 @@
 import { resolve } from 'path';
-import { DbProvider, DbConnection } from 'typings';
+import { IDbProvider, IDbConnection } from 'typings';
 import { KeyvWrapper } from './Utils/KeyvWrapper';
 
-export class SQLiteKV implements DbProvider {
+export class SQLiteKV implements IDbProvider {
   [key: string]: any;
 
-  public connect(name: string, path: string): DbConnection {
+  public connect(name: string, path: string): IDbConnection {
     try {
       this[name] = new KeyvWrapper(`sqlite://${resolve(path)}`);
       return this[name];
