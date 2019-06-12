@@ -1,7 +1,7 @@
-# Dependencies
+# deps
 node_modules/*
 
-# tsc outDir
+# outdir
 bin/*
 
 # extras
