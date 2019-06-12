@@ -16,25 +16,25 @@ import { ICitrineOptions } from 'typings';
  */
 
 const options: ICitrineOptions = {
-    disableEveryone: true,
-    disabledEvents: ['TYPING_START'],
-    defaultChips: ['utils']
+  disableEveryone: true,
+  disabledEvents: ['TYPING_START'],
+  defaultChips: ['utils']
 };
 
 const citrine = new CitrineClient(options);
 
 (async function main() {
-    try {
-        citrine.initChips();
-        citrine.initEvents();
-        await citrine.launch();
-    } catch (_) {
-        process.exit(1);
-    }
+  try {
+    citrine.initChips();
+    citrine.initEvents();
+    await citrine.launch();
+  } catch (_) {
+    process.exit(1);
+  }
 })();
 
 process.on('uncaughtException', citrine.logger.error);
 process.on('unhandledRejection', citrine.logger.error);
 process.on('exit', code =>
-    citrine.logger.warn(`Process exited with code ${code}`)
+  citrine.logger.warn(`Process exited with code ${code}`)
 );

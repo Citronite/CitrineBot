@@ -15,52 +15,51 @@ const Credits = new CreditsMenu();
 const root = resolve(`${__dirname}/../../`);
 
 class HomeMenu extends AbstractMenu {
-    constructor() {
-        super({
-            title:
-                'Welcome to the Citrine Launcher! What would you like to do?',
-            choices: [
-                'Launch Citrine',
-                'Manage Chips',
-                'Repairs / Maintenance',
-                'View Guides / Documentations',
-                'View Credits / License'
-            ]
-        });
-        this.code = 0;
-    }
+  constructor() {
+    super({
+      title: 'Welcome to the Citrine Launcher! What would you like to do?',
+      choices: [
+        'Launch Citrine',
+        'Manage Chips',
+        'Repairs / Maintenance',
+        'View Guides / Documentations',
+        'View Credits / License'
+      ]
+    });
+    this.code = 0;
+  }
 
-    async 1() {
-        cls(0, 0);
-        await sleep(200);
-        println('Launching Citrine. . .');
-        try {
-            const options = {
-                cwd: root,
-                shell: true,
-                stdio: 'inherit'
-            };
-            await spawnSync('node', [`${root}/bin/citrine.js`], options);
-        } catch (err) {
-            println(err);
-        }
+  async 1() {
+    cls(0, 0);
+    await sleep(200);
+    println('Launching Citrine. . .');
+    try {
+      const options = {
+        cwd: root,
+        shell: true,
+        stdio: 'inherit'
+      };
+      await spawnSync('node', [`${root}/bin/citrine.js`], options);
+    } catch (err) {
+      println(err);
     }
+  }
 
-    2() {
-        printMenu(Chips);
-    }
+  2() {
+    printMenu(Chips);
+  }
 
-    3() {
-        printMenu(Repairs);
-    }
+  3() {
+    printMenu(Repairs);
+  }
 
-    4() {
-        printMenu(Guides);
-    }
+  4() {
+    printMenu(Guides);
+  }
 
-    5() {
-        printMenu(Credits);
-    }
+  5() {
+    printMenu(Credits);
+  }
 }
 
 module.exports = HomeMenu;
