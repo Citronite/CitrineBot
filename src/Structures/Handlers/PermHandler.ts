@@ -50,16 +50,15 @@ export class PermHandler implements IPermHandler {
                 `Member permissions not found (id: ${member.id})`
             );
 
-        const missing = memberPerms.missing(perms, checkAdmin);
-        if (!missing) return;
+        const missing = new Permissions(memberPerms.missing(perms, checkAdmin)).toArray();
+        if (!missing || !missing.length) return;
 
-        const missingFlags = new Permissions(missing).toArray(checkAdmin);
         const { MISSING_BOT_PERMS, MISSING_MEMBER_PERMS } = ExceptionCodes;
         const code =
             channel.client.user.id === member.id
                 ? MISSING_BOT_PERMS
                 : MISSING_MEMBER_PERMS;
-        throw new Exception(code, missingFlags);
+        throw new Exception(code, missing);
     }
 
     public checkGuildOwner(guild: Guild, user: User | GuildMember): void {
