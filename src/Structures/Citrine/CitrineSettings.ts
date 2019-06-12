@@ -8,7 +8,6 @@ export class CitrineSettings {
     public constructor(client: CitrineClient) {
         this.client = client;
         this.data = {
-            id: client.user.id,
             owner: 'DEFAULT',
             globalPrefix: 'DEFAULT',
             verbose: true,

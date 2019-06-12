@@ -138,7 +138,6 @@ declare module 'typings' {
     }
 
     export interface IGlobalConfig {
-        id: string;
         owner: UserID;
         globalPrefix: string;
         verbose: boolean;
