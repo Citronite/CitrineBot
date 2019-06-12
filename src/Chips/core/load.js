@@ -1,6 +1,7 @@
 const { BaseCommand } = require('../../exports');
 const { promisify } = require('util');
 const { readdir } = require('fs');
+const { resolve } = require('path');
 
 const readdirAsync = promisify(readdir);
 const root = resolve(`${__dirname}/../../../`);

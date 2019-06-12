@@ -1,5 +1,6 @@
 const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
+const { resolve } = require('path');
 const { println, confirm, execute, input, sleep, open } = require('../cli.js');
 
 const baseCmdTemplate = `
