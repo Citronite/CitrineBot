@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { resolve } = require('path');
 const HomeMenu = require('./Menus/HomeMenu.js');
 const package = require('../package.json');
 const {
@@ -14,7 +15,7 @@ const {
 } = require('./cli.js');
 
 const Home = new HomeMenu();
-const CWD = `${__dirname}/../`;
+const root = resolve(`${__dirname}/../`);
 
 // Exit the launcher.
 function exit(code = 0) {
@@ -63,7 +64,7 @@ async function installDeps() {
 
         const { stdout, stderr } = await execute(
             'npm install --only=production',
-            { cwd: CWD }
+            { cwd: root }
         );
         if (stdout) println(stdout);
         if (stderr) println(stderr);
@@ -89,18 +90,18 @@ async function compileCitrine() {
         println('\nPlease wait...');
         try {
             const { stdout, stderr } = await execute('node_modules/.bin/tsc', {
-                cwd: CWD
+                cwd: root
             });
             if (stderr) println(stderr);
             if (stdout) println(stdout);
         } catch (_) {
             // In case typescript is installed globally
-            const { stdout, stderr } = await execute('tsc', { cwd: CWD });
+            const { stdout, stderr } = await execute('tsc', { cwd: root });
             if (stderr) println(stderr);
             if (stdout) println(stdout);
         }
         // Check if it exists
-        fs.readdirSync(`${CWD}/bin`);
+        fs.readdirSync(`${root}/bin`);
         println('Successfully recompiled code!');
         return true;
     } catch (err) {
@@ -119,7 +120,7 @@ async function compileCitrine() {
 async function createDataFiles(TOKEN, initialPrefix) {
     try {
         // Create data directory
-        const data = `${CWD}/data`;
+        const data = `${root}/data`;
         println('Creating path: data/core');
         fs.mkdirSync(`${data}/core`, { recursive: true });
 
@@ -202,7 +203,7 @@ async function startLauncher() {
     }
 
     // Kinda hacky but oh well :P
-    const dir = fs.readdirSync(CWD);
+    const dir = fs.readdirSync(root);
     const firstRun =
         !dir.includes('data') &&
         !dir.includes('bin') &&
@@ -243,9 +244,9 @@ async function startLauncher() {
                     'echo --------------\n' +
                     'echo %DATE%' +
                     'echo --------------\n' +
-                    `node ${CWD}/bin/citrine.js\n` +
+                    `node ${root}/bin/citrine.js\n` +
                     'pause\n';
-                fs.writeFileSync(`${CWD}/start_citrine.bat`, content);
+                fs.writeFileSync(`${root}/start_citrine.bat`, content);
             } else if (platform === 'linux') {
                 if (dir.includes('start_citrine.sh')) return;
 
@@ -257,9 +258,9 @@ async function startLauncher() {
                     'echo -----------------------------\n' +
                     'date\n' +
                     'echo -----------------------------\n' +
-                    `node ${CWD}/bin/citrine.js\n` +
+                    `node ${root}/bin/citrine.js\n` +
                     'read -n1 -r -p "Press any key to continue..."\n';
-                fs.writeFileSync(`${CWD}/start_citrine.sh`, content);
+                fs.writeFileSync(`${root}/start_citrine.sh`, content);
             } else {
                 println(
                     'Unsupported platform!\n' +

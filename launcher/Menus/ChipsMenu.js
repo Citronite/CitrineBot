@@ -66,7 +66,7 @@ class ChipsMenu extends AbstractMenu {
     async 1() {
         println('Downloaded Chips:');
         await sleep(200);
-        const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
+        const chips = fs.readdirSync(`${super.root}/bin/Chips/`);
         println(chips.join('\n'));
     }
 
@@ -82,7 +82,7 @@ class ChipsMenu extends AbstractMenu {
 
     // Create new Chip
     async 4() {
-        const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
+        const chips = fs.readdirSync(`${super.root}/bin/Chips/`);
 
         let chipName = (await input(
             'Please enter the name of your new chip:'
@@ -99,10 +99,10 @@ class ChipsMenu extends AbstractMenu {
 
         try {
             println(`Creating path: ./data/${chipName}`);
-            fs.mkdirSync(`${super.CWD}/data/${chipName}`);
+            fs.mkdirSync(`${super.root}/data/${chipName}`);
 
             println(`Creating path: ./bin/Chips/${chipName}`);
-            fs.mkdirSync(`${super.CWD}/bin/Chips/${chipName}`);
+            fs.mkdirSync(`${super.root}/bin/Chips/${chipName}`);
 
             println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
             const metaContent = JSON.stringify(
@@ -111,7 +111,7 @@ class ChipsMenu extends AbstractMenu {
                 '  '
             );
             fs.writeFileSync(
-                `${super.CWD}/bin/Chips/${chipName}/_meta.json`,
+                `${super.root}/bin/Chips/${chipName}/_meta.json`,
                 metaContent
             );
 
@@ -121,13 +121,13 @@ class ChipsMenu extends AbstractMenu {
                 chipName
             );
             fs.writeFileSync(
-                `${super.CWD}/bin/Chips/${chipName}/cmd.js`,
+                `${super.root}/bin/Chips/${chipName}/cmd.js`,
                 baseCmdContent
             );
 
             println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
             fs.writeFileSync(
-                `${super.CWD}/bin/Chips/${chipName}/_subcmd.js`,
+                `${super.root}/bin/Chips/${chipName}/_subcmd.js`,
                 subCmdTemplate
             );
 
@@ -137,17 +137,17 @@ class ChipsMenu extends AbstractMenu {
             if (createBranch) {
                 try {
                     println('Creating branch...');
-                    await execute(`git branch ${chipName}`, { cwd: super.CWD });
+                    await execute(`git branch ${chipName}`, { cwd: super.root });
                     println('Checking out...');
                     await execute(`git checkout ${chipName}`, {
-                        cwd: super.CWD
+                        cwd: super.root
                     });
                     println('Successful!');
                 } catch (err) {
                     println(err);
                 }
             }
-            const p = path.resolve(super.CWD, './bin/Chips');
+            const p = path.resolve(super.root, './bin/Chips');
             open(p);
         } catch (err) {
             println(err);

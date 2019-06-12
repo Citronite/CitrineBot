@@ -24,18 +24,18 @@ class RepairsMenu extends AbstractMenu {
             try {
                 const { stdout, stderr } = await execute(
                     'node_modules/.bin/tsc',
-                    { cwd: super.CWD }
+                    { cwd: super.root }
                 );
                 if (stderr) println(stderr);
                 if (stdout) println(stdout);
             } catch (_) {
                 const { stdout, stderr } = await execute('tsc', {
-                    cwd: super.CWD
+                    cwd: super.root
                 });
                 if (stderr) println(stderr);
                 if (stdout) println(stdout);
             }
-            fs.readdirSync(`${super.CWD}/bin`);
+            fs.readdirSync(`${super.root}/bin`);
             println('Successfully recompiled code!');
         } catch (err) {
             println('Uh-oh! An unknown error occurred while compiling code!');

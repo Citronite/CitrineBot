@@ -33,7 +33,7 @@ class HomeMenu extends AbstractMenu {
         println('Launching Citrine. . .');
         try {
             const options = {
-                cwd: super.CWD,
+                cwd: super.root,
                 shell: true,
                 stdio: 'inherit'
             };
