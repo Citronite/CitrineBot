@@ -5,7 +5,10 @@ import { Exception } from '../Structures/Exceptions/Exception';
 
 module.exports = {
     name: 'message',
-    listener: async (client: CitrineClient, message: Message): Promise<void> => {
+    listener: async (
+        client: CitrineClient,
+        message: Message
+    ): Promise<void> => {
         const { cmdHandler, db } = client;
         let config: GuildConfig | null = null;
         try {

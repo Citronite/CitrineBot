@@ -29,7 +29,7 @@ class TestSubOne extends SubCommand {
     constructor() {
         super({
             name: 'subone',
-            description: 'TestSubOne',
+            description: 'TestSubOne'
         });
     }
 }
@@ -38,7 +38,7 @@ class TestSubTwo extends SubCommand {
     constructor() {
         super({
             name: 'subtwo',
-            description: 'TestSubTwo',
+            description: 'TestSubTwo'
         });
     }
     async execute(ctx, arg, arg2) {
@@ -58,5 +58,8 @@ class Test extends BaseCommand {
 }
 
 const testSubTwo = new TestSubTwo();
-const testSubOne = new TestSubOne().registerSubCommands(new TestSubOneA(), new TestSubOneB());
+const testSubOne = new TestSubOne().registerSubCommands(
+    new TestSubOneA(),
+    new TestSubOneB()
+);
 module.exports = new Test().registerSubCommands(testSubOne, testSubTwo);

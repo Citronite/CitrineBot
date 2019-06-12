@@ -1,11 +1,11 @@
 declare module 'typings' {
-    import { 
-        Collection, 
-        Client, 
-        Message, 
-        User, 
-        GuildMember, 
-        Guild, 
+    import {
+        Collection,
+        Client,
+        Message,
+        User,
+        GuildMember,
+        Guild,
         Channel,
         TextChannel,
         Snowflake,
@@ -60,15 +60,30 @@ declare module 'typings' {
 
     export interface ICmdHandler {
         checkPrefix: (message: Message & any, config?: any) => string | null;
-        getArgs: (message: Message & any, prefix: string, parseQuotes?: boolean) => string[] | null;
-        getBaseCmd: (message: Message & any, args: string[]) => [ICommand, string[]] | null;
-        getFinalCmd: (message: Message, args: string[]) => [ICommand, string[]] | null;
+        getArgs: (
+            message: Message & any,
+            prefix: string,
+            parseQuotes?: boolean
+        ) => string[] | null;
+        getBaseCmd: (
+            message: Message & any,
+            args: string[]
+        ) => [ICommand, string[]] | null;
+        getFinalCmd: (
+            message: Message,
+            args: string[]
+        ) => [ICommand, string[]] | null;
         processCommand: (message: Message & any, config?: any) => Promise<void>;
     }
 
     export interface IPermHandler {
         checkFilters: (ctx: any, config: any) => void;
-        checkPerms: (perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin?: boolean) => void;
+        checkPerms: (
+            perms: PermissionResolvable,
+            member: GuildMember,
+            channel: TextChannel,
+            checkAdmin?: boolean
+        ) => void;
         checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
         checkBotOwner: (user: User | GuildMember) => void;
         checkBotDev: (user: User | GuildMember) => void;
@@ -78,9 +93,15 @@ declare module 'typings' {
         parseMention: (mention: string) => string;
         parseQuotes: (text: string) => (string | undefined)[];
         resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
-        resolveGuildChannel: (guild: Guild, channel: string) => Promise<GuildChannel | null>;
+        resolveGuildChannel: (
+            guild: Guild,
+            channel: string
+        ) => Promise<GuildChannel | null>;
         resolveUser: (client: any, user: string) => Promise<User | null>;
-        resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
+        resolveGuildMember(
+            guild: Guild,
+            member: string
+        ): Promise<GuildMember | null>;
     }
 
     export interface IFormatter {
@@ -97,7 +118,7 @@ declare module 'typings' {
         djs: IDjsUtils;
         format: IFormatter;
     }
-  
+
     export interface ILogger {
         info: (...args: any[]) => void;
         error: (...args: any[]) => void;
@@ -158,36 +179,47 @@ declare module 'typings' {
     export type Reaction = string | Emoji | ReactionEmoji;
     export type RawExceptionArray = [string | number, string | string[]];
     // export type RawExceptionObject = { type: string | number, msg: string | string[] };
-    export type RawException = string | number | RawExceptionArray | /* RawExceptionObject | */ Error;
-    export type LockType = 'nsfw' | 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean; // TODO: Add nsfw check
+    export type RawException =
+        | string
+        | number
+        | RawExceptionArray
+        | /* RawExceptionObject | */ Error;
+    export type LockType =
+        | 'nsfw'
+        | 'dm'
+        | 'guild'
+        | 'botOwner'
+        | 'botManager'
+        | 'botDev'
+        | boolean; // TODO: Add nsfw check
     export type LockPermsOptions = {
         checkAdmin?: boolean;
         checkBot?: boolean;
-    }
+    };
 
     export type PromptOptions = {
         contentOnly?: boolean;
         timeOut?: number;
         filter?: (...args: any[]) => any;
-    }
+    };
 
     export type PromptReactionOptions = {
         limit?: number;
         timeOut?: number;
         filter?: (...args: any[]) => any; // TODO: Add proper typings here.
-    }
+    };
 
     export type CommandOptions = {
         name: string;
         description: string;
         usage?: string;
         chip?: string;
-    }
+    };
 
     export type FormatHelpOptions = {
         maxWidth?: number;
         useCodeBlocks?: boolean;
-    }
+    };
 
     export type ContextData = {
         message: Message;
@@ -195,5 +227,5 @@ declare module 'typings' {
         command: ICommand;
         subcommand?: ISubCommand;
         args?: string[]; // TODO: Add this to Context class and allow flags for commands
-    }
+    };
 }

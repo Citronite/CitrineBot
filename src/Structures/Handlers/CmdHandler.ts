@@ -12,23 +12,37 @@ function isSubcommand(subcmd: any): subcmd is SubCommand {
 }
 
 export class CmdHandler implements ICmdHandler {
-
-    public checkPrefix(message: Message & any, config?: GuildConfig): string | null {
+    public checkPrefix(
+        message: Message & any,
+        config?: GuildConfig
+    ): string | null {
         if (message.author.bot) return null;
         const gPrefix = message.client.settings.globalPrefix;
         const id = message.client.user.id;
         let rgx = new RegExp(`^(<@!?${id}>|\\${gPrefix})\\s*`);
-        if (config) rgx = new RegExp(`^(<@!?${id}>|\\${gPrefix}|\\${config.prefix})\\s*`);
+        if (config)
+            rgx = new RegExp(
+                `^(<@!?${id}>|\\${gPrefix}|\\${config.prefix})\\s*`
+            );
         return rgx.test(message.content) ? message.content.match(rgx)[0] : null;
     }
 
-    public getArgs(message: Message & any, prefix: string, parseQuotes: boolean = true): string[] | null {
+    public getArgs(
+        message: Message & any,
+        prefix: string,
+        parseQuotes: boolean = true
+    ): string[] | null {
         const text = message.content.slice(prefix.length);
-        const args = parseQuotes ? message.client.utils.djs.parseQuotes(text) : text.split(/ +/);
+        const args = parseQuotes
+            ? message.client.utils.djs.parseQuotes(text)
+            : text.split(/ +/);
         return args.length ? args : null;
     }
 
-    public getBaseCmd(message: Message & any, args: string[]): [BaseCommand, string[]] | null {
+    public getBaseCmd(
+        message: Message & any,
+        args: string[]
+    ): [BaseCommand, string[]] | null {
         if (!args || !args.length) return null;
 
         let name = args.shift();
@@ -39,14 +53,18 @@ export class CmdHandler implements ICmdHandler {
             const aliases = message.client.settings.aliases[val.name];
             return aliases && aliases.includes(name);
         };
-        const cmd = message.client.commands.get(name)
-            || message.client.commands.find(fn)
-            || null;
+        const cmd =
+            message.client.commands.get(name) ||
+            message.client.commands.find(fn) ||
+            null;
 
         return cmd ? [cmd, args] : null;
     }
 
-    public getFinalCmd(message: Message, args: string[]): [Command, string[]] | null {
+    public getFinalCmd(
+        message: Message,
+        args: string[]
+    ): [Command, string[]] | null {
         if (!args || !args.length) return null;
 
         const result = this.getBaseCmd(message, args);
@@ -60,7 +78,9 @@ export class CmdHandler implements ICmdHandler {
         while (cmd.subcommands) {
             const name = finalArgs[0];
             if (!name) break;
-            const subcmd: Command | undefined = cmd.subcommands.get(name.toLowerCase());
+            const subcmd: Command | undefined = cmd.subcommands.get(
+                name.toLowerCase()
+            );
             if (subcmd) {
                 cmd = subcmd;
                 finalArgs.shift();
@@ -71,7 +91,10 @@ export class CmdHandler implements ICmdHandler {
         return [cmd, finalArgs];
     }
 
-    public *getCmdGenerator(message: Message, args: string[]): IterableIterator<[Command, string[]] | undefined> {
+    public *getCmdGenerator(
+        message: Message,
+        args: string[]
+    ): IterableIterator<[Command, string[]] | undefined> {
         if (!args || !args.length) return;
 
         const result = this.getBaseCmd(message, args);
@@ -90,7 +113,10 @@ export class CmdHandler implements ICmdHandler {
         } while (finalArgs.shift());
     }
 
-    public async processCommand(message: any, config?: GuildConfig): Promise<void> {
+    public async processCommand(
+        message: any,
+        config?: GuildConfig
+    ): Promise<void> {
         const invokedPrefix = this.checkPrefix(message, config);
         if (!invokedPrefix) return;
 

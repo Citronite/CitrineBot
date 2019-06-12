@@ -40,7 +40,9 @@ export abstract class Command {
                 this.subcommands.set(subCmd.name, subCmd);
                 continue;
             } else {
-                throw new Error('Only instances of the SubCommand class can be registered!');
+                throw new Error(
+                    'Only instances of the SubCommand class can be registered!'
+                );
             }
         }
         return this;

@@ -1,24 +1,24 @@
 import { CitrineClient } from './Structures/CitrineClient';
-import { CitrineOptions } from 'typings';
+import { ICitrineOptions } from 'typings';
 
 /*
-*       CitrineBot - A powerful, modular discord bot!
-*
-*       By @Quantomistro3178 (https://github.com/Quantomistro3178)
-*       GitHub: https://github.com/Quantomistro3178/CitrineBot
-*       Support Server: https://discord.gg/rEM9gFN
-*
-*       ###############################
-*       #                             #
-*       #     C  I  T  R  I  N  E     #
-*       #                             #
-*       ###############################
-*/
+ *       CitrineBot - A powerful, modular discord bot!
+ *
+ *       By @Quantomistro3178 (https://github.com/Quantomistro3178)
+ *       GitHub: https://github.com/Quantomistro3178/CitrineBot
+ *       Support Server: https://discord.gg/rEM9gFN
+ *
+ *       ###############################
+ *       #                             #
+ *       #     C  I  T  R  I  N  E     #
+ *       #                             #
+ *       ###############################
+ */
 
-const options: CitrineOptions = {
+const options: ICitrineOptions = {
     disableEveryone: true,
     disabledEvents: ['TYPING_START'],
-    defaultChips: ['utils'],
+    defaultChips: ['utils']
 };
 
 const citrine = new CitrineClient(options);
@@ -35,4 +35,6 @@ const citrine = new CitrineClient(options);
 
 process.on('uncaughtException', citrine.logger.error);
 process.on('unhandledRejection', citrine.logger.error);
-process.on('exit', code => citrine.logger.warn(`Process exited with code ${code}`));
+process.on('exit', code =>
+    citrine.logger.warn(`Process exited with code ${code}`)
+);

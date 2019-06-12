@@ -6,7 +6,7 @@ const prompt = '-> ';
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt,
+    prompt
     // removeHistoryDuplicates: true
 });
 
@@ -20,19 +20,21 @@ function println(str) {
 
 // Prints header
 function printHeader() {
-    console.log('\n' +
-  '\t#############################\n' +
-  '\t#                           #\n' +
-  '\t#      - - Welcome - -      #\n' +
-  '\t#                           #\n' +
-  '\t#    C  I  T  R  I  N  E    #\n' +
-  '\t#                           #\n' +
-  '\t#############################\n');
+    console.log(
+        '\n' +
+            '\t#############################\n' +
+            '\t#                           #\n' +
+            '\t#      - - Welcome - -      #\n' +
+            '\t#                           #\n' +
+            '\t#    C  I  T  R  I  N  E    #\n' +
+            '\t#                           #\n' +
+            '\t#############################\n'
+    );
 }
 
 // Useful sleep function
 async function sleep(time = 1000) {
-    return new Promise((res) => {
+    return new Promise(res => {
         setTimeout(() => {
             res();
         }, time);
@@ -41,8 +43,8 @@ async function sleep(time = 1000) {
 
 // Obtain user input.
 function input(str) {
-    return new Promise((res) => {
-        rl.question(`\n${str}\n${prompt}`, (ans) => {
+    return new Promise(res => {
+        rl.question(`\n${str}\n${prompt}`, ans => {
             res(ans.trim());
             return;
         });
@@ -95,7 +97,12 @@ function execute(...args) {
 }
 
 async function open(arg, options) {
-    const cmd = (process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open');
+    const cmd =
+        process.platform === 'darwin'
+            ? 'open'
+            : process.platform === 'win32'
+            ? 'start'
+            : 'xdg-open';
     await execute(`${cmd} ${arg}`, options);
 }
 
@@ -110,5 +117,5 @@ module.exports = {
     cls,
     confirm,
     execute,
-    open,
+    open
 };

@@ -39,11 +39,22 @@ export class CitrineClient extends Client {
         this.settings = new CitrineSettings(this);
         this.commands = new Collection();
 
-        this.db = options && options.dbDriver ? new options.dbDriver() : new Memory();
-        this.utils = options && options.utils ? new options.utils() : new CitrineUtils();
-        this.logger = options && options.logger ? new options.logger() : new ConsoleLogger();
-        this.cmdHandler = options && options.cmdHandler ? new options.cmdHandler() : new CmdHandler();
-        this.permHandler = options && options.permHandler ? new options.permHandler() : new PermHandler();
+        this.db =
+            options && options.dbDriver ? new options.dbDriver() : new Memory();
+        this.utils =
+            options && options.utils ? new options.utils() : new CitrineUtils();
+        this.logger =
+            options && options.logger
+                ? new options.logger()
+                : new ConsoleLogger();
+        this.cmdHandler =
+            options && options.cmdHandler
+                ? new options.cmdHandler()
+                : new CmdHandler();
+        this.permHandler =
+            options && options.permHandler
+                ? new options.permHandler()
+                : new PermHandler();
         this.defaultChips = new Set(['core']);
 
         if (options && options.defaultChips) {
@@ -60,7 +71,9 @@ export class CitrineClient extends Client {
             const allChips = readdirSync('./bin/Chips');
             for (const chip of this.defaultChips) {
                 if (!allChips.includes(chip)) {
-                    throw new Error(`Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`);
+                    throw new Error(
+                        `Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`
+                    );
                 }
                 const dir = readdirSync(`./bin/Chips/${chip}`);
                 const cmdFiles = fileFilter(dir);
@@ -68,7 +81,9 @@ export class CitrineClient extends Client {
                     const cmd = require(`../Chips/${chip}/${file}`);
                     this.commands.set(cmd.name, cmd);
                     if (chip === 'core') {
-                        delete require.cache[require.resolve(`../Chips/core/${file}`)];
+                        delete require.cache[
+                            require.resolve(`../Chips/core/${file}`)
+                        ];
                     }
                 }
                 if (dir.includes('_setup.js')) {
@@ -79,7 +94,9 @@ export class CitrineClient extends Client {
             }
             this.logger.info('Successfully initialized default Chips!');
         } catch (err) {
-            this.logger.error(`Error initializing default Chips:\n  ${err.stack}`);
+            this.logger.error(
+                `Error initializing default Chips:\n  ${err.stack}`
+            );
             throw 0;
         }
     }
@@ -91,13 +108,17 @@ export class CitrineClient extends Client {
             const eventFiles = fileFilter(readdirSync('./bin/Events'));
             for (const file of eventFiles) {
                 const event = require(`../Events/${file}`);
-                if (event.listener) this.on(event.name, event.listener.bind(null, this));
-                if (event.once) this.once(event.name, event.once.bind(null, this));
+                if (event.listener)
+                    this.on(event.name, event.listener.bind(null, this));
+                if (event.once)
+                    this.once(event.name, event.once.bind(null, this));
                 delete require.cache[require.resolve(`../Events/${file}`)];
             }
             this.logger.info('Successfully initialized event listeners!');
         } catch (err) {
-            this.logger.error(`Error initializing event listeners:\n  ${err.stack}`);
+            this.logger.error(
+                `Error initializing event listeners:\n  ${err.stack}`
+            );
             throw 0;
         }
     }
@@ -149,7 +170,9 @@ export class CitrineClient extends Client {
             const dir = await readdirAsync(`./bin/Chips/${chip}`);
             const files = all ? dir : fileFilter(dir);
             for (const file of files) {
-                delete require.cache[require.resolve(`../Chips/${chip}/${file}`)];
+                delete require.cache[
+                    require.resolve(`../Chips/${chip}/${file}`)
+                ];
             }
             this.logger.info(`Successfully cleared cache for chip: ${chip}`);
             return Promise.resolve();

@@ -5,10 +5,7 @@ class CreditsMenu extends AbstractMenu {
     constructor() {
         super({
             title: 'What would you like to view?',
-            choices: [
-                'View Credits',
-                'View License',
-            ],
+            choices: ['View Credits', 'View License']
         });
 
         this.code = 4;
@@ -24,7 +21,6 @@ class CreditsMenu extends AbstractMenu {
     async 2() {
         await sleep(200);
         println('Show License (or just link to github repo)');
-
     }
 }
 

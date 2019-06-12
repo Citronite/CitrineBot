@@ -12,15 +12,18 @@ class Help extends BaseCommand {
 
     async execute(ctx, ...args) {
         if (args.length) {
-            const result = ctx.client.cmdHandler.getFinalCmd(ctx.message, Array.from(args));
+            const result = ctx.client.cmdHandler.getFinalCmd(
+                ctx.message,
+                Array.from(args)
+            );
             if (!result) {
                 ctx.send(`Unable to find command: \`${args.join(' ')}\``);
             } else {
-                const [cmd,] = result;
+                const [cmd] = result;
                 ctx.send(QuickEmbed.cmdHelp(ctx, cmd));
             }
         } else {
-            ctx.send('Hi! I\'m an instance of Citrine!');
+            ctx.send("Hi! I'm an instance of Citrine!");
         }
     }
 }

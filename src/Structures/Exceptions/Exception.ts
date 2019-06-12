@@ -8,7 +8,7 @@ import { RawException, RawExceptionArray } from 'typings';
 function isExceptionArray(err: any): err is RawExceptionArray {
     const isArr = err.constructor.name === 'Array';
     const hasType = ['string', 'number'].includes(typeof err[0]);
-    const hasMsg = typeof(err[1]) === 'string' || typeof(err[1][0]) === 'string';
+    const hasMsg = typeof err[1] === 'string' || typeof err[1][0] === 'string';
     return isArr && hasType && hasMsg;
 }
 
@@ -27,11 +27,18 @@ export class Exception extends Error {
     public readonly type: string;
     public readonly errors: string[];
 
-    public constructor(code: number, errors: string | string[], original?: Error) {
+    public constructor(
+        code: number,
+        errors: string | string[],
+        original?: Error
+    ) {
         super();
         if (original) this.stack = original.stack;
         this.code = Object.values(ExceptionCodes).includes(code) ? code : 999;
-        this.type = Object.keys(ExceptionCodes).find(val => ExceptionCodes[val] === code) || 'UNKNOWN_ERROR';
+        this.type =
+            Object.keys(ExceptionCodes).find(
+                val => ExceptionCodes[val] === code
+            ) || 'UNKNOWN_ERROR';
         errors = typeof errors === 'string' ? [errors] : errors;
         this.errors = errors || ExceptionMessages[this.code];
     }
@@ -60,7 +67,9 @@ export class Exception extends Error {
         if (typeof err === 'string') {
             return ExceptionCodes[err] || ExceptionCodes.UNKNOWN_ERROR;
         } else if (typeof err === 'number') {
-            return Object.values(ExceptionCodes).includes(err) ? err : ExceptionCodes.UNKNOWN_ERROR;
+            return Object.values(ExceptionCodes).includes(err)
+                ? err
+                : ExceptionCodes.UNKNOWN_ERROR;
         } else {
             return 999;
         }

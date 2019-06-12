@@ -16,10 +16,15 @@ class Eval extends BaseCommand {
         const code = args.join(' ');
         try {
             const result = eval(code);
-            await ctx.send(`[Code]\n${code}\n\n[Result]\n${result}`, { code: 'js', split: true });
-        }
-        catch (err) {
-            await ctx.send(`[Code]\n${code}\n\n[Error]\n${err}`, { code: 'js', split: true });
+            await ctx.send(`[Code]\n${code}\n\n[Result]\n${result}`, {
+                code: 'js',
+                split: true
+            });
+        } catch (err) {
+            await ctx.send(`[Code]\n${code}\n\n[Error]\n${err}`, {
+                code: 'js',
+                split: true
+            });
         }
     }
 }

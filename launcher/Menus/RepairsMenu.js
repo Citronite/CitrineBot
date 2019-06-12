@@ -9,8 +9,8 @@ class RepairsMenu extends AbstractMenu {
             choices: [
                 'Recompile source code',
                 'Reinstall dependencies',
-                'Full reinstallation',
-            ],
+                'Full reinstallation'
+            ]
         });
 
         this.code = 2;
@@ -22,24 +22,29 @@ class RepairsMenu extends AbstractMenu {
         try {
             println('\nPlease wait...');
             try {
-                const { stdout, stderr } = await execute('node_modules/.bin/tsc', { cwd: super.CWD });
+                const { stdout, stderr } = await execute(
+                    'node_modules/.bin/tsc',
+                    { cwd: super.CWD }
+                );
                 if (stderr) println(stderr);
                 if (stdout) println(stdout);
-            }
-            catch (_) {
-                const { stdout, stderr } = await execute('tsc', { cwd: super.CWD });
+            } catch (_) {
+                const { stdout, stderr } = await execute('tsc', {
+                    cwd: super.CWD
+                });
                 if (stderr) println(stderr);
                 if (stdout) println(stdout);
             }
             fs.readdirSync(`${super.CWD}/bin`);
             println('Successfully recompiled code!');
-        }
-        catch (err) {
+        } catch (err) {
             println('Uh-oh! An unknown error occurred while compiling code!');
             println(err);
-            println('Please make sure Citrine is installed properly, and try again.\n' +
-              'For further help, you can join the support server:\n' +
-              'Support Server: https://discord.gg/rEM9gFN');
+            println(
+                'Please make sure Citrine is installed properly, and try again.\n' +
+                    'For further help, you can join the support server:\n' +
+                    'Support Server: https://discord.gg/rEM9gFN'
+            );
             rl.close();
             process.exit(1);
         }

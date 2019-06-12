@@ -10,8 +10,8 @@ class GuidesMenu extends AbstractMenu {
                 'Citrine Documentation',
                 'Discord.js Documentation',
                 'Node.js Documentation',
-                'Discord.js Official Guide',
-            ],
+                'Discord.js Official Guide'
+            ]
         });
         this.code = 3;
     }
@@ -19,7 +19,6 @@ class GuidesMenu extends AbstractMenu {
     // Citrine Installation Guides
     1() {
         println('This feature is yet to be implemented!');
-
     }
 
     // Citrine Documentation

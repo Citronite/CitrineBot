@@ -112,7 +112,9 @@ export class CitrineSettings {
     }
 
     public setAlias(cmd: string, alias: string): void {
-        const aliases = this.data.aliases[cmd] ? new Set(this.data.aliases[cmd]) : new Set();
+        const aliases = this.data.aliases[cmd]
+            ? new Set(this.data.aliases[cmd])
+            : new Set();
         aliases.add(alias);
         this.data.aliases[cmd] = [...aliases];
     }
@@ -127,7 +129,7 @@ export class CitrineSettings {
     public async save(): Promise<void> {
         try {
             await this.client.db.guilds.update('GLOBAL', this.data);
-        }	catch (err) {
+        } catch (err) {
             return Promise.reject(err);
         }
     }

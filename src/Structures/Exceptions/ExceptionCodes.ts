@@ -10,5 +10,5 @@ export const ExceptionCodes: { [key: string]: number } = {
     INVALID_ARGS: 202,
     // ??? -> misc.
     NOT_FOUND: 404,
-    UNKNOWN_ERROR: 999,
+    UNKNOWN_ERROR: 999
 };

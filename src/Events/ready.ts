@@ -15,13 +15,17 @@ module.exports = {
         console.log(`     ${name}   `);
         console.log(`=====${'='.repeat(name.length)}=====\n`);
 
-        console.log(`Active in     : ${servers} ${servers === 1 ? 'server' : 'servers'}`);
+        console.log(
+            `Active in     : ${servers} ${servers === 1 ? 'server' : 'servers'}`
+        );
         console.log(`Bot Owner     : ${app.owner.tag}`);
         console.log(`Global Prefix : ${client.settings.globalPrefix}`);
         console.log(`Invite Link:\n${invite}`);
-        console.log('\n(Note: Closing this window will also shut down the bot!)\n');
+        console.log(
+            '\n(Note: Closing this window will also shut down the bot!)\n'
+        );
 
-    /*
+        /*
     const table = {};
     table[name] = {
       'Active in': `${servers} ${servers === 1 ? 'server' : 'servers'}`,

@@ -4,5 +4,5 @@ module.exports = {
     name: 'reconnecting',
     listener: (client: CitrineClient) => {
         client.logger.info('Reconnecting...');
-    },
+    }
 };

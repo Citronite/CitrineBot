@@ -8,7 +8,7 @@ class Verbose extends SubCommand {
             usage: '[p]gconfig verbose ["on" | "off"]'
         });
     }
-  
+
     async execute(ctx, choice) {
         if (choice) {
             if (choice.toLowerCase() === 'on') {
@@ -16,15 +16,22 @@ class Verbose extends SubCommand {
             } else if (choice.toLowerCase() === 'off') {
                 ctx.client.settings.verbose = false;
             } else {
-                await ctx.error('Please choose "on" or "off" to control verbose mode.');
+                await ctx.error(
+                    'Please choose "on" or "off" to control verbose mode.'
+                );
                 return;
             }
             await ctx.client.settings.save();
-            await ctx.success(`Verbose mode is now **\`${choice.toUpperCase()}\`**`);
+            await ctx.success(
+                `Verbose mode is now **\`${choice.toUpperCase()}\`**`
+            );
             return;
-        }
-        else {
-            await ctx.send(`Verbose mode is currently **\`${ctx.client.settings.verbose ? "ON" : "OFF"}\`**`);
+        } else {
+            await ctx.send(
+                `Verbose mode is currently **\`${
+                    ctx.client.settings.verbose ? 'ON' : 'OFF'
+                }\`**`
+            );
             return;
         }
     }

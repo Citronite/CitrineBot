@@ -1,11 +1,6 @@
 import { Guild } from 'discord.js';
 import { CitrineClient } from '../Structures/CitrineClient';
-import {
-    ChannelID,
-    RoleID,
-    UserID,
-    IGuildConfig,
-} from 'typings';
+import { ChannelID, RoleID, UserID, IGuildConfig } from 'typings';
 
 export class GuildConfig {
     private readonly data: IGuildConfig;
@@ -23,9 +18,9 @@ export class GuildConfig {
                 disabledUsers: new Set(),
                 disabledChannels: new Set(),
                 disabledCommands: new Set(),
-                reqRoles: {},
+                reqRoles: {}
             };
-        }	else {
+        } else {
             this.data = {
                 id: guild.id,
                 prefix: guild.prefix,
@@ -36,7 +31,7 @@ export class GuildConfig {
                 disabledUsers: new Set(guild.disabledUsers),
                 disabledChannels: new Set(guild.disabledChannels),
                 disabledCommands: new Set(guild.disabledCommands),
-                reqRoles: guild.reqRoles,
+                reqRoles: guild.reqRoles
             };
         }
     }
@@ -147,7 +142,7 @@ export class GuildConfig {
             ...conf,
             disabledUsers: [...conf.disabledUsers],
             disabledChannels: [...conf.disabledChannels],
-            disabledCommands: [...conf.disabledCommands],
+            disabledCommands: [...conf.disabledCommands]
         };
     }
 }

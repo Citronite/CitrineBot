@@ -11,5 +11,5 @@ module.exports = {
     Exception,
     ExceptionCodes,
     ExceptionMessages,
-    QuickEmbed,
+    QuickEmbed
 };

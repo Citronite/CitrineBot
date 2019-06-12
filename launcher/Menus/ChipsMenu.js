@@ -1,14 +1,7 @@
 const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
 const path = require('path');
-const {
-    println,
-    confirm,
-    execute,
-    input,
-    sleep,
-    open,
-} = require('../cli.js');
+const { println, confirm, execute, input, sleep, open } = require('../cli.js');
 
 const baseCmdTemplate = `
 const { BaseCommand } = require('../../exports');
@@ -62,8 +55,8 @@ class ChipsMenu extends AbstractMenu {
                 'List downloaded Chips',
                 'Download Chip from GitHub',
                 'Delete Chip',
-                'Create new Chip',
-            ],
+                'Create new Chip'
+            ]
         });
 
         this.code = 1;
@@ -91,11 +84,15 @@ class ChipsMenu extends AbstractMenu {
     async 4() {
         const chips = fs.readdirSync(`${super.CWD}/bin/Chips/`);
 
-        let chipName = (await input('Please enter the name of your new chip:')).toLowerCase();
+        let chipName = (await input(
+            'Please enter the name of your new chip:'
+        )).toLowerCase();
         if (chips.includes(chipName)) chipName = false;
         if (/\s|\d/.test(chipName)) chipName = false;
         while (!chipName) {
-            chipName = (await input('Please enter a valid name:')).toLowerCase();
+            chipName = (await input(
+                'Please enter a valid name:'
+            )).toLowerCase();
             if (chips.includes(chipName)) chipName = false;
             if (/\s|\d/.test(chipName)) chipName = false;
         }
@@ -108,33 +105,51 @@ class ChipsMenu extends AbstractMenu {
             fs.mkdirSync(`${super.CWD}/bin/Chips/${chipName}`);
 
             println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-            const metaContent = JSON.stringify({author: '<YOUR NAME>', description: '<DESCRIPTION>'}, null, '  ');
-            fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_meta.json`, metaContent);
+            const metaContent = JSON.stringify(
+                { author: '<YOUR NAME>', description: '<DESCRIPTION>' },
+                null,
+                '  '
+            );
+            fs.writeFileSync(
+                `${super.CWD}/bin/Chips/${chipName}/_meta.json`,
+                metaContent
+            );
 
             println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
-            const baseCmdContent = baseCmdTemplate.replace('{{chip}}', chipName);
-            fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/cmd.js`, baseCmdContent);
+            const baseCmdContent = baseCmdTemplate.replace(
+                '{{chip}}',
+                chipName
+            );
+            fs.writeFileSync(
+                `${super.CWD}/bin/Chips/${chipName}/cmd.js`,
+                baseCmdContent
+            );
 
             println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
-            fs.writeFileSync(`${super.CWD}/bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
+            fs.writeFileSync(
+                `${super.CWD}/bin/Chips/${chipName}/_subcmd.js`,
+                subCmdTemplate
+            );
 
-            const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
+            const createBranch = await confirm(
+                `Would you also like to create a git branch the ${chipName} chip?`
+            );
             if (createBranch) {
                 try {
                     println('Creating branch...');
                     await execute(`git branch ${chipName}`, { cwd: super.CWD });
                     println('Checking out...');
-                    await execute(`git checkout ${chipName}`, { cwd: super.CWD });
+                    await execute(`git checkout ${chipName}`, {
+                        cwd: super.CWD
+                    });
                     println('Successful!');
-                }
-                catch (err) {
+                } catch (err) {
                     println(err);
                 }
             }
             const p = path.resolve(super.CWD, './bin/Chips');
             open(p);
-        }
-        catch (err) {
+        } catch (err) {
             println(err);
         }
     }

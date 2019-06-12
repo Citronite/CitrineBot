@@ -22,4 +22,4 @@ class Config extends BaseCommand {
     }
 }
 
-module.exports = new Config()
+module.exports = new Config();
