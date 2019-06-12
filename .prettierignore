@@ -1,9 +1,9 @@
 # deps
 node_modules/*
 
-# outdir
-bin/*
-
 # extras
 temp/*
 data/*
+
+# editor
+.vscode
