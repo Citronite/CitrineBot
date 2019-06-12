@@ -1,4 +1,5 @@
 import { CitrineClient } from '../Structures/CitrineClient';
+import { IDjsUtils } from 'typings';
 import {
     Role,
     Guild,
@@ -7,12 +8,9 @@ import {
     GuildChannel
 } from 'discord.js';
 
-export class DjsUtils {
-    constructor() {
-        throw new Error('This class may not be instantiated with the new keyword!');
-    }
+export class DjsUtils implements IDjsUtils {
 
-    public static parseMention(mention: string): string {
+    public parseMention(mention: string): string {
         const rgx = /^<(#|@|@!|@&)\d+>$/;
         if (rgx.test(mention)) {
             mention = mention.slice(2, -1);
@@ -21,16 +19,16 @@ export class DjsUtils {
         return mention;
     }
 
-    public static parseQuotes(text: string): (string | undefined)[] {
+    public parseQuotes(text: string): (string | undefined)[] {
         const matches = text.match(/".*?"/g);
         if (!matches || !matches.length) return text.split(/ +/);
         const tmp = ` ${Date.now()}`;
-        return text.replace(/".*?"/g, tmp).split(/ +/).map(val => val === tmp.slice(1) ? matches.shift() : val);
+        return text.replace(/".*?"/g, tmp).split(/ +/).map(val  => val === tmp.slice(1) ? matches.shift() : val);
     }
 
-    public static async resolveRole(guild: Guild, role: string): Promise<Role | null> {
+    public async resolveRole(guild: Guild, role: string): Promise<Role | null> {
         const parsedRole = this.parseMention(role);
-        const finder = (val: Role): boolean => {
+        const finder = (val: Role) => {
             if (parsedRole.startsWith('"') && parsedRole.endsWith('"')) {
                 return val.name === parsedRole.slice(1,-1);
             } else {
@@ -40,7 +38,7 @@ export class DjsUtils {
         return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
     }
 
-    public static async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
+    public async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
         const parsedChnl = this.parseMention(channel);
         const finder = (val: GuildChannel) => {
             if (val.name === parsedChnl) return true;
@@ -50,7 +48,7 @@ export class DjsUtils {
         return guild.channels.get(parsedChnl) || guild.channels.find(finder) || null;
     }
 
-    public static async resolveUser(client: CitrineClient, user: string): Promise<User | null> {
+    public async resolveUser(client: CitrineClient, user: string): Promise<User | null> {
         const parsedUser = this.parseMention(user);
         try {
             const fetched = await client.fetchUser(parsedUser);
@@ -59,8 +57,8 @@ export class DjsUtils {
             const rgx = new RegExp(parsedUser, 'i');
             const finder = (val: User) => {
                 return val.username === parsedUser
-          || val.tag === parsedUser
-          || rgx.test(val.username);
+                    || val.tag === parsedUser
+                    || rgx.test(val.username);
             };
             return client.users.find(finder) || null;
         }	catch (err) {
@@ -69,8 +67,8 @@ export class DjsUtils {
         }
     }
 
-    public static async resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null> {
-        const parsedMember = DjsUtils.parseMention(member);
+    public async resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null> {
+        const parsedMember = this.parseMention(member);
 
         try {
             const fetched = await guild.fetchMember(parsedMember);
@@ -80,11 +78,11 @@ export class DjsUtils {
             const rgx = new RegExp(parsedMember, 'i');
             const finder = (val: GuildMember) => {
                 return val.user.id === parsedMember
-          || val.user.username === parsedMember
-          || val.nickname === parsedMember
-          || val.user.tag === parsedMember
-          || rgx.test(val.user.username)
-          || rgx.test(val.nickname);
+                    || val.user.username === parsedMember
+                    || val.nickname === parsedMember
+                    || val.user.tag === parsedMember
+                    || rgx.test(val.user.username)
+                    || rgx.test(val.nickname);
             };
 
             return fetchedGuild.members.find(finder) || null;

@@ -9,9 +9,6 @@ const Colors: { [key: string]: number } = {
 };
 
 export class QuickEmbed {
-    constructor() {
-        throw new Error('This class may not be instantiated with the new keyword');
-    }
 
     public static error(info: string = 'An unknown error occurred!'): RichEmbed {
         return new RichEmbed().setColor(Colors.RED)

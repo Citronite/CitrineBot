@@ -7,9 +7,9 @@ import { SubCommand } from '../Structures/Command/SubCommand';
 import {
     LockType,
     LockPermsOptions,
-    PromptOptions,
-    PromptReactionOptions,
-    Reaction,
+    // PromptOptions,
+    // PromptReactionOptions,
+    // Reaction,
     ContextData
 } from 'typings';
 
@@ -43,7 +43,7 @@ export class Context {
     public readonly command: Command;
     public readonly subcommand?: SubCommand;
 
-    constructor(data: ContextData) {
+    public constructor(data: ContextData) {
         validateContextData(data);
         const { message } = data;
         this.client = message.client;
@@ -88,14 +88,14 @@ export class Context {
         }
     }
 
-    public async prompt(msg: string, options?: PromptOptions): Promise<Message | string | null> {
+    public async prompt(/* msg: string, options?: PromptOptions */): Promise<Message | string | null> {
         return Promise.reject('This feature is yet to be implemented!');
     }
 
     // Waits for a reaction on the bot message.
     // First param would be msg to send, second param list of reactions to await.
     // Limit is number of reactions to wait for.
-    public async promptReaction(msg: string, emojis: Reaction[], options?: PromptReactionOptions): Promise<MessageReaction | null> {
+    public async promptReaction(/* msg: string, emojis: Reaction[], options?: PromptReactionOptions */): Promise<MessageReaction | null> {
         return Promise.reject('This feature is yet to be implemented!');
     }
 

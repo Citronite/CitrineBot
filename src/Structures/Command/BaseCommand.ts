@@ -5,7 +5,7 @@ import { CommandOptions } from 'typings';
 export class BaseCommand extends Command {
     public readonly chip: string;
 
-    constructor(options: CommandOptions) {
+    public constructor(options: CommandOptions) {
         if (!options.chip) throw Error('Please provide the chip name!');
         super(options);
         this.chip = options.chip;

@@ -5,9 +5,10 @@ export class CitrineSettings {
     public readonly client: CitrineClient;
     private data: IGlobalConfig;
 
-    constructor(client: CitrineClient) {
+    public constructor(client: CitrineClient) {
         this.client = client;
         this.data = {
+            id: client.user.id,
             owner: 'DEFAULT',
             globalPrefix: 'DEFAULT',
             verbose: true,
@@ -20,31 +21,31 @@ export class CitrineSettings {
         };
     }
 
-    get owner(): string {
+    public get owner(): string {
         return this.data.owner;
     }
 
-    set owner(id: string) {
+    public set owner(id: string) {
         this.data.owner = id;
     }
 
-    get globalPrefix(): string {
+    public get globalPrefix(): string {
         return this.data.globalPrefix;
     }
 
-    set globalPrefix(str: string) {
+    public set globalPrefix(str: string) {
         this.data.globalPrefix = str;
     }
 
-    get verbose(): boolean {
+    public get verbose(): boolean {
         return this.data.verbose;
     }
 
-    set verbose(val: boolean) {
+    public set verbose(val: boolean) {
         this.data.verbose = val;
     }
 
-    get devs(): string[] {
+    public get devs(): string[] {
         return [...this.data.devs];
     }
 
@@ -56,7 +57,7 @@ export class CitrineSettings {
         this.data.devs.delete(id);
     }
 
-    get disabledUsers(): string[] {
+    public get disabledUsers(): string[] {
         return [...this.data.disabledUsers];
     }
 
@@ -68,7 +69,7 @@ export class CitrineSettings {
         this.data.disabledUsers.delete(id);
     }
 
-    get disabledGuilds(): string[] {
+    public get disabledGuilds(): string[] {
         return [...this.data.disabledGuilds];
     }
 
@@ -82,7 +83,7 @@ export class CitrineSettings {
         this.data.disabledGuilds.delete(id);
     }
 
-    get disabledCommands(): string[] {
+    public get disabledCommands(): string[] {
         return [...this.data.disabledCommands];
     }
 
@@ -94,7 +95,7 @@ export class CitrineSettings {
         this.data.disabledCommands.delete(name);
     }
 
-    get loadedChips(): string[] {
+    public get loadedChips(): string[] {
         return [...this.data.loadedChips];
     }
 
@@ -106,7 +107,7 @@ export class CitrineSettings {
         this.data.loadedChips.delete(name);
     }
 
-    get aliases(): object {
+    public get aliases(): object {
         return this.data.aliases;
     }
 

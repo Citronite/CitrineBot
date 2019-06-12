@@ -11,10 +11,10 @@ class Eval extends BaseCommand {
     }
 
     async execute(ctx, ...args) {
-        ctx.lock('dm', 'botDev');
+        ctx.lock('dm', 'botOwner');
 
+        const code = args.join(' ');
         try {
-            const code = args.join(' ');
             const result = eval(code);
             await ctx.send(`[Code]\n${code}\n\n[Result]\n${result}`, { code: 'js', split: true });
         }

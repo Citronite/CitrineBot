@@ -1,24 +1,24 @@
-import Keyv = require('keyv');
 import { IDbConnection } from 'typings';
+import Keyv = require('keyv');
 
 export class KeyvWrapper extends Keyv implements IDbConnection {
-    constructor(...options: any[]) {
+    public constructor(...options: any[]) {
         super(...options);
     }
 
-    public async create(key: string, value: any, ttl?: number): Promise<true> {
-        return this.set(key, value, ttl);
+    public async create(key: string, value: any, ttl?: number): Promise<void> {
+        return super.set(key, value, ttl);
     }
 
     public async read(key: string): Promise<any> {
-        return this.get(key);
+        return super.get(key);
     }
 
-    public async update(key: string, value: any, ttl?: number): Promise<true> {
-        return this.set(key, value, ttl);
+    public async update(key: string, value: any, ttl?: number): Promise<void> {
+        return super.set(key, value, ttl);
     }
 
-    public async delete(key: string): Promise<true> {
-        return this.delete(key);
+    public async delete(key: string): Promise<void> {
+        return super.delete(key);
     }
 }

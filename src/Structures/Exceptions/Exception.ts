@@ -27,7 +27,7 @@ export class Exception extends Error {
     public readonly type: string;
     public readonly errors: string[];
 
-    constructor(code: number, errors: string | string[], original?: Error) {
+    public constructor(code: number, errors: string | string[], original?: Error) {
         super();
         if (original) this.stack = original.stack;
         this.code = Object.values(ExceptionCodes).includes(code) ? code : 999;
@@ -36,16 +36,16 @@ export class Exception extends Error {
         this.errors = errors || ExceptionMessages[this.code];
     }
 
-    get name(): string {
+    public get name(): string {
         return `${this.type}:${this.code}`;
     }
 
-    get info(): string {
+    public get info(): string {
         return this.errors.join('\n');
     }
 
     public toString(code: boolean = true): string {
-        const top = `\⛔ ${this.name} \⛔`;
+        const top = `⛔ ${this.name} ⛔`;
         const msg = this.info;
         return code ? `\`\`\`\n${top}\n\n${msg}\n\`\`\`` : `${top}\n\n${msg}`;
     }
@@ -90,11 +90,11 @@ export class Exception extends Error {
         }
 
         /*
-    if (isExceptionObject(err)) {
-      const code = this.resolveCode(err.type);
-      return new Exception(code, err.msg);
-    }
-    */
+        if (isExceptionObject(err)) {
+            const code = this.resolveCode(err.type);
+            return new Exception(code, err.msg);
+        }
+        */
 
         return new Exception(999, ExceptionMessages[999]);
     }

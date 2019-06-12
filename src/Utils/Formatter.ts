@@ -1,15 +1,12 @@
-import { FormatHelpOptions } from 'typings';
+import { FormatHelpOptions, IFormatter } from 'typings';
 import { BaseCommand } from '../Structures/Command/BaseCommand';
 import { SubCommand } from '../Structures/Command/SubCommand';
 
 type tCommand = BaseCommand | SubCommand;
 
-export class Formatter {
-    constructor() {
-        throw new Error('This class may not be instantiated with the new keyword!');
-    }
+export class Formatter implements IFormatter {
 
-    public static italic(str: string | string[]): string | string[] {
+    public italic(str: string | string[]): string | string[] {
         if (typeof str === 'string') {
             return `*${str}*`;
         } else {
@@ -17,7 +14,7 @@ export class Formatter {
         }
     }
 
-    public static lined(str: string | string[]): string | string[] {
+    public lined(str: string | string[]): string | string[] {
         if (typeof str === 'string') {
             return `__${str}__`;
         } else {
@@ -25,7 +22,7 @@ export class Formatter {
         }
     }
 
-    public static striked(str: string | string[]): string | string[] {
+    public striked(str: string | string[]): string | string[] {
         if (typeof str === 'string') {
             return `~~${str}~~`;
         } else {
@@ -33,7 +30,7 @@ export class Formatter {
         }
     }
 
-    public static bold(str: string | string[]): string | string[] {
+    public bold(str: string | string[]): string | string[] {
         if (typeof str === 'string') {
             return `**${str}**`;
         } else {
@@ -41,7 +38,7 @@ export class Formatter {
         }
     }
 
-    public static inline(str: string | string[]): string | string[] {
+    public inline(str: string | string[]): string | string[] {
         if (typeof str === 'string') {
             return `\`${str}\``;
         } else {
@@ -49,7 +46,7 @@ export class Formatter {
         }
     }
 
-    public static block(str: string | string[], lang: string = ''): string | string[] {
+    public block(str: string | string[], lang: string = ''): string | string[] {
         if (typeof str === 'string') {
             return `\`\`\`${lang}\n${str}\`\`\``;
         } else {
@@ -57,7 +54,7 @@ export class Formatter {
         }
     }
 
-    public static cmdHelp(cmd: tCommand, options?: FormatHelpOptions): object {
+    public cmdHelp(cmd: tCommand, options?: FormatHelpOptions): object {
         let chip;
         let parent;
         let base;

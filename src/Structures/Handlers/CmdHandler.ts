@@ -5,12 +5,14 @@ import { BaseCommand } from '../Command/BaseCommand';
 import { Exception } from '../Exceptions/Exception';
 import { Context } from '../../Utils/Context';
 import { SubCommand } from '../Command/SubCommand';
+import { ICmdHandler } from 'typings';
 
 function isSubcommand(subcmd: any): subcmd is SubCommand {
     return subcmd instanceof SubCommand;
 }
 
-export class CmdHandler {
+export class CmdHandler implements ICmdHandler {
+
     public checkPrefix(message: Message & any, config?: GuildConfig): string | null {
         if (message.author.bot) return null;
         const gPrefix = message.client.settings.globalPrefix;
@@ -33,13 +35,13 @@ export class CmdHandler {
         if (!name) return null;
         else name = name.toLowerCase();
 
-        const finder = (val: Command) => {
+        const fn = (val: Command) => {
             const aliases = message.client.settings.aliases[val.name];
             return aliases && aliases.includes(name);
         };
         const cmd = message.client.commands.get(name)
-      || message.client.commands.find(finder)
-      || null;
+            || message.client.commands.find(fn)
+            || null;
 
         return cmd ? [cmd, args] : null;
     }

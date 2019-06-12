@@ -6,8 +6,8 @@ export class CitrineUtils {
     public readonly djs: IDjsUtils;
     public readonly format: IFormatter;
 
-    constructor() {
-        this.djs = DjsUtils;
-        this.format = Formatter;
+    public constructor() {
+        this.djs = new DjsUtils();
+        this.format = new Formatter();
     }
 }

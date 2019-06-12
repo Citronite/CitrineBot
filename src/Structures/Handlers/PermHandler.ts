@@ -2,6 +2,7 @@ import { GuildConfig } from '../../Utils/GuildConfig';
 import { Exception } from '../Exceptions/Exception';
 import { ExceptionCodes } from '../Exceptions/ExceptionCodes';
 import { Context } from '../../Utils/Context';
+import { IPermHandler } from 'typings';
 import {
     GuildMember,
     TextChannel,
@@ -13,7 +14,8 @@ import {
 
 const ErrCode = ExceptionCodes;
 
-export class PermHandler {
+export class PermHandler implements IPermHandler {
+
     public checkFilters(ctx: Context, config?: GuildConfig): void {
         const { settings: globalConfig } = ctx.client;
         if (ctx.author.id === globalConfig.owner) return;

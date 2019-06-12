@@ -21,21 +21,21 @@ declare module 'typings' {
     } from 'discord.js';
 
     /*
-  interface CitrineClient {
-    loadChip: (chip: string) => Promise<void>;
-    unloadChip: (chip: string) => Promise<void>;
-    launch: () => Promise<void>;
-    initEvents: () => void;
-    initChips: () => void;
-    permHandler: IPermHandler;
-    cmdHandler: ICmdHandler;
-    utils: Utils;
-    commands: Collection<string, Command>;
-    logger: Logger;
-    lastException: any;
-    defaultChips: Set<string>;
-    db: DbDriver;
-    settings: 
+    interface CitrineClient {
+        loadChip: (chip: string) => Promise<void>;
+        unloadChip: (chip: string) => Promise<void>;
+        launch: () => Promise<void>;
+        initEvents: () => void;
+        initChips: () => void;
+        permHandler: IPermHandler;
+        cmdHandler: ICmdHandler;
+        utils: Utils;
+        commands: Collection<string, Command>;
+        logger: Logger;
+        lastException: any;
+        defaultChips: Set<string>;
+        db: DbDriver;
+        settings: 
   }
   */
 
@@ -59,11 +59,11 @@ declare module 'typings' {
     }
 
     export interface ICmdHandler {
-        checkPrefix: (message: any, config?: any) => string | null;
-        getArgs: (message: any, prefix: string, parseQuotes?: boolean) => string[] | null;
-        getBaseCmd: (message: any, args: string[]) => [ICommand, string[]] | null;
+        checkPrefix: (message: Message & any, config?: any) => string | null;
+        getArgs: (message: Message & any, prefix: string, parseQuotes?: boolean) => string[] | null;
+        getBaseCmd: (message: Message & any, args: string[]) => [ICommand, string[]] | null;
         getFinalCmd: (message: Message, args: string[]) => [ICommand, string[]] | null;
-        processCommand: (message: any, config?: any) => Promise<void>;
+        processCommand: (message: Message & any, config?: any) => Promise<void>;
     }
 
     export interface IPermHandler {
@@ -84,9 +84,13 @@ declare module 'typings' {
     }
 
     export interface IFormatter {
+        italic: (str: string | string[]) => string | string[];
+        lined: (str: string | string[]) => string | string[];
+        striked: (str: string | string[]) => string | string[];
+        bold: (str: string | string[]) => string | string[];
         inline: (str: string | string[]) => string | string[];
         block: (str: string | string[], lang?: string) => string | string[];
-        cmdHelp(cmd: any, options: any): object;
+        cmdHelp(cmd: ICommand, options: FormatHelpOptions): object;
     }
 
     export interface IUtils {
@@ -101,18 +105,19 @@ declare module 'typings' {
     }
 
     export interface IDbConnection {
-        create: (...args: any[]) => any;
-        read: (...args: any[]) => any;
-        update: (...args: any[]) => any;
-        delete: (...args: any[]) => any;
+        create: (...args: any[]) => Promise<void>;
+        read: (...args: any[]) => Promise<any>;
+        update: (...args: any[]) => Promise<void>;
+        delete: (...args: any[]) => Promise<void>;
     }
 
     export interface IDbDriver {
         connect: (...options: any[]) => IDbConnection;
-        disconnect: (...args: any[]) => any;
+        disconnect: (...args: any[]) => void;
     }
 
     export interface IGlobalConfig {
+        id: string;
         owner: UserID;
         globalPrefix: string;
         verbose: boolean;
@@ -125,10 +130,19 @@ declare module 'typings' {
     }
 
     export interface IGuildConfig {
-    //TODO
+        id: string;
+        prefix: string;
+        disabledRole: string;
+        deleteCmdCalls: boolean;
+        deleteCmdCallsDelay: number;
+        readMsgEdits: boolean;
+        disabledUsers: Set<UserID>;
+        disabledChannels: Set<ChannelID>;
+        disabledCommands: Set<string>;
+        reqRoles: { [key: string]: string } & any;
     }
 
-    export interface CitrineOptions extends ClientOptions {
+    export interface ICitrineOptions extends ClientOptions {
         defaultChips?: string[];
         utils?: new () => IUtils;
         logger?: new () => ILogger;
@@ -145,40 +159,41 @@ declare module 'typings' {
     export type RawExceptionArray = [string | number, string | string[]];
     // export type RawExceptionObject = { type: string | number, msg: string | string[] };
     export type RawException = string | number | RawExceptionArray | /* RawExceptionObject | */ Error;
-    export type LockType = 'nsfw' | 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean;
-    export interface LockPermsOptions {
+    export type LockType = 'nsfw' | 'dm' | 'guild' | 'botOwner' | 'botManager' | 'botDev' | boolean; // TODO: Add nsfw check
+    export type LockPermsOptions = {
         checkAdmin?: boolean;
         checkBot?: boolean;
     }
 
-    export interface PromptOptions {
+    export type PromptOptions = {
         contentOnly?: boolean;
         timeOut?: number;
         filter?: (...args: any[]) => any;
     }
 
-    export interface PromptReactionOptions {
+    export type PromptReactionOptions = {
         limit?: number;
         timeOut?: number;
         filter?: (...args: any[]) => any; // TODO: Add proper typings here.
     }
 
-    export interface CommandOptions {
+    export type CommandOptions = {
         name: string;
         description: string;
         usage?: string;
         chip?: string;
     }
 
-    export interface FormatHelpOptions {
+    export type FormatHelpOptions = {
         maxWidth?: number;
         useCodeBlocks?: boolean;
     }
 
-    export interface ContextData {
+    export type ContextData = {
         message: Message;
         prefix: string;
         command: ICommand;
         subcommand?: ISubCommand;
+        args?: string[]; // TODO: Add this to Context class and allow flags for commands
     }
 }

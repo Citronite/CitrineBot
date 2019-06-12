@@ -9,7 +9,7 @@ import { ConsoleLogger } from './Loggers/Console';
 import { CitrineSettings } from './Citrine/CitrineSettings';
 import { Client, Collection } from 'discord.js';
 import {
-    CitrineOptions,
+    ICitrineOptions,
     IDbDriver,
     IUtils,
     ILogger,
@@ -34,7 +34,7 @@ export class CitrineClient extends Client {
     public readonly defaultChips: Set<string>;
     public lastException: Error | null; // Temporary
 
-    constructor(options?: CitrineOptions) {
+    public constructor(options?: ICitrineOptions) {
         super(options);
         this.settings = new CitrineSettings(this);
         this.commands = new Collection();
@@ -129,7 +129,7 @@ export class CitrineClient extends Client {
 
     public async unloadChip(chip: string): Promise<void> {
         try {
-            this.commands.sweep((cmd) => cmd.chip === chip);
+            this.commands.sweep(cmd => cmd.chip === chip);
             const dir = await readdirAsync(`./bin/Chips/${chip}`);
             if (dir.includes('_setup.js')) {
                 const { unload: fn } = require(`../Chips/${chip}/_setup.js`);
@@ -180,7 +180,7 @@ export class CitrineClient extends Client {
 
                 const path = `${__dirname}/../../data/core/_instance.json`;
                 const content = JSON.stringify(data, null, '  ');
-                fs.writeFile(path, content, (err) => {
+                fs.writeFile(path, content, err => {
                     if (err) this.logger.warn(err);
                 });
             }

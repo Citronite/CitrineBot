@@ -14,7 +14,7 @@ export abstract class Command {
     public readonly description: string;
     public readonly usage?: string;
 
-    constructor(options: CommandOptions) {
+    public constructor(options: CommandOptions) {
         validateCommandOptions(options);
         this.name = options.name;
         this.description = options.description;
@@ -23,14 +23,15 @@ export abstract class Command {
 
     // By default, throws an INSUFFICIENT_ARGS error,
     // which will show a help message in discord.
-    public async execute(ctx: Context, ...args: any[]): Promise<void> {
+    public async execute(ctx: Context, ...args: string[]): Promise<void> {
         if (ctx.subcommand) return;
-        throw 201;
+        if (args.length) throw 'INVALID_ARGS';
+        else throw 'INSUFFICIENT_ARGS';
     }
 
     // Couldn't think of any better way
     // to do this. I'm not smart enough.
-    public registerSubCommands(...subCmds: any[]) {
+    public registerSubCommands(...subCmds: any[]): this {
         this.subcommands = new Collection();
         for (const subCmd of subCmds) {
             if (subCmd.setParent && subCmd.setBase) {

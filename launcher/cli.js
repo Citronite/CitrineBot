@@ -30,6 +30,15 @@ function printHeader() {
   '\t#############################\n');
 }
 
+// Useful sleep function
+async function sleep(time = 1000) {
+    return new Promise((res) => {
+        setTimeout(() => {
+            res();
+        }, time);
+    });
+}
+
 // Obtain user input.
 function input(str) {
     return new Promise((res) => {
@@ -73,15 +82,6 @@ async function printMenu(menu) {
 function cls(x = 0, y = 8) {
     readline.cursorTo(process.stdout, x, y);
     readline.clearScreenDown(process.stdout);
-}
-
-// Useful sleep function
-async function sleep(time = 1000) {
-    return new Promise((res) => {
-        setTimeout(() => {
-            res();
-        }, time);
-    });
 }
 
 // Promisified version of child_process.exec()

@@ -3,7 +3,7 @@ import { IDbConnection } from 'typings';
 export class MapWrapper implements IDbConnection {
     private readonly map: Map<string, any>;
 
-    constructor() {
+    public constructor() {
         this.map = new Map();
     }
 

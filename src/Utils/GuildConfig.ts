@@ -3,13 +3,14 @@ import { CitrineClient } from '../Structures/CitrineClient';
 import {
     ChannelID,
     RoleID,
-    UserID
+    UserID,
+    IGuildConfig,
 } from 'typings';
 
 export class GuildConfig {
-    private readonly data: any;
+    private readonly data: IGuildConfig;
 
-    constructor(guild: Guild | GuildConfig) {
+    public constructor(guild: Guild | GuildConfig) {
         if (guild instanceof Guild) {
             const client: CitrineClient & any = guild.client;
             this.data = {
@@ -40,43 +41,43 @@ export class GuildConfig {
         }
     }
 
-    get id(): string {
+    public get id(): string {
         return this.data.id;
     }
 
-    set id(v: string) {
+    public set id(v: string) {
         return;
     }
 
-    get prefix(): string {
+    public get prefix(): string {
         return this.data.prefix;
     }
 
-    set prefix(str: string) {
+    public set prefix(str: string) {
         this.data.prefix = str;
     }
 
-    get disabledRole(): string {
+    public get disabledRole(): string {
         return this.data.disabledRole;
     }
 
-    set disabledRole(id: string) {
+    public set disabledRole(id: string) {
         this.data.disabledRole = id;
     }
 
-    get deleteCmdCalls(): boolean {
+    public get deleteCmdCalls(): boolean {
         return this.data.deleteCmdCalls;
     }
 
-    set deleteCmdCalls(val: boolean) {
+    public set deleteCmdCalls(val: boolean) {
         this.data.deleteCmdCalls = val;
     }
 
-    get deleteCmdCallsDelay(): number {
+    public get deleteCmdCallsDelay(): number {
         return this.data.deleteCmdCallsDelay;
     }
 
-    set deleteCmdCallsDelay(val: number) {
+    public set deleteCmdCallsDelay(val: number) {
         if (val >= 3600000 && val <= 1000) {
             this.data.deleteCmdCallsDelay = val;
         } else {
@@ -84,15 +85,15 @@ export class GuildConfig {
         }
     }
 
-    get readMsgEdits(): boolean {
+    public get readMsgEdits(): boolean {
         return this.data.readMsgEdits;
     }
 
-    set readMsgEdits(val: boolean) {
+    public set readMsgEdits(val: boolean) {
         this.data.readMsgEdits = val;
     }
 
-    get disabledUsers(): UserID[] {
+    public get disabledUsers(): UserID[] {
         return [...this.data.disabledUsers];
     }
 
@@ -104,7 +105,7 @@ export class GuildConfig {
         this.data.disabledUsers.delete(id);
     }
 
-    get disabledChannels(): ChannelID[] {
+    public get disabledChannels(): ChannelID[] {
         return [...this.data.disabledChannels];
     }
 
@@ -116,7 +117,7 @@ export class GuildConfig {
         this.data.disabledChannels.delete(id);
     }
 
-    get disabledCommands(): string[] {
+    public get disabledCommands(): string[] {
         return [...this.data.disabledCommands];
     }
 
@@ -128,7 +129,7 @@ export class GuildConfig {
         this.data.disabledCommands.delete(id);
     }
 
-    get reqRoles(): object {
+    public get reqRoles(): object {
         return this.data.reqRoles;
     }
 
@@ -137,7 +138,7 @@ export class GuildConfig {
     }
 
     public unsetReqRole(cmd: string): void {
-        this.data.reqRoles[cmd] = undefined;
+        delete this.data.reqRoles[cmd];
     }
 
     public toJSON(): object {

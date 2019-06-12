@@ -3,9 +3,6 @@ const { promisify } = require('util');
 const { readdir } = require('fs');
 
 const readdirAsync = promisify(readdir);
-function fileFilter(arr) {
-    return arr.filter(val => !val.startsWith('_') && val.endsWith('.js'));
-}
 
 class Load extends BaseCommand {
     constructor() {

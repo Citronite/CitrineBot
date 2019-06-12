@@ -1,4 +1,4 @@
-export const ExceptionMessages: { [key in number]: string } = {
+export const ExceptionMessages: { [key: number]: string } = {
     100: 'Insufficient permissions!',
     101: 'Are you sure you have the proper permissions to invoke this command?',
     102: 'Are you sure I have the proper permissions to execute this command?',

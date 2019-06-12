@@ -6,7 +6,7 @@ export class SubCommand extends Command {
     private parent?: Command;
     private base?: BaseCommand;
 
-    constructor(options: CommandOptions) {
+    public constructor(options: CommandOptions) {
         super(options);
     }
 
