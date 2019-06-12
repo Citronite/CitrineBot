@@ -1,5 +1,9 @@
+<h4 align="center">
+    <img src="https://i.imgur.com/D0I9Yoq.png?size=1024" alt="CitrineBanner"/>
+</h4>
+
 <h1 align="center">
-    <img src="https://i.imgur.com/D0I9Yoq.png?size=2048" alt="CitrineBanner"/>
+    CitrineBot - A powerful & extensible Discord bot!
 </h1>
 
 <p align="center">
