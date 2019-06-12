@@ -17,14 +17,13 @@
     "node": ">=10.1.0"
   },
   "keywords": [
-    "discord",
-    "discord.js",
+    "bot",
     "javascript",
     "typescript",
-    "bot",
     "citrine",
-    "modular",
-    "extensible"
+    "discord",
+    "self-hosted",
+    "discord.js"
   ],
   "author": "Quantomistro3178",
   "license": "GPL-3.0",
