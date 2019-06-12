@@ -4,7 +4,6 @@
   "description": "CitrineBot - A powerful & extensible Discord bot!",
   "main": "./bin/citrine.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "launcher": "node ./launcher/main.js",
     "citrine": "node ./bin/citrine.js",
     "lint": "eslint . --ext .ts,.js",
