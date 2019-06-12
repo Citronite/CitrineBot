@@ -8,3 +8,5 @@ bin/
 *.txt
 data/
 start_citrine.bat
+.vscode
+temp/
