@@ -4,6 +4,7 @@
   "description": "CitrineBot - A powerful & extensible Discord bot!",
   "main": "./bin/citrine.js",
   "scripts": {
+    "tsc": "tsc --incremental",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "fmt": "prettier --check \"{src,launcher}/**/*.{ts,js}\"",
@@ -33,7 +34,7 @@
   "peerDependencies": {
     "@types/keyv": "^3.1.0",
     "@keyv/sqlite": "^2.0.0",
-    "typescript": "^3.3.3",
+    "typescript": "^3.5.1",
     "winston": "^3.2.1",
     "keyv": "^3.1.0"
   },
