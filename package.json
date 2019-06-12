@@ -9,6 +9,7 @@
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "fmt": "prettier --check \"{src,launcher}/**/*.{ts,js}\"",
     "fmt:fix": "prettier --write \"{src,launcher}/**/*.{ts,js}\"",
+    "fmt:fixbin": "prettier --write \"bin/**/*.js\"",
     "launcher": "node ./launcher/main.js",
     "citrine": "node ./bin/citrine.js"
   },
