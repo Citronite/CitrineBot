@@ -1,10 +1,7 @@
-const { resolve } = require('path');
-
 class AbstractMenu {
     constructor(options) {
         this.title = options.title;
         this.choices = options.choices;
-        super.root = resolve(`${__dirname}/../..`);
     }
 
     // Execute which option the user chose in the launcher menu

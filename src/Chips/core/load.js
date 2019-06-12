@@ -3,6 +3,7 @@ const { promisify } = require('util');
 const { readdir } = require('fs');
 
 const readdirAsync = promisify(readdir);
+const root = resolve(`${__dirname}/../../../`);
 
 class Load extends BaseCommand {
     constructor() {
@@ -19,7 +20,7 @@ class Load extends BaseCommand {
         ctx.lock('botOwner');
         if (!chips.length) throw 'INSUFFICIENT_ARGS';
 
-        const allChips = await readdirAsync('./bin/Chips');
+        const allChips = await readdirAsync(`${root}/bin/Chips`);
         const filteredChips = chips.includes('all')
             ? allChips
             : chips.filter(name => allChips.includes(name));

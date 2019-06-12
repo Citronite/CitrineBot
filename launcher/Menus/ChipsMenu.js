@@ -1,6 +1,5 @@
 const AbstractMenu = require('./AbstractMenu.js');
 const fs = require('fs');
-const path = require('path');
 const { println, confirm, execute, input, sleep, open } = require('../cli.js');
 
 const baseCmdTemplate = `
@@ -46,6 +45,8 @@ module.exports = new Name();
 
 `;
 
+const root = resolve(`${__dirname}/../../`);
+
 // Allows managing chips through the launcher.
 class ChipsMenu extends AbstractMenu {
     constructor() {
@@ -58,7 +59,6 @@ class ChipsMenu extends AbstractMenu {
                 'Create new Chip'
             ]
         });
-
         this.code = 1;
     }
 
@@ -66,7 +66,7 @@ class ChipsMenu extends AbstractMenu {
     async 1() {
         println('Downloaded Chips:');
         await sleep(200);
-        const chips = fs.readdirSync(`${super.root}/bin/Chips/`);
+        const chips = fs.readdirSync(`${root}/bin/Chips/`);
         println(chips.join('\n'));
     }
 
@@ -82,7 +82,7 @@ class ChipsMenu extends AbstractMenu {
 
     // Create new Chip
     async 4() {
-        const chips = fs.readdirSync(`${super.root}/bin/Chips/`);
+        const chips = fs.readdirSync(`${root}/bin/Chips/`);
 
         let chipName = (await input(
             'Please enter the name of your new chip:'
@@ -99,10 +99,10 @@ class ChipsMenu extends AbstractMenu {
 
         try {
             println(`Creating path: ./data/${chipName}`);
-            fs.mkdirSync(`${super.root}/data/${chipName}`);
+            fs.mkdirSync(`${root}/data/${chipName}`);
 
             println(`Creating path: ./bin/Chips/${chipName}`);
-            fs.mkdirSync(`${super.root}/bin/Chips/${chipName}`);
+            fs.mkdirSync(`${root}/bin/Chips/${chipName}`);
 
             println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
             const metaContent = JSON.stringify(
@@ -111,7 +111,7 @@ class ChipsMenu extends AbstractMenu {
                 '  '
             );
             fs.writeFileSync(
-                `${super.root}/bin/Chips/${chipName}/_meta.json`,
+                `${root}/bin/Chips/${chipName}/_meta.json`,
                 metaContent
             );
 
@@ -121,13 +121,13 @@ class ChipsMenu extends AbstractMenu {
                 chipName
             );
             fs.writeFileSync(
-                `${super.root}/bin/Chips/${chipName}/cmd.js`,
+                `${root}/bin/Chips/${chipName}/cmd.js`,
                 baseCmdContent
             );
 
             println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
             fs.writeFileSync(
-                `${super.root}/bin/Chips/${chipName}/_subcmd.js`,
+                `${root}/bin/Chips/${chipName}/_subcmd.js`,
                 subCmdTemplate
             );
 
@@ -137,18 +137,17 @@ class ChipsMenu extends AbstractMenu {
             if (createBranch) {
                 try {
                     println('Creating branch...');
-                    await execute(`git branch ${chipName}`, { cwd: super.root });
+                    await execute(`git branch ${chipName}`, { cwd: root });
                     println('Checking out...');
                     await execute(`git checkout ${chipName}`, {
-                        cwd: super.root
+                        cwd: root
                     });
                     println('Successful!');
                 } catch (err) {
                     println(err);
                 }
             }
-            const p = path.resolve(super.root, './bin/Chips');
-            open(p);
+            open(`${root}/bin/Chips`);
         } catch (err) {
             println(err);
         }

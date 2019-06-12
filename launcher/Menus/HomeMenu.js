@@ -11,6 +11,8 @@ const Repairs = new RepairsMenu();
 const Guides = new GuidesMenu();
 const Credits = new CreditsMenu();
 
+const root = resolve(`${__dirname}/../../`);
+
 class HomeMenu extends AbstractMenu {
     constructor() {
         super({
@@ -33,11 +35,11 @@ class HomeMenu extends AbstractMenu {
         println('Launching Citrine. . .');
         try {
             const options = {
-                cwd: super.root,
+                cwd: root,
                 shell: true,
                 stdio: 'inherit'
             };
-            await spawnSync('node', ['./bin/citrine.js'], options);
+            await spawnSync('node', [`${root}/bin/citrine.js`], options);
         } catch (err) {
             println(err);
         }

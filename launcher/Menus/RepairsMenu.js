@@ -2,6 +2,8 @@ const AbstractMenu = require('./AbstractMenu.js');
 const { println, execute, rl } = require('../cli.js');
 const fs = require('fs');
 
+const root = resolve(`${__dirname}/../../`);
+
 class RepairsMenu extends AbstractMenu {
     constructor() {
         super({
@@ -24,18 +26,18 @@ class RepairsMenu extends AbstractMenu {
             try {
                 const { stdout, stderr } = await execute(
                     'node_modules/.bin/tsc',
-                    { cwd: super.root }
+                    { cwd: root }
                 );
                 if (stderr) println(stderr);
                 if (stdout) println(stdout);
             } catch (_) {
                 const { stdout, stderr } = await execute('tsc', {
-                    cwd: super.root
+                    cwd: root
                 });
                 if (stderr) println(stderr);
                 if (stdout) println(stdout);
             }
-            fs.readdirSync(`${super.root}/bin`);
+            fs.readdirSync(`${root}/bin`);
             println('Successfully recompiled code!');
         } catch (err) {
             println('Uh-oh! An unknown error occurred while compiling code!');

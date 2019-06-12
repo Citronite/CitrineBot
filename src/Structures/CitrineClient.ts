@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { resolve } from 'path';
 import { promisify } from 'util';
 import { Memory } from './DbDrivers/Memory';
 import { CmdHandler } from './Handlers/CmdHandler';
@@ -17,7 +18,8 @@ import {
     IPermHandler
 } from 'typings';
 
-const readdirSync = fs.readdirSync;
+const root = resolve(`${__dirname}/../../`);
+const { readdirSync } = fs;
 const readdirAsync = promisify(fs.readdir);
 function fileFilter(arr: string[]): string[] {
     return arr.filter(val => !val.startsWith('_') && val.endsWith('.js'));
@@ -68,14 +70,14 @@ export class CitrineClient extends Client {
     // Removes the core chip from cache since it is only loaded once.
     public initChips(): void {
         try {
-            const allChips = readdirSync('./bin/Chips');
+            const allChips = readdirSync(`${root}/bin/Chips`);
             for (const chip of this.defaultChips) {
                 if (!allChips.includes(chip)) {
                     throw new Error(
                         `Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`
                     );
                 }
-                const dir = readdirSync(`./bin/Chips/${chip}`);
+                const dir = readdirSync(`${root}/bin/Chips/${chip}`);
                 const cmdFiles = fileFilter(dir);
                 for (const file of cmdFiles) {
                     const cmd = require(`../Chips/${chip}/${file}`);
@@ -105,7 +107,7 @@ export class CitrineClient extends Client {
     // events should only be loaded once.
     public initEvents(): void {
         try {
-            const eventFiles = fileFilter(readdirSync('./bin/Events'));
+            const eventFiles = fileFilter(readdirSync(`${root}/bin/Events`));
             for (const file of eventFiles) {
                 const event = require(`../Events/${file}`);
                 if (event.listener)
@@ -125,11 +127,11 @@ export class CitrineClient extends Client {
 
     public async loadChip(chip: string): Promise<void> {
         try {
-            const allChips = await readdirAsync('./bin/Chips');
+            const allChips = await readdirAsync(`${root}/bin/Chips`);
             if (!allChips.includes(chip)) {
                 return Promise.reject(`Unable to find chip: ${chip}!`);
             }
-            const dir = await readdirAsync(`./bin/Chips/${chip}`);
+            const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
             const cmdFiles = fileFilter(dir);
             for (const file of cmdFiles) {
                 const cmd = require(`../Chips/${chip}/${file}`);
@@ -151,7 +153,7 @@ export class CitrineClient extends Client {
     public async unloadChip(chip: string): Promise<void> {
         try {
             this.commands.sweep(cmd => cmd.chip === chip);
-            const dir = await readdirAsync(`./bin/Chips/${chip}`);
+            const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
             if (dir.includes('_setup.js')) {
                 const { unload: fn } = require(`../Chips/${chip}/_setup.js`);
                 if (typeof fn === 'function') fn(this);
@@ -167,7 +169,7 @@ export class CitrineClient extends Client {
 
     public async clearChipCache(chip: string, all = false): Promise<void> {
         try {
-            const dir = await readdirAsync(`./bin/Chips/${chip}`);
+            const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
             const files = all ? dir : fileFilter(dir);
             for (const file of files) {
                 delete require.cache[
@@ -201,7 +203,7 @@ export class CitrineClient extends Client {
                 data.ownerId = app.owner.id;
                 data.appId = app.id;
 
-                const path = `${__dirname}/../../data/core/_instance.json`;
+                const path = `${root}/data/core/_instance.json`;
                 const content = JSON.stringify(data, null, '  ');
                 fs.writeFile(path, content, err => {
                     if (err) this.logger.warn(err);
