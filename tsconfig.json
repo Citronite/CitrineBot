@@ -63,5 +63,6 @@
   "exclude": [
     "./launcher",
     "./bin",
+    "./docs"
   ]
 }
