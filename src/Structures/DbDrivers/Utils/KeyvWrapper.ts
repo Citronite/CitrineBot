@@ -13,7 +13,7 @@ export class KeyvWrapper implements IDbConnection {
   }
 
   public async read(key: string): Promise<any> {
-    await this.kv.get(key);
+    return await this.kv.get(key);
   }
 
   public async update(key: string, value: any, ttl?: number): Promise<void> {

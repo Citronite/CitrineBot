@@ -22,4 +22,8 @@ export class MapWrapper implements IDbConnection {
   public async delete(key: string): Promise<void> {
     this.map.delete(key);
   }
+
+  public async drop(): Promise<void> {
+    this.map.clear();
+  }
 }
