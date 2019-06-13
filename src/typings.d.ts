@@ -130,6 +130,7 @@ declare module 'typings' {
     read: (...args: any[]) => Promise<any>;
     update: (...args: any[]) => Promise<void>;
     delete: (...args: any[]) => Promise<void>;
+    drop: () => Promise<void>;
   }
 
   export interface IDbDriver {
