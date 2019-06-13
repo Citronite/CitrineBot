@@ -104,12 +104,8 @@ class ChipsMenu extends AbstractMenu {
       fs.mkdirSync(`${root}/bin/Chips/${chipName}`);
 
       println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const metaContent = JSON.stringify(
-        { author: '<YOUR NAME>', description: '<DESCRIPTION>' },
-        null,
-        '  '
-      );
-      fs.writeFileSync(`${root}/bin/Chips/${chipName}/_meta.json`, metaContent);
+      const metaContent = `module.exports = {\n  author: '<YOUR NAME>',\n  description: '<DESCRIPTION>'\n};\n`;
+      fs.writeFileSync(`${root}/bin/Chips/${chipName}/_meta.js`, metaContent);
 
       println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
       const baseCmdContent = baseCmdTemplate.replace('{{chip}}', chipName);

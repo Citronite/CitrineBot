@@ -5,7 +5,7 @@ class GConfig extends BaseCommand {
     super({
       name: 'gconfig',
       description: "View or change Citrine's global settings.",
-      usage: '[p]gconfig [-dm]',
+      usage: '[p]gconfig [--dm]',
       chip: 'core'
     });
   }
@@ -15,7 +15,7 @@ class GConfig extends BaseCommand {
     if (ctx.subcommand) return;
 
     const settings = JSON.stringify(ctx.client.settings.toJSON(), null, '  ');
-    const dm = flag === '-dm';
+    const dm = flag === '--dm';
     if (dm) await ctx.sendDM(settings, { code: 'json' });
     else await ctx.send(settings, { code: 'json' });
   }

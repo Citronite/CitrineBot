@@ -5,7 +5,7 @@
   "main": "./bin/citrine.js",
   "scripts": {
     "build": "tsc --incremental",
-    "build:docs": "typedoc src/",
+    "build:docs": "typedoc --out docs/ src/",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "fmt": "prettier --check \"{src,launcher}/**/*.{ts,js}\"",

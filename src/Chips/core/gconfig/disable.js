@@ -5,8 +5,31 @@ class DisableGuild extends SubCommand {
     super({
       name: 'guild',
       description: 'Globally disable guilds from using this bot.',
-      usage: '[p]gconfig disable user [...UserID/@User]'
+      usage: '[p]gconfig disable guild [...GuildID/Name]'
     });
+  }
+
+  async execute(ctx, ...guilds) {
+    const { inline } = ctx.client.utils.format;
+
+    if (guilds.length) {
+      for (const guild of guilds) {
+        let id;
+        const found = ctx.client.guilds.find(g => g.name === guild || g.id === guild);
+        if (found) id = found.id
+        else id = guild;
+        ctx.client.settings.disableGuild(id);
+      }
+      await ctx.client.settings.save();
+      await ctx.success(`Successfully disabled guilds: ${inline(guilds).join(', ')}`);
+    } else {
+      const disabled = ctx.client.settings.disabledGuilds;
+      if (disabled.length) {
+        await ctx.send(`Currently disabled guilds: ${inline(disabled).join(', ')}`);
+      } else {
+        await ctx.send('No guilds disabled currently.');
+      }
+    }
   }
 }
 
@@ -17,6 +40,23 @@ class DisableUser extends SubCommand {
       description: 'Globally disable users from using this bot.',
       usage: '[p]gconfig disable user [...UserID/@User]'
     });
+  }
+
+  async execute(ctx, ...users) {
+    if (users.length) {
+      for (const user of users) {
+        ctx.client.settings.disableUser(user);
+      }
+      await ctx.client.settings.save();
+      await ctx.send(`Successfully disabled users: ${users.map(id => `<@${id}>`)}`);
+    } else {
+      const disabled = ctx.client.settings.disabledUsers;
+      if (disabled.length) {
+        await ctx.send(`Currently disabled Users: ${disabled.map(id => `<@${id}>`)}`);
+      } else {
+        await ctx.send(`No users disabled currently.`);
+      }
+    }
   }
 }
 
@@ -31,36 +71,35 @@ class DisableCmd extends SubCommand {
   }
 
   async execute(ctx, ...cmds) {
+    const { inline } = ctx.client.utils.format;
+
     if (cmds.length) {
       const disabled = [];
+
       for (const cmd of cmds) {
         const [exists] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
-        if (!exists) continue;
+        if (!exists || exists.chip === 'core') continue;
         ctx.client.settings.disableCommand(cmd);
         disabled.push(cmd);
       }
+
       if (disabled.length) {
-        const { inline } = ctx.client.utils.format;
         await ctx.client.settings.save();
         ctx.success(
           `Successfully disabled commands:\n${inline(disabled).join('\n')}`
         );
-        return;
       } else {
         ctx.error(
           'No commands were disabled. Did you provide the correct names?'
         );
-        return;
       }
     } else {
-      const { inline } = ctx.client.utils.format;
       const disabled = ctx.client.settings.disabledCommands;
       if (disabled.length) {
-        await ctx.send(`Disabled Commands: ${inline(disabled).join(', ')}`);
+        await ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
       } else {
         await ctx.send('No commands disabled currently.');
       }
-      return;
     }
   }
 }

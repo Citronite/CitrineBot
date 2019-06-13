@@ -61,6 +61,8 @@ export class CitrineSettings {
   }
 
   public disableUser(id: string): void {
+    if (id === this.owner) return;
+    if (id === this.client.user.id) return;
     this.data.disabledUsers.add(id);
   }
 
@@ -103,6 +105,7 @@ export class CitrineSettings {
   }
 
   public removeLoadedChip(name: string): void {
+    if (name === 'core') return;
     this.data.loadedChips.delete(name);
   }
 
