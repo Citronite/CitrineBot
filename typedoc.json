@@ -1,0 +1,6 @@
+{
+    "out": "./docs",
+    "mode": "file",
+    "theme": "default",
+    "ignoreCompilerErrors": true
+}
