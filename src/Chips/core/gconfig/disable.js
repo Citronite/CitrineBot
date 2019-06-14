@@ -1,5 +1,15 @@
 const { SubCommand } = require('../../../exports');
 
+class Disable extends SubCommand {
+  constructor() {
+    super({
+      name: 'disable',
+      description: 'Disable guilds/users/commands globally.',
+      usage: '[p]gconfig disable <"guild" | "user" | "cmd">'
+    });
+  }
+}
+
 class DisableGuild extends SubCommand {
   constructor() {
     super({
@@ -101,16 +111,6 @@ class DisableCmd extends SubCommand {
         await ctx.send('No commands disabled currently.');
       }
     }
-  }
-}
-
-class Disable extends SubCommand {
-  constructor() {
-    super({
-      name: 'disable',
-      description: 'Disable guilds/users/commands globally.',
-      usage: '[p]gconfig disable <"guild" | "user" | "cmd">'
-    });
   }
 }
 
