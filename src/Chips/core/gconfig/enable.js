@@ -1,6 +1,5 @@
 const { SubCommand } = require('../../../exports');
 
-
 class Enable extends SubCommand {
   constructor() {
     super({
@@ -10,7 +9,6 @@ class Enable extends SubCommand {
     });
   }
 }
-
 
 class EnableGuild extends SubCommand {
   constructor() {
