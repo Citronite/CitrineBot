@@ -4,7 +4,7 @@
   "description": "CitrineBot - A powerful & extensible Discord bot!",
   "main": "./bin/citrine.js",
   "scripts": {
-    "build": "tsc --incremental",
+    "build": "tsc",
     "build:docs": "typedoc --out docs/ src/",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
