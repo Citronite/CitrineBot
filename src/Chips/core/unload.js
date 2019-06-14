@@ -33,8 +33,10 @@ class Unload extends BaseCommand {
       }
     }
     const { inline } = ctx.client.utils.format;
-    if (errors.length) {
-      await ctx.error(`Failed to load the following chip(s):\n${inline(failed).join(', ')}`);
+    if (failed.length) {
+      await ctx.error(
+        `Failed to load the following chip(s):\n${inline(failed).join(', ')}`
+      );
     }
     if (unloaded.length) {
       await ctx.success(

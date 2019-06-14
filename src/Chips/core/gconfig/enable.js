@@ -1,5 +1,17 @@
 const { SubCommand } = require('../../../exports');
 
+
+class Enable extends SubCommand {
+  constructor() {
+    super({
+      name: 'enable',
+      description: 'Enable guilds/users/commands globally.',
+      usage: '[p]gconfig enable <"guild" | "user" | "cmd">'
+    });
+  }
+}
+
+
 class EnableGuild extends SubCommand {
   constructor() {
     super({
@@ -14,14 +26,18 @@ class EnableGuild extends SubCommand {
 
     if (guilds.length) {
       for (const guild of guilds) {
-          ctx.client.settings.enableGuild(guild);
+        ctx.client.settings.enableGuild(guild);
       }
       await ctx.client.settings.save();
-      await ctx.success(`Successfully enabled guilds: ${inline(guilds).join(', ')}`);
+      await ctx.success(
+        `Successfully enabled guilds: ${inline(guilds).join(', ')}`
+      );
     } else {
       const disabled = ctx.client.settings.disabledGuilds;
       if (disabled.length) {
-        await ctx.send(`Currently disabled guilds: ${inline(disabled).join(', ')}`);
+        await ctx.send(
+          `Currently disabled guilds: ${inline(disabled).join(', ')}`
+        );
       } else {
         await ctx.send('No guilds disabled currently.');
       }
@@ -44,11 +60,15 @@ class EnableUser extends SubCommand {
         ctx.client.settings.enableUser(user);
       }
       await ctx.client.settings.save();
-      await ctx.send(`Successfully enabled users: ${users.map(id => `<@${id}>`)}`);
+      await ctx.send(
+        `Successfully enabled users: ${users.map(id => `<@${id}>`)}`
+      );
     } else {
       const disabled = ctx.client.settings.disabledUsers;
       if (disabled.length) {
-        await ctx.send(`Currently disabled users: ${disabled.map(id => `<@${id}>`)}`);
+        await ctx.send(
+          `Currently disabled users: ${disabled.map(id => `<@${id}>`)}`
+        );
       } else {
         await ctx.send(`No users enabled currently.`);
       }
@@ -92,21 +112,13 @@ class EnableCmd extends SubCommand {
     } else {
       const disabled = ctx.client.settings.disabledCommands;
       if (disabled.length) {
-        await ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
+        await ctx.send(
+          `Currently disabled commands: ${inline(disabled).join(', ')}`
+        );
       } else {
         await ctx.send('No commands disabled currently.');
       }
     }
-  }
-}
-
-class Enable extends SubCommand {
-  constructor() {
-    super({
-      name: 'enable',
-      description: 'Enable guilds/users/commands globally.',
-      usage: '[p]gconfig enable <"guild" | "user" | "cmd">'
-    });
   }
 }
 
