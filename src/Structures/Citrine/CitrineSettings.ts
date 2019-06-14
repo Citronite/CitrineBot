@@ -113,7 +113,7 @@ export class CitrineSettings {
     return this.data.aliases;
   }
 
-  public setAlias(cmd: string, alias: string): void {
+  public addAlias(cmd: string, alias: string): void {
     const aliases: Set<string> = this.data.aliases[cmd]
       ? new Set(this.data.aliases[cmd])
       : new Set();
@@ -121,7 +121,7 @@ export class CitrineSettings {
     this.data.aliases[cmd] = [...aliases];
   }
 
-  public unsetAlias(cmd: string, alias: string): void {
+  public removeAlias(cmd: string, alias: string): void {
     if (!this.data.aliases[cmd]) return;
     const aliases = new Set(this.data.aliases[cmd]);
     aliases.delete(alias);
