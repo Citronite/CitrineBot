@@ -89,7 +89,7 @@ class Remove extends SubCommand {
       );
       if (exists) {
         ctx.client.settings.removeAlias(cmd, alias);
-        await ctx.settings.save();
+        await ctx.client.settings.save();
         ctx.success(
           `Successfully removed \`${alias}\` as an alias for \`${cmd}\``
         );

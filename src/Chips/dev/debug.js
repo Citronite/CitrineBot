@@ -34,7 +34,6 @@ class Debug extends BaseCommand {
     await msg.delete();
     const msgDelete = Date.now() - start;
 
-    const cachedUsers = ctx.client.users.size;
     const { ping } = ctx.client;
     const { uptime } = ctx.client;
 
@@ -48,14 +47,13 @@ class Debug extends BaseCommand {
 
     const embed = QuickEmbed.basic(ctx.author)
       .setTitle('Citrine | Debug')
-      .addField("client.db.guilds.read('GLOBAL')", `${dbRead}ms`, true)
-      .addField('client.settings.save()', `${saveSettings}ms`, true)
-      .addField('Message Send', `${msgSend}ms`, true)
-      .addField('Message Edit', `${msgEdit}ms`, true)
-      .addField('Message Delete', `${msgDelete}ms`, true)
-      .addField('Cached Users', `${cachedUsers}`, true)
-      .addField('Ping', `${ping}ms`, true)
-      .addField('Uptime', `${uptime}`, true)
+      .addField("db.guilds.read()", `${dbRead} ms`, true)
+      .addField('settings.save()', `${saveSettings} ms`, true)
+      .addField('Message Send', `${msgSend} ms`, true)
+      .addField('Message Edit', `${msgEdit} ms`, true)
+      .addField('Message Delete', `${msgDelete} ms`, true)
+      .addField('Ping', `${Math.round(ping)} ms`, true)
+      .addField('Uptime', `${Math.round(uptime / 1000 / 60)} minutes`, true)
       .addField('Memory Usage', usage.join('\n'), false);
 
     ctx.send(embed);
