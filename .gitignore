@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# package-lock
+package-lock.json
+
 # tsc outDir + buildinfo
 bin/
 *.tsbuildinfo
