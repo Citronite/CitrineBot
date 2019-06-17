@@ -1,12 +1,23 @@
 # Dependencies
 node_modules/
 
-# tsc outDir
+# package-lock
+package-lock.json
+
+# tsc outDir + buildinfo
 bin/
+*.tsbuildinfo
+
+# data dirs
+data/
+temp/
+
+# Created batch/shell files
+start_citrine.*
 
 # extra stuff
 *.txt
-data/
-start_citrine.bat
+
+# Editors
 .vscode
-temp/
+.idea
