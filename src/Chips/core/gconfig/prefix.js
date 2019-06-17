@@ -13,7 +13,9 @@ class Prefix extends SubCommand {
     if (prefix) {
       ctx.client.settings.globalPrefix = prefix;
       await ctx.client.settings.save();
-      await ctx.success(`Successfully changed the global prefix to ${prefix}`);
+      await ctx.success(
+        `Successfully changed the global prefix to \`${prefix}\``
+      );
       return;
     } else {
       await ctx.send(

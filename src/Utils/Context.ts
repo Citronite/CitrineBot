@@ -124,11 +124,13 @@ export class Context {
       throw new Exception(100, 'Permission checks only work inside guilds!');
     }
 
-    const checkAdmin =
-      options && options.checkAdmin ? options.checkAdmin : true;
-    const checkBot = options && options.checkBot ? options.checkBot : true;
-    checkPerms(perms, this.member, this.channel, checkAdmin);
-    if (checkBot) checkPerms(perms, this.guild.me, this.channel, checkAdmin);
+    const opts = Object.assign({
+      checkBot: true,
+      checkAdmin: true
+    }, options);
+
+    checkPerms(perms, this.member, this.channel, opts.checkAdmin);
+    if (opts.checkBot) checkPerms(perms, this.guild.me, this.channel, opts.checkAdmin);
   }
 
   public lock(...locks: LockType[]): void {

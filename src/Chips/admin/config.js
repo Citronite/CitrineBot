@@ -5,7 +5,7 @@ class Config extends BaseCommand {
     super({
       name: 'config',
       description: 'View or change server settings.',
-      usage: '[p]config [-dm]',
+      usage: '[p]config [--dm]',
       chip: 'admin'
     });
   }
@@ -16,7 +16,7 @@ class Config extends BaseCommand {
 
     const data = await ctx.client.db.guilds.read(ctx.message.guild.id);
     const settings = JSON.stringify(data, null, '  ');
-    const dm = flag === '-dm';
+    const dm = flag === '--dm';
     if (dm) await ctx.sendDM(settings, { code: 'json' });
     else await ctx.send(settings, { code: 'json' });
   }

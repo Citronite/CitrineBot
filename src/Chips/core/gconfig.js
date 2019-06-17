@@ -5,7 +5,7 @@ class GConfig extends BaseCommand {
     super({
       name: 'gconfig',
       description: "View or change Citrine's global settings.",
-      usage: '[p]gconfig [-dm]',
+      usage: '[p]gconfig [--dm]',
       chip: 'core'
     });
   }
@@ -15,14 +15,16 @@ class GConfig extends BaseCommand {
     if (ctx.subcommand) return;
 
     const settings = JSON.stringify(ctx.client.settings.toJSON(), null, '  ');
-    const dm = flag === '-dm';
+    const dm = flag === '--dm';
     if (dm) await ctx.sendDM(settings, { code: 'json' });
     else await ctx.send(settings, { code: 'json' });
   }
 }
 
-const p = require('./gconfig/prefix.js');
-const v = require('./gconfig/verbose.js');
-const d = require('./gconfig/disable.js');
-const e = require('./gconfig/enable.js');
-module.exports = new GConfig().registerSubCommands(p, v, d, e);
+const a = require('./gconfig/prefix.js');
+const b = require('./gconfig/verbose.js');
+const c = require('./gconfig/disable.js');
+const d = require('./gconfig/enable.js');
+const e = require('./gconfig/aliases.js');
+const f = require('./gconfig/devs.js');
+module.exports = new GConfig().registerSubCommands(a, b, c, d, e, f);

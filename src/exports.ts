@@ -1,15 +1,6 @@
-import { BaseCommand } from './Structures/Command/BaseCommand';
-import { SubCommand } from './Structures/Command/SubCommand';
-import { Exception } from './Structures/Exceptions/Exception';
-import { ExceptionCodes } from './Structures/Exceptions/ExceptionCodes';
-import { ExceptionMessages } from './Structures/Exceptions/ExceptionMessages';
-import { QuickEmbed } from './Utils/QuickEmbed';
-
-module.exports = {
-  BaseCommand,
-  SubCommand,
-  Exception,
-  ExceptionCodes,
-  ExceptionMessages,
-  QuickEmbed
-};
+export { BaseCommand } from './Structures/Command/BaseCommand';
+export { SubCommand } from './Structures/Command/SubCommand';
+export { Exception } from './Structures/Exceptions/Exception';
+export { ExceptionCodes } from './Structures/Exceptions/ExceptionCodes';
+export { ExceptionMessages } from './Structures/Exceptions/ExceptionMessages';
+export { QuickEmbed } from './Utils/QuickEmbed';

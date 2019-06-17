@@ -60,7 +60,7 @@ export class PermHandler implements IPermHandler {
       channel.client.user.id === member.id
         ? MISSING_BOT_PERMS
         : MISSING_MEMBER_PERMS;
-    throw new Exception(code, missing);
+    throw new Exception(code, ['Missing permissions:', ...missing]);
   }
 
   public checkGuildOwner(guild: Guild, user: User | GuildMember): void {

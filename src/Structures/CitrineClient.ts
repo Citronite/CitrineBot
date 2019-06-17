@@ -62,6 +62,10 @@ export class CitrineClient extends Client {
     }
 
     this.lastException = null;
+
+    this.on('error', () => this.logger.error('Connection error. . .'));
+    this.on('reconnecting', () => this.logger.warn('Reconnecting. . .'));
+    this.on('resume', () => this.logger.info('Connection resumed!'));
   }
 
   // Loads all chips from the Chips folder.
