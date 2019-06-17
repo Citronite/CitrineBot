@@ -185,13 +185,13 @@ declare module 'typings' {
     | RawExceptionArray
     | /* RawExceptionObject | */ Error;
   export type LockType =
-    | 'nsfw'
+    | 'nsfw' // TODO: Implement nsfw check in Context#lock
     | 'dm'
     | 'guild'
     | 'botOwner'
     | 'botManager'
     | 'botDev'
-    | boolean; // TODO: Add nsfw check
+    | boolean;
   export type LockPermsOptions = {
     checkAdmin?: boolean;
     checkBot?: boolean;
@@ -226,6 +226,6 @@ declare module 'typings' {
     prefix: string;
     command: ICommand;
     subcommand?: ISubCommand;
-    args?: string[]; // TODO: Add this to Context class and allow flags for commands
+    args?: string[]; // TODO: Implement this in Context class and allow flags for commands
   };
 }

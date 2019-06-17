@@ -1,6 +1,12 @@
 {
-    "out": "./docs",
+    "name": "Citrine",
     "mode": "file",
     "theme": "default",
-    "ignoreCompilerErrors": true
+    "ignoreCompilerErrors": true,
+    "hideGenerator": true,
+    "includeDeclarations": true,
+    "excludeExternals": true,
+    "excludeNotExported": true,
+    "excludePrivate": true,
+    "excludeProtected": true
 }
