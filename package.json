@@ -1,5 +1,5 @@
 {
-  "name": "citrine-bot",
+  "name": "citrinebot",
   "version": "1.0.0",
   "description": "CitrineBot - A powerful & extensible Discord bot!",
   "main": "./bin/citrine.js",
@@ -26,12 +26,12 @@
     "self-hosted",
     "discord.js"
   ],
-  "author": "Quantomistro3178",
+  "author": "Quantomistro",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/Quantomistro3178/CitrineBot/issues"
+    "url": "https://github.com/Quantomistro/CitrineBot/issues"
   },
-  "homepage": "https://github.com/Quantomistro3178/CitrineBot#README",
+  "homepage": "https://github.com/Quantomistro/CitrineBot#README",
   "peerDependencies": {
     "@types/node": "^12.0.8",
     "@types/keyv": "^3.1.0",
@@ -52,6 +52,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Quantomistro3178/CitrineBot.git"
+    "url": "git+https://github.com/Quantomistro/CitrineBot.git"
   }
 }
