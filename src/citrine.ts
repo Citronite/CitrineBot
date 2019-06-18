@@ -4,8 +4,8 @@ import { ICitrineOptions } from 'typings';
 /*
  *       CitrineBot - A powerful, modular discord bot!
  *
- *       By @Quantomistro3178 (https://github.com/Quantomistro3178)
- *       GitHub: https://github.com/Quantomistro3178/CitrineBot
+ *       By @quantomistro (https://github.com/quantomistro)
+ *       GitHub: https://github.com/quantomistro/CitrineBot
  *       Support Server: https://discord.gg/rEM9gFN
  *
  *       ###############################
