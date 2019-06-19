@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { CitrineClient } from '../Structures/CitrineClient';
-import { GuildConfig } from '../Utils/GuildConfig';
+import { GuildConfig } from '../Structures/Utils/GuildConfig';
 import { Exception } from '../Structures/Exceptions/Exception';
 
 module.exports = {

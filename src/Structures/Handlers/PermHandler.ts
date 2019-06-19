@@ -1,7 +1,7 @@
-import { GuildConfig } from '../../Utils/GuildConfig';
+import { GuildConfig } from '../Utils/GuildConfig';
 import { Exception } from '../Exceptions/Exception';
 import { ExceptionCodes } from '../Exceptions/ExceptionCodes';
-import { Context } from '../../Utils/Context';
+import { Context } from '../Utils/Context';
 import {
   GuildMember,
   TextChannel,

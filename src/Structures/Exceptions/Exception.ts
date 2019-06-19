@@ -1,5 +1,5 @@
 import { RichEmbed } from 'discord.js';
-import { QuickEmbed } from '../../Utils/QuickEmbed';
+import { QuickEmbed } from '../Utils/QuickEmbed';
 import { ExceptionCodes } from './ExceptionCodes';
 import { ExceptionMessages } from './ExceptionMessages';
 import { RawException, RawExceptionArray } from 'typings';
@@ -11,16 +11,6 @@ function isExceptionArray(err: any): err is RawExceptionArray {
   const hasMsg = typeof err[1] === 'string' || typeof err[1][0] === 'string';
   return isArr && hasType && hasMsg;
 }
-
-/*
-// Type guard
-function isExceptionObject(err: any): err is RawExceptionObject {
-  const isObj = err.constructor.name === 'Object';
-  const hasType = ['string', 'number'].includes(typeof err.type);
-  const hasMsg = typeof err.msg === 'string' || typeof err.msg[0] === 'string';
-  return isObj && hasType && hasMsg;
-}
-*/
 
 export class Exception extends Error {
   public readonly code: number;
@@ -96,13 +86,6 @@ export class Exception extends Error {
       const code = this.resolveCode(err[0]);
       return new Exception(code, err[1]);
     }
-
-    /*
-        if (isExceptionObject(err)) {
-            const code = this.resolveCode(err.type);
-            return new Exception(code, err.msg);
-        }
-        */
 
     return new Exception(999, ExceptionMessages[999]);
   }

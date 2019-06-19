@@ -1,9 +1,9 @@
 import { QuickEmbed } from './QuickEmbed';
-import { CitrineClient } from '../Structures/CitrineClient';
-import { Exception } from '../Structures/Exceptions/Exception';
-import { ExceptionMessages } from '../Structures/Exceptions/ExceptionMessages';
+import { CitrineClient } from '../CitrineClient';
+import { Exception } from '../Exceptions/Exception';
+import { ExceptionMessages } from '../Exceptions/ExceptionMessages';
 import { Command } from 'typings';
-import { SubCommand } from '../Structures/Command/SubCommand';
+import { SubCommand } from '../Command/SubCommand';
 import {
   LockType,
   LockPermsOptions,

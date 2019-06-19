@@ -1,5 +1,5 @@
-import { DjsUtils } from '../../Utils/DjsUtils';
-import { Formatter } from '../../Utils/Formatter';
+import { DjsUtils } from '../Utils/DjsUtils';
+import { Formatter } from '../Utils/Formatter';
 import { DjsUtils as IDjsUtils, Formatter as IFormatter } from 'typings';
 
 export class CitrineUtils {

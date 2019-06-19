@@ -1,6 +1,6 @@
 import { BaseCommandOptions } from 'typings';
 import { Collection } from 'discord.js';
-import { Context } from '../../Utils/Context';
+import { Context } from '../Utils/Context';
 import { SubCommand } from './SubCommand';
 
 type Command = SubCommand | BaseCommand;
