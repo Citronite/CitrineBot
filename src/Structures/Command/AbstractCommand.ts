@@ -10,6 +10,7 @@ function validateCommandOptions(options: any): void {
 
 export abstract class Command {
   public subcommands?: Collection<string, Command>;
+  public parent?: Command;
   public readonly name: string;
   public readonly description: string;
   public readonly usage?: string;
@@ -29,14 +30,23 @@ export abstract class Command {
     else throw 'INSUFFICIENT_ARGS';
   }
 
-  // Couldn't think of any better way
-  // to do this. I'm not smart enough.
+  public getParent(): Command | null {
+    return this.parent || null;
+  }
+
+  public getBase(): Command {
+    let base: Command = this;
+    while (base.parent) {
+      base = base.parent;
+    }
+    return base;
+  }
+
   public registerSubCommands(...subCmds: any[]): this {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
-      if (subCmd.setParent && subCmd.setBase) {
+      if (subCmd.id === 'sub' && subCmd.setParent) {
         subCmd.setParent(this);
-        subCmd.setBase(this);
         this.subcommands.set(subCmd.name, subCmd);
         continue;
       } else {
