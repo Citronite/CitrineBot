@@ -58,7 +58,7 @@ export class SubCommand {
   public register(...subCmds: any[]): this {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
-      if (subCmd.id === 'sub' && subCmd.setParent) {
+      if (subCmd instanceof SubCommand) {
         setParent(subCmd, this);
         this.subcommands.set(subCmd.name, subCmd);
         continue;
