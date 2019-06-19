@@ -1,5 +1,5 @@
 import { DbDriver, DbConnection } from 'typings';
-import { KeyvWrapper } from './Utils/KeyvWrapper';
+import KeyvWrapper from './Utils/KeyvWrapper';
 
 export default class MemoryKV implements DbDriver {
   [key: string]: any;
