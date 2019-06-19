@@ -1,13 +1,17 @@
 import { Guild } from 'discord.js';
-import { CitrineClient } from '../Structures/CitrineClient';
-import { ChannelID, RoleID, UserID, IGuildConfig } from 'typings';
+import {
+  ChannelID,
+  RoleID,
+  UserID,
+  GuildConfigData
+} from 'typings';
 
 export class GuildConfig {
-  private readonly data: IGuildConfig;
+  private readonly data: GuildConfigData;
 
   public constructor(guild: Guild | GuildConfig) {
     if (guild instanceof Guild) {
-      const client: CitrineClient & any = guild.client;
+      const client: any = guild.client;
       this.data = {
         id: guild.id,
         prefix: client.settings.globalPrefix,
@@ -124,19 +128,19 @@ export class GuildConfig {
     this.data.disabledCommands.delete(id);
   }
 
-  public get reqRoles(): object {
+  public get reqRoles(): { [key: string]: string } {
     return this.data.reqRoles;
   }
 
-  public setReqRole(cmd: string, role: RoleID): void {
+  public addReqRole(cmd: string, role: RoleID): void {
     this.data.reqRoles[cmd] = role;
   }
 
-  public unsetReqRole(cmd: string): void {
+  public removeReqRole(cmd: string): void {
     delete this.data.reqRoles[cmd];
   }
 
-  public toJSON(): object {
+  public toJSON(): { [key: string]: any } {
     const conf = this.data;
     return {
       ...conf,

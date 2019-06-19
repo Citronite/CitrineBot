@@ -1,44 +1,47 @@
 import { Message } from 'discord.js';
-import { Command } from '../Command/AbstractCommand';
+import { SubCommand } from '../Command/SubCommand';
 import { GuildConfig } from '../../Utils/GuildConfig';
 import { BaseCommand } from '../Command/BaseCommand';
 import { Exception } from '../Exceptions/Exception';
 import { Context } from '../../Utils/Context';
-import { SubCommand } from '../Command/SubCommand';
-import { ICmdHandler } from 'typings';
+
+type Command = SubCommand | BaseCommand;
 
 function isSubcommand(subcmd: any): subcmd is SubCommand {
   return subcmd instanceof SubCommand;
 }
 
-export class CmdHandler implements ICmdHandler {
+export class CmdHandler {
   public checkPrefix(
-    message: Message & any,
+    message: Message,
     config?: GuildConfig
   ): string | null {
     if (message.author.bot) return null;
-    const gPrefix = message.client.settings.globalPrefix;
-    const id = message.client.user.id;
+    const client: any = message.client;
+    const gPrefix = client.settings.globalPrefix;
+    const id = client.user.id;
     let rgx = new RegExp(`^(<@!?${id}>|\\${gPrefix})\\s*`);
     if (config)
       rgx = new RegExp(`^(<@!?${id}>|\\${gPrefix}|\\${config.prefix})\\s*`);
-    return rgx.test(message.content) ? message.content.match(rgx)[0] : null;
+    const match = message.content.match(rgx);
+    return match ? match[0] : null;
   }
 
   public getArgs(
-    message: Message & any,
+    message: Message,
     prefix: string,
     parseQuotes: boolean = true
   ): string[] | null {
     const text = message.content.slice(prefix.length);
+    const client: any = message.client;
     const args = parseQuotes
-      ? message.client.utils.djs.parseQuotes(text)
+      ? client.utils.djs.parseQuotes(text)
       : text.split(/ +/);
     return args.length ? args : null;
   }
 
   public getBaseCmd(
-    message: Message & any,
+    message: Message,
     args: string[]
   ): [BaseCommand, string[]] | null {
     if (!args || !args.length) return null;
@@ -47,13 +50,14 @@ export class CmdHandler implements ICmdHandler {
     if (!name) return null;
     else name = name.toLowerCase();
 
+    const client: any = message.client;
     const fn = (val: Command) => {
-      const aliases = message.client.settings.aliases[val.name];
+      const aliases = client.settings.aliases[val.name];
       return aliases && aliases.includes(name);
     };
     const cmd =
-      message.client.commands.get(name) ||
-      message.client.commands.find(fn) ||
+      client.commands.get(name) ||
+      client.commands.find(fn) ||
       null;
 
     return cmd ? [cmd, args] : null;
@@ -69,7 +73,7 @@ export class CmdHandler implements ICmdHandler {
     if (!result) return null;
     const [base, finalArgs] = result;
 
-    let cmd: Command | undefined = base;
+    let cmd: Command = base;
     if (!cmd.subcommands) return result;
     if (!finalArgs.length) return result;
 

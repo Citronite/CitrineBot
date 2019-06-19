@@ -2,7 +2,7 @@ import { QuickEmbed } from './QuickEmbed';
 import { CitrineClient } from '../Structures/CitrineClient';
 import { Exception } from '../Structures/Exceptions/Exception';
 import { ExceptionMessages } from '../Structures/Exceptions/ExceptionMessages';
-import { Command } from '../Structures/Command/AbstractCommand';
+import { Command } from 'typings';
 import { SubCommand } from '../Structures/Command/SubCommand';
 import {
   LockType,
@@ -33,7 +33,7 @@ function validateContextData(data: any): void {
 }
 
 export class Context {
-  public readonly client: CitrineClient & any;
+  public readonly client: CitrineClient;
   public readonly prefix: string;
   public readonly message: Message;
   public readonly author: User;
@@ -45,7 +45,8 @@ export class Context {
 
   public constructor(data: ContextData) {
     validateContextData(data);
-    const { message } = data;
+    const message: any = data.message;
+    const subcmd: any = data.subcommand;
     this.client = message.client;
     this.message = message;
     this.author = message.author;
@@ -54,7 +55,7 @@ export class Context {
     this.guild = message.guild || null;
     this.prefix = data.prefix;
     this.command = data.command;
-    this.subcommand = data.subcommand;
+    this.subcommand = subcmd;
   }
 
   public async send(...args: any): Promise<Message | Message[]> {
@@ -117,10 +118,13 @@ export class Context {
     if (!this.member) {
       throw new Exception(
         100,
-        'Permission checks only work on guild members, not users!'
+        'Permission checks only work on guild members!'
       );
     }
     if (!this.guild) {
+      throw new Exception(100, 'Permission checks only work inside guilds!');
+    }
+    if (!(this.channel instanceof TextChannel)) {
       throw new Exception(100, 'Permission checks only work inside guilds!');
     }
 

@@ -1,10 +1,10 @@
-import { FormatHelpOptions, IFormatter } from 'typings';
+import { FormatHelpOptions, CommandHelpObject } from 'typings';
 import { BaseCommand } from '../Structures/Command/BaseCommand';
 import { SubCommand } from '../Structures/Command/SubCommand';
 
 type tCommand = BaseCommand | SubCommand;
 
-export class Formatter implements IFormatter {
+export class Formatter {
   public italic(str: string | string[]): string | string[] {
     if (typeof str === 'string') {
       return `*${str}*`;
@@ -53,7 +53,7 @@ export class Formatter implements IFormatter {
     }
   }
 
-  public cmdHelp(cmd: tCommand, options?: FormatHelpOptions): object {
+  public cmdHelp(cmd: tCommand, options?: FormatHelpOptions): CommandHelpObject {
     let chip;
     let parent;
     let base;

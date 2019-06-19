@@ -1,8 +1,7 @@
 import { CitrineClient } from '../Structures/CitrineClient';
-import { IDjsUtils } from 'typings';
 import { Role, Guild, User, GuildMember, GuildChannel } from 'discord.js';
 
-export class DjsUtils implements IDjsUtils {
+export class DjsUtils {
   public parseMention(mention: string): string {
     const rgx = /^<(#|@|@!|@&)\d+>$/;
     if (rgx.test(mention)) {
@@ -99,7 +98,7 @@ export class DjsUtils implements IDjsUtils {
 
       return fetchedGuild.members.find(finder) || null;
     } catch (err) {
-      const client: CitrineClient & any = guild.client;
+      const client: any = guild.client;
       client.logger.warn(`resolveGuildMember() failed for [${member}]`);
       return null;
     }

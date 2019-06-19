@@ -2,7 +2,6 @@ import { GuildConfig } from '../../Utils/GuildConfig';
 import { Exception } from '../Exceptions/Exception';
 import { ExceptionCodes } from '../Exceptions/ExceptionCodes';
 import { Context } from '../../Utils/Context';
-import { IPermHandler } from 'typings';
 import {
   GuildMember,
   TextChannel,
@@ -14,7 +13,7 @@ import {
 
 const ErrCode = ExceptionCodes;
 
-export class PermHandler implements IPermHandler {
+export class PermHandler {
   public checkFilters(ctx: Context, config?: GuildConfig): void {
     const { settings: globalConfig } = ctx.client;
     if (ctx.author.id === globalConfig.owner) return;
@@ -71,16 +70,18 @@ export class PermHandler implements IPermHandler {
     );
   }
 
-  public checkBotOwner(user: User | GuildMember & any): void {
-    if (user.id === user.client.settings.owner) return;
+  public checkBotOwner(user: User | GuildMember): void {
+    const client: any = user.client;
+    if (user.id === client.settings.owner) return;
     throw new Exception(
       ErrCode.PERMISSION_ERROR,
       'Only bot owners may perform that action!'
     );
   }
 
-  public checkBotDev(user: User | GuildMember & any): void {
-    if (user.client.settings.devs.includes(user.id)) return;
+  public checkBotDev(user: User | GuildMember): void {
+    const client: any = user.client;
+    if (client.settings.devs.includes(user.id)) return;
     throw new Exception(
       ErrCode.PERMISSION_ERROR,
       'Only bot developers may perform that action!'

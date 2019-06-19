@@ -10,12 +10,10 @@ import { ConsoleLogger } from './Loggers/Console';
 import { CitrineSettings } from './Citrine/CitrineSettings';
 import { Client, Collection } from 'discord.js';
 import {
-  ICitrineOptions,
-  IDbDriver,
-  IUtils,
-  ILogger,
-  ICmdHandler,
-  IPermHandler
+  CitrineOptions,
+  DbDriver,
+  Utils,
+  Logger
 } from 'typings';
 
 const root = resolve(`${__dirname}/../../`);
@@ -27,16 +25,16 @@ function fileFilter(arr: string[]): string[] {
 
 export class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
-  public readonly logger: ILogger;
-  public readonly utils: IUtils;
-  public readonly db: IDbDriver & any;
-  public readonly cmdHandler: ICmdHandler;
-  public readonly permHandler: IPermHandler;
+  public readonly logger: Logger;
+  public readonly utils: Utils;
+  public readonly db: DbDriver;
+  public readonly cmdHandler: CmdHandler;
+  public readonly permHandler: PermHandler;
   public readonly commands: Collection<string, BaseCommand>;
   public readonly defaultChips: Set<string>;
   public lastException: Error | null; // Temporary
 
-  public constructor(options?: ICitrineOptions) {
+  public constructor(options?: CitrineOptions) {
     super(options);
     this.settings = new CitrineSettings(this);
     this.commands = new Collection();

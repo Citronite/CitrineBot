@@ -1,9 +1,9 @@
 import { CitrineClient } from '../CitrineClient';
-import { IGlobalConfig } from 'typings';
+import { GlobalConfigData } from 'typings';
 
 export class CitrineSettings {
   public readonly client: CitrineClient;
-  private data: IGlobalConfig;
+  private data: GlobalConfigData;
 
   public constructor(client: CitrineClient) {
     this.client = client;
@@ -109,7 +109,7 @@ export class CitrineSettings {
     this.data.loadedChips.delete(name);
   }
 
-  public get aliases(): object {
+  public get aliases(): { [key: string]: any } {
     return this.data.aliases;
   }
 
@@ -130,7 +130,8 @@ export class CitrineSettings {
 
   public async save(): Promise<void> {
     try {
-      await this.client.db.guilds.update('GLOBAL', this.data);
+      const db: any = this.client.db;
+      await db.guilds.update('GLOBAL', this.data);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -138,7 +139,8 @@ export class CitrineSettings {
 
   public async load(): Promise<void> {
     try {
-      const jsonData = await this.client.db.guilds.read('GLOBAL');
+      const db: any = this.client.db;
+      const jsonData = await db.guilds.read('GLOBAL');
       if (!jsonData) return;
       this.data = jsonData;
     } catch (err) {

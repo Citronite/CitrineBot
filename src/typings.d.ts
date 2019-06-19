@@ -8,6 +8,8 @@ declare module 'typings' {
     Guild,
     Channel,
     TextChannel,
+    DMChannel,
+    GroupDMChannel,
     Snowflake,
     MessageReaction,
     PermissionResolvable,
@@ -39,45 +41,146 @@ declare module 'typings' {
   }
   */
 
-  interface ICommand {
-    name: string;
-    description: string;
-    usage?: string;
-    execute: (...args: any[]) => Promise<void>;
-    registerSubCommands: (...args: ICommand[]) => this;
+  // Had to add the 'any's because TypeScript doesn't allow access modifiers
+  // in interfaces, and then complains if access modifiers are different between
+  // interfaces and implementations :(
+
+  interface CitrineSettings {
+    data: GlobalConfigData;
+    readonly client: CitrineClient;
+    readonly owner: string;
+    readonly globalPrefix: string;
+    readonly verbose: boolean;
+    readonly devs: UserID[];
+    readonly disabledUsers: UserID[];
+    disableUser: (id: UserID) => void;
+    enableUser: (id: UserID) => void;
+    readonly disabledGuilds: GuildID[];
+    disableGuild: (id: GuildID) => void;
+    enableGuild: (id: GuildID) => void;
+    readonly disabledCommands: string[];
+    disableCommand: (cmd: string) => void;
+    enableCommand: (cmd: string) => void;
+    readonly loadedChips: string[];
+    addLoadedChip: (chip: string) => void;
+    removeLoadedChip: (chip: string) => void;
+    readonly aliases: { [key: string]: string };
+    addAlias: (cmd: string, alias: string) => void;
+    removeAlias: (cmd: string, alias: string) => void;
+    save: () => Promise<void>;
+    load: () => Promise<void>;
+    toJSON: () => { [key: string]: any };
   }
 
-  interface IBaseCommand extends ICommand {
-    chip: string;
+  interface CitrineClient extends Client {
+    readonly settings: CitrineSettings;
+    readonly logger: Logger;
+    readonly utils: Utils;
+    readonly db: DbDriver;
+    readonly cmdHandler: CmdHandler;
+    readonly permHandler: PermHandler;
+    readonly commands: Collection<string, BaseCommand>;
+    readonly defaultChips: Set<string>;
+    lastException: Error | null;
+    initChips: () => void;
+    initEvents: () => void;
+    loadChip: (chip: string) => Promise<void>;
+    unloadChip: (chip: string) => Promise<void>;
+    clearChipCache: (chip: string) => Promise<void>;
+    launch: () => Promise<void>;
   }
 
-  interface ISubCommand extends ICommand {
-    setParent: (cmd: ICommand) => void;
-    getParent: () => ICommand | null;
-    setBase: (cmd: IBaseCommand) => void;
-    getBase: () => IBaseCommand | null;
+  interface Context {
+    readonly client: CitrineClient;
+    readonly prefix: string;
+    readonly message: Message;
+    readonly author: User;
+    readonly member: GuildMember | null;
+    readonly channel: TextChannel | DMChannel | GroupDMChannel;
+    readonly guild: Guild | null;
+    readonly command: Command;
+    readonly subcommand?: SubCommand;
+    send: (...args: any[]) => Promise<Message | Message[]>;
+    sendDM: (...args: any[]) => Promise<Message | Message[]>;
+    success: (msg: string, embed: boolean) => Promise<Message | Message[]>;
+    error: (msg: string, embed: boolean) => Promise<Message | Message[]>;
+    prompt: () => Promise<Message | string | null>;
+    promptReaction: () =>  Promise<MessageReaction | null>;
+    lockPerms: (perms: PermissionResolvable, options?: LockPermsOptions) => void;
+    lock: (...locks: LockType[]) => void;
   }
 
-  export interface ICmdHandler {
-    checkPrefix: (message: Message & any, config?: any) => string | null;
+  interface GuildConfig {
+     data: GuildConfigData;
+    readonly id: string;
+    readonly prefix: string;
+    readonly disabledRole: string;
+    readonly deleteCmdCalls: boolean;
+    readonly deleteCmdCallsDelay: number;
+    readonly readMsgEdits: boolean;
+    readonly disabledUsers: UserID[];
+    disableUser: (id: UserID) => void;
+    enableUser: (id: UserID) => void;
+    readonly disabledChannels: ChannelID[];
+    disableChannel: (id: ChannelID) => void;
+    enableChannel: (id: ChannelID) => void;
+    readonly disabledCommands: string[];
+    disableCommand: (name: string) => void;
+    enableCommand: (name: string) => void;
+    readonly reqRoles: { [key: string]: string };
+    addReqRole: (cmd: string, role: RoleID) => void;
+    removeReqRole: (cmd: string) => void;
+    toJSON: () => { [key: string]: any };
+  }
+
+  interface BaseCommand {
+    readonly id: 'base';
+    readonly name: string;
+    readonly description: string;
+    readonly usage?: string;
+    readonly chip: string;
+    readonly subcommands?: Collection<string, SubCommand>;
+    execute: (ctx: Context & any, ...args: string[]) => Promise<void>;
+    register: (...args: SubCommand[]) => this;
+  }
+
+  interface SubCommand {
+    readonly id: 'sub';
+    readonly name: string;
+    readonly description: string;
+    readonly usage?: string;
+    readonly parent?: Command;
+    readonly subcommands?: Collection<string, SubCommand>;
+    execute: (ctx: Context & any, ...args: string[]) => Promise<void>;
+    getParent: () => Command | undefined;
+    getBase: () => BaseCommand | undefined;
+    register: (...args: SubCommand[]) => this;
+  }
+
+  interface CmdHandler {
+    checkPrefix: (message: Message, config?: GuildConfig & any) => string | null;
     getArgs: (
-      message: Message & any,
+      message: Message,
       prefix: string,
       parseQuotes?: boolean
     ) => string[] | null;
     getBaseCmd: (
-      message: Message & any,
+      message: Message,
       args: string[]
-    ) => [ICommand, string[]] | null;
+    ) => [BaseCommand, string[]] | null;
     getFinalCmd: (
       message: Message,
       args: string[]
-    ) => [ICommand, string[]] | null;
-    processCommand: (message: Message & any, config?: any) => Promise<void>;
+    ) => [Command, string[]] | null;
+    getCmdGenerator: (
+      message: Message,
+      args: string[]
+    ) => IterableIterator<[Command, string[]] | undefined>;
+    processCommand: (message: Message, config?: GuildConfig & any) => Promise<void>;
   }
 
-  export interface IPermHandler {
-    checkFilters: (ctx: any, config: any) => void;
+  interface PermHandler {
+    checkFilters: (ctx: Context & any, config?: GuildConfig & any) => void;
     checkPerms: (
       perms: PermissionResolvable,
       member: GuildMember,
@@ -89,7 +192,7 @@ declare module 'typings' {
     checkBotDev: (user: User | GuildMember) => void;
   }
 
-  export interface IDjsUtils {
+  interface DjsUtils {
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
     resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
@@ -97,35 +200,35 @@ declare module 'typings' {
       guild: Guild,
       channel: string
     ) => Promise<GuildChannel | null>;
-    resolveUser: (client: any, user: string) => Promise<User | null>;
+    resolveUser: (client: CitrineClient, user: string) => Promise<User | null>;
     resolveGuildMember(
       guild: Guild,
       member: string
     ): Promise<GuildMember | null>;
   }
 
-  export interface IFormatter {
+  interface Formatter {
     italic: (str: string | string[]) => string | string[];
     lined: (str: string | string[]) => string | string[];
     striked: (str: string | string[]) => string | string[];
     bold: (str: string | string[]) => string | string[];
     inline: (str: string | string[]) => string | string[];
     block: (str: string | string[], lang?: string) => string | string[];
-    cmdHelp(cmd: ICommand, options: FormatHelpOptions): object;
+    cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpObject;
   }
 
-  export interface IUtils {
-    djs: IDjsUtils;
-    format: IFormatter;
+  interface Utils {
+    readonly djs: DjsUtils;
+    readonly format: Formatter;
   }
 
-  export interface ILogger {
+  export interface Logger {
     info: (...args: any[]) => void;
     error: (...args: any[]) => void;
     warn: (...args: any[]) => void;
   }
 
-  export interface IDbConnection {
+  export interface DbConnection {
     create: (...args: any[]) => Promise<void>;
     read: (...args: any[]) => Promise<any>;
     update: (...args: any[]) => Promise<void>;
@@ -133,12 +236,12 @@ declare module 'typings' {
     drop: () => Promise<void>;
   }
 
-  export interface IDbDriver {
-    connect: (...options: any[]) => IDbConnection;
+  export interface DbDriver {
+    connect: (...options: any[]) => DbConnection;
     disconnect: (...args: any[]) => void;
   }
 
-  export interface IGlobalConfig {
+  export interface GlobalConfigData {
     owner: UserID;
     globalPrefix: string;
     verbose: boolean;
@@ -150,7 +253,7 @@ declare module 'typings' {
     aliases: { [cmd: string]: string[] };
   }
 
-  export interface IGuildConfig {
+  export interface GuildConfigData {
     id: string;
     prefix: string;
     disabledRole: string;
@@ -160,30 +263,33 @@ declare module 'typings' {
     disabledUsers: Set<UserID>;
     disabledChannels: Set<ChannelID>;
     disabledCommands: Set<string>;
-    reqRoles: { [key: string]: string } & any;
+    reqRoles: { [key: string]: string };
   }
 
-  export interface ICitrineOptions extends ClientOptions {
-    defaultChips?: string[];
-    utils?: new () => IUtils;
-    logger?: new () => ILogger;
-    dbDriver?: new () => IDbDriver;
-    cmdHandler?: new () => ICmdHandler;
-    permHandler?: new () => IPermHandler;
+  export interface CitrineOptions extends ClientOptions {
+    readonly defaultChips?: string[];
+    readonly utils?: new () => Utils;
+    readonly logger?: new () => Logger;
+    readonly dbDriver?: new () => DbDriver;
+    readonly cmdHandler?: new () => CmdHandler;
+    readonly permHandler?: new () => PermHandler;
   }
 
   export type GuildID = Snowflake;
   export type ChannelID = Snowflake;
   export type RoleID = Snowflake;
   export type UserID = Snowflake;
+  
+  export type Command = BaseCommand | SubCommand;
+
   export type Reaction = string | Emoji | ReactionEmoji;
+
   export type RawExceptionArray = [string | number, string | string[]];
-  // export type RawExceptionObject = { type: string | number, msg: string | string[] };
   export type RawException =
     | string
     | number
     | RawExceptionArray
-    | /* RawExceptionObject | */ Error;
+    | Error;
   export type LockType =
     | 'nsfw' // TODO: Implement nsfw check in Context#lock
     | 'dm'
@@ -209,12 +315,18 @@ declare module 'typings' {
     filter?: (...args: any[]) => any; // TODO: Add proper typings here.
   };
 
-  export type CommandOptions = {
+  export type SubCommandOptions = {
     name: string;
     description: string;
     usage?: string;
-    chip?: string;
   };
+
+  export type BaseCommandOptions = {
+    name: string;
+    description: string;
+    usage?: string;
+    chip: string;
+  }
 
   export type FormatHelpOptions = {
     maxWidth?: number;
@@ -224,8 +336,20 @@ declare module 'typings' {
   export type ContextData = {
     message: Message;
     prefix: string;
-    command: ICommand;
-    subcommand?: ISubCommand;
+    command: Command;
+    subcommand?: SubCommand;
     args?: string[]; // TODO: Implement this in Context class and allow flags for commands
   };
+
+  export type CommandHelpObject = {
+    name: string;
+    description: string;
+    chip: string;
+    parent: string;
+    base: string;
+    usage?: string;
+    subcommands?: string;
+  }
 }
+
+// export type RawExceptionObject = { type: string | number, msg: string | string[] };
