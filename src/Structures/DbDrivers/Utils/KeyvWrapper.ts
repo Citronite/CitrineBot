@@ -1,7 +1,7 @@
-import { IDbConnection } from 'typings';
+import { DbConnection } from 'typings';
 import Keyv = require('keyv');
 
-export class KeyvWrapper implements IDbConnection {
+export class KeyvWrapper implements DbConnection {
   private readonly kv: Keyv<any>;
 
   public constructor(...options: any[]) {

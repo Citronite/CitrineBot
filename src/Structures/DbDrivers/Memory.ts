@@ -1,10 +1,10 @@
-import { IDbDriver, IDbConnection } from 'typings';
+import { DbDriver, DbConnection } from 'typings';
 import { MapWrapper } from './Utils/MapWrapper';
 
-export class Memory implements IDbDriver {
+export class Memory implements DbDriver {
   [key: string]: any;
 
-  public connect(name: string): IDbConnection {
+  public connect(name: string): DbConnection {
     try {
       this[name] = new MapWrapper();
       return this[name];

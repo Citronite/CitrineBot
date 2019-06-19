@@ -1,5 +1,5 @@
 import { CitrineClient } from './Structures/CitrineClient';
-import { ICitrineOptions } from 'typings';
+import { CitrineOptions } from 'typings';
 
 /*
  *       CitrineBot - A powerful, modular discord bot!
@@ -15,7 +15,7 @@ import { ICitrineOptions } from 'typings';
  *       ###############################
  */
 
-const options: ICitrineOptions = {
+const options: CitrineOptions = {
   disableEveryone: true,
   disabledEvents: ['TYPING_START'],
   defaultChips: ['utils']

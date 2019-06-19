@@ -1,5 +1,4 @@
-import { CitrineClient } from '../Structures/CitrineClient';
-import { Role, Guild, User, GuildMember, GuildChannel } from 'discord.js';
+import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js';
 
 export class DjsUtils {
   public parseMention(mention: string): string {
@@ -50,7 +49,7 @@ export class DjsUtils {
   }
 
   public async resolveUser(
-    client: CitrineClient,
+    client: Client,
     user: string
   ): Promise<User | null> {
     const parsedUser = this.parseMention(user);
@@ -68,7 +67,9 @@ export class DjsUtils {
       };
       return client.users.find(finder) || null;
     } catch (err) {
-      client.logger.warn(`resolveUser() failed for [${user}]`);
+      // Don't mind this
+      const c: any = client;
+      c.logger.warn(`resolveUser() failed for [${user}]`);
       return null;
     }
   }

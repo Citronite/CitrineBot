@@ -6,8 +6,9 @@ import { Exception } from '../Structures/Exceptions/Exception';
 module.exports = {
   name: 'message',
   listener: async (client: CitrineClient, message: Message): Promise<void> => {
-    const { cmdHandler, db } = client;
-    let config: GuildConfig | null = null;
+    const { cmdHandler } = client;
+    const db: any = client.db;
+    let config: GuildConfig | undefined;
     try {
       if (message.guild) {
         config = await db.guilds.read(message.guild.id);

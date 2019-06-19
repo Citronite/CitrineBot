@@ -1,6 +1,6 @@
-import { IDbConnection } from 'typings';
+import { DbConnection } from 'typings';
 
-export class MapWrapper implements IDbConnection {
+export class MapWrapper implements DbConnection {
   private readonly map: Map<string, any>;
 
   public constructor() {

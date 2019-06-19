@@ -1,7 +1,7 @@
 /*
-import { IDbConnection } from 'typings';
+import { DbConnection } from 'typings';
 
-export class JsonWrapper implements IDbConnection {
+export class JsonWrapper implements DbConnection {
 
 }
 */

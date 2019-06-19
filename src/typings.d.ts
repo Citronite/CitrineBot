@@ -22,25 +22,6 @@ declare module 'typings' {
     ClientOptions
   } from 'discord.js';
 
-  /*
-    interface CitrineClient {
-        loadChip: (chip: string) => Promise<void>;
-        unloadChip: (chip: string) => Promise<void>;
-        launch: () => Promise<void>;
-        initEvents: () => void;
-        initChips: () => void;
-        permHandler: IPermHandler;
-        cmdHandler: ICmdHandler;
-        utils: Utils;
-        commands: Collection<string, Command>;
-        logger: Logger;
-        lastException: any;
-        defaultChips: Set<string>;
-        db: DbDriver;
-        settings: 
-  }
-  */
-
   // Had to add the 'any's because TypeScript doesn't allow access modifiers
   // in interfaces, and then complains if access modifiers are different between
   // interfaces and implementations :(
@@ -52,6 +33,8 @@ declare module 'typings' {
     readonly globalPrefix: string;
     readonly verbose: boolean;
     readonly devs: UserID[];
+    addDev: (id: UserID) => void;
+    removeDev: (id: UserID) => void;
     readonly disabledUsers: UserID[];
     disableUser: (id: UserID) => void;
     enableUser: (id: UserID) => void;
@@ -91,7 +74,7 @@ declare module 'typings' {
   }
 
   interface Context {
-    readonly client: CitrineClient;
+    readonly client: Client;
     readonly prefix: string;
     readonly message: Message;
     readonly author: User;
@@ -200,7 +183,7 @@ declare module 'typings' {
       guild: Guild,
       channel: string
     ) => Promise<GuildChannel | null>;
-    resolveUser: (client: CitrineClient, user: string) => Promise<User | null>;
+    resolveUser: (client: Client, user: string) => Promise<User | null>;
     resolveGuildMember(
       guild: Guild,
       member: string
