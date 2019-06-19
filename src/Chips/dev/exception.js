@@ -21,9 +21,9 @@ class Exception extends BaseCommand {
         null,
         '  '
       )}\n\`\`\``;
-      await ctx.send(QuickEmbed.error(msg).setTitle('Last Exception:'));
+      ctx.send(QuickEmbed.error(msg).setTitle('Last Exception:'));
     } else {
-      await ctx.success('No exceptions!');
+      ctx.success('No exceptions!');
     }
   }
 }

@@ -5,7 +5,8 @@ class Unload extends BaseCommand {
     super({
       name: 'unload',
       description:
-        'Unloads a chip. Separate multiple names with spaces. The `core` chip cannot be unloaded. Provide the `--cc` flag to clear the chip from the cache.',
+        'Unloads a chip. Separate multiple names with spaces.' +
+        'The `core` chip cannot be unloaded. Provide the `--cc` flag to also clear the chip from the cache.',
       usage: '[p]unload <...chips> [--cc]',
       chip: 'core'
     });
@@ -35,7 +36,7 @@ class Unload extends BaseCommand {
     const { inline } = ctx.client.utils.format;
     if (failed.length) {
       await ctx.error(
-        `Failed to load the following chip(s):\n${inline(failed).join(', ')}`
+        `Failed to unload the following chip(s):\n${inline(failed).join(', ')}`
       );
     }
     if (unloaded.length) {
@@ -44,7 +45,8 @@ class Unload extends BaseCommand {
       );
     } else {
       await ctx.error(
-        'No chips were unloaded. Are you sure you provided the correct name(s)?'
+        'No chips were unloaded. Are you sure you provided the correct name(s)?\n' +
+        'Remember, you can\'t unload the `core` chip!'
       );
     }
   }

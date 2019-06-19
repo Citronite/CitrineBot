@@ -11,7 +11,7 @@ class Eval extends BaseCommand {
   }
 
   async execute(ctx, ...args) {
-    ctx.lock('dm', 'botOwner');
+    ctx.lock('botOwner');
 
     const code = args.join(' ');
     try {
