@@ -123,4 +123,4 @@ class EnableCmd extends SubCommand {
 const g = new EnableGuild();
 const u = new EnableUser();
 const c = new EnableCmd();
-module.exports = new Enable().registerSubCommands(g, u, c);
+module.exports = new Enable().register(g, u, c);

@@ -102,4 +102,4 @@ class Remove extends SubCommand {
 
 const a = new Add();
 const r = new Remove();
-module.exports = new Aliases().registerSubCommands(a, r);
+module.exports = new Aliases().register(a, r);

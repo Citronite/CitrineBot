@@ -129,4 +129,4 @@ class DisableCmd extends SubCommand {
 const g = new DisableGuild();
 const u = new DisableUser();
 const c = new DisableCmd();
-module.exports = new Disable().registerSubCommands(g, u, c);
+module.exports = new Disable().register(g, u, c);

@@ -27,4 +27,4 @@ const c = require('./gconfig/disable.js');
 const d = require('./gconfig/enable.js');
 const e = require('./gconfig/aliases.js');
 const f = require('./gconfig/devs.js');
-module.exports = new GConfig().registerSubCommands(a, b, c, d, e, f);
+module.exports = new GConfig().register(a, b, c, d, e, f);
