@@ -1,4 +1,4 @@
-import { CitrineClient } from '../Structures/CitrineClient';
+import CitrineClient from '../Structures/CitrineClient';
 
 module.exports = {
   name: 'ready',

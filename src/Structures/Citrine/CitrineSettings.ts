@@ -1,4 +1,4 @@
-import { CitrineClient } from '../CitrineClient';
+import CitrineClient from '../CitrineClient';
 import { GlobalConfigData } from 'typings';
 
 export default class CitrineSettings {

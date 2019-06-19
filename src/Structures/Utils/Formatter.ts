@@ -1,6 +1,6 @@
 import { FormatHelpOptions, CommandHelpObject } from 'typings';
-import { BaseCommand } from '../Command/BaseCommand';
-import { SubCommand } from '../Command/SubCommand';
+import BaseCommand from '../Command/BaseCommand';
+import SubCommand from '../Command/SubCommand';
 
 type Command = BaseCommand | SubCommand;
 

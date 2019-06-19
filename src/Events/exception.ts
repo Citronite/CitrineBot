@@ -1,9 +1,9 @@
-import { BaseCommand } from '../Structures/Command/BaseCommand';
-import { SubCommand } from '../Structures/Command/SubCommand';
-import { Exception } from '../Structures/Exceptions/Exception';
-import { CitrineClient } from '../Structures/CitrineClient';
-import { QuickEmbed } from '../Structures/Utils/QuickEmbed';
-import { Context } from '../Structures/Utils/Context';
+import BaseCommand from '../Structures/Command/BaseCommand';
+import SubCommand from '../Structures/Command/SubCommand';
+import Exception from '../Structures/Exceptions/Exception';
+import CitrineClient from '../Structures/CitrineClient';
+import QuickEmbed from '../Structures/Utils/QuickEmbed';
+import Context from '../Structures/Utils/Context';
 
 type tCommand = BaseCommand | SubCommand;
 
