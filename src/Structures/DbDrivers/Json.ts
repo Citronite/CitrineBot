@@ -1,5 +1,5 @@
 /*
-export class JsonDB {
+export default class JsonDB {
 
 }
 */

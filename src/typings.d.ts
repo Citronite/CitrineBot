@@ -251,9 +251,9 @@ declare module 'typings' {
 
   export interface CitrineOptions extends ClientOptions {
     readonly defaultChips?: string[];
+    readonly logger?: string;
+    readonly dbDriver?: string;
     readonly utils?: new () => Utils;
-    readonly logger?: new () => Logger;
-    readonly dbDriver?: new () => DbDriver;
     readonly cmdHandler?: new () => CmdHandler;
     readonly permHandler?: new () => PermHandler;
   }

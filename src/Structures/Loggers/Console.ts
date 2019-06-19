@@ -1,4 +1,4 @@
-export class ConsoleLogger {
+export default class ConsoleLogger {
   public info(...args: any[]): void {
     console.log(...args);
   }

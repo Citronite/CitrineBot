@@ -1,6 +1,13 @@
-import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js';
+import {
+  Role,
+  Guild,
+  User,
+  GuildMember,
+  GuildChannel,
+  Client
+} from 'discord.js';
 
-export class DjsUtils {
+export default class DjsUtils {
   public parseMention(mention: string): string {
     const rgx = /^<(#|@|@!|@&)\d+>$/;
     if (rgx.test(mention)) {

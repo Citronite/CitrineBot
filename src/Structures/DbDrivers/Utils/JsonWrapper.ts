@@ -1,7 +1,7 @@
 /*
 import { DbConnection } from 'typings';
 
-export class JsonWrapper implements DbConnection {
+export default class JsonWrapper implements DbConnection {
 
 }
 */

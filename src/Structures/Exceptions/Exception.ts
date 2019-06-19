@@ -1,7 +1,7 @@
 import { RichEmbed } from 'discord.js';
-import { QuickEmbed } from '../Utils/QuickEmbed';
-import { ExceptionCodes } from './ExceptionCodes';
-import { ExceptionMessages } from './ExceptionMessages';
+import QuickEmbed from '../Utils/QuickEmbed';
+import ExceptionCodes from './ExceptionCodes';
+import ExceptionMessages from './ExceptionMessages';
 import { RawException, RawExceptionArray } from 'typings';
 
 // Type guard
@@ -12,7 +12,7 @@ function isExceptionArray(err: any): err is RawExceptionArray {
   return isArr && hasType && hasMsg;
 }
 
-export class Exception extends Error {
+export default class Exception extends Error {
   public readonly code: number;
   public readonly type: string;
   public readonly errors: string[];

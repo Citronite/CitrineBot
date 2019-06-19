@@ -2,9 +2,9 @@ import { FormatHelpOptions, CommandHelpObject } from 'typings';
 import { BaseCommand } from '../Command/BaseCommand';
 import { SubCommand } from '../Command/SubCommand';
 
-type tCommand = BaseCommand | SubCommand;
+type Command = BaseCommand | SubCommand;
 
-export class Formatter {
+export default class Formatter {
   public italic(str: string | string[]): string | string[] {
     if (typeof str === 'string') {
       return `*${str}*`;
@@ -53,7 +53,7 @@ export class Formatter {
     }
   }
 
-  public cmdHelp(cmd: tCommand, options?: FormatHelpOptions): CommandHelpObject {
+  public cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpObject {
     let chip;
     let parent;
     let base;

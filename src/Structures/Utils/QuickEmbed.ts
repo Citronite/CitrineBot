@@ -1,6 +1,6 @@
 import { RichEmbed, User, GuildMember } from 'discord.js';
 import { Command } from 'typings';
-import { Context } from './Context';
+import Context from './Context';
 
 const Colors: { [key: string]: number } = {
   RED: 0xcb4154,
@@ -8,7 +8,7 @@ const Colors: { [key: string]: number } = {
   BOT: 0x9dffbe
 };
 
-export class QuickEmbed {
+export default class QuickEmbed {
   public static error(info: string = 'An unknown error occurred!'): RichEmbed {
     return new RichEmbed()
       .setColor(Colors.RED)

@@ -1,7 +1,7 @@
 import { Collection } from 'discord.js';
 import { SubCommandOptions } from 'typings';
-import { Context } from '../Utils/Context';
-import { BaseCommand } from './BaseCommand';
+import Context from '../Utils/Context';
+import BaseCommand from './BaseCommand';
 
 type Command = SubCommand | BaseCommand;
 
@@ -21,7 +21,7 @@ function setParent(child: SubCommand, parent: Command): void {
   }
 }
 
-export class SubCommand {
+export default class SubCommand {
   public readonly id: 'sub';
   public readonly name: string;
   public readonly description: string;

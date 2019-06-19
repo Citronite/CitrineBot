@@ -1,9 +1,9 @@
 import { Message } from 'discord.js';
-import { SubCommand } from '../Command/SubCommand';
-import { GuildConfig } from '../Utils/GuildConfig';
-import { BaseCommand } from '../Command/BaseCommand';
-import { Exception } from '../Exceptions/Exception';
-import { Context } from '../Utils/Context';
+import SubCommand from '../Command/SubCommand';
+import GuildConfig from '../Utils/GuildConfig';
+import BaseCommand from '../Command/BaseCommand';
+import Exception from '../Exceptions/Exception';
+import Context from '../Utils/Context';
 
 type Command = SubCommand | BaseCommand;
 
@@ -11,7 +11,7 @@ function isSubcommand(subcmd: any): subcmd is SubCommand {
   return subcmd instanceof SubCommand;
 }
 
-export class CmdHandler {
+export default class CmdHandler {
   public checkPrefix(
     message: Message,
     config?: GuildConfig

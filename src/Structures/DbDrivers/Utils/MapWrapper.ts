@@ -1,6 +1,6 @@
 import { DbConnection } from 'typings';
 
-export class MapWrapper implements DbConnection {
+export default class MapWrapper implements DbConnection {
   private readonly map: Map<string, any>;
 
   public constructor() {

@@ -1,8 +1,14 @@
 import { DbDriver, DbConnection } from 'typings';
 import { MapWrapper } from './Utils/MapWrapper';
 
-export class Memory implements DbDriver {
+export default class Memory implements DbDriver {
   [key: string]: any;
+
+  public readonly type: 'Memory';
+
+  public constructor() {
+    this.type = 'Memory';
+  }
 
   public connect(name: string): DbConnection {
     try {

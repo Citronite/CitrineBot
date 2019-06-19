@@ -1,5 +1,5 @@
 /*
-export class JsonIO {
+export default class JsonIO {
 
 }
 */

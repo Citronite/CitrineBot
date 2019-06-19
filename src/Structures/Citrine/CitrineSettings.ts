@@ -1,7 +1,7 @@
 import { CitrineClient } from '../CitrineClient';
 import { GlobalConfigData } from 'typings';
 
-export class CitrineSettings {
+export default class CitrineSettings {
   public readonly client: CitrineClient;
   private data: GlobalConfigData;
 

@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import { resolve } from 'path';
 import { promisify } from 'util';
-import { Memory } from './DbDrivers/Memory';
-import { CmdHandler } from './Handlers/CmdHandler';
-import { PermHandler } from './Handlers/PermHandler';
-import { BaseCommand } from './Command/BaseCommand';
-import { CitrineUtils } from './Citrine/CitrineUtils';
-import { ConsoleLogger } from './Loggers/Console';
-import { CitrineSettings } from './Citrine/CitrineSettings';
+import CmdHandler from './Handlers/CmdHandler';
+import PermHandler from './Handlers/PermHandler';
+import BaseCommand from './Command/BaseCommand';
+import CitrineUtils from './Citrine/CitrineUtils';
+import CitrineSettings from './Citrine/CitrineSettings';
+import Memory from './DbDrivers/Memory';
+import ConsoleLogger from './Loggers/Console';
 import { Client, Collection } from 'discord.js';
 import {
   CitrineOptions,
@@ -23,7 +23,35 @@ function fileFilter(arr: string[]): string[] {
   return arr.filter(val => !val.startsWith('_') && val.endsWith('.js'));
 }
 
-export class CitrineClient extends Client {
+function resolveDbDriver(options: any): new () => DbDriver {
+  if (!options || !options.dbDriver) return Memory;
+  else {
+    const { dbDriver } = options;
+    const drivers = fileFilter(readdirSync(`${root}/bin/DbDrivers`));
+    if (drivers.includes(`${dbDriver}.js`)) {
+      return require(`${root}/bin/DbDrivers/${dbDriver}.js`);
+    }
+    else {
+      throw new Error('Invalid dbDriver option provided!');
+    }
+  }
+}
+
+function resolveLogger(options: any): new () => Logger {
+  if (!options || !options.dbDriver) return ConsoleLogger;
+  else {
+    const { logger } = options;
+    const loggers = fileFilter(readdirSync(`${root}/bin/Loggers`));
+    if (loggers.includes(`${logger}.js`)) {
+      return require(`${root}/bin/DbDrivers/${logger}.js`);
+    }
+    else {
+      throw new Error('Invalid logger option provided!');
+    }
+  }
+}
+
+export default class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: Logger;
   public readonly utils: Utils;
@@ -39,22 +67,19 @@ export class CitrineClient extends Client {
     this.settings = new CitrineSettings(this);
     this.commands = new Collection();
 
-    this.db =
-      options && options.dbDriver ? new options.dbDriver() : new Memory();
-    this.utils =
-      options && options.utils ? new options.utils() : new CitrineUtils();
-    this.logger =
-      options && options.logger ? new options.logger() : new ConsoleLogger();
-    this.cmdHandler =
-      options && options.cmdHandler
-        ? new options.cmdHandler()
-        : new CmdHandler();
-    this.permHandler =
-      options && options.permHandler
-        ? new options.permHandler()
-        : new PermHandler();
-    this.defaultChips = new Set(['core']);
+    const dbDriver = resolveDbDriver(options);
+    const logger = resolveLogger(options);
+    const utils = (options && options.utils) || CitrineUtils;
+    const cmdHandler = (options && options.cmdHandler) || CmdHandler;
+    const permHandler = (options && options.permHandler) || PermHandler;
 
+    this.db = new dbDriver();
+    this.utils = new utils();
+    this.logger = new logger();
+    this.cmdHandler = new cmdHandler();
+    this.permHandler = new permHandler();
+
+    this.defaultChips = new Set(['core']);
     if (options && options.defaultChips) {
       this.defaultChips = new Set(['core', ...options.defaultChips]);
     }
@@ -71,7 +96,8 @@ export class CitrineClient extends Client {
   public initChips(): void {
     try {
       const allChips = readdirSync(`${root}/bin/Chips`);
-      for (const chip of this.defaultChips) {
+      const chips = this.defaultChips.has('all') ? allChips : this.defaultChips;
+      for (const chip of chips) {
         if (!allChips.includes(chip)) {
           throw new Error(
             `Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`

@@ -1,4 +1,4 @@
-export const ExceptionMessages: { [key: number]: string } = {
+const ExceptionMessages: { [key: number]: string } = {
   100: 'Insufficient permissions!',
   101: 'Are you sure you have the proper permissions to invoke this command?',
   102: 'Are you sure I have the proper permissions to execute this command?',
@@ -9,3 +9,5 @@ export const ExceptionMessages: { [key: number]: string } = {
   404: "Uh-oh! You just got 404'd! (I couldn't find what you're looking for!)",
   999: "Whoops! Something went wrong and I have no idea what it is. I'm sorry! :("
 };
+
+export default ExceptionMessages;

@@ -1,8 +1,11 @@
-import { DjsUtils } from '../Utils/DjsUtils';
-import { Formatter } from '../Utils/Formatter';
-import { DjsUtils as IDjsUtils, Formatter as IFormatter } from 'typings';
+import DjsUtils from '../Utils/DjsUtils';
+import Formatter from '../Utils/Formatter';
+import {
+  DjsUtils as IDjsUtils,
+  Formatter as IFormatter
+} from 'typings';
 
-export class CitrineUtils {
+export default class CitrineUtils {
   public readonly djs: IDjsUtils;
   public readonly format: IFormatter;
 

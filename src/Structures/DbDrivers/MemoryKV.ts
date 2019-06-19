@@ -1,8 +1,14 @@
 import { DbDriver, DbConnection } from 'typings';
 import { KeyvWrapper } from './Utils/KeyvWrapper';
 
-export class MemoryKV implements DbDriver {
+export default class MemoryKV implements DbDriver {
   [key: string]: any;
+
+  public readonly type: 'MemoryKV';
+
+  public constructor() {
+    this.type = 'MemoryKV';
+  }
 
   public connect(name: string): DbConnection {
     try {

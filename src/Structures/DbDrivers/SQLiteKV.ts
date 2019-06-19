@@ -2,8 +2,14 @@ import { resolve } from 'path';
 import { DbDriver, DbConnection } from 'typings';
 import { KeyvWrapper } from './Utils/KeyvWrapper';
 
-export class SQLiteKV implements DbDriver {
+export default class SQLiteKV implements DbDriver {
   [key: string]: any;
+
+  public readonly type: 'SQLiteKV';
+
+  public constructor() {
+    this.type = 'SQLiteKV';
+  }
 
   public connect(name: string, path: string): DbConnection {
     try {

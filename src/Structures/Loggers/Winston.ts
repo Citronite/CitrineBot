@@ -1,7 +1,7 @@
 /*
 import * as winston from 'winston';
 
-export class WinstonLogger {
+export default class WinstonLogger {
 
 }
 */

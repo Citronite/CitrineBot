@@ -1,4 +1,4 @@
-export const ExceptionCodes: { [key: string]: number } = {
+const ExceptionCodes: { [key: string]: number } = {
   // 100 -> permissions
   PERMISSION_ERROR: 100,
   MISSING_BOT_PERMS: 101,
@@ -12,3 +12,5 @@ export const ExceptionCodes: { [key: string]: number } = {
   NOT_FOUND: 404,
   UNKNOWN_ERROR: 999
 };
+
+export default ExceptionCodes;

@@ -18,7 +18,8 @@ import { CitrineOptions } from 'typings';
 const options: CitrineOptions = {
   disableEveryone: true,
   disabledEvents: ['TYPING_START'],
-  defaultChips: ['utils']
+  defaultChips: ['all'],
+  dbDriver: 'SQLiteKV'
 };
 
 const citrine = new CitrineClient(options);

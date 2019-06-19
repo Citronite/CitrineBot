@@ -6,7 +6,7 @@ import {
   GuildConfigData
 } from 'typings';
 
-export class GuildConfig {
+export default class GuildConfig {
   private readonly data: GuildConfigData;
 
   public constructor(guild: Guild | GuildConfig) {

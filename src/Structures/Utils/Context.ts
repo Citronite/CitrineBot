@@ -1,9 +1,9 @@
-import { QuickEmbed } from './QuickEmbed';
-import { CitrineClient } from '../CitrineClient';
-import { Exception } from '../Exceptions/Exception';
-import { ExceptionMessages } from '../Exceptions/ExceptionMessages';
+import QuickEmbed from './QuickEmbed';
+import CitrineClient from '../CitrineClient';
+import Exception from '../Exceptions/Exception';
+import ExceptionMessages from '../Exceptions/ExceptionMessages';
 import { Command } from 'typings';
-import { SubCommand } from '../Command/SubCommand';
+import SubCommand from '../Command/SubCommand';
 import {
   LockType,
   LockPermsOptions,
@@ -32,7 +32,7 @@ function validateContextData(data: any): void {
   if (!data.command) throw new Error('ContextData#cmd is required!');
 }
 
-export class Context {
+export default class Context {
   public readonly client: CitrineClient;
   public readonly prefix: string;
   public readonly message: Message;
