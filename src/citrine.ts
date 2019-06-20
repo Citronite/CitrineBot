@@ -19,7 +19,7 @@ const options: CitrineOptions = {
   disableEveryone: true,
   disabledEvents: ['TYPING_START'],
   defaultChips: ['all'],
-  dbDriver: 'SQLiteKV'
+  dbDriver: 'Memory'
 };
 
 const citrine = new CitrineClient(options);

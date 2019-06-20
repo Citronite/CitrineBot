@@ -5,33 +5,33 @@ class DeleteCmdCalls extends SubCommand {
     super({
       name: 'deletecmdcalls',
       description: 'Toggle whether commands calls are deleted after being called.',
-      usage: '[p]config deletecmdcalls [true | false] [delay (in seconds)]'
+      usage: '[p]config deletecmdcalls [on | off] [delay (in seconds)]'
     });
   }
 
   async execute(ctx, setting, delay) {
     const data = await ctx.client.getGuild(ctx.message.guild.id);
     if (setting) {
-      setting = JSON.parse(setting);
-      if (typeof setting !== 'boolean') {
-        ctx.error('Please specify `true` or `false`!');
+      setting = setting.toLowerCase();
+      if (!['on', 'off'].includes(setting)) {
+        ctx.error('Please specify `on` or `off`!');
       } else {
         if (delay) {
           delay = JSON.parse(delay);
-          if (typeof delay !== 'number') {
+          if (typeof delay !== 'number' || delay > 3600 || delay < 1) {
             return ctx.error('The delay must be a number, between 1 and 3600');
           } else {
-            data.deleteCmdCallsDelay = delay;
+            data.deleteCmdCallsDelay = delay * 1000;
           }
         }
-        data.deleteCmdCalls = setting;
+        data.deleteCmdCalls = setting === 'on' ? true : false;
         await ctx.client.setGuild(ctx.guild.id, data);
         ctx.success('Successfully updated server settings!');
       }
     } else {
       const { deleteCmdCalls: deleted } = data;
       const { deleteCmdCallsDelay: delay } = data;
-      ctx.send(`Delete commands calls: \`${deleted}\`\nDelay: \`${delay}\``);
+      ctx.send(`Delete commands calls: \`${deleted}\`\nDelay: \`${delay / 1000} seconds\``);
     }
   }
 }
