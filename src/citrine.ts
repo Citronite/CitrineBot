@@ -36,6 +36,4 @@ const citrine = new CitrineClient(options);
 
 process.on('uncaughtException', citrine.logger.error);
 process.on('unhandledRejection', citrine.logger.error);
-process.on('exit', code =>
-  citrine.logger.warn(`Process exited with code ${code}`)
-);
+process.on('exit', code => citrine.logger.warn(`Process exited with code ${code}`));

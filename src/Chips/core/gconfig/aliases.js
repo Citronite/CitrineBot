@@ -29,8 +29,7 @@ class Add extends SubCommand {
   constructor() {
     super({
       name: 'add',
-      description:
-        'Add command aliases. Only aliases for base commands can be added',
+      description: 'Add command aliases. Only aliases for base commands can be added',
       usage: '[p]gconfig aliases add <command> <alias>'
     });
   }
@@ -45,20 +44,13 @@ class Add extends SubCommand {
         ctx.error(`The command \`${cmd}\` does not exist!`);
         return;
       }
-      const exists = ctx.client.cmdHandler.getBaseCmd(
-        ctx.message,
-        Array.from([alias])
-      );
+      const exists = ctx.client.cmdHandler.getBaseCmd(ctx.message, Array.from([alias]));
       if (exists) {
-        ctx.error(
-          `The alias \`${alias}\` is already registered for the command \`${exists.name}\``
-        );
+        ctx.error(`The alias \`${alias}\` is already registered for the command \`${exists.name}\``);
       } else {
         ctx.client.settings.addAlias(cmd, alias);
         await ctx.client.settings.save();
-        ctx.success(
-          `Successfully registered \`${alias}\` as an alias for \`${cmd}\``
-        );
+        ctx.success(`Successfully registered \`${alias}\` as an alias for \`${cmd}\``);
       }
     }
   }
@@ -83,16 +75,11 @@ class Remove extends SubCommand {
         ctx.error(`The command \`${cmd}\` does not exist!`);
         return;
       }
-      const exists = ctx.client.cmdHandler.getBaseCmd(
-        ctx.message,
-        Array.from([alias])
-      );
+      const exists = ctx.client.cmdHandler.getBaseCmd(ctx.message, Array.from([alias]));
       if (exists) {
         ctx.client.settings.removeAlias(cmd, alias);
         await ctx.client.settings.save();
-        ctx.success(
-          `Successfully removed \`${alias}\` as an alias for \`${cmd}\``
-        );
+        ctx.success(`Successfully removed \`${alias}\` as an alias for \`${cmd}\``);
       } else {
         ctx.error(`The alias \`${alias}\` does not exist for \`${cmd}\``);
       }

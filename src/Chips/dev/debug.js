@@ -32,14 +32,12 @@ class Debug extends BaseCommand {
     const memory = process.memoryUsage();
     const usage = [];
     for (let key in memory) {
-      usage.push(
-        `${key}: ${Math.round((memory[key] / 1024 / 1024) * 100) / 100} MB`
-      );
+      usage.push(`${key}: ${Math.round((memory[key] / 1024 / 1024) * 100) / 100} MB`);
     }
 
     const embed = QuickEmbed.basic(ctx.author)
       .setTitle('Citrine | Debug')
-      .addField("DB Read", `${dbRead} ms`, true)
+      .addField('DB Read', `${dbRead} ms`, true)
       .addField('DB Write', `${dbWrite} ms`, true)
       .addField('Message Send', `${msgSend} /  ms`, true)
       .addField('Ping', `${Math.round(ping)} ms`, true)

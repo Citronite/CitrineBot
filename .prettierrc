@@ -2,6 +2,7 @@
     "tabWidth": 2,
     "singleQuote": true,
     "quoteProps": "as-needed",
+    "printWidth": 120,
     "overrides": [
         {
             "files": "*.ts",

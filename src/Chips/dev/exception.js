@@ -16,11 +16,7 @@ class Exception extends BaseCommand {
     const { lastException } = ctx.client;
     if (lastException) {
       const cls = lastException.constructor.name;
-      const msg = `\`\`\`js\n[${cls}]\n${JSON.stringify(
-        lastException,
-        null,
-        '  '
-      )}\n\`\`\``;
+      const msg = `\`\`\`js\n[${cls}]\n${JSON.stringify(lastException, null, '  ')}\n\`\`\``;
       ctx.send(QuickEmbed.error(msg).setTitle('Last Exception:'));
     } else {
       ctx.success('No exceptions!');

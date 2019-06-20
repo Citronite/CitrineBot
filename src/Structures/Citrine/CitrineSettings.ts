@@ -11,11 +11,11 @@ export default class CitrineSettings {
       owner: 'DEFAULT',
       globalPrefix: 'DEFAULT',
       verbose: true,
-      devs: new Set(),
-      disabledUsers: new Set(),
-      disabledGuilds: new Set(),
-      disabledCommands: new Set(),
-      loadedChips: new Set(),
+      devs: [],
+      disabledUsers: [],
+      disabledGuilds: [],
+      disabledCommands: [],
+      loadedChips: [],
       aliases: {}
     };
   }
@@ -49,11 +49,15 @@ export default class CitrineSettings {
   }
 
   public addDev(id: string): void {
-    this.data.devs.add(id);
+    const tmp = new Set(this.data.devs);
+    tmp.add(id);
+    this.data.devs = [...tmp];
   }
 
   public removeDev(id: string): void {
-    this.data.devs.delete(id);
+    const tmp = new Set(this.data.devs);
+    tmp.delete(id);
+    this.data.devs = [...tmp];
   }
 
   public get disabledUsers(): string[] {
@@ -63,11 +67,15 @@ export default class CitrineSettings {
   public disableUser(id: string): void {
     if (id === this.owner) return;
     if (id === this.client.user.id) return;
-    this.data.disabledUsers.add(id);
+    const tmp = new Set(this.data.disabledUsers);
+    tmp.add(id);
+    this.data.disabledUsers = [...tmp];
   }
 
   public enableUser(id: string): void {
-    this.data.disabledUsers.delete(id);
+    const tmp = new Set(this.data.disabledUsers);
+    tmp.delete(id);
+    this.data.disabledUsers = [...tmp];
   }
 
   public get disabledGuilds(): string[] {
@@ -75,13 +83,17 @@ export default class CitrineSettings {
   }
 
   public disableGuild(id: string): void {
-    this.data.disabledGuilds.add(id);
+    const tmp = new Set(this.data.disabledGuilds);
+    tmp.add(id);
+    this.data.disabledGuilds = [...tmp];
     const guild = this.client.guilds.get(id);
     if (guild) guild.leave();
   }
 
   public enableGuild(id: string): void {
-    this.data.disabledGuilds.delete(id);
+    const tmp = new Set(this.data.disabledGuilds);
+    tmp.delete(id);
+    this.data.disabledGuilds = [...tmp];
   }
 
   public get disabledCommands(): string[] {
@@ -89,11 +101,15 @@ export default class CitrineSettings {
   }
 
   public disableCommand(name: string): void {
-    this.data.disabledCommands.add(name);
+    const tmp = new Set(this.data.disabledCommands);
+    tmp.add(name);
+    this.data.disabledCommands = [...tmp];
   }
 
   public enableCommand(name: string): void {
-    this.data.disabledCommands.delete(name);
+    const tmp = new Set(this.data.disabledCommands);
+    tmp.delete(name);
+    this.data.disabledCommands = [...tmp];
   }
 
   public get loadedChips(): string[] {
@@ -101,12 +117,16 @@ export default class CitrineSettings {
   }
 
   public addLoadedChip(name: string): void {
-    this.data.loadedChips.add(name);
+    const tmp = new Set(this.data.loadedChips);
+    tmp.add(name);
+    this.data.loadedChips = [...tmp];
   }
 
   public removeLoadedChip(name: string): void {
     if (name === 'core') return;
-    this.data.loadedChips.delete(name);
+    const tmp = new Set(this.data.loadedChips);
+    tmp.delete(name);
+    this.data.loadedChips = [...tmp];
   }
 
   public get aliases(): { [key: string]: any } {
@@ -114,9 +134,7 @@ export default class CitrineSettings {
   }
 
   public addAlias(cmd: string, alias: string): void {
-    const aliases: Set<string> = this.data.aliases[cmd]
-      ? new Set(this.data.aliases[cmd])
-      : new Set();
+    const aliases: Set<string> = this.data.aliases[cmd] ? new Set(this.data.aliases[cmd]) : new Set();
     aliases.add(alias);
     this.data.aliases[cmd] = [...aliases];
   }

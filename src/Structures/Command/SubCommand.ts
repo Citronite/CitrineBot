@@ -15,9 +15,7 @@ function setParent(child: SubCommand, parent: Command): void {
   if (parent.id === 'base' || parent.id === 'sub') {
     child.parent = parent;
   } else {
-    throw new Error(
-      'Parent commands must be instances of BaseCommand or SubCommand!'
-    );
+    throw new Error('Parent commands must be instances of BaseCommand or SubCommand!');
   }
 }
 
@@ -63,9 +61,7 @@ export default class SubCommand {
         this.subcommands.set(subCmd.name, subCmd);
         continue;
       } else {
-        throw new Error(
-          'Only instances of the SubCommand class can be registered!'
-        );
+        throw new Error('Only instances of the SubCommand class can be registered!');
       }
     }
     return this;

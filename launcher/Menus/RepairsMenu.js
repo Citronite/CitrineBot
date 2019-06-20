@@ -9,11 +9,7 @@ class RepairsMenu extends AbstractMenu {
   constructor() {
     super({
       title: 'What would you like to do?',
-      choices: [
-        'Recompile source code',
-        'Reinstall dependencies',
-        'Full reinstallation'
-      ]
+      choices: ['Recompile source code', 'Reinstall dependencies', 'Full reinstallation']
     });
 
     this.code = 2;

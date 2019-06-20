@@ -67,16 +67,11 @@ export default class Context {
       const res = await this.author.send(...args);
       return res;
     } catch (_) {
-      return this.channel.send(
-        'Failed to send DM. Please make sure your DMs are enabled.'
-      );
+      return this.channel.send('Failed to send DM. Please make sure your DMs are enabled.');
     }
   }
 
-  public async success(
-    msg: string,
-    embed: boolean = true
-  ): Promise<Message | Message[]> {
+  public async success(msg: string, embed: boolean = true): Promise<Message | Message[]> {
     if (embed) {
       const embed = QuickEmbed.success(msg);
       return this.channel.send(embed);
@@ -85,10 +80,7 @@ export default class Context {
     }
   }
 
-  public async error(
-    msg: string,
-    embed: boolean = true
-  ): Promise<Message | Message[]> {
+  public async error(msg: string, embed: boolean = true): Promise<Message | Message[]> {
     if (embed) {
       const embed = QuickEmbed.error(msg);
       return this.channel.send(embed);
@@ -97,9 +89,7 @@ export default class Context {
     }
   }
 
-  public async prompt(/* msg: string, options?: PromptOptions */): Promise<
-    Message | string | null
-  > {
+  public async prompt(/* msg: string, options?: PromptOptions */): Promise<Message | string | null> {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
@@ -110,16 +100,10 @@ export default class Context {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
-  public lockPerms(
-    perms: PermissionResolvable,
-    options?: LockPermsOptions
-  ): void {
+  public lockPerms(perms: PermissionResolvable, options?: LockPermsOptions): void {
     const { checkPerms } = this.client.permHandler;
     if (!this.member) {
-      throw new Exception(
-        100,
-        'Permission checks only work on guild members!'
-      );
+      throw new Exception(100, 'Permission checks only work on guild members!');
     }
     if (!this.guild) {
       throw new Exception(100, 'Permission checks only work inside guilds!');
@@ -128,10 +112,13 @@ export default class Context {
       throw new Exception(100, 'Permission checks only work inside guilds!');
     }
 
-    const opts = Object.assign({
-      checkBot: true,
-      checkAdmin: true
-    }, options);
+    const opts = Object.assign(
+      {
+        checkBot: true,
+        checkAdmin: true
+      },
+      options
+    );
 
     checkPerms(perms, this.member, this.channel, opts.checkAdmin);
     if (opts.checkBot) checkPerms(perms, this.guild.me, this.channel, opts.checkAdmin);
@@ -145,30 +132,24 @@ export default class Context {
         throw new Exception(100, ExceptionMessages[100]);
       } else {
         switch (lock) {
+          case 'guildOwner':
+            if (this.guild && this.guild.owner.id === this.author.id) continue;
+            throw new Exception(100, 'Only guild owners may perform this action!');
           case 'botOwner':
             if (this.client.settings.owner === this.author.id) continue;
-            throw new Exception(
-              100,
-              'Only the bot owner may perform this action!'
-            );
+            throw new Exception(100, 'Only the bot owner may perform this action!');
           case 'botDev':
             if (this.client.settings.devs.includes(this.author.id)) continue;
-            throw new Exception(
-              100,
-              'Only bot developers may perform this action!'
-            );
+            throw new Exception(100, 'Only bot developers may perform this action!');
           case 'dm':
             if (this.message.channel.type === 'dm') continue;
-            throw new Exception(
-              100,
-              'This command can only be used in DM channels!'
-            );
+            throw new Exception(100, 'This command can only be used in DM channels!');
           case 'guild':
             if (this.guild) continue;
-            throw new Exception(
-              100,
-              'This command can only be used in guild channels!'
-            );
+            throw new Exception(100, 'This command can only be used in guild channels!');
+          case 'nsfw':
+            if (this.channel instanceof TextChannel && this.channel.nsfw) continue;
+            throw new Exception(100, 'This command can only be used in channels marked nsfw!');
           default:
             throw new Error('Invalid LockType provided!');
         }

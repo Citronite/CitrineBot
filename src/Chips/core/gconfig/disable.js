@@ -25,23 +25,17 @@ class DisableGuild extends SubCommand {
     if (guilds.length) {
       for (const guild of guilds) {
         let id;
-        const found = ctx.client.guilds.find(
-          g => g.name === guild || g.id === guild
-        );
+        const found = ctx.client.guilds.find(g => g.name === guild || g.id === guild);
         if (found) id = found.id;
         else id = guild;
         ctx.client.settings.disableGuild(id);
       }
       await ctx.client.settings.save();
-      await ctx.success(
-        `Successfully disabled guilds: ${inline(guilds).join(', ')}`
-      );
+      await ctx.success(`Successfully disabled guilds: ${inline(guilds).join(', ')}`);
     } else {
       const disabled = ctx.client.settings.disabledGuilds;
       if (disabled.length) {
-        await ctx.send(
-          `Currently disabled guilds: ${inline(disabled).join(', ')}`
-        );
+        await ctx.send(`Currently disabled guilds: ${inline(disabled).join(', ')}`);
       } else {
         await ctx.send('No guilds disabled currently.');
       }
@@ -64,15 +58,11 @@ class DisableUser extends SubCommand {
         ctx.client.settings.disableUser(user);
       }
       await ctx.client.settings.save();
-      await ctx.send(
-        `Successfully disabled users: ${users.map(id => `<@${id}>`)}`
-      );
+      await ctx.send(`Successfully disabled users: ${users.map(id => `<@${id}>`)}`);
     } else {
       const disabled = ctx.client.settings.disabledUsers;
       if (disabled.length) {
-        await ctx.send(
-          `Currently disabled Users: ${disabled.map(id => `<@${id}>`)}`
-        );
+        await ctx.send(`Currently disabled Users: ${disabled.map(id => `<@${id}>`)}`);
       } else {
         await ctx.send(`No users disabled currently.`);
       }
@@ -105,20 +95,14 @@ class DisableCmd extends SubCommand {
 
       if (disabled.length) {
         await ctx.client.settings.save();
-        ctx.success(
-          `Successfully disabled commands:\n${inline(disabled).join('\n')}`
-        );
+        ctx.success(`Successfully disabled commands:\n${inline(disabled).join('\n')}`);
       } else {
-        ctx.error(
-          'No commands were disabled. Did you provide the correct names?'
-        );
+        ctx.error('No commands were disabled. Did you provide the correct names?');
       }
     } else {
       const disabled = ctx.client.settings.disabledCommands;
       if (disabled.length) {
-        await ctx.send(
-          `Currently disabled commands: ${inline(disabled).join(', ')}`
-        );
+        await ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
       } else {
         await ctx.send('No commands disabled currently.');
       }

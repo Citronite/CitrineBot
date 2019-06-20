@@ -97,12 +97,7 @@ function execute(...args) {
 }
 
 async function open(arg, options) {
-  const cmd =
-    process.platform === 'darwin'
-      ? 'open'
-      : process.platform === 'win32'
-      ? 'start'
-      : 'xdg-open';
+  const cmd = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
   await execute(`${cmd} ${arg}`, options);
 }
 

@@ -1,11 +1,4 @@
-import {
-  Role,
-  Guild,
-  User,
-  GuildMember,
-  GuildChannel,
-  Client
-} from 'discord.js';
+import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js';
 
 export default class DjsUtils {
   public parseMention(mention: string): string {
@@ -39,26 +32,17 @@ export default class DjsUtils {
     return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
   }
 
-  public async resolveGuildChannel(
-    guild: Guild,
-    channel: string
-  ): Promise<GuildChannel | null> {
+  public async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
     const parsedChnl = this.parseMention(channel);
     const finder = (val: GuildChannel) => {
       if (val.name === parsedChnl) return true;
-      if (parsedChnl.startsWith('#') && val.name === parsedChnl.slice(1))
-        return true;
+      if (parsedChnl.startsWith('#') && val.name === parsedChnl.slice(1)) return true;
       return false;
     };
-    return (
-      guild.channels.get(parsedChnl) || guild.channels.find(finder) || null
-    );
+    return guild.channels.get(parsedChnl) || guild.channels.find(finder) || null;
   }
 
-  public async resolveUser(
-    client: Client,
-    user: string
-  ): Promise<User | null> {
+  public async resolveUser(client: Client, user: string): Promise<User | null> {
     const parsedUser = this.parseMention(user);
     try {
       const fetched = await client.fetchUser(parsedUser);
@@ -66,11 +50,7 @@ export default class DjsUtils {
 
       const rgx = new RegExp(parsedUser, 'i');
       const finder = (val: User) => {
-        return (
-          val.username === parsedUser ||
-          val.tag === parsedUser ||
-          rgx.test(val.username)
-        );
+        return val.username === parsedUser || val.tag === parsedUser || rgx.test(val.username);
       };
       return client.users.find(finder) || null;
     } catch (err) {
@@ -81,10 +61,7 @@ export default class DjsUtils {
     }
   }
 
-  public async resolveGuildMember(
-    guild: Guild,
-    member: string
-  ): Promise<GuildMember | null> {
+  public async resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null> {
     const parsedMember = this.parseMention(member);
 
     try {

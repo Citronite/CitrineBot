@@ -23,11 +23,7 @@ class Verbose extends SubCommand {
       await ctx.success(`Verbose mode is now **\`${choice.toUpperCase()}\`**`);
       return;
     } else {
-      await ctx.send(
-        `Verbose mode is currently **\`${
-          ctx.client.settings.verbose ? 'ON' : 'OFF'
-        }\`**`
-      );
+      await ctx.send(`Verbose mode is currently **\`${ctx.client.settings.verbose ? 'ON' : 'OFF'}\`**`);
       return;
     }
   }

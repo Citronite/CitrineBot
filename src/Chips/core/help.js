@@ -12,10 +12,7 @@ class Help extends BaseCommand {
 
   async execute(ctx, ...args) {
     if (args.length) {
-      const result = ctx.client.cmdHandler.getFinalCmd(
-        ctx.message,
-        Array.from(args)
-      );
+      const result = ctx.client.cmdHandler.getFinalCmd(ctx.message, Array.from(args));
       if (!result) {
         ctx.send(`Unable to find command: \`${args.join(' ')}\``);
       } else {

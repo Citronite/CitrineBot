@@ -2,17 +2,7 @@ const fs = require('fs');
 const { resolve } = require('path');
 const HomeMenu = require('./Menus/HomeMenu.js');
 const package = require('../package.json');
-const {
-  cls,
-  sleep,
-  printHeader,
-  println,
-  input,
-  confirm,
-  rl,
-  printMenu,
-  execute
-} = require('./cli.js');
+const { cls, sleep, printHeader, println, input, confirm, rl, printMenu, execute } = require('./cli.js');
 
 const Home = new HomeMenu();
 const root = resolve(`${__dirname}/../`);
@@ -36,8 +26,7 @@ async function printHomepage() {
 // Obtain bot token
 async function getToken() {
   let TOKEN = await input(
-    'Please insert your bot token. If it is stored as\n' +
-      'an environment variable, enter ENV:<VARIABLE>'
+    'Please insert your bot token. If it is stored as\n' + 'an environment variable, enter ENV:<VARIABLE>'
   );
   if (TOKEN.startsWith('ENV:')) TOKEN = process.env[TOKEN.slice(4)];
   while (!TOKEN) {
@@ -126,11 +115,7 @@ async function createDataFiles(TOKEN, initialPrefix) {
     // Create _instance for storing token + prefix
     println('Creating file: data/core/_instance.json');
     const { version } = package;
-    const content = JSON.stringify(
-      { TOKEN, initialPrefix, version },
-      null,
-      '  '
-    );
+    const content = JSON.stringify({ TOKEN, initialPrefix, version }, null, '  ');
     fs.writeFileSync(`${data}/core/_instance.json`, content);
     // Check if it exists
     fs.readFileSync(`${data}/core/_instance.json`);
@@ -176,10 +161,7 @@ async function startLauncher() {
         println(err);
       }
       await sleep(200);
-      const str =
-        rl.currMenu.code === 0
-          ? '0. Exit Launcher'
-          : '0. Go back to the homepage';
+      const str = rl.currMenu.code === 0 ? '0. Exit Launcher' : '0. Go back to the homepage';
       println(`\n${str}`);
       rl.prompt();
     }
@@ -203,10 +185,7 @@ async function startLauncher() {
 
   // Kinda hacky but oh well :P
   const dir = fs.readdirSync(root);
-  const firstRun =
-    !dir.includes('data') &&
-    !dir.includes('bin') &&
-    !dir.includes('node_modules');
+  const firstRun = !dir.includes('data') && !dir.includes('bin') && !dir.includes('node_modules');
 
   if (firstRun) {
     println('Hello there! Seems like this is your first time running Citrine!');
@@ -266,8 +245,7 @@ async function startLauncher() {
         );
       }
     } catch (err) {
-      const ext =
-        platform === 'win32' ? '.bat' : platform === 'linux' ? '.sh' : null;
+      const ext = platform === 'win32' ? '.bat' : platform === 'linux' ? '.sh' : null;
       if (!ext) {
         println(
           'Unsupported platform!\n' +
@@ -300,17 +278,13 @@ async function startLauncher() {
     }
     if (!dir.includes('bin')) {
       // Recompile.
-      const str =
-        'It seems like the ./bin directory is missing.\n' +
-        'Would you like to try recompiling Citrine?';
+      const str = 'It seems like the ./bin directory is missing.\n' + 'Would you like to try recompiling Citrine?';
       const recompile = await confirm(str);
       if (recompile) {
         const compiled = await compileCitrine();
         if (!compiled) exit(1);
       } else {
-        println(
-          'Alright. Please make sure Citrine is installed correctly and try again!'
-        );
+        println('Alright. Please make sure Citrine is installed correctly and try again!');
         exit();
       }
     }
@@ -324,9 +298,7 @@ async function startLauncher() {
         const installed = await installDeps();
         if (!installed) exit(1);
       } else {
-        println(
-          'Alright. Please make sure Citrine is installed correctly and try again!'
-        );
+        println('Alright. Please make sure Citrine is installed correctly and try again!');
         exit();
       }
     }

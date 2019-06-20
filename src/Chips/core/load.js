@@ -22,9 +22,7 @@ class Load extends BaseCommand {
     if (!chips.length) throw 'INSUFFICIENT_ARGS';
 
     const allChips = await readdirAsync(`${root}/bin/Chips`);
-    const filteredChips = chips.includes('all')
-      ? allChips
-      : chips.filter(name => allChips.includes(name));
+    const filteredChips = chips.includes('all') ? allChips : chips.filter(name => allChips.includes(name));
     const reload = chips.includes('--re');
     const loaded = [];
     for (const chip of filteredChips) {
@@ -38,13 +36,9 @@ class Load extends BaseCommand {
     }
     if (loaded.length) {
       const { inline } = ctx.client.utils.format;
-      await ctx.success(
-        `Successfully loaded chip(s):\n${inline(loaded).join('\n')}`
-      );
+      await ctx.success(`Successfully loaded chip(s):\n${inline(loaded).join('\n')}`);
     } else {
-      await ctx.error(
-        'No chips were loaded. Are you sure you provided the correct name(s)?'
-      );
+      await ctx.error('No chips were loaded. Are you sure you provided the correct name(s)?');
     }
   }
 }

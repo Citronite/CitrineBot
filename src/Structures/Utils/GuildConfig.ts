@@ -1,10 +1,5 @@
 import { Guild } from 'discord.js';
-import {
-  ChannelID,
-  RoleID,
-  UserID,
-  GuildConfigData
-} from 'typings';
+import { ChannelID, RoleID, UserID, GuildConfigData } from 'typings';
 
 export default class GuildConfig {
   private readonly data: GuildConfigData;
@@ -19,9 +14,9 @@ export default class GuildConfig {
         deleteCmdCalls: false,
         deleteCmdCallsDelay: 5000,
         readMsgEdits: false,
-        disabledUsers: new Set(),
-        disabledChannels: new Set(),
-        disabledCommands: new Set(),
+        disabledUsers: [],
+        disabledChannels: [],
+        disabledCommands: [],
         reqRoles: {}
       };
     } else {
@@ -32,9 +27,9 @@ export default class GuildConfig {
         deleteCmdCalls: guild.deleteCmdCalls,
         deleteCmdCallsDelay: guild.deleteCmdCallsDelay,
         readMsgEdits: guild.readMsgEdits,
-        disabledUsers: new Set(guild.disabledUsers),
-        disabledChannels: new Set(guild.disabledChannels),
-        disabledCommands: new Set(guild.disabledCommands),
+        disabledUsers: [...new Set(guild.disabledUsers)],
+        disabledChannels: [...new Set(guild.disabledChannels)],
+        disabledCommands: [...new Set(guild.disabledCommands)],
         reqRoles: guild.reqRoles
       };
     }
@@ -97,11 +92,15 @@ export default class GuildConfig {
   }
 
   public disableUser(id: UserID): void {
-    this.data.disabledUsers.add(id);
+    const tmp = new Set(this.data.disabledUsers);
+    tmp.add(id);
+    this.data.disabledUsers = [...tmp];
   }
 
   public enableUser(id: UserID): void {
-    this.data.disabledUsers.delete(id);
+    const tmp = new Set(this.data.disabledUsers);
+    tmp.delete(id);
+    this.data.disabledUsers = [...tmp];
   }
 
   public get disabledChannels(): ChannelID[] {
@@ -109,11 +108,15 @@ export default class GuildConfig {
   }
 
   public disableChannel(id: ChannelID): void {
-    this.data.disabledChannels.add(id);
+    const tmp = new Set(this.data.disabledChannels);
+    tmp.add(id);
+    this.data.disabledChannels = [...tmp];
   }
 
   public enableChannel(id: ChannelID): void {
-    this.data.disabledChannels.delete(id);
+    const tmp = new Set(this.data.disabledChannels);
+    tmp.delete(id);
+    this.data.disabledChannels = [...tmp];
   }
 
   public get disabledCommands(): string[] {
@@ -121,11 +124,15 @@ export default class GuildConfig {
   }
 
   public disableCommand(id: string): void {
-    this.data.disabledCommands.add(id);
+    const tmp = new Set(this.data.disabledCommands);
+    tmp.add(id);
+    this.data.disabledCommands = [...tmp];
   }
 
   public enableCommand(id: string): void {
-    this.data.disabledCommands.delete(id);
+    const tmp = new Set(this.data.disabledCommands);
+    tmp.delete(id);
+    this.data.disabledCommands = [...tmp];
   }
 
   public get reqRoles(): { [key: string]: string } {

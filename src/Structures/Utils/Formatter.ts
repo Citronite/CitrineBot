@@ -62,8 +62,7 @@ export default class Formatter {
     const name = cmd.name;
     const description = cmd.description;
     const maxWidth = options && options.maxWidth ? options.maxWidth : 50;
-    const useCodeBlocks =
-      options && options.useCodeBlocks ? options.useCodeBlocks : true;
+    const useCodeBlocks = options && options.useCodeBlocks ? options.useCodeBlocks : true;
 
     if (cmd instanceof BaseCommand) {
       chip = cmd.chip;
@@ -91,23 +90,16 @@ export default class Formatter {
         descrips.push(val.description);
       }
 
-      const max = names.reduce(
-        (acc, cur) => (acc > cur.length ? acc : cur.length),
-        0
-      );
+      const max = names.reduce((acc, cur) => (acc > cur.length ? acc : cur.length), 0);
       for (let x = 0; x < names.length; x++) {
         const paddedName = names[x].padEnd(max + 2);
         const sliceLength = maxWidth - (max + 2) - 3;
         const slicedDescrip =
-          descrips[x].length >= sliceLength
-            ? `${descrips[x].slice(0, sliceLength)}...`
-            : descrips[x];
+          descrips[x].length >= sliceLength ? `${descrips[x].slice(0, sliceLength)}...` : descrips[x];
         const str = paddedName + slicedDescrip;
         final.push(str);
       }
-      subcommands = useCodeBlocks
-        ? `\`\`\`\n${final.join('\n')}\n\`\`\``
-        : final.join('\n');
+      subcommands = useCodeBlocks ? `\`\`\`\n${final.join('\n')}\n\`\`\`` : final.join('\n');
     }
 
     return {

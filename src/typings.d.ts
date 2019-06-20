@@ -88,13 +88,13 @@ declare module 'typings' {
     success: (msg: string, embed: boolean) => Promise<Message | Message[]>;
     error: (msg: string, embed: boolean) => Promise<Message | Message[]>;
     prompt: () => Promise<Message | string | null>;
-    promptReaction: () =>  Promise<MessageReaction | null>;
+    promptReaction: () => Promise<MessageReaction | null>;
     lockPerms: (perms: PermissionResolvable, options?: LockPermsOptions) => void;
     lock: (...locks: LockType[]) => void;
   }
 
   interface GuildConfig {
-     data: GuildConfigData;
+    data: GuildConfigData;
     readonly id: string;
     readonly prefix: string;
     readonly disabledRole: string;
@@ -142,34 +142,16 @@ declare module 'typings' {
 
   interface CmdHandler {
     checkPrefix: (message: Message, config?: GuildConfig & any) => string | null;
-    getArgs: (
-      message: Message,
-      prefix: string,
-      parseQuotes?: boolean
-    ) => string[] | null;
-    getBaseCmd: (
-      message: Message,
-      args: string[]
-    ) => [BaseCommand, string[]] | null;
-    getFinalCmd: (
-      message: Message,
-      args: string[]
-    ) => [Command, string[]] | null;
-    getCmdGenerator: (
-      message: Message,
-      args: string[]
-    ) => IterableIterator<[Command, string[]] | undefined>;
+    getArgs: (message: Message, prefix: string, parseQuotes?: boolean) => string[] | null;
+    getBaseCmd: (message: Message, args: string[]) => [BaseCommand, string[]] | null;
+    getFinalCmd: (message: Message, args: string[]) => [Command, string[]] | null;
+    getCmdGenerator: (message: Message, args: string[]) => IterableIterator<[Command, string[]] | undefined>;
     processCommand: (message: Message, config?: GuildConfig & any) => Promise<void>;
   }
 
   interface PermHandler {
     checkFilters: (ctx: Context & any, config?: GuildConfig & any) => void;
-    checkPerms: (
-      perms: PermissionResolvable,
-      member: GuildMember,
-      channel: TextChannel,
-      checkAdmin?: boolean
-    ) => void;
+    checkPerms: (perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin?: boolean) => void;
     checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
     checkBotOwner: (user: User | GuildMember) => void;
     checkBotDev: (user: User | GuildMember) => void;
@@ -179,15 +161,9 @@ declare module 'typings' {
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
     resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
-    resolveGuildChannel: (
-      guild: Guild,
-      channel: string
-    ) => Promise<GuildChannel | null>;
+    resolveGuildChannel: (guild: Guild, channel: string) => Promise<GuildChannel | null>;
     resolveUser: (client: Client, user: string) => Promise<User | null>;
-    resolveGuildMember(
-      guild: Guild,
-      member: string
-    ): Promise<GuildMember | null>;
+    resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
   }
 
   interface Formatter {
@@ -228,11 +204,11 @@ declare module 'typings' {
     owner: UserID;
     globalPrefix: string;
     verbose: boolean;
-    devs: Set<UserID>;
-    disabledUsers: Set<UserID>;
-    disabledGuilds: Set<GuildID>;
-    disabledCommands: Set<string>;
-    loadedChips: Set<string>;
+    devs: UserID[];
+    disabledUsers: UserID[];
+    disabledGuilds: GuildID[];
+    disabledCommands: string[];
+    loadedChips: string[];
     aliases: { [cmd: string]: string[] };
   }
 
@@ -243,9 +219,9 @@ declare module 'typings' {
     deleteCmdCalls: boolean;
     deleteCmdCallsDelay: number;
     readMsgEdits: boolean;
-    disabledUsers: Set<UserID>;
-    disabledChannels: Set<ChannelID>;
-    disabledCommands: Set<string>;
+    disabledUsers: UserID[];
+    disabledChannels: ChannelID[];
+    disabledCommands: string[];
     reqRoles: { [key: string]: string };
   }
 
@@ -262,25 +238,14 @@ declare module 'typings' {
   export type ChannelID = Snowflake;
   export type RoleID = Snowflake;
   export type UserID = Snowflake;
-  
+
   export type Command = BaseCommand | SubCommand;
 
   export type Reaction = string | Emoji | ReactionEmoji;
 
   export type RawExceptionArray = [string | number, string | string[]];
-  export type RawException =
-    | string
-    | number
-    | RawExceptionArray
-    | Error;
-  export type LockType =
-    | 'nsfw' // TODO: Implement nsfw check in Context#lock
-    | 'dm'
-    | 'guild'
-    | 'botOwner'
-    | 'botManager'
-    | 'botDev'
-    | boolean;
+  export type RawException = string | number | RawExceptionArray | Error;
+  export type LockType = 'nsfw' | 'dm' | 'guild' | 'guildOwner' | 'botOwner' | 'botManager' | 'botDev' | boolean;
   export type LockPermsOptions = {
     checkAdmin?: boolean;
     checkBot?: boolean;
@@ -309,7 +274,7 @@ declare module 'typings' {
     description: string;
     usage?: string;
     chip: string;
-  }
+  };
 
   export type FormatHelpOptions = {
     maxWidth?: number;
@@ -332,7 +297,7 @@ declare module 'typings' {
     base: string;
     usage?: string;
     subcommands?: string;
-  }
+  };
 }
 
 // export type RawExceptionObject = { type: string | number, msg: string | string[] };

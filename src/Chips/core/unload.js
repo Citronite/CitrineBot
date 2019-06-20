@@ -35,18 +35,14 @@ class Unload extends BaseCommand {
     }
     const { inline } = ctx.client.utils.format;
     if (failed.length) {
-      await ctx.error(
-        `Failed to unload the following chip(s):\n${inline(failed).join(', ')}`
-      );
+      await ctx.error(`Failed to unload the following chip(s):\n${inline(failed).join(', ')}`);
     }
     if (unloaded.length) {
-      await ctx.success(
-        `Successfully unloaded chip(s):\n${inline(unloaded).join(', ')}`
-      );
+      await ctx.success(`Successfully unloaded chip(s):\n${inline(unloaded).join(', ')}`);
     } else {
       await ctx.error(
         'No chips were unloaded. Are you sure you provided the correct name(s)?\n' +
-        'Remember, you can\'t unload the `core` chip!'
+          "Remember, you can't unload the `core` chip!"
       );
     }
   }

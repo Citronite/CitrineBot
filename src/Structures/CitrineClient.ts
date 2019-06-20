@@ -6,15 +6,11 @@ import PermHandler from './Handlers/PermHandler';
 import BaseCommand from './Command/BaseCommand';
 import CitrineUtils from './Citrine/CitrineUtils';
 import CitrineSettings from './Citrine/CitrineSettings';
+import GuildConfig from './Utils/GuildConfig';
 import Memory from './DbDrivers/Memory';
 import ConsoleLogger from './Loggers/Console';
 import { Client, Collection } from 'discord.js';
-import {
-  CitrineOptions,
-  DbDriver,
-  Utils,
-  Logger
-} from 'typings';
+import { CitrineOptions, DbDriver, Utils, Logger, GuildID } from 'typings';
 
 const root = resolve(`${__dirname}/../../`);
 const { readdirSync } = fs;
@@ -27,25 +23,23 @@ function resolveDbDriver(options: any): new () => DbDriver {
   if (!options || !options.dbDriver) return Memory;
   else {
     const { dbDriver } = options;
-    const drivers = fileFilter(readdirSync(`${root}/bin/DbDrivers`));
+    const drivers = fileFilter(readdirSync(`${root}/bin/Structures/DbDrivers`));
     if (drivers.includes(`${dbDriver}.js`)) {
-      return require(`${root}/bin/DbDrivers/${dbDriver}.js`);
-    }
-    else {
+      return require(`${root}/bin/Structures/DbDrivers/${dbDriver}.js`).default;
+    } else {
       throw new Error('Invalid dbDriver option provided!');
     }
   }
 }
 
 function resolveLogger(options: any): new () => Logger {
-  if (!options || !options.dbDriver) return ConsoleLogger;
+  if (!options || !options.logger) return ConsoleLogger;
   else {
     const { logger } = options;
-    const loggers = fileFilter(readdirSync(`${root}/bin/Loggers`));
+    const loggers = fileFilter(readdirSync(`${root}/bin/Structures/Loggers`));
     if (loggers.includes(`${logger}.js`)) {
-      return require(`${root}/bin/DbDrivers/${logger}.js`);
-    }
-    else {
+      return require(`${root}/bin/Structures/Loggers/${logger}.js`).default;
+    } else {
       throw new Error('Invalid logger option provided!');
     }
   }
@@ -91,6 +85,23 @@ export default class CitrineClient extends Client {
     this.on('resume', () => this.logger.info('Connection resumed!'));
   }
 
+  public async getGuild(id: GuildID): Promise<{ [key: string]: any } | undefined> {
+    const db: any = this.db;
+    const guild = await db.guilds.read(id);
+    return guild ? new GuildConfig(guild) : undefined;
+  }
+
+  public async setGuild(id: GuildID, data: GuildConfig): Promise<void> {
+    const guild = new GuildConfig(data);
+    const db: any = this.db;
+    await db.guilds.update(id, guild.toJSON());
+  }
+
+  public async delGuild(id: GuildID): Promise<void> {
+    const db: any = this.db;
+    await db.guilds.delete(id);
+  }
+
   // Loads all chips from the Chips folder.
   // Removes the core chip from cache since it is only loaded once.
   public initChips(): void {
@@ -99,9 +110,7 @@ export default class CitrineClient extends Client {
       const chips = this.defaultChips.has('all') ? allChips : this.defaultChips;
       for (const chip of chips) {
         if (!allChips.includes(chip)) {
-          throw new Error(
-            `Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`
-          );
+          throw new Error(`Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`);
         }
         const dir = readdirSync(`${root}/bin/Chips/${chip}`);
         const cmdFiles = fileFilter(dir);
@@ -132,8 +141,7 @@ export default class CitrineClient extends Client {
       const eventFiles = fileFilter(readdirSync(`${root}/bin/Events`));
       for (const file of eventFiles) {
         const event = require(`../Events/${file}`);
-        if (event.listener)
-          this.on(event.name, event.listener.bind(null, this));
+        if (event.listener) this.on(event.name, event.listener.bind(null, this));
         if (event.once) this.once(event.name, event.once.bind(null, this));
         delete require.cache[require.resolve(`../Events/${file}`)];
       }
@@ -165,6 +173,7 @@ export default class CitrineClient extends Client {
       await this.settings.save();
     } catch (err) {
       this.logger.warn(`Failed to load chip: ${chip}`);
+      this.logger.error(err);
       return Promise.reject(err);
     }
   }
@@ -182,6 +191,7 @@ export default class CitrineClient extends Client {
       await this.settings.save();
     } catch (err) {
       this.logger.warn(`Failed to unload chip: ${chip}`);
+      this.logger.error(err);
       return Promise.reject(err);
     }
   }
@@ -197,6 +207,7 @@ export default class CitrineClient extends Client {
       return Promise.resolve();
     } catch (err) {
       this.logger.warn(`Failed to clear cache for chip: ${chip}`);
+      this.logger.error(err);
       return Promise.reject(err);
     }
   }

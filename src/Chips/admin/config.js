@@ -11,10 +11,10 @@ class Config extends BaseCommand {
   }
 
   async execute(ctx, flag) {
-    ctx.lockPerms(['ADMINISTRATOR'], { checkBot: false });
+    ctx.lock('guild', 'guildOwner');
     if (ctx.subcommand) return;
 
-    const data = await ctx.client.db.guilds.read(ctx.message.guild.id);
+    const data = await ctx.client.getGuild(ctx.message.guild.id);
     const settings = JSON.stringify(data, null, '  ');
     const dm = flag === '--dm';
     if (dm) await ctx.sendDM(settings, { code: 'json' });
@@ -22,4 +22,7 @@ class Config extends BaseCommand {
   }
 }
 
-module.exports = new Config();
+const a = require('./config/prefix.js');
+const b = require('./config/disabledrole.js');
+const c = require('./config/deletecmdcalls.js');
+module.exports = new Config().register(a, b, c);

@@ -27,15 +27,11 @@ class EnableGuild extends SubCommand {
         ctx.client.settings.enableGuild(guild);
       }
       await ctx.client.settings.save();
-      await ctx.success(
-        `Successfully enabled guilds: ${inline(guilds).join(', ')}`
-      );
+      await ctx.success(`Successfully enabled guilds: ${inline(guilds).join(', ')}`);
     } else {
       const disabled = ctx.client.settings.disabledGuilds;
       if (disabled.length) {
-        await ctx.send(
-          `Currently disabled guilds: ${inline(disabled).join(', ')}`
-        );
+        await ctx.send(`Currently disabled guilds: ${inline(disabled).join(', ')}`);
       } else {
         await ctx.send('No guilds disabled currently.');
       }
@@ -58,15 +54,11 @@ class EnableUser extends SubCommand {
         ctx.client.settings.enableUser(user);
       }
       await ctx.client.settings.save();
-      await ctx.send(
-        `Successfully enabled users: ${users.map(id => `<@${id}>`)}`
-      );
+      await ctx.send(`Successfully enabled users: ${users.map(id => `<@${id}>`)}`);
     } else {
       const disabled = ctx.client.settings.disabledUsers;
       if (disabled.length) {
-        await ctx.send(
-          `Currently disabled users: ${disabled.map(id => `<@${id}>`)}`
-        );
+        await ctx.send(`Currently disabled users: ${disabled.map(id => `<@${id}>`)}`);
       } else {
         await ctx.send(`No users enabled currently.`);
       }
@@ -78,8 +70,7 @@ class EnableCmd extends SubCommand {
   constructor() {
     super({
       name: 'cmd',
-      description:
-        'Globally enable commands. Only base commands may be enabled.',
+      description: 'Globally enable commands. Only base commands may be enabled.',
       usage: '[p]gconfig enable cmd [...commands]'
     });
   }
@@ -99,20 +90,14 @@ class EnableCmd extends SubCommand {
 
       if (enabled.length) {
         await ctx.client.settings.save();
-        ctx.success(
-          `Successfully enabled commands:\n${inline(enabled).join('\n')}`
-        );
+        ctx.success(`Successfully enabled commands:\n${inline(enabled).join('\n')}`);
       } else {
-        ctx.error(
-          'No commands were enabled. Did you provide the correct names?'
-        );
+        ctx.error('No commands were enabled. Did you provide the correct names?');
       }
     } else {
       const disabled = ctx.client.settings.disabledCommands;
       if (disabled.length) {
-        await ctx.send(
-          `Currently disabled commands: ${inline(disabled).join(', ')}`
-        );
+        await ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
       } else {
         await ctx.send('No commands disabled currently.');
       }
