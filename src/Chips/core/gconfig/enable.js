@@ -23,17 +23,26 @@ class EnableGuild extends SubCommand {
     const { inline } = ctx.client.utils.format;
 
     if (guilds.length) {
+      const enabled = [];
       for (const guild of guilds) {
-        ctx.client.settings.enableGuild(guild);
+        const found = ctx.client.guilds.find(g => g.name === guild || g.id === guild);
+        if (!found) continue;
+        ctx.client.settings.enableGuild(found.id);
+        enabled.push(found.name);
       }
-      await ctx.client.settings.save();
-      await ctx.success(`Successfully enabled guilds: ${inline(guilds).join(', ')}`);
-    } else {
-      const disabled = ctx.client.settings.disabledGuilds;
-      if (disabled.length) {
-        await ctx.send(`Currently disabled guilds: ${inline(disabled).join(', ')}`);
+
+      if (enabled.length) {
+        await ctx.client.settings.save();
+        return ctx.success(`Successfully enabled guilds: ${inline(enabled).join(', ')}`);
       } else {
-        await ctx.send('No guilds disabled currently.');
+        return ctx.error('No guilds were enabled. Are you sure you provided the correct names?');
+      }
+    } else {
+      const { disabledGuilds: disabled } = ctx.client.settings;
+      if (disabled.length) {
+        return ctx.send(`Currently disabled guilds: ${inline(disabled).join(', ')}`);
+      } else {
+        return ctx.send('No guilds disabled currently.');
       }
     }
   }
@@ -49,18 +58,29 @@ class EnableUser extends SubCommand {
   }
 
   async execute(ctx, ...users) {
+    const { inline } = ctx.client.utils.format;
+
     if (users.length) {
+      const enabled = [];
       for (const user of users) {
-        ctx.client.settings.enableUser(user);
+        const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+        if (!found) continue;
+        ctx.client.settings.enableUser(found.id);
+        enabled.push(found.tag);
       }
-      await ctx.client.settings.save();
-      await ctx.send(`Successfully enabled users: ${users.map(id => `<@${id}>`)}`);
-    } else {
-      const disabled = ctx.client.settings.disabledUsers;
-      if (disabled.length) {
-        await ctx.send(`Currently disabled users: ${disabled.map(id => `<@${id}>`)}`);
+
+      if (enabled.length) {
+        await ctx.client.settings.save();
+        return ctx.send(`Successfully enabled users: ${inline(enabled).join(', ')}`);
       } else {
-        await ctx.send(`No users enabled currently.`);
+        return ctx.error('No users were enabled. Are you sure you provided the correct names?');
+      }
+    } else {
+      const { disabledUsers: disabled } = ctx.client.settings;
+      if (disabled.length) {
+        return ctx.send(`Currently disabled users: ${disabled.map(id => `<@${id}>`).join(', ')}`);
+      } else {
+        return ctx.send(`No users enabled currently.`);
       }
     }
   }
@@ -80,7 +100,6 @@ class EnableCmd extends SubCommand {
 
     if (cmds.length) {
       const enabled = [];
-
       for (const cmd of cmds) {
         const [exists] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
         if (!exists || exists.chip === 'core') continue;
@@ -90,22 +109,22 @@ class EnableCmd extends SubCommand {
 
       if (enabled.length) {
         await ctx.client.settings.save();
-        ctx.success(`Successfully enabled commands:\n${inline(enabled).join('\n')}`);
+        return ctx.success(`Successfully enabled commands:\n${inline(enabled).join('\n')}`);
       } else {
-        ctx.error('No commands were enabled. Did you provide the correct names?');
+        return ctx.error('No commands were enabled. Are you sure you provided the correct names?');
       }
     } else {
-      const disabled = ctx.client.settings.disabledCommands;
+      const { disabledCommands: disabled } = ctx.client.settings;
       if (disabled.length) {
-        await ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
+        return ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
       } else {
-        await ctx.send('No commands disabled currently.');
+        return ctx.send('No commands disabled currently.');
       }
     }
   }
 }
 
-const g = new EnableGuild();
-const u = new EnableUser();
+const a = new EnableGuild();
+const b = new EnableUser();
 const c = new EnableCmd();
-module.exports = new Enable().register(g, u, c);
+module.exports = new Enable().register(a, b, c);

@@ -14,7 +14,7 @@ class DeleteCmdCalls extends SubCommand {
     if (setting) {
       setting = setting.toLowerCase();
       if (!['on', 'off'].includes(setting)) {
-        ctx.error('Please specify `on` or `off`!');
+        ctx.error('Please specify `on` or `off`');
       } else {
         if (delay) {
           delay = JSON.parse(delay);
@@ -31,7 +31,7 @@ class DeleteCmdCalls extends SubCommand {
     } else {
       const { deleteCmdCalls: deleted } = data;
       const { deleteCmdCallsDelay: delay } = data;
-      ctx.send(`Delete commands calls: \`${deleted}\`\nDelay: \`${delay / 1000} seconds\``);
+      ctx.send(`Delete commands calls: \`${deleted ? 'ON' : 'OFF'}\`\nDelay: \`${delay / 1000} seconds\``);
     }
   }
 }
