@@ -13,11 +13,9 @@ export default class PermHandler {
 
     const errors = [];
     if (config) {
-      if (config.disabledRole && ctx.guild) {
-        const member = ctx.guild.fetchMember(ctx.author.id);
-        if (member && !member.roles.has(config.disabledRole)) {
-          errors.push('Disabled Role');
-        }
+      if (config.disabledRole) {
+        const { member } = ctx;
+        if (member && !member.roles.has(config.disabledRole)) errors.push('Disabled Role');
       }
       if (config.disabledUsers.includes(ctx.author.id)) errors.push('Disabled User [Local]');
       if (config.disabledChannels.includes(ctx.channel.id)) errors.push('Disabled Channel');
