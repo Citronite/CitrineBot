@@ -33,6 +33,7 @@ export default class CmdHandler {
   public getBaseCmd(message: Message, args: string[]): [BaseCommand, string[]] | null {
     if (!args || !args.length) return null;
 
+    args = Array.from(args);
     let name = args.shift();
     if (!name) return null;
     else name = name.toLowerCase();
