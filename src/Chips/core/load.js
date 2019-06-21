@@ -11,7 +11,8 @@ class Load extends BaseCommand {
     super({
       name: 'load',
       description:
-        'Loads a chip. Separate multiple names with spaces, or enter `all` to load all. Optionally, add the `--re` flag to hot-reload chips',
+        'Loads a chip. Separate multiple names with spaces, or enter `all` to load all. ' +
+        'Optionally, add the `--re` flag to hot-reload chips',
       usage: '[p]load <...chips | "all"> [--re]',
       chip: 'core'
     });
@@ -25,20 +26,27 @@ class Load extends BaseCommand {
     const filteredChips = chips.includes('all') ? allChips : chips.filter(name => allChips.includes(name));
     const reload = chips.includes('--re');
     const loaded = [];
+    const failed = [];
+
     for (const chip of filteredChips) {
       try {
         if (reload) await ctx.client.clearChipCache(chip);
         await ctx.client.loadChip(chip);
         loaded.push(chip);
       } catch (err) {
-        continue;
+        failed.push(chip);
       }
     }
+
+    const { inline } = ctx.client.utils.format;
+
+    if (failed.length) {
+      await ctx.error(`Failed to load the following chip(s):\n${inline(failed).join(', ')}`)
+    }
     if (loaded.length) {
-      const { inline } = ctx.client.utils.format;
-      await ctx.success(`Successfully loaded chip(s):\n${inline(loaded).join('\n')}`);
+      return ctx.success(`Successfully ${reload ? 're' : ''}loaded chip(s):\n${inline(loaded).join(', ')}`);
     } else {
-      await ctx.error('No chips were loaded. Are you sure you provided the correct name(s)?');
+      return ctx.error('No chips were loaded. Are you sure you provided the correct name(s)?');
     }
   }
 }

@@ -28,13 +28,23 @@ class Add extends SubCommand {
   }
 
   async execute(ctx, ...users) {
+    const { inline } = ctx.client.utils.format;
+
     if (users.length) {
+      const added = [];
       for (const user of users) {
-        ctx.client.settings.addDev(user);
+        const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+        if (!found) continue;
+        ctx.client.settings.addDev(found.id);
+        added.push(found.tag);
       }
-      await ctx.client.settings.save();
-      const added = users.map(v => `<@${v}>`);
-      ctx.success(`Successfully added bot developers: ${added.join(', ')}`);
+
+      if (added.length) {
+        await ctx.client.settings.save();
+        return ctx.success(`Successfully added bot developers: ${inline(added).join(', ')}`);
+      } else {
+        return ctx.error('No users were added. Are you sure you provided the correct name?');
+      }
     } else {
       ctx.subcommand = undefined;
       await this.parent.execute(ctx);
@@ -52,13 +62,23 @@ class Remove extends SubCommand {
   }
 
   async execute(ctx, ...users) {
+    const { inline } = ctx.client.utils.format;
+
     if (users.length) {
+      const removed = [];
       for (const user of users) {
-        ctx.client.settings.removeDev(user);
+        const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+        if (!found) continue;
+        ctx.client.settings.removeDev(found.id);
+        removed.push(found.tag);
       }
-      const removed = users.map(v => `<@${v}>`);
-      await ctx.client.settings.save();
-      ctx.success(`Successfully removed bot developers: ${removed.join(', ')}`);
+
+      if (removed.length) {
+        await ctx.client.settings.save();
+        ctx.success(`Successfully removed bot developers: ${inline(removed).join(', ')}`);
+      } else {
+        return ctx.error('No users were removed. Are you sure you provided the correct names?');
+      }
     } else {
       ctx.subcommand = undefined;
       await this.parent.execute(ctx);
@@ -67,5 +87,5 @@ class Remove extends SubCommand {
 }
 
 const a = new Add();
-const r = new Remove();
-module.exports = new Devs().register(a, r);
+const b = new Remove();
+module.exports = new Devs().register(a, b);

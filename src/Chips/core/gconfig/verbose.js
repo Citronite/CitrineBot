@@ -13,14 +13,14 @@ class Verbose extends SubCommand {
     if (choice) {
       choice = choice.toLowerCase();
       if (!['on', 'off'].includes(choice)) {
-        ctx.error('Please specify `on` or `off`');
+        return ctx.error('Please specify `on` or `off`');
       } else {
-        ctx.settings.verbose = setting === 'on' ? true : false;
+        ctx.settings.verbose = choice === 'on' ? true : false;
         await ctx.client.settings.save();
-        ctx.success(`Verbose mode is now \`${choice.toUpperCase()}\``);
+        return ctx.success(`Verbose mode is now \`${choice.toUpperCase()}\``);
       }
     } else {
-      ctx.send(`Verbose mode is currently \`${ctx.client.settings.verbose ? 'ON' : 'OFF'}\``);
+      return ctx.send(`Verbose mode is currently \`${ctx.client.settings.verbose ? 'ON' : 'OFF'}\``);
     }
   }
 }
