@@ -25,7 +25,7 @@ export default class PermHandler {
     if (disabledUsers.includes(ctx.author.id)) errors.push('Disabled User [Global]');
     if (disabledCommands.includes(ctx.command.name)) errors.push('Disabled Command [Global]');
 
-    const code = ErrCode.FAILED_CUSTOM_FILTERS;
+    const code = ErrCode.FAILED_FILTER_CHECKS;
     if (errors.length) throw new Exception(code, errors);
   }
 
