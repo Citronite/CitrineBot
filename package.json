@@ -12,11 +12,10 @@
     "fmt:fix": "prettier --write \"{src,launcher}/**/*.{ts,js}\"",
     "fmt:fixbin": "prettier --write \"bin/**/*.js\"",
     "launcher": "node ./launcher/main.js",
-    "citrine": "node ./bin/citrine.js",
-    "start": "node ./bin/citrine.js"
+    "citrine": "node ./bin/citrine.js"
   },
   "engines": {
-    "node": ">=10.1.0"
+    "node": ">=10.0.0"
   },
   "keywords": [
     "bot",
@@ -49,11 +48,7 @@
     "typedoc": "^0.14.2"
   },
   "dependencies": {
-    "discord.js": "^11.5.1",
-    "typescript": "^3.4.5",
-    "keyv": "^3.1.0",
-    "@types/node": "^12.0.8",
-    "@types/keyv": "^3.1.0"
+    "discord.js": "^11.5.1"
   },
   "repository": {
     "type": "git",
