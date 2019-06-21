@@ -225,13 +225,13 @@ declare module 'typings' {
     reqRoles: { [key: string]: string };
   }
 
+  type LoggerType = 'Console' | 'Winston';
+  type DbDriverType = 'Memory' | 'MemoryKV' | 'Json' | 'SQLiteKV';
+
   export interface CitrineOptions extends ClientOptions {
     readonly defaultChips?: string[];
-    readonly logger?: string;
-    readonly dbDriver?: string;
-    readonly utils?: new () => Utils;
-    readonly cmdHandler?: new () => CmdHandler;
-    readonly permHandler?: new () => PermHandler;
+    readonly logger?: LoggerType;
+    readonly dbDriver?: DbDriverType;
   }
 
   export type GuildID = Snowflake;
