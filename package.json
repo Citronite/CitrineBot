@@ -12,7 +12,8 @@
     "fmt:fix": "prettier --write \"{src,launcher}/**/*.{ts,js}\"",
     "fmt:fixbin": "prettier --write \"bin/**/*.js\"",
     "launcher": "node ./launcher/main.js",
-    "citrine": "node ./bin/citrine.js"
+    "citrine": "node ./bin/citrine.js",
+    "start": "node ./bin/citrine.js"
   },
   "engines": {
     "node": ">=10.1.0"
