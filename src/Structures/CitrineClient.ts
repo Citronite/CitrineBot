@@ -217,6 +217,7 @@ export default class CitrineClient extends Client {
     try {
       this.logger.info('\nFetching data. . .');
       // const data = require(`${root}/data/core/_instance.json`);
+      const data = {};
       await this.settings.load();
       if (this.settings.globalPrefix === 'DEFAULT') {
         this.settings.globalPrefix = data.initialPrefix;
