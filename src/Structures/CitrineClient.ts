@@ -212,28 +212,31 @@ export default class CitrineClient extends Client {
     }
   }
 
-  // Starts bot!
+  // Starts Citrine!
   public async launch(): Promise<void> {
     try {
       this.logger.info('\nFetching data. . .');
-      // const data = require(`${root}/data/core/_instance.json`);
-      const data: any = {};
+      const data = require(`${root}/data/core/_instance.json`);
       await this.settings.load();
+
       if (this.settings.globalPrefix === 'DEFAULT') {
         this.settings.globalPrefix = data.initialPrefix;
       }
 
       this.logger.info('\nLogging in to Discord. . .');
-      await this.login(process.env.TOKEN);
+      await this.login(data.TOKEN);
 
       if (this.settings.owner === 'DEFAULT') {
         const app = await this.fetchApplication();
         this.settings.owner = app.owner.id;
-        data.ownerId = app.owner.id;
+
+        data.botOwner = app.owner.id;
+        data.appOwner = app.owner.id;
         data.appId = app.id;
 
         const path = `${root}/data/core/_instance.json`;
         const content = JSON.stringify(data, null, '  ');
+
         fs.writeFile(path, content, err => {
           if (err) this.logger.warn(err);
         });
