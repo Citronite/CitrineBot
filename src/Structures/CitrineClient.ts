@@ -216,14 +216,14 @@ export default class CitrineClient extends Client {
   public async launch(): Promise<void> {
     try {
       this.logger.info('\nFetching data. . .');
-      const data = require('../../data/core/_instance.json');
+      // const data = require(`${root}/data/core/_instance.json`);
       await this.settings.load();
       if (this.settings.globalPrefix === 'DEFAULT') {
         this.settings.globalPrefix = data.initialPrefix;
       }
 
       this.logger.info('\nLogging in to Discord. . .');
-      await this.login(data.TOKEN);
+      await this.login(process.env.TOKEN);
 
       if (this.settings.owner === 'DEFAULT') {
         const app = await this.fetchApplication();
