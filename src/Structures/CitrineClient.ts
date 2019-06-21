@@ -53,29 +53,27 @@ export default class CitrineClient extends Client {
   public readonly cmdHandler: CmdHandler;
   public readonly permHandler: PermHandler;
   public readonly commands: Collection<string, BaseCommand>;
-  public readonly defaultChips: Set<string>;
-  public lastException: Error | null; // Temporary
+  public readonly defaultChips: string[];
+  public lastException: Error | null; // Temporary?
 
   public constructor(options?: CitrineOptions) {
     super(options);
+
     this.settings = new CitrineSettings(this);
     this.commands = new Collection();
 
+    this.utils = new CitrineUtils();
+    this.cmdHandler = new CmdHandler();
+    this.permHandler = new PermHandler();
+
     const dbDriver = resolveDbDriver(options);
-    const logger = resolveLogger(options);
-    const utils = (options && options.utils) || CitrineUtils;
-    const cmdHandler = (options && options.cmdHandler) || CmdHandler;
-    const permHandler = (options && options.permHandler) || PermHandler;
-
     this.db = new dbDriver();
-    this.utils = new utils();
+    const logger = resolveLogger(options);
     this.logger = new logger();
-    this.cmdHandler = new cmdHandler();
-    this.permHandler = new permHandler();
 
-    this.defaultChips = new Set(['core']);
+    this.defaultChips = ['core'];
     if (options && options.defaultChips) {
-      this.defaultChips = new Set(['core', ...options.defaultChips]);
+      this.defaultChips = ['core', ...options.defaultChips];
     }
 
     this.lastException = null;
@@ -85,29 +83,12 @@ export default class CitrineClient extends Client {
     this.on('resume', () => this.logger.info('Connection resumed!'));
   }
 
-  public async getGuild(id: GuildID): Promise<{ [key: string]: any } | undefined> {
-    const db: any = this.db;
-    const guild = await db.guilds.read(id);
-    return guild ? new GuildConfig(guild) : undefined;
-  }
-
-  public async setGuild(id: GuildID, data: GuildConfig): Promise<void> {
-    const guild = new GuildConfig(data);
-    const db: any = this.db;
-    await db.guilds.update(id, guild.toJSON());
-  }
-
-  public async delGuild(id: GuildID): Promise<void> {
-    const db: any = this.db;
-    await db.guilds.delete(id);
-  }
-
   // Loads all chips from the Chips folder.
   // Removes the core chip from cache since it is only loaded once.
   public initChips(): void {
     try {
       const allChips = readdirSync(`${root}/bin/Chips`);
-      const chips = this.defaultChips.has('all') ? allChips : this.defaultChips;
+      const chips = this.defaultChips.includes('all') ? allChips : this.defaultChips;
       for (const chip of chips) {
         if (!allChips.includes(chip)) {
           throw new Error(`Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`);
@@ -212,12 +193,16 @@ export default class CitrineClient extends Client {
     }
   }
 
-  // Starts bot!
+  // Starts Citrine!
   public async launch(): Promise<void> {
     try {
+      this.initChips();
+      this.initEvents();
+
       this.logger.info('\nFetching data. . .');
       const data = require('../../data/core/_instance.json');
       await this.settings.load();
+
       if (this.settings.globalPrefix === 'DEFAULT') {
         this.settings.globalPrefix = data.initialPrefix;
       }
@@ -227,20 +212,40 @@ export default class CitrineClient extends Client {
 
       if (this.settings.owner === 'DEFAULT') {
         const app = await this.fetchApplication();
+
         this.settings.owner = app.owner.id;
         data.ownerId = app.owner.id;
         data.appId = app.id;
 
         const path = `${root}/data/core/_instance.json`;
         const content = JSON.stringify(data, null, '  ');
+
         fs.writeFile(path, content, err => {
           if (err) this.logger.warn(err);
         });
       }
+
       await this.settings.save();
     } catch (err) {
       this.logger.error(err);
       return Promise.reject(err);
     }
+  }
+
+  public async getGuild(id: GuildID): Promise<{ [key: string]: any } | undefined> {
+    const db: any = this.db;
+    const guild = await db.guilds.read(id);
+    return guild ? new GuildConfig(guild) : undefined;
+  }
+
+  public async setGuild(id: GuildID, data: GuildConfig): Promise<void> {
+    const guild = new GuildConfig(data);
+    const db: any = this.db;
+    await db.guilds.update(id, guild.toJSON());
+  }
+
+  public async delGuild(id: GuildID): Promise<void> {
+    const db: any = this.db;
+    await db.guilds.delete(id);
   }
 }
