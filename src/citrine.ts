@@ -2,7 +2,7 @@ import CitrineClient from './Structures/CitrineClient';
 import { CitrineOptions } from 'typings';
 
 /*
- *       CitrineBot - A powerful, modular discord bot!
+ *       CitrineBot - A powerful & extensible Discord bot!
  *
  *       By @quantomistro (https://github.com/quantomistro)
  *       GitHub: https://github.com/quantomistro/CitrineBot
