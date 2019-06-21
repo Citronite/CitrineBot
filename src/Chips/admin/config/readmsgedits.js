@@ -12,14 +12,14 @@ class ReadMsgEdits extends SubCommand {
   async execute(ctx, setting) {
     const data = await ctx.client.getGuild(ctx.message.guild.id);
     if (setting) {
-			setting = setting.toLowerCase();
+      setting = setting.toLowerCase();
       if (!['on', 'off'].includes(setting)) {
-				ctx.error('Please specify `on` or `off`');
-			} else {
-				data.readMsgEdits = setting === 'on' ? true : false;
-				await ctx.client.setGuild(ctx.message.guild.id, data);
-				ctx.success('Successfully updated server settings!');
-			}
+        ctx.error('Please specify `on` or `off`');
+      } else {
+        data.readMsgEdits = setting === 'on' ? true : false;
+        await ctx.client.setGuild(ctx.message.guild.id, data);
+        ctx.success('Successfully updated server settings!');
+      }
     } else {
       const { readMsgEdits } = data;
       ctx.send(`Read message edits: \`${readMsgEdits ? 'ON' : 'OFF'}\``);

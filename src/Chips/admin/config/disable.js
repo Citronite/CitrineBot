@@ -21,24 +21,24 @@ class DisableCmd extends SubCommand {
 
   async execute(ctx, ...cmds) {
     const { inline } = ctx.client.utils.format;
-		const data = await ctx.client.getGuild(ctx.guild.id);
+    const data = await ctx.client.getGuild(ctx.guild.id);
 
     if (cmds.length) {
-			const disabled = [];
+      const disabled = [];
       for (const cmd of cmds) {
-				const [found] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
+        const [found] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
         if (!found) continue;
-				data.disableCommand(found.name);
-				disabled.push(cmd);
-			}
-			if (disabled.length) {
-      	await ctx.client.setGuild(ctx.guild.id, data);
-				return ctx.success(`Successfully disabled commands: ${inline(disabled).join(', ')}`);
-			} else {
-				return ctx.error('No commands were disabled. Are you sure you provided the correct names?');
-			}
+        data.disableCommand(found.name);
+        disabled.push(cmd);
+      }
+      if (disabled.length) {
+        await ctx.client.setGuild(ctx.guild.id, data);
+        return ctx.success(`Successfully disabled commands: ${inline(disabled).join(', ')}`);
+      } else {
+        return ctx.error('No commands were disabled. Are you sure you provided the correct names?');
+      }
     } else {
-			const { disabledCommands: disabled } = data;
+      const { disabledCommands: disabled } = data;
       if (disabled.length) {
         return ctx.send(`Currently disabled commands: ${inline(disabled).join(', ')}`);
       } else {
@@ -58,22 +58,22 @@ class DisableUser extends SubCommand {
   }
 
   async execute(ctx, ...users) {
-		const data = await ctx.client.getGuild(ctx.guild.id);
+    const data = await ctx.client.getGuild(ctx.guild.id);
 
     if (users.length) {
-			const disabled = [];
+      const disabled = [];
       for (let user of users) {
-				user = await ctx.client.utils.djs.resolveUser(ctx.client, user);
-				if (!user) continue;
-				data.disableUser(user.id);
-				disabled.push(user.tag);
-			}
-			if (disabled.length) {
-				await ctx.client.setGuild(ctx.guild.id, data);
-				return ctx.success(`Successfully disabled users: ${data.disabledUsers.map(id => `<@${id}>`).join(', ')}`);
-			} else {
-				return ctx.error('No users were disabled. Are you sure you provided the correct names?');
-			}
+        user = await ctx.client.utils.djs.resolveUser(ctx.client, user);
+        if (!user) continue;
+        data.disableUser(user.id);
+        disabled.push(user.tag);
+      }
+      if (disabled.length) {
+        await ctx.client.setGuild(ctx.guild.id, data);
+        return ctx.success(`Successfully disabled users: ${data.disabledUsers.map(id => `<@${id}>`).join(', ')}`);
+      } else {
+        return ctx.error('No users were disabled. Are you sure you provided the correct names?');
+      }
     } else {
       const { disabledUsers: disabled } = ctx.client.settings;
       if (disabled.length) {
@@ -89,22 +89,22 @@ class DisableChannel extends SubCommand {
   constructor() {
     super({
       name: 'channel',
-      description:
-        'Locally disable the bot from specific channels. Only works on channels the bot can see.',
+      description: 'Locally disable the bot from specific channels. Only works on channels the bot can see.',
       usage: '[p]config disable channel [...#Channel/ChannelID]'
     });
   }
 
   async execute(ctx, ...channels) {
+    const { inline } = ctx.client.utils.format;
     const data = await ctx.client.getGuild(ctx.guild.id);
 
     if (channels.length) {
-			const disabled = [];
+      const disabled = [];
       for (let channel of channels) {
         channel = await ctx.client.utils.djs.resolveGuildChannel(ctx.guild, channel);
-				if (!channel) continue;
-				data.disableChannel(channel.id);
-				disabled.push(channel.name);
+        if (!channel) continue;
+        data.disableChannel(channel.id);
+        disabled.push(channel.name);
       }
 
       if (disabled.length) {

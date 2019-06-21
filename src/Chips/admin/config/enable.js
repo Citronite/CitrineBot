@@ -21,23 +21,23 @@ class EnableCmd extends SubCommand {
 
   async execute(ctx, ...cmds) {
     const { inline } = ctx.client.utils.format;
-		const data = await ctx.client.getGuild(ctx.guild.id);
+    const data = await ctx.client.getGuild(ctx.guild.id);
 
     if (cmds.length) {
-			const enabled = [];
+      const enabled = [];
       for (const cmd of cmds) {
-				const [found] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
+        const [found] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
         if (!found) continue;
-				data.enableCommand(found.name);
-				enabled.push(cmd);
-			}
+        data.enableCommand(found.name);
+        enabled.push(cmd);
+      }
 
-			if (enabled.length) {
-      	await ctx.client.setGuild(ctx.guild.id, data);
-				return ctx.success(`Successfully enabled commands: ${inline(enabled).join(', ')}`);
-			} else {
-				return ctx.error('No commands were enabled. Are you sure you provided the correct names?');
-			}
+      if (enabled.length) {
+        await ctx.client.setGuild(ctx.guild.id, data);
+        return ctx.success(`Successfully enabled commands: ${inline(enabled).join(', ')}`);
+      } else {
+        return ctx.error('No commands were enabled. Are you sure you provided the correct names?');
+      }
     } else {
       const { disabledCommands: disabled } = data;
       if (disabled.length) {
@@ -59,24 +59,24 @@ class EnableUser extends SubCommand {
   }
 
   async execute(ctx, ...users) {
-		const { inline } = ctx.client.utils.format;
-		const data = ctx.cliet.getGuild(ctx.guild.id);
+    const { inline } = ctx.client.utils.format;
+    const data = ctx.cliet.getGuild(ctx.guild.id);
 
     if (users.length) {
-			const enabled = [];
+      const enabled = [];
       for (const user of users) {
-				const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
-				if (!found) continue;
-				data.enableUser(found.id);
-				enabled.push(found.tag);
-			}
-			
-			if (enabled.length) {
-      	await ctx.client.setGuild(ctx.guild.id, data);
-				return ctx.success(`Successfully enabled users: ${inline(enabled).join(', ')}`);
-			} else {
-				return ctx.error('No users were enabled. Are you sure you provided the correct names?');
-			}
+        const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
+        if (!found) continue;
+        data.enableUser(found.id);
+        enabled.push(found.tag);
+      }
+
+      if (enabled.length) {
+        await ctx.client.setGuild(ctx.guild.id, data);
+        return ctx.success(`Successfully enabled users: ${inline(enabled).join(', ')}`);
+      } else {
+        return ctx.error('No users were enabled. Are you sure you provided the correct names?');
+      }
     } else {
       const { disabledUsers: disabled } = ctx.client.settings;
       if (disabled.length) {
@@ -99,7 +99,7 @@ class EnableChannel extends SubCommand {
 
   async execute(ctx, ...channels) {
     const { inline } = ctx.client.utils.format;
-		const data = ctx.client.getGuild(ctx.guild.id);
+    const data = ctx.client.getGuild(ctx.guild.id);
 
     if (channels.length) {
       const enabled = [];

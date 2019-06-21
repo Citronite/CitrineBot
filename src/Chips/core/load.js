@@ -41,7 +41,7 @@ class Load extends BaseCommand {
     const { inline } = ctx.client.utils.format;
 
     if (failed.length) {
-      await ctx.error(`Failed to load the following chip(s):\n${inline(failed).join(', ')}`)
+      await ctx.error(`Failed to load the following chip(s):\n${inline(failed).join(', ')}`);
     }
     if (loaded.length) {
       return ctx.success(`Successfully ${reload ? 're' : ''}loaded chip(s):\n${inline(loaded).join(', ')}`);
