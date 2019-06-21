@@ -26,8 +26,6 @@ const citrine = new CitrineClient(options);
 
 (async function main() {
   try {
-    citrine.initChips();
-    citrine.initEvents();
     await citrine.launch();
   } catch (_) {
     process.exit(1);
