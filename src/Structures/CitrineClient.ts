@@ -200,7 +200,7 @@ export default class CitrineClient extends Client {
       this.initEvents();
 
       this.logger.info('\nFetching data. . .');
-      const data = require('../../data/core/_instance.json');
+      const data = require(`${root}/data/core/_instance.json`);
       await this.settings.load();
 
       if (this.settings.globalPrefix === 'DEFAULT') {
@@ -214,7 +214,9 @@ export default class CitrineClient extends Client {
         const app = await this.fetchApplication();
 
         this.settings.owner = app.owner.id;
-        data.ownerId = app.owner.id;
+
+        data.botOwner = app.owner.id;
+        data.appOwner = app.owner.id;
         data.appId = app.id;
 
         const path = `${root}/data/core/_instance.json`;

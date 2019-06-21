@@ -15,7 +15,7 @@
     "citrine": "node ./bin/citrine.js"
   },
   "engines": {
-    "node": ">=10.1.0"
+    "node": ">=10.0.0"
   },
   "keywords": [
     "bot",
