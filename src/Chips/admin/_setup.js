@@ -1,8 +1,8 @@
 const { Exception, GuildConfig } = require('../../exports.js');
 
-async function listener(client, oldMsg, newMsg) {
+async function listener(oldMsg, newMsg) {
   if (oldMsg.content === newMsg.content) return;
-
+  const { client } = newMsg;
   try {
     let config;
     if (newMsg.guild) {

@@ -25,4 +25,7 @@ class Config extends BaseCommand {
 const a = require('./config/prefix.js');
 const b = require('./config/disabledrole.js');
 const c = require('./config/deletecmdcalls.js');
-module.exports = new Config().register(a, b, c);
+const d = require('./config/enable.js');
+const e = require('./config/disable.js');
+const f = require('./config/readmsgedits.js');
+module.exports = new Config().register(a, b, c, d, e, f);
