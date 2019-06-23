@@ -28,9 +28,25 @@
 
 <hr/>
 
-<h1>
-    License
-</h1>
+> NOTE: Citrine is still in development stages. *Breaking changes can and will be made without notice*. There is still a lot to do, and it will be some time before Citrine is stable enough for proper usage. All help is appreciated, so feel free to [contribute.](#Contribute)
+
+# Overview
+**To-Do**
+
+<br/>
+
+# Installation
+**To-Do**
+
+<br/>
+
+# Contribute
+Citrine is still in development stages. Testing, built-in Chips, documentation, installation & usage guides, and much more still needs work. If you feel like contributing, feel free to open a PR, or drop by at the [support server!](https://discord.gg/yyqjd3B)
+
+<br/>
+
+# License
+
 <a href="https://github.com/quantomistro/CitrineBot/blob/master/LICENSE">
     <img alt="license: GPL-3.0" src="https://img.shields.io/badge/LICENSE-GPL--3.0-orange.svg?style=for-the-badge">
 </a>
