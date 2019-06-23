@@ -6,7 +6,7 @@ import { CitrineOptions } from 'typings';
  *
  *       By @quantomistro (https://github.com/quantomistro)
  *       GitHub: https://github.com/quantomistro/CitrineBot
- *       Support Server: https://discord.gg/rEM9gFN
+ *       Support Server: https://discord.gg/yyqjd3B
  *
  *       ###############################
  *       #                             #

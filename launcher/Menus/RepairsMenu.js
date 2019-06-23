@@ -41,7 +41,7 @@ class RepairsMenu extends AbstractMenu {
       println(
         'Please make sure Citrine is installed properly, and try again.\n' +
           'For further help, you can join the support server:\n' +
-          'Support Server: https://discord.gg/rEM9gFN'
+          'Support Server: https://discord.gg/yyqjd3B'
       );
       rl.close();
       process.exit(1);

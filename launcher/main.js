@@ -66,7 +66,7 @@ async function installDeps() {
       'Error installing dependencies.\n\n' +
         'You can try running `npm install --only=production` to manually install\n' +
         'the required dependencies. If a problem persists, you can visit the\n' +
-        'support server for help: https://discord.gg/rEM9gFN'
+        'support server for help: https://discord.gg/yyqjd3B'
     );
     return false;
   }
@@ -98,7 +98,7 @@ async function compileCitrine() {
     println(
       'Please make sure Citrine is installed properly, and try again.\n' +
         'For further help, you can join the support server:\n' +
-        'Support Server: https://discord.gg/rEM9gFN'
+        'Support Server: https://discord.gg/yyqjd3B'
     );
     return false;
   }
@@ -127,7 +127,7 @@ async function createDataFiles(TOKEN, initialPrefix) {
     println(
       'You may configure the files manually and try again.\n' +
         'If the problem persists, you can visit the support\n' +
-        'server for more help: https://discord.gg/rEM9gFN\n'
+        'server for more help: https://discord.gg/yyqjd3B\n'
     );
     return false;
   }
