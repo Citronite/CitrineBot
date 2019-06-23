@@ -33,13 +33,6 @@
     "url": "https://github.com/quantomistro/CitrineBot/issues"
   },
   "homepage": "https://github.com/quantomistro/CitrineBot#README",
-  "peerDependencies": {
-    "@types/node": "^12.0.8",
-    "@types/keyv": "^3.1.0",
-    "typescript": "^3.4.5",
-    "winston": "^3.2.1",
-    "keyv": "^3.1.0"
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
@@ -49,7 +42,12 @@
     "typedoc": "^0.14.2"
   },
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "@types/node": "^12.0.8",
+    "@types/keyv": "^3.1.0",
+    "discord.js": "^11.5.1",
+    "keyv": "^3.1.0",
+    "typescript": "^3.4.5",
+    "winston": "^3.2.1"
   },
   "repository": {
     "type": "git",
