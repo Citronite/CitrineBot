@@ -28,7 +28,7 @@
 
 <hr/>
 
-> NOTE: Citrine is still in development stages. *Breaking changes can and will be made without notice*. There is still a lot to do, and it will be some time before Citrine is stable enough for proper usage. All help is appreciated, so feel free to [contribute.](#Contribute)
+> **NOTE:** Citrine is still in development stages. *Breaking changes can and will be made without notice*. There is still a lot to do, and it will be some time before Citrine is stable enough for proper usage. All help is appreciated, so feel free to [contribute.](#Contribute)
 
 # Overview
 **To-Do**
