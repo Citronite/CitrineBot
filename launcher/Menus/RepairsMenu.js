@@ -15,33 +15,26 @@ class RepairsMenu extends AbstractMenu {
     this.code = 2;
   }
 
-  // Recompile TS code
+  // Recompile TS src code
   async 1() {
     println('Recompiling source code...');
     try {
       println('\nPlease wait...');
-      try {
-        const { stdout, stderr } = await execute('node_modules/.bin/tsc', {
-          cwd: root
-        });
-        if (stderr) println(stderr);
-        if (stdout) println(stdout);
-      } catch (_) {
-        const { stdout, stderr } = await execute('tsc', {
-          cwd: root
-        });
-        if (stderr) println(stderr);
-        if (stdout) println(stdout);
-      }
-      fs.readdirSync(`${root}/bin`);
+      const { stdout, stderr } = await execute('npm run build', {
+        cwd: root
+      });
+
+      if (stderr) println(stderr);
+      if (stdout) println(stdout);
+
       println('Successfully recompiled code!');
     } catch (err) {
       println('Uh-oh! An unknown error occurred while compiling code!');
       println(err);
       println(
         'Please make sure Citrine is installed properly, and try again.\n' +
-          'For further help, you can join the support server:\n' +
-          'Support Server: https://discord.gg/yyqjd3B'
+        'For further help, you can join the support server:\n' +
+        'Support Server: https://discord.gg/yyqjd3B'
       );
       rl.close();
       process.exit(1);

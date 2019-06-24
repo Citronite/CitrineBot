@@ -3,8 +3,8 @@ const fs = require('fs');
 const { resolve } = require('path');
 const { println, confirm, execute, input, sleep, open } = require('../cli.js');
 
-const baseCmdTemplate = `
-const { BaseCommand } = require('../../exports');
+const baseCmdTemplate = 
+`const { BaseCommand } = require('../../exports');
 
 class Name extends BaseCommand {
   constructor() {
@@ -25,8 +25,8 @@ module.exports = new Name();
 
 `;
 
-const subCmdTemplate = `
-const { SubCommand } = require('../../exports');
+const subCmdTemplate = 
+`const { SubCommand } = require('../../exports');
 
 class Name extends Subcommand {
   constructor() {
@@ -53,7 +53,12 @@ class ChipsMenu extends AbstractMenu {
   constructor() {
     super({
       title: 'What would you like to do?',
-      choices: ['List downloaded Chips', 'Download Chip from GitHub', 'Delete Chip', 'Create new Chip']
+      choices: [
+        'List downloaded Chips',
+        'Download Chip from GitHub',
+        'Delete Chip',
+        'Create new Chip'
+      ]
     });
     this.code = 1;
   }
@@ -61,7 +66,6 @@ class ChipsMenu extends AbstractMenu {
   // List downloaded Chips
   async 1() {
     println('Downloaded Chips:');
-    await sleep(200);
     const chips = fs.readdirSync(`${root}/bin/Chips/`);
     println(chips.join('\n'));
   }
@@ -97,7 +101,7 @@ class ChipsMenu extends AbstractMenu {
       fs.mkdirSync(`${root}/bin/Chips/${chipName}`);
 
       println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const metaContent = `module.exports = {\n  author: '<YOUR NAME>',\n  description: '<DESCRIPTION>'\n};\n`;
+      const metaContent = "module.exports = {\n  author: '<YOUR NAME>',\n  description: '<DESCRIPTION>'\n};\n";
       fs.writeFileSync(`${root}/bin/Chips/${chipName}/_meta.js`, metaContent);
 
       println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
@@ -107,15 +111,13 @@ class ChipsMenu extends AbstractMenu {
       println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
       fs.writeFileSync(`${root}/bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
 
-      const createBranch = await confirm(`Would you also like to create a git branch the ${chipName} chip?`);
+      const createBranch = await confirm(`Would you also like to create a git branch for the ${chipName} chip?`);
       if (createBranch) {
         try {
           println('Creating branch...');
           await execute(`git branch ${chipName}`, { cwd: root });
           println('Checking out...');
-          await execute(`git checkout ${chipName}`, {
-            cwd: root
-          });
+          await execute(`git checkout ${chipName}`, { cwd: root });
           println('Successful!');
         } catch (err) {
           println(err);
