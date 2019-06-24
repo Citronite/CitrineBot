@@ -6,6 +6,7 @@ const { cls, sleep, printHeader, println, input, confirm, rl, printMenu, execute
 
 const Home = new HomeMenu();
 const root = resolve(`${__dirname}/../`);
+const rootDir = fs.readdirSync(root);
 
 // Exit the launcher.
 function exit(code = 0) {
@@ -54,19 +55,19 @@ async function installDeps() {
     const { stdout, stderr } = await execute('npm install --only=production', {
       cwd: root
     });
+
     if (stdout) println(stdout);
     if (stderr) println(stderr);
-    // Check if it exists
-    fs.readdirSync(`${__dirname}/../node_modules`);
+
     println('Dependencies installed successfully!');
     return true;
   } catch (err) {
     println(err);
     println(
       'Error installing dependencies.\n\n' +
-        'You can try running `npm install --only=production` to manually install\n' +
-        'the required dependencies. If a problem persists, you can visit the\n' +
-        'support server for help: https://discord.gg/yyqjd3B'
+      'You can try running `npm install --only=production` to manually install\n' +
+      'the required dependencies. If a problem persists, you can visit the\n' +
+      'support server for help: https://discord.gg/yyqjd3B'
     );
     return false;
   }
@@ -76,20 +77,14 @@ async function installDeps() {
 async function compileCitrine() {
   try {
     println('\nPlease wait...');
-    try {
-      const { stdout, stderr } = await execute('node_modules/.bin/tsc', {
-        cwd: root
-      });
-      if (stderr) println(stderr);
-      if (stdout) println(stdout);
-    } catch (_) {
-      // In case typescript is installed globally
-      const { stdout, stderr } = await execute('tsc', { cwd: root });
-      if (stderr) println(stderr);
-      if (stdout) println(stdout);
-    }
-    // Check if it exists
-    fs.readdirSync(`${root}/bin`);
+
+    const { stdout, stderr } = await execute('npm run build', {
+      cwd: root
+    });
+
+    if (stderr) println(stderr);
+    if (stdout) println(stdout);
+
     println('Successfully recompiled code!');
     return true;
   } catch (err) {
@@ -97,8 +92,8 @@ async function compileCitrine() {
     println(err);
     println(
       'Please make sure Citrine is installed properly, and try again.\n' +
-        'For further help, you can join the support server:\n' +
-        'Support Server: https://discord.gg/yyqjd3B'
+      'For further help, you can join the support server:\n' +
+      'Support Server: https://discord.gg/yyqjd3B'
     );
     return false;
   }
@@ -117,8 +112,9 @@ async function createDataFiles(TOKEN, initialPrefix) {
     const { version } = package;
     const content = JSON.stringify({ TOKEN, initialPrefix, version }, null, '  ');
     fs.writeFileSync(`${data}/core/_instance.json`, content);
-    // Check if it exists
-    fs.readFileSync(`${data}/core/_instance.json`);
+
+    // Check if it was created successfully
+    require('../data/core/_instance.json');
     println('Success!');
     return true;
   } catch (err) {
@@ -126,11 +122,63 @@ async function createDataFiles(TOKEN, initialPrefix) {
     println(err);
     println(
       'You may configure the files manually and try again.\n' +
-        'If the problem persists, you can visit the support\n' +
-        'server for more help: https://discord.gg/yyqjd3B\n'
+      'If the problem persists, you can visit the support\n' +
+      'server for more help: https://discord.gg/yyqjd3B\n'
     );
     return false;
   }
+}
+
+async function createBatchFile() {
+  if (rootDir.includes('start_citrine.bat')) return;
+  if (rootDir.includes('start_citrine.sh')) return;
+
+  const helpStr =
+  'You can run `npm run citrine` in your\n' +
+  'console to directly launch citrine!';
+
+  const { platform } = process;
+
+    try {
+      if (platform === 'win32') {
+        println('Creating file: ./start_citrine.bat');
+
+        const content =
+          '@echo off\n' +
+          'rem start citrine.js\n\n' +
+          'cls\n' +
+          'title Citrine Launcher\n\n' +
+          'echo --------------\n' +
+          'echo %DATE%' +
+          'echo --------------\n' +
+          `node ${root}/bin/citrine.js\n` +
+          'pause\n';
+
+        fs.writeFileSync(`${root}/start_citrine.bat`, content);
+      } else if (platform === 'linux') {
+        println('Creating file: ./start_citrine.sh');
+
+        const content =
+          '#!/bin/sh\n\n' +
+          'echo -ne "\033]0;Citrine Launcher\007"\n' +
+          'clear\n' +
+          'echo -----------------------------\n' +
+          'date\n' +
+          'echo -----------------------------\n' +
+          `node ${root}/bin/citrine.js\n` +
+          'read -n1 -r -p "Press any key to continue..."\n';
+
+        fs.writeFileSync(`${root}/start_citrine.sh`, content);
+      } else {
+        println('Unsupported platform!');
+        println(helpStr);
+      }
+    } catch (err) {
+      const ext = platform === 'win32' ? '.bat' : '.sh';
+      println(`Error creating file: start_citrine${ext}`);
+      println(err);
+      println(helpStr);
+    }
 }
 
 // Adds the line event listener, and prints the homepage
@@ -184,99 +232,48 @@ async function startLauncher() {
   }
 
   // Kinda hacky but oh well :P
-  const dir = fs.readdirSync(root);
-  const firstRun = !dir.includes('data') && !dir.includes('bin') && !dir.includes('node_modules');
+  const firstRun = !rootDir.includes('data') 
+    && !rootDir.includes('bin')
+    && !rootDir.includes('node_modules');
 
   if (firstRun) {
     println('Hello there! Seems like this is your first time running Citrine!');
     await sleep(500);
 
-    // Obtain the bot token & global prefix
     const TOKEN = await getToken();
     const initialPrefix = await getInitialPrefix();
 
-    // Install dependencies & compile code
     const installed = await installDeps();
     if (!installed) exit(1);
 
     const compiled = await compileCitrine();
     if (!compiled) exit(1);
 
-    // Create data dir & files
     const created = await createDataFiles(TOKEN, initialPrefix);
     if (!created) exit(1);
 
-    const { platform } = process;
-    try {
-      if (platform === 'win32') {
-        if (dir.includes('start_citrine.bat')) return;
+    await createBatchFile();
 
-        println('Creating file: ./start_citrine.bat');
-        const content =
-          '@echo off\n' +
-          'rem start citrine.js\n\n' +
-          'cls\n' +
-          'title Citrine Launcher\n\n' +
-          'echo --------------\n' +
-          'echo %DATE%' +
-          'echo --------------\n' +
-          `node ${root}/bin/citrine.js\n` +
-          'pause\n';
-        fs.writeFileSync(`${root}/start_citrine.bat`, content);
-      } else if (platform === 'linux') {
-        if (dir.includes('start_citrine.sh')) return;
-
-        println('Creating file: ./start_citrine.sh');
-        const content =
-          '#!/bin/sh\n\n' +
-          'echo -ne "\033]0;Citrine Launcher\007"\n' +
-          'clear\n' +
-          'echo -----------------------------\n' +
-          'date\n' +
-          'echo -----------------------------\n' +
-          `node ${root}/bin/citrine.js\n` +
-          'read -n1 -r -p "Press any key to continue..."\n';
-        fs.writeFileSync(`${root}/start_citrine.sh`, content);
-      } else {
-        println(
-          'Unsupported platform!\n' +
-            'You can run `node ./bin/citrine.js` in your\n' +
-            'console to directly launch citrine!'
-        );
-      }
-    } catch (err) {
-      const ext = platform === 'win32' ? '.bat' : platform === 'linux' ? '.sh' : null;
-      if (!ext) {
-        println(
-          'Unsupported platform!\n' +
-            'You may run `node ./bin/citrine.js` in your\n' +
-            'console to directly launch citrine!'
-        );
-        return;
-      }
-      println(`Error creating file start_citrine${ext}`);
-      println(err);
-      println(
-        'You may launch Citrine through the main launcher, or run\n' +
-          '`node ./bin/citrine.js` to launch citrine directly.'
-      );
-      exit(1);
-    }
-    // Start the launcher!
     println('\nStarting launcher. . .');
     await sleep();
     await startLauncher();
+
   } else {
     // Check if any of the important directories are missing
-    if (!dir.includes('data')) {
-      // Create ./data again
+
+    if (!rootDir.find(v => v.startsWith('start_citrine.'))) {
+      await createBatchFile();
+    }
+
+    if (!rootDir.includes('data')) {
       println('It seems like the ./data directory is missing.');
       const TOKEN = await getToken();
       const prefix = await getInitialPrefix();
       const created = await createDataFiles(TOKEN, prefix);
       if (!created) exit(1);
     }
-    if (!dir.includes('bin')) {
+
+    if (!rootDir.includes('bin')) {
       // Recompile.
       const str = 'It seems like the ./bin directory is missing.\n' + 'Would you like to try recompiling Citrine?';
       const recompile = await confirm(str);
@@ -288,7 +285,8 @@ async function startLauncher() {
         exit();
       }
     }
-    if (!dir.includes('node_modules')) {
+
+    if (!rootDir.includes('node_modules')) {
       // Install npm dependencies again
       const str =
         'It seems like the ./node_modules directory is missing.\n' +
@@ -302,7 +300,7 @@ async function startLauncher() {
         exit();
       }
     }
-    // Start Launcher!
+
     println('\nStarting launcher. . .');
     await sleep();
     await startLauncher();
