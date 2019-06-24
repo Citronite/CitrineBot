@@ -22,13 +22,13 @@ function println(str) {
 function printHeader() {
   console.log(
     '\n' +
-      '\t#############################\n' +
-      '\t#                           #\n' +
-      '\t#      - - Welcome - -      #\n' +
-      '\t#                           #\n' +
-      '\t#    C  I  T  R  I  N  E    #\n' +
-      '\t#                           #\n' +
-      '\t#############################\n'
+    '\t#############################\n' +
+    '\t#                           #\n' +
+    '\t#      - - Welcome - -      #\n' +
+    '\t#                           #\n' +
+    '\t#    C  I  T  R  I  N  E    #\n' +
+    '\t#                           #\n' +
+    '\t#############################\n'
   );
 }
 
@@ -46,7 +46,6 @@ function input(str) {
   return new Promise(res => {
     rl.question(`\n${str}\n${prompt}`, ans => {
       res(ans.trim());
-      return;
     });
   });
 }
@@ -55,8 +54,8 @@ function input(str) {
 async function confirm(str) {
   while (str) {
     const ans = await input(str);
-    if (['yes', 'y'].includes(ans.toLowerCase())) return true;
-    if (['no', 'n'].includes(ans.toLowerCase())) return false;
+    if (['yes', 'y', 'true', 't', '1'].includes(ans.toLowerCase())) return true;
+    if (['no', 'n', 'false', 'f', '0'].includes(ans.toLowerCase())) return false;
   }
 }
 
@@ -65,8 +64,9 @@ async function confirm(str) {
 // Also sets rl.currMenu to that menu. This, along with <Menu>.code can be helpful
 // For identifying which menu is currently displayed to the user.
 async function printMenu(menu) {
-  if (!menu) return;
-  if (!(menu instanceof AbstractMenu)) return;
+  if (!menu || !(menu instanceof AbstractMenu)) {
+    throw new Error('Invalid Menu provided!');
+  }
 
   println(menu.title);
   await sleep(100);
@@ -90,8 +90,8 @@ function cls(x = 0, y = 8) {
 function execute(...args) {
   return new Promise((res, rej) => {
     exec(...args, (err, stdout, stderr) => {
-      if (err) return rej(err);
-      return res({ stdout, stderr });
+      if (err) rej(err);
+      else res({ stdout, stderr });
     });
   });
 }
