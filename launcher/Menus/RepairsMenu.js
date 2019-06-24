@@ -1,6 +1,5 @@
 const AbstractMenu = require('./AbstractMenu.js');
 const { println, execute, rl } = require('../cli.js');
-const fs = require('fs');
 const { resolve } = require('path');
 
 const root = resolve(`${__dirname}/../../`);
