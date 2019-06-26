@@ -13,7 +13,8 @@ class Eval extends BaseCommand {
 
   async execute(ctx) {
     ctx.lock('botOwner');
-    const { extractCodeBlock, censor } = ctx.client.utils.djs;
+    const { extractCodeBlock } = ctx.client.utils.djs;
+    const { censor } = ctx.client.utils.format;
 
     const extracted = extractCodeBlock(ctx.message.content);
     if (!extracted) return ctx.error('Failed to parse codeblock!');
