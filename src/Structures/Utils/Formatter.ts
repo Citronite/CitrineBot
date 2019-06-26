@@ -1,4 +1,4 @@
-import { FormatHelpOptions, CommandHelpObject } from 'typings';
+import { FormatHelpOptions, CommandHelpData } from 'typings';
 import BaseCommand from '../Command/BaseCommand';
 import SubCommand from '../Command/SubCommand';
 
@@ -53,7 +53,15 @@ export default class Formatter {
     }
   }
 
-  public cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpObject {
+  public censor(text: string, ...words: string[]) {
+    for (const word of words) {
+      text = text.replace(word, '<CENSORED>');
+    }
+    return text;
+  }
+
+
+  public cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpData {
     let chip;
     let parent;
     let base;
