@@ -21,7 +21,8 @@ export default class Exception extends Error {
     super();
     if (original) this.stack = original.stack;
     this.code = Object.values(ExceptionCodes).includes(code) ? code : 999;
-    this.type = Object.keys(ExceptionCodes).find(val => ExceptionCodes[val] === code) || 'UNKNOWN_ERROR';
+    this.type =
+      Object.keys(ExceptionCodes).find(val => ExceptionCodes[val] === code) || 'UNKNOWN_ERROR';
     errors = typeof errors === 'string' ? [errors] : errors;
     this.errors = errors || ExceptionMessages[this.code];
   }

@@ -145,13 +145,21 @@ declare module 'typings' {
     getArgs: (message: Message, prefix: string, parseQuotes?: boolean) => string[] | null;
     getBaseCmd: (message: Message, args: string[]) => [BaseCommand, string[]] | null;
     getFinalCmd: (message: Message, args: string[]) => [Command, string[]] | null;
-    getCmdGenerator: (message: Message, args: string[]) => IterableIterator<[Command, string[]] | undefined>;
+    getCmdGenerator: (
+      message: Message,
+      args: string[]
+    ) => IterableIterator<[Command, string[]] | undefined>;
     processCommand: (message: Message, config?: GuildConfig & any) => Promise<void>;
   }
 
   interface PermHandler {
     checkFilters: (ctx: Context & any, config?: GuildConfig & any) => void;
-    checkPerms: (perms: PermissionResolvable, member: GuildMember, channel: TextChannel, checkAdmin?: boolean) => void;
+    checkPerms: (
+      perms: PermissionResolvable,
+      member: GuildMember,
+      channel: TextChannel,
+      checkAdmin?: boolean
+    ) => void;
     checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
     checkBotOwner: (user: User | GuildMember) => void;
     checkBotDev: (user: User | GuildMember) => void;
@@ -245,7 +253,15 @@ declare module 'typings' {
 
   export type RawExceptionArray = [string | number, string | string[]];
   export type RawException = string | number | RawExceptionArray | Error;
-  export type LockType = 'nsfw' | 'dm' | 'guild' | 'guildOwner' | 'botOwner' | 'botManager' | 'botDev' | boolean;
+  export type LockType =
+    | 'nsfw'
+    | 'dm'
+    | 'guild'
+    | 'guildOwner'
+    | 'botOwner'
+    | 'botManager'
+    | 'botDev'
+    | boolean;
   export type LockPermsOptions = {
     checkAdmin?: boolean;
     checkBot?: boolean;

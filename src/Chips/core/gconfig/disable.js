@@ -14,7 +14,8 @@ class DisableGuild extends SubCommand {
   constructor() {
     super({
       name: 'guild',
-      description: 'Globally disable guilds from using this bot. Only works on guilds the bot can see.',
+      description:
+        'Globally disable guilds from using this bot. Only works on guilds the bot can see.',
       usage: '[p]gconfig disable guild [...GuildID/Name]'
     });
   }
@@ -52,7 +53,8 @@ class DisableUser extends SubCommand {
   constructor() {
     super({
       name: 'user',
-      description: 'Globally disable users from using this bot. Only works on users the bot can see.',
+      description:
+        'Globally disable users from using this bot. Only works on users the bot can see.',
       usage: '[p]gconfig disable user [...UserID/@User]'
     });
   }

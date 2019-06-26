@@ -46,7 +46,9 @@ class Add extends SubCommand {
       }
       const exists = ctx.client.cmdHandler.getBaseCmd(ctx.message, Array.from([alias]));
       if (exists) {
-        ctx.error(`The alias \`${alias}\` is already registered for the command \`${exists.name}\``);
+        ctx.error(
+          `The alias \`${alias}\` is already registered for the command \`${exists.name}\``
+        );
       } else {
         ctx.client.settings.addAlias(cmd, alias);
         await ctx.client.settings.save();

@@ -95,7 +95,9 @@ export default class Formatter {
         const paddedName = names[x].padEnd(max + 2);
         const sliceLength = maxWidth - (max + 2) - 3;
         const slicedDescrip =
-          descrips[x].length >= sliceLength ? `${descrips[x].slice(0, sliceLength)}...` : descrips[x];
+          descrips[x].length >= sliceLength
+            ? `${descrips[x].slice(0, sliceLength)}...`
+            : descrips[x];
         const str = paddedName + slicedDescrip;
         final.push(str);
       }
