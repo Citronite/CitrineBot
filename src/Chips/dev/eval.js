@@ -1,26 +1,6 @@
 const { BaseCommand } = require('../../exports');
 const { TOKEN } = require(`${__dirname}/../../../data/core/_instance.json`);
 
-function extractCodeBlock(text) {
-  const rgx = /```(.*?)\n(.*)\n```/s;
-  const result = rgx.exec(text);
-
-  if (!result) return;
-  return {
-    match: result[0],
-    lang: result[1],
-    code: result[2],
-    input: text
-  };
-}
-
-function censor(text, ...words) {
-  for (const word of words) {
-    text = text.replace(word, '<CENSORED>');
-  }
-  return text;
-}
-
 class Eval extends BaseCommand {
   constructor() {
     super({
@@ -33,6 +13,7 @@ class Eval extends BaseCommand {
 
   async execute(ctx) {
     ctx.lock('botOwner');
+    const { extractCodeBlock, censor } = ctx.client.utils.djs;
 
     const extracted = extractCodeBlock(ctx.message.content);
     if (!extracted) return ctx.error('Failed to parse codeblock!');

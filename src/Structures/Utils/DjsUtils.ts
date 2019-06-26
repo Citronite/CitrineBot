@@ -1,6 +1,26 @@
 import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js';
 
 export default class DjsUtils {
+  public censor(text: string, ...words: string[]) {
+    for (const word of words) {
+      text = text.replace(word, '<CENSORED>');
+    }
+    return text;
+  }
+
+  public extractCodeBlock(text: string) {
+    const rgx = /```(.*?)\n(.*)\n```/s;
+    const result = rgx.exec(text);
+  
+    if (!result) return;
+    return {
+      match: result[0],
+      lang: result[1],
+      code: result[2],
+      input: text
+    };
+  }
+  
   public parseMention(mention: string): string {
     const rgx = /^<(#|@|@!|@&)\d+>$/;
     if (rgx.test(mention)) {

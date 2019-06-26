@@ -166,6 +166,8 @@ declare module 'typings' {
   }
 
   interface DjsUtils {
+    censor: (text: string, ...words: string[]) => string;
+    extractCodeBlock: (text: string) => undefined | CodeBlockData;
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
     resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
@@ -314,6 +316,13 @@ declare module 'typings' {
     usage?: string;
     subcommands?: string;
   };
+
+  export type CodeBlockData = {
+    match: string;
+    lang: string;
+    code: string;
+    input: string;
+  }
 }
 
 // export type RawExceptionObject = { type: string | number, msg: string | string[] };
