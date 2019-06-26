@@ -149,7 +149,7 @@ async function createBatchFile() {
           'cls\n' +
           'title Citrine Launcher\n\n' +
           'echo --------------\n' +
-          'echo %DATE%' +
+          'echo %DATE%\n' +
           'echo --------------\n' +
           `node ${root}/bin/citrine.js\n` +
           'pause\n';
