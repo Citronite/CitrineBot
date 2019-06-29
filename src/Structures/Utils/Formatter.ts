@@ -62,20 +62,15 @@ export default class Formatter {
 
 
   public cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpData {
-    let chip;
-    let parent;
-    let base;
-    let usage;
-    let subcommands;
+    let chip, parent, base, usage, subcommands;
     const name = cmd.name;
     const description = cmd.description;
-    const maxWidth = options && options.maxWidth ? options.maxWidth : 50;
-    const useCodeBlocks = options && options.useCodeBlocks ? options.useCodeBlocks : true;
+    const maxWidth = (options && options.maxWidth) || 50;
+    const useCodeBlocks = (options && options.useCodeBlocks) || true;
 
     if (cmd instanceof BaseCommand) {
       chip = cmd.chip;
-      parent = '--/--';
-      base = '--/--';
+      base = parent = '--/--';
     } else {
       const parentCmd = cmd.getParent();
       const baseCmd = cmd.getBase();
@@ -84,9 +79,7 @@ export default class Formatter {
       base = baseCmd ? baseCmd.name : '--/--';
     }
 
-    if (cmd.usage) {
-      usage = useCodeBlocks ? `\`\`\`\n${cmd.usage}\n\`\`\`` : cmd.usage;
-    }
+    if (cmd.usage) usage = useCodeBlocks ? `\`\`\`\n${cmd.usage}\n\`\`\`` : cmd.usage;
 
     if (cmd.subcommands) {
       const names = [];
