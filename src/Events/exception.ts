@@ -26,7 +26,11 @@ module.exports = {
       } else if (client.settings.verbose) {
         await ctx.send(error.toEmbed());
       } else {
-        ctx.send(QuickEmbed.error('Unknown error occurred!').setFooter('⛔ Check console for more details!'));
+        ctx.send(
+          QuickEmbed.error('Unknown error occurred!').setFooter(
+            '⛔ Check console for more details!'
+          )
+        );
       }
     }
 

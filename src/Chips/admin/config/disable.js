@@ -52,7 +52,8 @@ class DisableUser extends SubCommand {
   constructor() {
     super({
       name: 'user',
-      description: 'Globally disable users from using this bot. Only works on users that the bot can see.',
+      description:
+        'Globally disable users from using this bot. Only works on users that the bot can see.',
       usage: '[p]config disable user [...UserID/@User]'
     });
   }
@@ -70,7 +71,9 @@ class DisableUser extends SubCommand {
       }
       if (disabled.length) {
         await ctx.client.setGuild(ctx.guild.id, data);
-        return ctx.success(`Successfully disabled users: ${data.disabledUsers.map(id => `<@${id}>`).join(', ')}`);
+        return ctx.success(
+          `Successfully disabled users: ${data.disabledUsers.map(id => `<@${id}>`).join(', ')}`
+        );
       } else {
         return ctx.error('No users were disabled. Are you sure you provided the correct names?');
       }
@@ -89,7 +92,8 @@ class DisableChannel extends SubCommand {
   constructor() {
     super({
       name: 'channel',
-      description: 'Locally disable the bot from specific channels. Only works on channels the bot can see.',
+      description:
+        'Locally disable the bot from specific channels. Only works on channels the bot can see.',
       usage: '[p]config disable channel [...#Channel/ChannelID]'
     });
   }
@@ -116,7 +120,9 @@ class DisableChannel extends SubCommand {
     } else {
       const { disabledChannels: disabled } = ctx.client.settings;
       if (disabled.length) {
-        return ctx.send(`Currently disabled channels: ${disabled.map(id => `<#${id}>`).join(', ')}`);
+        return ctx.send(
+          `Currently disabled channels: ${disabled.map(id => `<#${id}>`).join(', ')}`
+        );
       } else {
         return ctx.send('No channels disabled currently.');
       }

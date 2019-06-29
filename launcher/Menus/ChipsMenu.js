@@ -3,8 +3,7 @@ const fs = require('fs');
 const { resolve } = require('path');
 const { println, confirm, execute, input, sleep, open } = require('../cli.js');
 
-const baseCmdTemplate = 
-`const { BaseCommand } = require('../../exports');
+const baseCmdTemplate = `const { BaseCommand } = require('../../exports');
 
 class Name extends BaseCommand {
   constructor() {
@@ -25,8 +24,7 @@ module.exports = new Name();
 
 `;
 
-const subCmdTemplate = 
-`const { SubCommand } = require('../../exports');
+const subCmdTemplate = `const { SubCommand } = require('../../exports');
 
 class Name extends Subcommand {
   constructor() {
@@ -101,7 +99,8 @@ class ChipsMenu extends AbstractMenu {
       fs.mkdirSync(`${root}/bin/Chips/${chipName}`);
 
       println(`Creating file: ./bin/Chips/${chipName}/_meta.js`);
-      const metaContent = "module.exports = {\n  author: '<YOUR NAME>',\n  description: '<DESCRIPTION>'\n};\n";
+      const metaContent =
+        "module.exports = {\n  author: '<YOUR NAME>',\n  description: '<DESCRIPTION>'\n};\n";
       fs.writeFileSync(`${root}/bin/Chips/${chipName}/_meta.js`, metaContent);
 
       println(`Creating file: ./bin/Chips/${chipName}/cmd.js`);
@@ -111,7 +110,9 @@ class ChipsMenu extends AbstractMenu {
       println(`Creating file: ./bin/Chips/${chipName}/_subcmd.js`);
       fs.writeFileSync(`${root}/bin/Chips/${chipName}/_subcmd.js`, subCmdTemplate);
 
-      const createBranch = await confirm(`Would you also like to create a git branch for the ${chipName} chip?`);
+      const createBranch = await confirm(
+        `Would you also like to create a git branch for the ${chipName} chip?`
+      );
       if (createBranch) {
         try {
           println('Creating branch...');

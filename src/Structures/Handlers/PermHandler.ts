@@ -2,7 +2,14 @@ import GuildConfig from '../Utils/GuildConfig';
 import Exception from '../Exceptions/Exception';
 import ExceptionCodes from '../Exceptions/ExceptionCodes';
 import Context from '../Utils/Context';
-import { GuildMember, TextChannel, PermissionResolvable, Permissions, Guild, User } from 'discord.js';
+import {
+  GuildMember,
+  TextChannel,
+  PermissionResolvable,
+  Permissions,
+  Guild,
+  User
+} from 'discord.js';
 
 const ErrCode = ExceptionCodes;
 
@@ -19,7 +26,8 @@ export default class PermHandler {
       }
       if (config.disabledUsers.includes(ctx.author.id)) errors.push('Disabled User [Local]');
       if (config.disabledChannels.includes(ctx.channel.id)) errors.push('Disabled Channel');
-      if (config.disabledCommands.includes(ctx.command.name)) errors.push('Disabled Command [Local]');
+      if (config.disabledCommands.includes(ctx.command.name))
+        errors.push('Disabled Command [Local]');
     }
     const { disabledUsers, disabledCommands } = globalConfig;
     if (disabledUsers.includes(ctx.author.id)) errors.push('Disabled User [Global]');
@@ -36,7 +44,8 @@ export default class PermHandler {
     checkAdmin: boolean = true
   ): void {
     const memberPerms = channel.memberPermissions(member);
-    if (!memberPerms) throw new Exception(ErrCode.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
+    if (!memberPerms)
+      throw new Exception(ErrCode.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
 
     const missing = new Permissions(memberPerms.missing(perms, checkAdmin)).toArray();
     if (!missing || !missing.length) return;

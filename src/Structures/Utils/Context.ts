@@ -89,7 +89,9 @@ export default class Context {
     }
   }
 
-  public async prompt(/* msg: string, options?: PromptOptions */): Promise<Message | string | null> {
+  public async prompt(/* msg: string, options?: PromptOptions */): Promise<
+    Message | string | null
+  > {
     return Promise.reject('This feature is yet to be implemented!');
   }
 

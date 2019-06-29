@@ -134,7 +134,9 @@ export default class CitrineSettings {
   }
 
   public addAlias(cmd: string, alias: string): void {
-    const aliases: Set<string> = this.data.aliases[cmd] ? new Set(this.data.aliases[cmd]) : new Set();
+    const aliases: Set<string> = this.data.aliases[cmd]
+      ? new Set(this.data.aliases[cmd])
+      : new Set();
     aliases.add(alias);
     this.data.aliases[cmd] = [...aliases];
   }

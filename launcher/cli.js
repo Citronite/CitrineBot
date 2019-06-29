@@ -22,13 +22,13 @@ function println(str) {
 function printHeader() {
   console.log(
     '\n' +
-    '\t#############################\n' +
-    '\t#                           #\n' +
-    '\t#      - - Welcome - -      #\n' +
-    '\t#                           #\n' +
-    '\t#    C  I  T  R  I  N  E    #\n' +
-    '\t#                           #\n' +
-    '\t#############################\n'
+      '\t#############################\n' +
+      '\t#                           #\n' +
+      '\t#      - - Welcome - -      #\n' +
+      '\t#                           #\n' +
+      '\t#    C  I  T  R  I  N  E    #\n' +
+      '\t#                           #\n' +
+      '\t#############################\n'
   );
 }
 
@@ -97,7 +97,8 @@ function execute(...args) {
 }
 
 async function open(arg, options) {
-  const cmd = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
+  const cmd =
+    process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
   await execute(`${cmd} ${arg}`, options);
 }
 

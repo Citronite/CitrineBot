@@ -1,6 +1,21 @@
 import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js';
+import { CodeBlockData } from 'typings';
 
 export default class DjsUtils {
+
+  public extractCodeBlock(text: string): void | CodeBlockData {
+    const rgx = /```(.*?)\n(.*)\n```/s;
+    const result = rgx.exec(text);
+  
+    if (!result) return;
+    return {
+      match: result[0],
+      lang: result[1],
+      code: result[2],
+      input: text
+    };
+  }
+  
   public parseMention(mention: string): string {
     const rgx = /^<(#|@|@!|@&)\d+>$/;
     if (rgx.test(mention)) {
@@ -12,49 +27,53 @@ export default class DjsUtils {
 
   public parseQuotes(text: string): (string | undefined)[] {
     const matches = text.match(/".*?"/g);
-    if (!matches || !matches.length) return text.split(/ +/);
-    const tmp = ` ${Date.now()}`;
+    if (!matches) return text.split(/ +/);
+    
+    const tmp = Date.now().toString();
     return text
       .replace(/".*?"/g, tmp)
       .split(/ +/)
-      .map(val => (val === tmp.slice(1) ? matches.shift() : val));
+      .map(val => val === tmp ? matches.shift() : val);
   }
 
   public async resolveRole(guild: Guild, role: string): Promise<Role | null> {
-    const parsedRole = this.parseMention(role);
+    role = this.parseMention(role);
+
     const finder = (val: Role) => {
-      if (parsedRole.startsWith('"') && parsedRole.endsWith('"')) {
-        return val.name === parsedRole.slice(1, -1);
+      if (role.startsWith('"') && role.endsWith('"')) {
+        return val.name === role.slice(1, -1);
       } else {
-        return val.name === parsedRole;
+        return val.name === role;
       }
     };
-    return guild.roles.get(parsedRole) || guild.roles.find(finder) || null;
+    return guild.roles.get(role) || guild.roles.find(finder) || null;
   }
 
   public async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
-    const parsedChnl = this.parseMention(channel);
+    channel = this.parseMention(channel);
+
     const finder = (val: GuildChannel) => {
-      if (val.name === parsedChnl) return true;
-      if (parsedChnl.startsWith('#') && val.name === parsedChnl.slice(1)) return true;
-      return false;
+      if (val.name === channel) return true;
+      else if (channel.startsWith('#') && val.name === channel.slice(1)) return true;
+      else return false;
     };
-    return guild.channels.get(parsedChnl) || guild.channels.find(finder) || null;
+    return guild.channels.get(channel) || guild.channels.find(finder) || null;
   }
 
   public async resolveUser(client: Client, user: string): Promise<User | null> {
-    const parsedUser = this.parseMention(user);
+    user = this.parseMention(user);
+
     try {
-      const fetched = await client.fetchUser(parsedUser);
+      const fetched = await client.fetchUser(user);
       if (fetched) return fetched;
 
-      const rgx = new RegExp(parsedUser, 'i');
+      const rgx = new RegExp(user, 'i');
       const finder = (val: User) => {
-        return val.username === parsedUser || val.tag === parsedUser || rgx.test(val.username);
+        return val.username === user || val.tag === user || rgx.test(val.username);
       };
       return client.users.find(finder) || null;
     } catch (err) {
-      // Don't mind this
+      // Don't mind this :^)
       const c: any = client;
       c.logger.warn(`resolveUser() failed for [${user}]`);
       return null;
@@ -62,26 +81,23 @@ export default class DjsUtils {
   }
 
   public async resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null> {
-    const parsedMember = this.parseMention(member);
+    member = this.parseMention(member);
 
     try {
-      const fetched = await guild.fetchMember(parsedMember);
+      const fetched = await guild.fetchMember(member);
       if (fetched) return fetched;
 
-      const fetchedGuild = await guild.fetchMembers(parsedMember, 5);
-      const rgx = new RegExp(parsedMember, 'i');
+      guild = await guild.fetchMembers(member, 5);
+      const rgx = new RegExp(member, 'i');
       const finder = (val: GuildMember) => {
-        return (
-          val.user.id === parsedMember ||
-          val.user.username === parsedMember ||
-          val.nickname === parsedMember ||
-          val.user.tag === parsedMember ||
-          rgx.test(val.user.username) ||
-          rgx.test(val.nickname)
-        );
+        return val.user.id === member
+          || val.user.username === member
+          || val.nickname === member
+          || val.user.tag === member
+          || rgx.test(val.user.username)
+          || rgx.test(val.nickname);
       };
-
-      return fetchedGuild.members.find(finder) || null;
+      return guild.members.find(finder) || null;
     } catch (err) {
       const client: any = guild.client;
       client.logger.warn(`resolveGuildMember() failed for [${member}]`);

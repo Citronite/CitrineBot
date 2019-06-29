@@ -73,7 +73,10 @@ export default class CmdHandler {
     return [cmd, finalArgs];
   }
 
-  public *getCmdGenerator(message: Message, args: string[]): IterableIterator<[Command, string[]] | undefined> {
+  public *getCmdGenerator(
+    message: Message,
+    args: string[]
+  ): IterableIterator<[Command, string[]] | undefined> {
     if (!args || !args.length) return;
 
     const result = this.getBaseCmd(message, args);

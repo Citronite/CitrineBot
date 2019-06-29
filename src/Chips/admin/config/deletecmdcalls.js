@@ -31,7 +31,9 @@ class DeleteCmdCalls extends SubCommand {
     } else {
       const { deleteCmdCalls: deleted } = data;
       const { deleteCmdCallsDelay: delay } = data;
-      ctx.send(`Delete commands calls: \`${deleted ? 'ON' : 'OFF'}\`\nDelay: \`${delay / 1000} seconds\``);
+      ctx.send(
+        `Delete commands calls: \`${deleted ? 'ON' : 'OFF'}\`\nDelay: \`${delay / 1000} seconds\``
+      );
     }
   }
 }
