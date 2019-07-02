@@ -16,7 +16,7 @@
         <img alt="pull requests: open" src="https://img.shields.io/badge/PRs-open-42ff93.svg?style=flat">
     </a>
     <a href ="https://github.com/Quantomistro3178/CitrineBot">
-        <img alt="version: 1.0.0" src="https://img.shields.io/badge/version-1.0.0-66ff99.svg?style=for-the-badge">
+        <img alt="version: 0.1.0" src="https://img.shields.io/badge/version-0.1.0-66ff99.svg?style=for-the-badge">
     </a>
     <a href="https://github.com/discordjs/discord.js">
         <img alt="discord.js" src="https://img.shields.io/badge/discord-.js-42c6ff.svg?style=flat">
