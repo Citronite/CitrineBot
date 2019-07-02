@@ -166,7 +166,6 @@ declare module 'typings' {
   }
 
   interface DjsUtils {
-    censor: (text: string, ...words: string[]) => string;
     extractCodeBlock: (text: string) => undefined | CodeBlockData;
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
@@ -177,6 +176,7 @@ declare module 'typings' {
   }
 
   interface Formatter {
+    censor: (text: string, ...words: string[]) => string;
     italic: (str: string | string[]) => string | string[];
     lined: (str: string | string[]) => string | string[];
     striked: (str: string | string[]) => string | string[];
