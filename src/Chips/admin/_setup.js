@@ -14,7 +14,7 @@ async function listener(oldMsg, newMsg) {
         await db.guilds.create(guild.id, config);
       }
     }
-    if (!config.readMsgEdits) return;
+    if (config && !config.readMsgEdits) return;
     await client.cmdHandler.processCommand(newMsg, config);
   } catch (err) {
     const error = Exception.parse(err);
