@@ -1,5 +1,5 @@
 <h4 align="center">
-    <a href="https://github.com/quantomistro/CitrineBot">
+    <a href="https://github.com/Citronite/CitrineBot">
         <img src="https://i.imgur.com/D0I9Yoq.png?size=1024" alt="CitrineBanner"/>
     </a>
 </h4>
@@ -47,6 +47,6 @@ Citrine is still in development stages. Testing, built-in Chips, documentation, 
 
 # License
 
-<a href="https://github.com/quantomistro/CitrineBot/blob/master/LICENSE">
+<a href="https://github.com/Citronite/CitrineBot/blob/master/LICENSE">
     <img alt="license: GPL-3.0" src="https://img.shields.io/badge/LICENSE-GPL--3.0-orange.svg?style=for-the-badge">
 </a>

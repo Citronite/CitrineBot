@@ -5,7 +5,7 @@ import { CitrineOptions } from 'typings';
  *       CitrineBot - A powerful & extensible Discord bot!
  *
  *       By @quantomistro (https://github.com/quantomistro)
- *       GitHub: https://github.com/quantomistro/CitrineBot
+ *       GitHub: https://github.com/Citronite/CitrineBot
  *       Support Server: https://discord.gg/yyqjd3B
  *
  *       ###############################
