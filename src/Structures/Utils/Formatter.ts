@@ -5,6 +5,7 @@ import SubCommand from '../Command/SubCommand';
 type Command = BaseCommand | SubCommand;
 
 export default class Formatter {
+
   public italic(str: string | string[]): string | string[] {
     if (typeof str === 'string') {
       return `*${str}*`;

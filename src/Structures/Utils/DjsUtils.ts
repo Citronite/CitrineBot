@@ -3,6 +3,9 @@ import { CodeBlockData } from 'typings';
 
 export default class DjsUtils {
 
+  /**
+   * Extracts text from a codeblock inside text.
+   */
   public extractCodeBlock(text: string): void | CodeBlockData {
     const rgx = /```(.*?)\n(.*)\n```/s;
     const result = rgx.exec(text);
@@ -16,6 +19,9 @@ export default class DjsUtils {
     };
   }
   
+  /**
+   * Parses mentions to obtain the snowflake.
+   */
   public parseMention(mention: string): string {
     const rgx = /^<(#|@|@!|@&)\d+>$/;
     if (rgx.test(mention)) {
@@ -25,6 +31,9 @@ export default class DjsUtils {
     return mention;
   }
 
+  /**
+   * Parses double-quoted arguments from strings.
+   */
   public parseQuotes(text: string): (string | undefined)[] {
     const matches = text.match(/".*?"/g);
     if (!matches) return text.split(/ +/);
@@ -36,6 +45,9 @@ export default class DjsUtils {
       .map(val => val === tmp ? matches.shift() : val);
   }
 
+  /**
+   * Resolves a role object given a guild and the string input.
+   */
   public async resolveRole(guild: Guild, role: string): Promise<Role | null> {
     role = this.parseMention(role);
 
@@ -49,6 +61,9 @@ export default class DjsUtils {
     return guild.roles.get(role) || guild.roles.find(finder) || null;
   }
 
+  /**
+   * Resolves a guild channel object given a guild and the string input
+   */
   public async resolveGuildChannel(guild: Guild, channel: string): Promise<GuildChannel | null> {
     channel = this.parseMention(channel);
 
@@ -60,6 +75,9 @@ export default class DjsUtils {
     return guild.channels.get(channel) || guild.channels.find(finder) || null;
   }
 
+  /**
+   * Resolves a user object given the client and the string input.
+   */
   public async resolveUser(client: Client, user: string): Promise<User | null> {
     user = this.parseMention(user);
 
@@ -80,6 +98,9 @@ export default class DjsUtils {
     }
   }
 
+  /**
+   * Resolves a guild member object given the guild and the string input.
+   */
   public async resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null> {
     member = this.parseMention(member);
 

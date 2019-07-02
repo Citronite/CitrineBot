@@ -9,6 +9,9 @@ const Colors: { [key: string]: number } = {
 };
 
 export default class QuickEmbed {
+  /**
+   * Creates a RichEmbed which can be used to display error messages.
+   */
   public static error(info: string = 'An unknown error occurred!'): RichEmbed {
     return new RichEmbed()
       .setColor(Colors.RED)
@@ -17,6 +20,9 @@ export default class QuickEmbed {
       .setTimestamp();
   }
 
+  /**
+   * Creates a RichEmbed which can be used to display success messages.
+   */
   public static success(info: string = 'Success!'): RichEmbed {
     return new RichEmbed()
       .setColor(Colors.GREEN)
@@ -25,6 +31,9 @@ export default class QuickEmbed {
       .setTimestamp();
   }
 
+  /**
+   * Creates a basic RichEmbed which can be further extended.
+   */
   public static basic(user: User | GuildMember): RichEmbed {
     if (user instanceof GuildMember) {
       return new RichEmbed()
@@ -39,6 +48,9 @@ export default class QuickEmbed {
     }
   }
 
+  /**
+   * Creates the RichEmbed for command help.
+   */
   public static cmdHelp(ctx: Context, cmd: Command): RichEmbed {
     const help = ctx.client.utils.format.cmdHelp(cmd);
     const embed = this.basic(ctx.message.member || ctx.author);

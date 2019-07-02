@@ -58,10 +58,16 @@ export default class Context {
     this.subcommand = subcmd;
   }
 
+  /**
+   * Equivalent to ctx.channel.send
+   */
   public async send(...args: any): Promise<Message | Message[]> {
     return this.channel.send(...args);
   }
 
+  /**
+   * Attempts to send a DM to the message author.
+   */
   public async sendDM(...args: any): Promise<Message | Message[]> {
     try {
       const res = await this.author.send(...args);
@@ -71,6 +77,9 @@ export default class Context {
     }
   }
 
+  /**
+   * Sends a simple success message.
+   */
   public async success(msg: string, embed: boolean = true): Promise<Message | Message[]> {
     if (embed) {
       const embed = QuickEmbed.success(msg);
@@ -80,6 +89,9 @@ export default class Context {
     }
   }
 
+  /**
+   * Sends a simple error message.
+   */
   public async error(msg: string, embed: boolean = true): Promise<Message | Message[]> {
     if (embed) {
       const embed = QuickEmbed.error(msg);
@@ -89,19 +101,26 @@ export default class Context {
     }
   }
 
+  /**
+   * Prompts input from a user.
+   */
   public async prompt(/* msg: string, options?: PromptOptions */): Promise<
     Message | string | null
   > {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
-  // Waits for a reaction on the bot message.
-  // First param would be msg to send, second param list of reactions to await.
-  // Limit is number of reactions to wait for.
+  /**
+   * Prompts a reaction from a user.
+   */
   public async promptReaction(/* msg: string, emojis: Reaction[], options?: PromptReactionOptions */): Promise<MessageReaction | null> {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
+  /**
+   * Add permission checks to restrict command usage.
+   * If failed, throws an Exception with error code 100.
+   */
   public lockPerms(perms: PermissionResolvable, options?: LockPermsOptions): void {
     const { checkPerms } = this.client.permHandler;
     if (!this.member) {
@@ -126,6 +145,10 @@ export default class Context {
     if (opts.checkBot) checkPerms(perms, this.guild.me, this.channel, opts.checkAdmin);
   }
 
+  /**
+   * Add custom checks to restrict command usage.
+   * If failed, throws an Exception with error code 100.
+   */
   public lock(...locks: LockType[]): void {
     for (const lock of locks) {
       if (typeof lock === 'boolean') {
