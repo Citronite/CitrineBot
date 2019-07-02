@@ -236,7 +236,7 @@ declare module 'typings' {
   }
 
   type LoggerType = 'Console' | 'Winston';
-  type DbDriverType = 'Memory' | 'Json' | 'SQLiteKV';
+  type DbDriverType = 'Memory' | /*'Json' |*/ 'SQLiteKV';
 
   export interface CitrineOptions extends ClientOptions {
     readonly defaultChips?: string[];
