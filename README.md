@@ -36,6 +36,7 @@ Citrine is a fully functional, and highly extensible Discord bot.
 <br/>
 
 # Installation
+The docs and installation guides aren't ready yet, but here's a quick guide on installation and setup.
 You should have Node.js (version 10 or above) installed, and preferably git.
 
 ## Stable
