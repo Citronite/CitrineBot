@@ -4,9 +4,17 @@ node_modules/
 # package-lock
 package-lock.json
 
-# tsc outDir + buildinfo
-bin/
+# tsc rootDir + buildinfo + config + typedoc
+src/
 *.tsbuildinfo
+tsconfig.json
+typedoc.json
+
+# development files
+.eslintignore
+.eslintrc
+.prettierrc
+.prettierignore
 
 # data dirs
 data/
