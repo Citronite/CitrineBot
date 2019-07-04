@@ -22,7 +22,7 @@ class Eval extends BaseCommand {
     const lang = extracted.lang ? extracted.lang : 'Code';
     const { code } = extracted;
     try {
-      const result = censor(eval(code), TOKEN);
+      const result = censor(eval(code).toString(), TOKEN);
       return ctx.send(`[${lang}]\n${code}\n\n[Result]\n${result}`, {
         code: 'js',
         split: true
