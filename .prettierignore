@@ -1,9 +1,0 @@
-# deps
-node_modules/*
-
-# extras
-temp/*
-data/*
-
-# editor
-.vscode
