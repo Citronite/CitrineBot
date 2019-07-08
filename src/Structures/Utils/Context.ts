@@ -105,7 +105,7 @@ export default class Context {
    * Prompts input from a user.
    */
   public async prompt(/* msg: string, options?: PromptOptions */): Promise<
-    Message | string | null
+    Message | string
   > {
     return Promise.reject('This feature is yet to be implemented!');
   }
@@ -113,7 +113,7 @@ export default class Context {
   /**
    * Prompts a reaction from a user.
    */
-  public async promptReaction(/* msg: string, emojis: Reaction[], options?: PromptReactionOptions */): Promise<MessageReaction | null> {
+  public async promptReaction(/* msg: string, emojis: Reaction[], options?: PromptReactionOptions */): Promise<MessageReaction> {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
@@ -152,29 +152,34 @@ export default class Context {
   public lock(...locks: LockType[]): void {
     for (const lock of locks) {
       if (typeof lock === 'boolean') {
-        // 100 === ExceptionCodes.PERMISSION_ERROR
         if (lock) continue;
         throw new Exception(100, ExceptionMessages[100]);
       } else {
         switch (lock) {
           case 'guildOwner':
-            if (this.guild && this.guild.owner.id === this.author.id) continue;
+            if (this.guild && this.guild.ownerID === this.author.id) continue;
             throw new Exception(100, 'Only guild owners may perform this action!');
+
           case 'botOwner':
             if (this.client.settings.owner === this.author.id) continue;
             throw new Exception(100, 'Only the bot owner may perform this action!');
+
           case 'botDev':
             if (this.client.settings.devs.includes(this.author.id)) continue;
             throw new Exception(100, 'Only bot developers may perform this action!');
+
           case 'dm':
-            if (this.message.channel.type === 'dm') continue;
+            if (this.channel.type === 'dm') continue;
             throw new Exception(100, 'This command can only be used in DM channels!');
+
           case 'guild':
             if (this.guild) continue;
             throw new Exception(100, 'This command can only be used in guild channels!');
+
           case 'nsfw':
             if (this.channel instanceof TextChannel && this.channel.nsfw) continue;
             throw new Exception(100, 'This command can only be used in channels marked nsfw!');
+
           default:
             throw new Error('Invalid LockType provided!');
         }
