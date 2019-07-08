@@ -22,7 +22,8 @@ class Eval extends BaseCommand {
     const lang = extracted.lang ? extracted.lang : 'Code';
     const { code } = extracted;
     try {
-      const result = censor(eval(code).toString(), TOKEN);
+      const evaled = ('' + eval(code));
+      const result = ctx.channel.type === 'dm' ? evaled : censor(evaled, TOKEN);
       return ctx.send(`[${lang}]\n${code}\n\n[Result]\n${result}`, {
         code: 'js',
         split: true
