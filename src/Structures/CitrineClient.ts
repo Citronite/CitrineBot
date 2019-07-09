@@ -91,7 +91,7 @@ export default class CitrineClient extends Client {
       const chips = this.defaultChips.includes('all') ? allChips : this.defaultChips;
       for (const chip of chips) {
         if (!allChips.includes(chip)) {
-          throw new Error(`Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`);
+          throw new Error(`Unable to find chip ${chip}. If it exists, make sure it is placed in ./bin/Chips`);
         }
         const dir = readdirSync(`${root}/bin/Chips/${chip}`);
         const cmdFiles = fileFilter(dir);
@@ -177,18 +177,20 @@ export default class CitrineClient extends Client {
     }
   }
 
-  public async clearChipCache(chip: string, all = false): Promise<void> {
+  public async clearChipCache(chip: string): Promise<void> {
     try {
-      const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
-      const files = all ? dir : fileFilter(dir);
-      for (const file of files) {
-        delete require.cache[require.resolve(`../Chips/${chip}/${file}`)];
+      const basePath = require.resolve(`../Chips/${chip}`);
+      const cachedPaths = Object.keys(require.cache);
+      for (const path of cachedPaths) {
+        if (path.startsWith(basePath)) {
+          delete require.cache[path];  
+        }
       }
       this.logger.info(`Successfully cleared cache for chip: ${chip}`);
       return Promise.resolve();
     } catch (err) {
       this.logger.warn(`Failed to clear cache for chip: ${chip}`);
-      this.logger.error(err);
+      this.logger.warn(err);
       return Promise.reject(err);
     }
   }
