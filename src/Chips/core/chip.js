@@ -10,7 +10,7 @@ class Chip extends BaseCommand {
   constructor() {
     super({
       name: 'chip',
-      description: 'Give information on an installed chip, or provide the `--list` flag to view loaded/unloaded chips.',
+      description: 'Give information on an installed chip, or provide the `--list` flag to view loaded/unloaded chips (only for bot owners).',
       usage: '[p]chip <chip | --list>',
       chip: 'core'
     });
@@ -22,9 +22,10 @@ class Chip extends BaseCommand {
 		const allChips = await readdirAsync(`${root}/bin/Chips`);
 		
 		if (chip === '--list') {
+			ctx.lock('botOwner');
 			const { inline } = ctx.client.utils.format;
 			const { loadedChips: loaded } = ctx.client.settings;
-			const unloaded = allChips.filter(name => loaded.includes(name));
+			const unloaded = allChips.filter(name => !loaded.includes(name));
 
 			const embed = QuickEmbed.basic(ctx.member || ctx.author)
 				.addField('Loaded', inline(loaded).join(', '), false)
@@ -37,8 +38,8 @@ class Chip extends BaseCommand {
 			const meta = require(`${root}/bin/Chips/${chip}/_meta.js`);
 			const embed = QuickEmbed.basic(ctx.member || ctx.author).setTitle(chip);
 
-			if (meta.author) embed.setAuthor(meta.author);
 			if (meta.description) embed.setDescription(meta.description);
+			if (meta.author) embed.addField('Author', meta.author, false);
 			if (meta.link || meta.url) embed.setURL(meta.link || meta.url);
 			if (meta.thumbnail) embed.setThumbnail(meta.thumbnail);
 			if (meta.color || meta.colour) embed.setColor(meta.color || meta.colour);
