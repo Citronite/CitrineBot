@@ -12,7 +12,7 @@ type Command = BaseCommand | SubCommand;
  * 101 - MISSING_BOT_PERMS
  * 102 - MISSING_MEMBER_PERMS
  * 103 - FAILED_FILTER_CHECKS
- * 201 - INSIFFICIENT_ARGS
+ * 201 - INSUFFICIENT_ARGS
  * 202 - INVALID_ARGS
  */
 const ignored = [101, 102, 103, 201, 202];
@@ -27,9 +27,8 @@ module.exports = {
         await ctx.send(error.toEmbed());
       } else {
         ctx.send(
-          QuickEmbed.error('Unknown error occurred!').setFooter(
-            '⛔ Check console for more details!'
-          )
+          QuickEmbed.error('Unknown error occurred!')
+            .setFooter('⛔ Check console for more details!')
         );
       }
     }
