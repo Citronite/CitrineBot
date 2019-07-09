@@ -6,40 +6,34 @@ class Unload extends BaseCommand {
       name: 'unload',
       description:
         'Unloads a chip. Separate multiple names with spaces. ' +
-        'The `core` chip cannot be unloaded. Provide the `--cc` flag to also clear the chip from the cache.',
-      usage: '[p]unload <...chips> [--cc]',
+        'The `core` chip cannot be unloaded.',
+      usage: '[p]unload <...chips>',
       chip: 'core'
     });
   }
 
-  async execute(ctx, ...args) {
+  async execute(ctx, ...chips) {
     ctx.lock('botOwner');
-    if (!args.length) throw 'INSUFFICIENT_ARGS';
+    if (!chips.length) throw 'INSUFFICIENT_ARGS';
 
-    const { loadedChips: loaded } = ctx.client.settings;
-    const clearCache = args.includes('--cc');
     const unloaded = [];
-    const failed = [];
-    if (args.includes('all')) args = loaded;
+    const { loadedChips } = ctx.client.settings;
+    const filteredChips = chips.includes('all')
+      ? loadedChips
+      : chips.filter(name => loadedChips.includes(name));
 
-    for (const chip of args) {
-      if (chip === 'core') continue;
-      if (!loaded.includes(chip)) continue;
+    for (const chip of filteredChips) {
       try {
-        if (clearCache) await ctx.client.clearChipCache(chip);
+        if (chip === 'core') continue;
         await ctx.client.unloadChip(chip);
         unloaded.push(chip);
       } catch (err) {
-        failed.push(chip);
+        ctx.client.logger.error(err);
       }
     }
 
-    const { inline } = ctx.client.utils.format;
-
-    if (failed.length) {
-      await ctx.error(`Failed to unload the following chip(s):\n${inline(failed).join(', ')}`);
-    }
     if (unloaded.length) {
+      const { inline } = ctx.client.utils.format;
       return ctx.success(`Successfully unloaded chip(s):\n${inline(unloaded).join(', ')}`);
     } else {
       return ctx.error('No chips were unloaded. Are you sure you provided the correct name(s)?');
