@@ -166,7 +166,7 @@ declare module 'typings' {
   }
 
   interface DjsUtils {
-    extractCodeBlock: (text: string) => undefined | CodeBlockData;
+    extractCodeBlock: (text: string) => void | CodeBlockData;
     parseMention: (mention: string) => string;
     parseQuotes: (text: string) => (string | undefined)[];
     resolveRole: (guild: Guild, role: string) => Promise<Role | null>;

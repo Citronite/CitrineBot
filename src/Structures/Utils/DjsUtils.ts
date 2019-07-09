@@ -4,19 +4,20 @@ import { CodeBlockData } from 'typings';
 export default class DjsUtils {
 
   /**
-   * Extracts text from a codeblock inside text.
+   * Extracts language (if any) and text from a codeblock.
    */
   public extractCodeBlock(text: string): void | CodeBlockData {
     const rgx = /```(.*?)\n(.*)\n```/s;
     const result = rgx.exec(text);
   
-    if (!result) return;
-    return {
-      match: result[0],
-      lang: result[1],
-      code: result[2],
-      input: text
-    };
+    if (result) {
+      return {
+        match: result[0],
+        lang: result[1],
+        code: result[2],
+        input: text
+      };
+    }
   }
   
   /**
