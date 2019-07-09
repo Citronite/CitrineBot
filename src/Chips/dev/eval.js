@@ -11,16 +11,14 @@ class Eval extends BaseCommand {
     });
   }
 
-  async execute(ctx) {
+  async execute(ctx, ...args) {
     ctx.lock('botOwner');
     const { extractCodeBlock } = ctx.client.utils.djs;
     const { censor } = ctx.client.utils.format;
 
     const extracted = extractCodeBlock(ctx.message.content);
-    if (!extracted) return ctx.error('Failed to parse codeblock!');
-
-    const lang = extracted.lang ? extracted.lang : 'Code';
-    const { code } = extracted;
+    const lang = (extracted && extracted.lang) || 'Code';
+    const code = (extracted && extracted.code) || args.join(' ');
     try {
       const evaled = ('' + eval(code));
       const result = ctx.channel.type === 'dm' ? evaled : censor(evaled, TOKEN);
