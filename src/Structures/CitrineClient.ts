@@ -175,7 +175,7 @@ export default class CitrineClient extends Client {
 
   public async clearChipCache(chip: string): Promise<string> {
     try {
-      const basePath = require.resolve(`../Chips/${chip}`);
+      const basePath = resolve(`${root}/bin/Chips/${chip}`);
       const cachedPaths = Object.keys(require.cache);
       for (const path of cachedPaths) {
         if (path.startsWith(basePath)) delete require.cache[path];
