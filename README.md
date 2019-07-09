@@ -28,25 +28,27 @@
 
 <hr/>
 
-> **NOTE:** Citrine is still in development stages. *Breaking changes can and will be made without notice*. There is still a lot to do, and it will be some time before Citrine is stable enough for proper usage. All help is appreciated, so feel free to [contribute.](#Contribute)
+> **NOTE:** Citrine is still in development stages. *Breaking changes can and will be made without notice*.
+> There is still a lot to do, and it will be some time before Citrine is stable enough for proper usage.
+> All help is appreciated, so feel free to [contribute!](#Contribute)
 
 # Overview
-Citrine is a fully functional, and highly extensible Discord bot.
-(I'll add more later. If you wanna help with this or other docs stuff, feel free)
+Citrine is a powerful, and highly extensible Discord bot.
+
+*(I'll add more later. If you wanna help with this or other docs stuff, feel free)*
 <br/>
 
 # Installation
 The docs and installation guides aren't ready yet, but here's a quick guide on installation and setup.
-You should have Node.js (version 10 or above) installed, and preferably git.
+You should have [Node.js]() (version 10 or above) installed, and preferably [git]().
 
-## Stable
-If you want to spend minimal time on configuration and set-up, clone/download the stable branch, which contains only the transpiled code.
-By default, Citrine will store data in memory (meaning all your settings will be lost after the bot shuts down), but it has support for SQLite-based persistence (more will be added later on).
+If you want to spend minimal time on set-up, clone/download the **stable** branch, which contains only the transpiled code.
+By default, Citrine will store data in memory (meaning all your settings will be lost after the bot shuts down), but it has support for SQLite-based persistence (more will be added later on) with the help of [Keyv]().
 
 For SQLite, you'll have to install additional packages:
 ```npm install keyv @keyv/sqlite```
 
-Then open `./bin/citrine.js` and edit the options for citrine:
+Then, open `./bin/citrine.js` and edit the options for the CitrineClient:
 ```js
 const options = {
     // Edit the dbDriver option and set it to 'SQLiteKV'
@@ -54,13 +56,10 @@ const options = {
 }
 ```
 
-And that's about it. Run `launcher.bat` or `launcher.sh` and it will ask for your bot token and the prefix (which can be changed later, of course).
-The launcher will create the necessary files needed to run Citrine. Once it's finished, you should have a `start_citrine` file in the folder. You can start citrine using that file, or using the launcher, or using `npm run citrine` in the console, or `node ./bin/citrine.js` in the console.
+And that's about it. Run the launcher file and it will ask for your bot token and the prefix (which can be changed later, of course).
+The launcher will then create the necessary files needed to run Citrine. Once it's finished, you should have a `start_citrine` file in the folder. You can start citrine using that file, or using the launcher, or entering `npm run citrine` in the console, or entering `node ./bin/citrine.js` in the console.
 
-## Master
-The master branch contains only the TypeScript source code for citrine. The set-up is pretty much the same as above, except when running the launcher, it will try to build the source code and you will likely get an error along the lines of `cannot import module "keyv"`. Just restart the launcher and you shouldn't get that error again. Even if you do, its safe to ignore, since installing `keyv` is optional.
-
-If you have any troubles, feel free to open an issue or join the support server.
+If you have any troubles, feel free to join the [support server](https://discord.gg/yyqjd3B) for help.
 
 <br/>
 
