@@ -133,33 +133,30 @@ export default class CitrineClient extends Client {
     }
   }
 
-  public async loadChip(chip: string): Promise<void> {
+  public async loadChip(chip: string): Promise<string> {
     try {
-      const allChips = await readdirAsync(`${root}/bin/Chips`);
-      if (!allChips.includes(chip)) {
-        return Promise.reject(`Unable to find chip: ${chip}!`);
-      }
       const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
       const cmdFiles = fileFilter(dir);
+
       for (const file of cmdFiles) {
         const cmd = require(`../Chips/${chip}/${file}`);
         this.commands.set(cmd.name, cmd);
       }
+
       if (dir.includes('_setup.js')) {
         const { load: fn } = require(`../Chips/${chip}/_setup.js`);
         if (typeof fn === 'function') fn(this);
       }
-      this.logger.info(`Successfully loaded chip: ${chip}`);
+
       this.settings.addLoadedChip(chip);
       await this.settings.save();
+      return Promise.resolve(`Successfully loaded chip: ${chip}`);
     } catch (err) {
-      this.logger.warn(`Failed to load chip: ${chip}`);
-      this.logger.error(err);
-      return Promise.reject(err);
+      return Promise.reject(`Failed to load chip: ${chip}\n${err}`);
     }
   }
 
-  public async unloadChip(chip: string): Promise<void> {
+  public async unloadChip(chip: string): Promise<string> {
     try {
       this.commands.sweep(cmd => cmd.chip === chip);
       const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
@@ -167,31 +164,25 @@ export default class CitrineClient extends Client {
         const { unload: fn } = require(`../Chips/${chip}/_setup.js`);
         if (typeof fn === 'function') fn(this);
       }
-      this.logger.info(`Successfully unloaded chip: ${chip}`);
+
       this.settings.removeLoadedChip(chip);
       await this.settings.save();
+      return Promise.resolve(`Successfully unloaded chip: ${chip}`);
     } catch (err) {
-      this.logger.warn(`Failed to unload chip: ${chip}`);
-      this.logger.error(err);
-      return Promise.reject(err);
+      return Promise.reject(`Failed to unload chip: ${chip}\n${err}`);
     }
   }
 
-  public async clearChipCache(chip: string): Promise<void> {
+  public async clearChipCache(chip: string): Promise<string> {
     try {
       const basePath = require.resolve(`../Chips/${chip}`);
       const cachedPaths = Object.keys(require.cache);
       for (const path of cachedPaths) {
-        if (path.startsWith(basePath)) {
-          delete require.cache[path];  
-        }
+        if (path.startsWith(basePath)) delete require.cache[path];
       }
-      this.logger.info(`Successfully cleared cache for chip: ${chip}`);
-      return Promise.resolve();
+      return Promise.resolve(`Successfully cleared cache for chip: ${chip}`);
     } catch (err) {
-      this.logger.warn(`Failed to clear cache for chip: ${chip}`);
-      this.logger.warn(err);
-      return Promise.reject(err);
+      return Promise.reject(`Failed to clear cache for chip: ${chip}\n${err}`);
     }
   }
 
@@ -232,7 +223,6 @@ export default class CitrineClient extends Client {
       await this.settings.save();
     } catch (err) {
       this.logger.error(err);
-      return Promise.reject(err);
     }
   }
 
