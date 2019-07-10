@@ -10,7 +10,8 @@ class Load extends BaseCommand {
   constructor() {
     super({
       name: 'load',
-      description: 'Loads a chip. Separate multiple names with spaces, or enter `all` to load all. ',
+      description:
+        'Loads a chip. Separate multiple names with spaces, or enter `all` to load all. ',
       usage: '[p]load <...chips | "all">',
       chip: 'core'
     });
@@ -39,9 +40,7 @@ class Load extends BaseCommand {
 
     const { inline } = ctx.client.utils.format;
     if (loaded.length) {
-      return ctx.success(
-        `Successfully loaded chip(s):\n${inline(loaded).join(', ')}`
-      );
+      return ctx.success(`Successfully loaded chip(s):\n${inline(loaded).join(', ')}`);
     } else {
       return ctx.error('No chips were loaded. Are you sure you provided the correct name(s)?');
     }

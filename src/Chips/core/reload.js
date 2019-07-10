@@ -4,7 +4,7 @@ class Reload extends BaseCommand {
   constructor() {
     super({
       name: 'reload',
-      description: 
+      description:
         'Reloads a chip. Separate multiple names with spaces, or enter `all` to reload all. ' +
         'This command will only work for loaded chips.',
       usage: '[p]reload <...chips | "all">',
@@ -35,9 +35,7 @@ class Reload extends BaseCommand {
 
     if (reloaded.length) {
       const { inline } = ctx.client.utils.format;
-      return ctx.success(
-        `Successfully reloaded chip(s):\n${inline(reloaded).join(', ')}`
-      );
+      return ctx.success(`Successfully reloaded chip(s):\n${inline(reloaded).join(', ')}`);
     } else {
       return ctx.error('No chips were reloaded. Are you sure you provided the correct name(s)?');
     }

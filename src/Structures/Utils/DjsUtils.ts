@@ -2,14 +2,13 @@ import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js
 import { CodeBlockData } from 'typings';
 
 export default class DjsUtils {
-
   /**
    * Extracts language (if any) and text from a codeblock.
    */
   public extractCodeBlock(text: string): void | CodeBlockData {
     const rgx = /```(.*?)\n(.*)\n```/s;
     const result = rgx.exec(text);
-  
+
     if (result) {
       return {
         match: result[0],
@@ -19,12 +18,12 @@ export default class DjsUtils {
       };
     }
   }
-  
+
   /**
    * Parses mentions to obtain the snowflake.
    */
   public parseMention(mention: string): string {
-    const rgx = /^<(#|@|@!|@&)\d+>$/;
+    const rgx = /^<(#|@)\d+>$/;
     if (rgx.test(mention)) {
       mention = mention.slice(2, -1);
       if (/^!|&/.test(mention)) mention = mention.slice(1);
@@ -38,12 +37,12 @@ export default class DjsUtils {
   public parseQuotes(text: string): (string | undefined)[] {
     const matches = text.match(/".*?"/g);
     if (!matches) return text.split(/ +/);
-    
+
     const tmp = Date.now().toString();
     return text
       .replace(/".*?"/g, tmp)
       .split(/ +/)
-      .map(val => val === tmp ? matches.shift() : val);
+      .map(val => (val === tmp ? matches.shift() : val));
   }
 
   /**
@@ -112,17 +111,19 @@ export default class DjsUtils {
       guild = await guild.fetchMembers(member, 5);
       const rgx = new RegExp(member, 'i');
       const finder = (val: GuildMember) => {
-        return val.user.id === member
-          || val.user.username === member
-          || val.nickname === member
-          || val.user.tag === member
-          || rgx.test(val.user.username)
-          || rgx.test(val.nickname);
+        return (
+          val.user.id === member ||
+          val.user.username === member ||
+          val.nickname === member ||
+          val.user.tag === member ||
+          rgx.test(val.user.username) ||
+          rgx.test(val.nickname)
+        );
       };
       return guild.members.find(finder) || null;
     } catch (err) {
-      const client: any = guild.client;
-      client.logger.warn(`resolveGuildMember() failed for [${member}]`);
+      const c: any = guild.client;
+      c.logger.warn(`resolveGuildMember() failed for [${member}]`);
       return null;
     }
   }

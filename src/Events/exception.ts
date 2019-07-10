@@ -27,8 +27,9 @@ module.exports = {
         await ctx.send(error.toEmbed());
       } else {
         ctx.send(
-          QuickEmbed.error('Unknown error occurred!')
-            .setFooter('⛔ Check console for more details!')
+          QuickEmbed.error('Unknown error occurred!').setFooter(
+            '⛔ Check console for more details!'
+          )
         );
       }
     }

@@ -10,7 +10,8 @@ class Chip extends BaseCommand {
   constructor() {
     super({
       name: 'chip',
-      description: 'Give information on an installed chip, or provide the `--list` flag to view loaded/unloaded chips (only for bot owners).',
+      description:
+        'Give information on an installed chip, or provide the `--list` flag to view loaded/unloaded chips (only for bot owners).',
       usage: '[p]chip <chip | --list>',
       chip: 'core'
     });
@@ -19,35 +20,35 @@ class Chip extends BaseCommand {
   async execute(ctx, chip) {
     if (!chip) throw 'INSUFFICIENT_ARGS';
 
-		const allChips = await readdirAsync(`${root}/bin/Chips`);
-		
-		if (chip === '--list') {
-			ctx.lock('botOwner');
-			const { inline } = ctx.client.utils.format;
-			const { loadedChips: loaded } = ctx.client.settings;
-			const unloaded = allChips.filter(name => !loaded.includes(name));
+    const allChips = await readdirAsync(`${root}/bin/Chips`);
 
-			const embed = QuickEmbed.basic(ctx.member || ctx.author)
-				.addField('Loaded', inline(loaded).join(', '), false)
-				.addField('Unloaded', inline(unloaded).join(', '), false);
+    if (chip === '--list') {
+      ctx.lock('botOwner');
+      const { inline } = ctx.client.utils.format;
+      const { loadedChips: loaded } = ctx.client.settings;
+      const unloaded = allChips.filter(name => !loaded.includes(name));
 
-			return ctx.send(embed);
-		}
+      const embed = QuickEmbed.basic(ctx.member || ctx.author)
+        .addField('Loaded', inline(loaded).join(', '), false)
+        .addField('Unloaded', inline(unloaded).join(', '), false);
 
-		if (allChips.includes(chip.toLowerCase())) {
-			const meta = require(`${root}/bin/Chips/${chip}/_meta.js`);
-			const embed = QuickEmbed.basic(ctx.member || ctx.author).setTitle(chip);
+      return ctx.send(embed);
+    }
 
-			if (meta.description) embed.setDescription(meta.description);
-			if (meta.author) embed.addField('Author', meta.author, false);
-			if (meta.link || meta.url) embed.setURL(meta.link || meta.url);
-			if (meta.thumbnail) embed.setThumbnail(meta.thumbnail);
-			if (meta.color || meta.colour) embed.setColor(meta.color || meta.colour);
+    if (allChips.includes(chip.toLowerCase())) {
+      const meta = require(`${root}/bin/Chips/${chip}/_meta.js`);
+      const embed = QuickEmbed.basic(ctx.member || ctx.author).setTitle(chip);
 
-			return ctx.send(embed);
-		} else {
-			return ctx.error(`Unable to find chip: \`${chip}\``);
-		}
+      if (meta.description) embed.setDescription(meta.description);
+      if (meta.author) embed.addField('Author', meta.author, false);
+      if (meta.link || meta.url) embed.setURL(meta.link || meta.url);
+      if (meta.thumbnail) embed.setThumbnail(meta.thumbnail);
+      if (meta.color || meta.colour) embed.setColor(meta.color || meta.colour);
+
+      return ctx.send(embed);
+    } else {
+      return ctx.error(`Unable to find chip: \`${chip}\``);
+    }
   }
 }
 

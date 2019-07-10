@@ -5,7 +5,6 @@ import SubCommand from '../Command/SubCommand';
 type Command = BaseCommand | SubCommand;
 
 export default class Formatter {
-
   public italic(str: string | string[]): string | string[] {
     if (typeof str === 'string') {
       return `*${str}*`;
@@ -60,7 +59,6 @@ export default class Formatter {
     }
     return text;
   }
-
 
   public cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpData {
     let chip, parent, base, usage, subcommands;

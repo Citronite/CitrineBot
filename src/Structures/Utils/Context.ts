@@ -104,16 +104,16 @@ export default class Context {
   /**
    * Prompts input from a user.
    */
-  public async prompt(/* msg: string, options?: PromptOptions */): Promise<
-    Message | string
-  > {
+  public async prompt(/* msg: string, options?: PromptOptions */): Promise<Message | string> {
     return Promise.reject('This feature is yet to be implemented!');
   }
 
   /**
    * Prompts a reaction from a user.
    */
-  public async promptReaction(/* msg: string, emojis: Reaction[], options?: PromptReactionOptions */): Promise<MessageReaction> {
+  public async promptReaction(/* msg: string, emojis: Reaction[], options?: PromptReactionOptions */): Promise<
+    MessageReaction
+  > {
     return Promise.reject('This feature is yet to be implemented!');
   }
 

@@ -91,7 +91,9 @@ export default class CitrineClient extends Client {
       const chips = this.defaultChips.includes('all') ? allChips : this.defaultChips;
       for (const chip of chips) {
         if (!allChips.includes(chip)) {
-          throw new Error(`Unable to find chip ${chip}. If it exists, make sure it is placed in ./bin/Chips`);
+          throw new Error(
+            `Unable to find chip ${chip}. If it exists, make sure it is placed in ./bin/Chips`
+          );
         }
         const dir = readdirSync(`${root}/bin/Chips/${chip}`);
         const cmdFiles = fileFilter(dir);

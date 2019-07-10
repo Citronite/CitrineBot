@@ -324,7 +324,7 @@ declare module 'typings' {
     lang: string;
     code: string;
     input: string;
-  }
+  };
 }
 
 // export type RawExceptionObject = { type: string | number, msg: string | string[] };

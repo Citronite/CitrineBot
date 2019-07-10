@@ -153,7 +153,7 @@ export default class GuildConfig {
   }
 
   /**
-   * Array of disabled BaseCommand names 
+   * Array of disabled BaseCommand names
    */
   public get disabledCommands(): string[] {
     return [...this.data.disabledCommands];
