@@ -3,8 +3,6 @@ import { Collection } from 'discord.js';
 import Context from '../Utils/Context';
 import SubCommand from './SubCommand';
 
-type Command = SubCommand | BaseCommand;
-
 function validateOptions(options: any): void {
   if (!options) throw new Error('Invalid CommandOptions provided!');
   if (!options.name) throw new Error('Invalid command name provided!');
@@ -12,16 +10,7 @@ function validateOptions(options: any): void {
   if (!options.chip) throw new Error('Invalid chip name provided!');
 }
 
-function setParent(child: SubCommand, parent: Command): void {
-  if (parent.id === 'base' || parent.id === 'sub') {
-    child.parent = parent;
-  } else {
-    throw new Error('Parent commands must be instances of BaseCommand or SubCommand!');
-  }
-}
-
 export default class BaseCommand {
-  public readonly id: 'base';
   public readonly name: string;
   public readonly description: string;
   public readonly usage?: string;
@@ -34,7 +23,6 @@ export default class BaseCommand {
     this.description = options.description;
     this.usage = options.usage;
     this.chip = options.chip;
-    this.id = 'base';
   }
 
   public async execute(ctx: Context, ...args: string[]): Promise<void> {
@@ -47,7 +35,7 @@ export default class BaseCommand {
     this.subcommands = new Collection();
     for (const subCmd of subCmds) {
       if (subCmd instanceof SubCommand) {
-        setParent(subCmd, this);
+        subCmd.parent = this;
         this.subcommands.set(subCmd.name, subCmd);
         continue;
       } else {

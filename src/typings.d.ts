@@ -28,26 +28,26 @@ declare module 'typings' {
 
   interface CitrineSettings {
     data: GlobalConfigData;
-    readonly client: CitrineClient;
-    readonly owner: string;
-    readonly globalPrefix: string;
-    readonly verbose: boolean;
-    readonly devs: UserID[];
+    client: CitrineClient;
+    owner: string;
+    globalPrefix: string;
+    verbose: boolean;
+    devs: UserID[];
     addDev: (id: UserID) => void;
     removeDev: (id: UserID) => void;
-    readonly disabledUsers: UserID[];
+    disabledUsers: UserID[];
     disableUser: (id: UserID) => void;
     enableUser: (id: UserID) => void;
-    readonly disabledGuilds: GuildID[];
+    disabledGuilds: GuildID[];
     disableGuild: (id: GuildID) => void;
     enableGuild: (id: GuildID) => void;
-    readonly disabledCommands: string[];
+    disabledCommands: string[];
     disableCommand: (cmd: string) => void;
     enableCommand: (cmd: string) => void;
-    readonly loadedChips: string[];
+    loadedChips: string[];
     addLoadedChip: (chip: string) => void;
     removeLoadedChip: (chip: string) => void;
-    readonly aliases: { [key: string]: string };
+    aliases: { [key: string]: string };
     addAlias: (cmd: string, alias: string) => void;
     removeAlias: (cmd: string, alias: string) => void;
     save: () => Promise<void>;
@@ -56,14 +56,14 @@ declare module 'typings' {
   }
 
   interface CitrineClient extends Client {
-    readonly settings: CitrineSettings;
-    readonly logger: Logger;
-    readonly utils: Utils;
-    readonly db: DbDriver;
-    readonly cmdHandler: CmdHandler;
-    readonly permHandler: PermHandler;
-    readonly commands: Collection<string, BaseCommand>;
-    readonly defaultChips: Set<string>;
+    settings: CitrineSettings;
+    logger: Logger;
+    utils: Utils;
+    db: DbDriver;
+    cmdHandler: CmdHandler;
+    permHandler: PermHandler;
+    commands: Collection<string, BaseCommand>;
+    defaultChips: Set<string>;
     lastException: Error | null;
     initChips: () => void;
     initEvents: () => void;
@@ -74,15 +74,15 @@ declare module 'typings' {
   }
 
   interface Context {
-    readonly client: Client;
-    readonly prefix: string;
-    readonly message: Message;
-    readonly author: User;
-    readonly member: GuildMember | null;
-    readonly channel: TextChannel | DMChannel | GroupDMChannel;
-    readonly guild: Guild | null;
-    readonly command: Command;
-    readonly subcommand?: SubCommand;
+    client: Client;
+    prefix: string;
+    message: Message;
+    author: User;
+    member: GuildMember | null;
+    channel: TextChannel | DMChannel | GroupDMChannel;
+    guild: Guild | null;
+    command: Command;
+    subcommand?: SubCommand;
     send: (...args: any[]) => Promise<Message | Message[]>;
     sendDM: (...args: any[]) => Promise<Message | Message[]>;
     success: (msg: string, embed: boolean) => Promise<Message | Message[]>;
@@ -95,45 +95,43 @@ declare module 'typings' {
 
   interface GuildConfig {
     data: GuildConfigData;
-    readonly id: string;
-    readonly prefix: string;
-    readonly disabledRole: string;
-    readonly deleteCmdCalls: boolean;
-    readonly deleteCmdCallsDelay: number;
-    readonly readMsgEdits: boolean;
-    readonly disabledUsers: UserID[];
+    id: string;
+    prefix: string;
+    disabledRole: string;
+    deleteCmdCalls: boolean;
+    deleteCmdCallsDelay: number;
+    readMsgEdits: boolean;
+    disabledUsers: UserID[];
     disableUser: (id: UserID) => void;
     enableUser: (id: UserID) => void;
-    readonly disabledChannels: ChannelID[];
+    disabledChannels: ChannelID[];
     disableChannel: (id: ChannelID) => void;
     enableChannel: (id: ChannelID) => void;
-    readonly disabledCommands: string[];
+    disabledCommands: string[];
     disableCommand: (name: string) => void;
     enableCommand: (name: string) => void;
-    readonly reqRoles: { [key: string]: string };
+    reqRoles: { [key: string]: string };
     addReqRole: (cmd: string, role: RoleID) => void;
     removeReqRole: (cmd: string) => void;
     toJSON: () => { [key: string]: any };
   }
 
   interface BaseCommand {
-    readonly id: 'base';
-    readonly name: string;
-    readonly description: string;
-    readonly usage?: string;
-    readonly chip: string;
-    readonly subcommands?: Collection<string, SubCommand>;
+    name: string;
+    description: string;
+    usage?: string;
+    chip: string;
+    subcommands?: Collection<string, SubCommand>;
     execute: (ctx: Context & any, ...args: string[]) => Promise<void>;
     register: (...args: SubCommand[]) => this;
   }
 
   interface SubCommand {
-    readonly id: 'sub';
-    readonly name: string;
-    readonly description: string;
-    readonly usage?: string;
-    readonly parent?: Command;
-    readonly subcommands?: Collection<string, SubCommand>;
+    name: string;
+    description: string;
+    usage?: string;
+    parent?: Command;
+    subcommands?: Collection<string, SubCommand>;
     execute: (ctx: Context & any, ...args: string[]) => Promise<void>;
     getParent: () => Command | undefined;
     getBase: () => BaseCommand | undefined;
@@ -187,8 +185,8 @@ declare module 'typings' {
   }
 
   interface Utils {
-    readonly djs: DjsUtils;
-    readonly format: Formatter;
+    djs: DjsUtils;
+    format: Formatter;
   }
 
   export interface Logger {
@@ -239,9 +237,9 @@ declare module 'typings' {
   type DbDriverType = 'Memory' | /*'Json' |*/ 'SQLiteKV';
 
   export interface CitrineOptions extends ClientOptions {
-    readonly defaultChips?: string[];
-    readonly logger?: LoggerType;
-    readonly dbDriver?: DbDriverType;
+    defaultChips?: string[];
+    logger?: LoggerType;
+    dbDriver?: DbDriverType;
   }
 
   export type Command = BaseCommand | SubCommand;
