@@ -40,10 +40,10 @@ Citrine is a powerful, and highly extensible Discord bot.
 
 # Installation
 The docs and installation guides aren't ready yet, but here's a quick guide on installation and setup.
-You should have [Node.js]() (version 10 or above) installed, and preferably [git]().
+You should have [Node.js](https://nodejs.org/en/) (version 10 or above) installed, and preferably [git](https://git-scm.com/).
 
 If you want to spend minimal time on set-up, clone/download the **stable** branch, which contains only the transpiled code.
-By default, Citrine will store data in memory (meaning all your settings will be lost after the bot shuts down), but it has support for SQLite-based persistence (more will be added later on) with the help of [Keyv]().
+By default, Citrine will store data in memory (meaning all your settings will be lost after the bot shuts down), but it has support for SQLite-based persistence (more will be added later on) with the help of [Keyv](https://github.com/lukechilds/keyv).
 
 For SQLite, you'll have to install additional packages:
 ```npm install keyv @keyv/sqlite```
