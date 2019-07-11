@@ -1,5 +1,4 @@
 import { Guild } from 'discord.js';
-import { ChannelID, RoleID, UserID, GuildConfigData } from 'typings';
 
 export default class GuildConfig {
   private readonly data: GuildConfigData;

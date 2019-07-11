@@ -65,5 +65,8 @@
     "./launcher",
     "./bin",
     "./docs"
+  ],
+  "files": [
+    "src/typings.d.ts"
   ]
 }

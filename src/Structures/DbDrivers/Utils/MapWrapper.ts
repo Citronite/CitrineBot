@@ -1,5 +1,3 @@
-import { DbConnection } from 'typings';
-
 export default class MapWrapper implements DbConnection {
   private readonly map: Map<string, any>;
 

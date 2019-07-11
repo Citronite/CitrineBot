@@ -1,5 +1,4 @@
 import { Collection } from 'discord.js';
-import { SubCommandOptions } from 'typings';
 import Context from '../Utils/Context';
 import BaseCommand from './BaseCommand';
 

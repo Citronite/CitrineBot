@@ -1,4 +1,3 @@
-import { FormatHelpOptions, CommandHelpData } from 'typings';
 import BaseCommand from '../Command/BaseCommand';
 import SubCommand from '../Command/SubCommand';
 

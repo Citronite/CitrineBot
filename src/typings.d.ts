@@ -1,77 +1,20 @@
-declare module 'typings' {
-  import {
-    Collection,
-    Client,
-    Message,
-    User,
-    GuildMember,
-    Guild,
-    Channel,
-    TextChannel,
-    DMChannel,
-    GroupDMChannel,
-    Snowflake,
-    MessageReaction,
-    PermissionResolvable,
-    SplitOptions,
-    DeconstructedSnowflake,
-    Role,
-    GuildChannel,
-    Emoji,
-    ReactionEmoji,
-    ClientOptions
-  } from 'discord.js';
-
-  // Had to add the 'any's because TypeScript doesn't allow access modifiers
-  // in interfaces, and then complains if access modifiers are different between
-  // interfaces and implementations :(
-
-  interface CitrineSettings {
-    data: GlobalConfigData;
-    client: CitrineClient;
-    owner: string;
-    globalPrefix: string;
-    verbose: boolean;
-    devs: UserID[];
-    addDev: (id: UserID) => void;
-    removeDev: (id: UserID) => void;
-    disabledUsers: UserID[];
-    disableUser: (id: UserID) => void;
-    enableUser: (id: UserID) => void;
-    disabledGuilds: GuildID[];
-    disableGuild: (id: GuildID) => void;
-    enableGuild: (id: GuildID) => void;
-    disabledCommands: string[];
-    disableCommand: (cmd: string) => void;
-    enableCommand: (cmd: string) => void;
-    loadedChips: string[];
-    addLoadedChip: (chip: string) => void;
-    removeLoadedChip: (chip: string) => void;
-    aliases: { [key: string]: string };
-    addAlias: (cmd: string, alias: string) => void;
-    removeAlias: (cmd: string, alias: string) => void;
-    save: () => Promise<void>;
-    load: () => Promise<void>;
-    toJSON: () => { [key: string]: any };
-  }
-
-  interface CitrineClient extends Client {
-    settings: CitrineSettings;
-    logger: Logger;
-    utils: Utils;
-    db: DbDriver;
-    cmdHandler: CmdHandler;
-    permHandler: PermHandler;
-    commands: Collection<string, BaseCommand>;
-    defaultChips: Set<string>;
-    lastException: Error | null;
-    initChips: () => void;
-    initEvents: () => void;
-    loadChip: (chip: string) => Promise<void>;
-    unloadChip: (chip: string) => Promise<void>;
-    clearChipCache: (chip: string) => Promise<void>;
-    launch: () => Promise<void>;
-  }
+import {
+  Collection,
+  Client,
+  Message,
+  User,
+  GuildMember,
+  Guild,
+  TextChannel,
+  DMChannel,
+  GroupDMChannel,
+  Snowflake,
+  MessageReaction,
+  PermissionResolvable,
+  Emoji,
+  ReactionEmoji,
+  ClientOptions
+} from 'discord.js';
 
   interface Context {
     client: Client;
@@ -91,29 +34,6 @@ declare module 'typings' {
     promptReaction: () => Promise<MessageReaction | null>;
     lockPerms: (perms: PermissionResolvable, options?: LockPermsOptions) => void;
     lock: (...locks: LockType[]) => void;
-  }
-
-  interface GuildConfig {
-    data: GuildConfigData;
-    id: string;
-    prefix: string;
-    disabledRole: string;
-    deleteCmdCalls: boolean;
-    deleteCmdCallsDelay: number;
-    readMsgEdits: boolean;
-    disabledUsers: UserID[];
-    disableUser: (id: UserID) => void;
-    enableUser: (id: UserID) => void;
-    disabledChannels: ChannelID[];
-    disableChannel: (id: ChannelID) => void;
-    enableChannel: (id: ChannelID) => void;
-    disabledCommands: string[];
-    disableCommand: (name: string) => void;
-    enableCommand: (name: string) => void;
-    reqRoles: { [key: string]: string };
-    addReqRole: (cmd: string, role: RoleID) => void;
-    removeReqRole: (cmd: string) => void;
-    toJSON: () => { [key: string]: any };
   }
 
   interface BaseCommand {
@@ -136,58 +56,7 @@ declare module 'typings' {
     getParent: () => Command | undefined;
     getBase: () => BaseCommand | undefined;
     register: (...args: SubCommand[]) => this;
-  }
-
-  interface CmdHandler {
-    checkPrefix: (message: Message, config?: GuildConfig & any) => string | null;
-    getArgs: (message: Message, prefix: string, parseQuotes?: boolean) => string[] | null;
-    getBaseCmd: (message: Message, args: string[]) => [BaseCommand, string[]] | null;
-    getFinalCmd: (message: Message, args: string[]) => [Command, string[]] | null;
-    getCmdGenerator: (
-      message: Message,
-      args: string[]
-    ) => IterableIterator<[Command, string[]] | undefined>;
-    processCommand: (message: Message, config?: GuildConfig & any) => Promise<void>;
-  }
-
-  interface PermHandler {
-    checkFilters: (ctx: Context & any, config?: GuildConfig & any) => void;
-    checkPerms: (
-      perms: PermissionResolvable,
-      member: GuildMember,
-      channel: TextChannel,
-      checkAdmin?: boolean
-    ) => void;
-    checkGuildOwner: (guild: Guild, user: User | GuildMember) => void;
-    checkBotOwner: (user: User | GuildMember) => void;
-    checkBotDev: (user: User | GuildMember) => void;
-  }
-
-  interface DjsUtils {
-    extractCodeBlock: (text: string) => void | CodeBlockData;
-    parseMention: (mention: string) => string;
-    parseQuotes: (text: string) => (string | undefined)[];
-    resolveRole: (guild: Guild, role: string) => Promise<Role | null>;
-    resolveGuildChannel: (guild: Guild, channel: string) => Promise<GuildChannel | null>;
-    resolveUser: (client: Client, user: string) => Promise<User | null>;
-    resolveGuildMember(guild: Guild, member: string): Promise<GuildMember | null>;
-  }
-
-  interface Formatter {
-    censor: (text: string, ...words: string[]) => string;
-    italic: (str: string | string[]) => string | string[];
-    lined: (str: string | string[]) => string | string[];
-    striked: (str: string | string[]) => string | string[];
-    bold: (str: string | string[]) => string | string[];
-    inline: (str: string | string[]) => string | string[];
-    block: (str: string | string[], lang?: string) => string | string[];
-    cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpData;
-  }
-
-  interface Utils {
-    djs: DjsUtils;
-    format: Formatter;
-  }
+  } 
 
   export interface Logger {
     info: (...args: any[]) => void;
@@ -251,6 +120,7 @@ declare module 'typings' {
   export type RoleID = Snowflake;
   export type UserID = Snowflake;
 
+  // export type RawExceptionObject = { type: string | number, msg: string | string[] };
   export type RawExceptionArray = [string | number, string | string[]];
   export type RawException = string | number | RawExceptionArray | Error;
 
@@ -323,6 +193,3 @@ declare module 'typings' {
     code: string;
     input: string;
   };
-}
-
-// export type RawExceptionObject = { type: string | number, msg: string | string[] };

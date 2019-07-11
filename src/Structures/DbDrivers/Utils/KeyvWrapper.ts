@@ -1,4 +1,3 @@
-import { DbConnection } from 'typings';
 import Keyv = require('keyv');
 
 export default class KeyvWrapper implements DbConnection {

@@ -10,7 +10,6 @@ import GuildConfig from './Utils/GuildConfig';
 import Memory from './DbDrivers/Memory';
 import ConsoleLogger from './Loggers/Console';
 import { Client, Collection } from 'discord.js';
-import { CitrineOptions, DbDriver, Utils, Logger, GuildID } from 'typings';
 
 const root = resolve(`${__dirname}/../../`);
 const { readdirSync } = fs;
@@ -48,7 +47,7 @@ function resolveLogger(options: any): new () => Logger {
 export default class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: Logger;
-  public readonly utils: Utils;
+  public readonly utils: CitrineUtils;
   public readonly db: DbDriver;
   public readonly cmdHandler: CmdHandler;
   public readonly permHandler: PermHandler;

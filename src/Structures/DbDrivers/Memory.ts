@@ -1,4 +1,3 @@
-import { DbDriver, DbConnection } from 'typings';
 import MapWrapper from './Utils/MapWrapper';
 
 export default class Memory implements DbDriver {

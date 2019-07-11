@@ -2,7 +2,6 @@ import { RichEmbed } from 'discord.js';
 import QuickEmbed from '../Utils/QuickEmbed';
 import ExceptionCodes from './ExceptionCodes';
 import ExceptionMessages from './ExceptionMessages';
-import { RawException, RawExceptionArray } from 'typings';
 
 // Type guard
 function isExceptionArray(err: any): err is RawExceptionArray {

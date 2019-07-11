@@ -2,17 +2,7 @@ import QuickEmbed from './QuickEmbed';
 import CitrineClient from '../CitrineClient';
 import Exception from '../Exceptions/Exception';
 import ExceptionMessages from '../Exceptions/ExceptionMessages';
-import { Command } from 'typings';
 import SubCommand from '../Command/SubCommand';
-import {
-  LockType,
-  LockPermsOptions,
-  // PromptOptions,
-  // PromptReactionOptions,
-  // Reaction,
-  ContextData
-} from 'typings';
-
 import {
   Message,
   User,

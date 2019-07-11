@@ -1,11 +1,10 @@
 import { RichEmbed, User, GuildMember } from 'discord.js';
-import { Command } from 'typings';
 import Context from './Context';
 
 const Colors: { [key: string]: number } = {
   RED: 0xcb4154,
   GREEN: 0x00ff40,
-  BOT: 0x9dffbe
+  CITRINE: 0x9dffbe
 };
 
 export default class QuickEmbed {
@@ -44,7 +43,7 @@ export default class QuickEmbed {
       return new RichEmbed()
         .setTimestamp()
         .setFooter(`Requested by ${user.username}`, user.avatarURL)
-        .setColor(Colors.BOT);
+        .setColor(Colors.CITRINE);
     }
   }
 
