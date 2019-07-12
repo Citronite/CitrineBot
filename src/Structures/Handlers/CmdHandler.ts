@@ -5,13 +5,12 @@ import BaseCommand from '../Command/BaseCommand';
 import Exception from '../Exceptions/Exception';
 import Context from '../Utils/Context';
 
-type Command = SubCommand | BaseCommand;
-
 function isSubcommand(subcmd: any): subcmd is SubCommand {
   return subcmd instanceof SubCommand;
 }
 
 export default class CmdHandler {
+
   public checkPrefix(message: Message, config?: GuildConfig): string | null {
     if (message.author.bot) return null;
     const client: any = message.client;
@@ -76,7 +75,7 @@ export default class CmdHandler {
   public *getCmdGenerator(
     message: Message,
     args: string[]
-  ): IterableIterator<[Command, string[]] | undefined> {
+  ): IterableIterator<[Command, string[]]> {
     if (!args || !args.length) return;
 
     const result = this.getBaseCmd(message, args);
@@ -85,13 +84,16 @@ export default class CmdHandler {
     const [base, finalArgs] = result;
     let cmd: Command | undefined = base;
     do {
+      // Yield cmd and remaining args
       yield [cmd, finalArgs];
-      if (!finalArgs.length) break;
+      // Break if no more args
+      if (!finalArgs.length || !finalArgs[0]) break;
+      // Break if no more subcmds
       if (!cmd.subcommands) break;
-      const name = finalArgs[0];
-      if (!name) break;
-      cmd = cmd.subcommands.get(name.toLowerCase());
+      cmd = cmd.subcommands.get(finalArgs[0].toLowerCase());
+      // Break if arg doesnt match any subcmds
       if (!cmd) break;
+      // Consume arg, and loop over.
     } while (finalArgs.shift());
   }
 
