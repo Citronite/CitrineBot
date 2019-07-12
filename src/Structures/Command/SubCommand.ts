@@ -1,7 +1,7 @@
 import { Collection } from 'discord.js';
 import Context from '../Utils/Context';
 import BaseCommand from './BaseCommand';
-import { SubCommandOptions } from 'typings';
+import { SubCommandOptions, Command } from 'typings';
 
 function validateOptions(options: any): void {
   if (!options) throw new Error('Invalid CommandOptions provided!');
@@ -13,7 +13,7 @@ export default class SubCommand {
   public readonly name: string;
   public readonly description: string;
   public readonly usage?: string;
-  public parent?: SubCommand | BaseCommand;
+  public parent?: Command;
   public subcommands?: Collection<string, SubCommand>;
 
   public constructor(options: SubCommandOptions) {
@@ -29,16 +29,16 @@ export default class SubCommand {
     else throw 'INSUFFICIENT_ARGS';
   }
 
-  public getParent(): SubCommand | BaseCommand | undefined {
+  public getParent(): Command | undefined {
     return this.parent;
   }
 
   public getBase(): BaseCommand | undefined {
-    let cmd: any = this;
-    while (cmd.parent) {
+    let cmd: Command | undefined = this;
+    while (cmd instanceof SubCommand) {
       cmd = cmd.parent;
     }
-    return cmd.id === 'base' ? cmd : undefined;
+    return cmd instanceof BaseCommand ? cmd : undefined;
   }
 
   public register(...subCmds: any[]): this {
@@ -47,7 +47,6 @@ export default class SubCommand {
       if (subCmd instanceof SubCommand) {
         subCmd.parent = this;
         this.subcommands.set(subCmd.name, subCmd);
-        continue;
       } else {
         throw new Error('Only instances of the SubCommand class can be registered!');
       }
