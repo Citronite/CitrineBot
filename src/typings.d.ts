@@ -102,8 +102,8 @@ import {
     reqRoles: { [key: string]: string };
   }
 
-  type LoggerType = 'Console' | 'Winston';
-  type DbDriverType = 'Memory' | /*'Json' |*/ 'SQLiteKV';
+  export type LoggerType = 'Console' | 'Winston';
+  export type DbDriverType = 'Memory' | /*'Json' |*/ 'SQLiteKV';
 
   export interface CitrineOptions extends ClientOptions {
     defaultChips?: string[];
