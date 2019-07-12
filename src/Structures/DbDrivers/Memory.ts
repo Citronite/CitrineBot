@@ -1,7 +1,7 @@
 import MapWrapper from './Utils/MapWrapper';
-import { DbDriver, DbConnection } from 'typings';
+import { DbProvider, DbConnection } from 'typings';
 
-export default class Memory implements DbDriver {
+export default class Memory implements DbProvider {
   [key: string]: any;
 
   public readonly type: 'Memory';

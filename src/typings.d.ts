@@ -73,7 +73,7 @@ declare module "typings" {
     drop: () => Promise<void>;
   }
 
-  export interface DbDriver {
+  export interface DbProvider {
     connect: (...options: any[]) => DbConnection;
     disconnect: (...args: any[]) => void;
   }
@@ -104,12 +104,12 @@ declare module "typings" {
   }
 
   export type LoggerType = 'Console' | 'Winston';
-  export type DbDriverType = 'Memory' | /*'Json' |*/ 'SQLiteKV';
+  export type DbProviderType = 'Memory' | /*'Json' |*/ 'SQLiteKV';
 
   export interface CitrineOptions extends ClientOptions {
     defaultChips?: string[];
     logger?: LoggerType;
-    dbDriver?: DbDriverType;
+    DbProvider?: DbProviderType;
   }
 
   export type Command = BaseCommand | SubCommand;

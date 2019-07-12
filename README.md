@@ -51,8 +51,8 @@ For SQLite, you'll have to install additional packages:
 Then, open `./bin/citrine.js` and edit the options for the CitrineClient:
 ```js
 const options = {
-    // Edit the dbDriver option and set it to 'SQLiteKV'
-    dbDriver: 'SQLiteKV'
+    // Edit the DbProvider option and set it to 'SQLiteKV'
+    DbProvider: 'SQLiteKV'
 }
 ```
 

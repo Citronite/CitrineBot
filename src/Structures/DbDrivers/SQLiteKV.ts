@@ -1,8 +1,8 @@
 import { resolve } from 'path';
 import KeyvWrapper from './Utils/KeyvWrapper';
-import { DbDriver, DbConnection } from 'typings';
+import { DbProvider, DbConnection } from 'typings';
 
-export default class SQLiteKV implements DbDriver {
+export default class SQLiteKV implements DbProvider {
   [key: string]: any;
 
   public readonly type: 'SQLiteKV';

@@ -8,9 +8,9 @@ import BaseCommand from './Command/BaseCommand';
 import CitrineUtils from './Citrine/CitrineUtils';
 import CitrineSettings from './Citrine/CitrineSettings';
 import GuildConfig from './Utils/GuildConfig';
-import Memory from './DbDrivers/Memory';
+import Memory from './DbProviders/Memory';
 import ConsoleLogger from './Loggers/Console';
-import { DbDriver, Logger, CitrineOptions, GuildID } from 'typings';
+import { DbProvider, Logger, CitrineOptions, GuildID } from 'typings';
 
 const root = resolve(`${__dirname}/../../`);
 const { readdirSync } = fs;
@@ -20,15 +20,15 @@ function fileFilter(arr: string[]): string[] {
   return arr.filter(val => !val.startsWith('_') && val.endsWith('.js'));
 }
 
-function resolveDbDriver(options: any): new () => DbDriver {
-  if (!options || !options.dbDriver) return Memory;
+function resolveDbProvider(options: any): new () => DbProvider {
+  if (!options || !options.DbProvider) return Memory;
 
-  const { dbDriver } = options;
-  const drivers = fileFilter(readdirSync(`${root}/bin/Structures/DbDrivers`));
-  if (drivers.includes(`${dbDriver}.js`)) {
-    return require(`${root}/bin/Structures/DbDrivers/${dbDriver}.js`).default;
+  const { DbProvider } = options;
+  const drivers = fileFilter(readdirSync(`${root}/bin/Structures/DbProviders`));
+  if (drivers.includes(`${DbProvider}.js`)) {
+    return require(`${root}/bin/Structures/DbProviders/${DbProvider}.js`).default;
   } else {
-    throw new Error('Invalid dbDriver option provided!');
+    throw new Error('Invalid DbProvider option provided!');
   }
 }
 
@@ -74,7 +74,7 @@ export default class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: Logger;
   public readonly utils: CitrineUtils;
-  public readonly db: DbDriver;
+  public readonly db: DbProvider;
   public readonly cmdHandler: CmdHandler;
   public readonly permHandler: PermHandler;
   public readonly commands: Collection<string, BaseCommand>;
@@ -90,8 +90,8 @@ export default class CitrineClient extends Client {
     this.commands = new Collection();
     this.utils = new CitrineUtils();
 
-    const dbDriver = resolveDbDriver(options);
-    this.db = new dbDriver();
+    const DbProvider = resolveDbProvider(options);
+    this.db = new DbProvider();
     const logger = resolveLogger(options);
     this.logger = new logger();
 
