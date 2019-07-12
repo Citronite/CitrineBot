@@ -159,12 +159,12 @@ export default class CitrineClient extends Client {
   public async launch(): Promise<void> {
     try {
       this.logger.info('----------------');
+      this.logger.info('Loading chips...');
+      await initChips(this);
+
       this.logger.info('Fetching data...');
       const data = require(`${root}/data/core/_instance.json`);
       await this.settings.load();
-
-      this.logger.info('Loading chips...');
-      await initChips(this);
 
       if (this.settings.globalPrefix === 'DEFAULT') {
         this.settings.globalPrefix = data.initialPrefix;
