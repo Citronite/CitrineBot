@@ -1,4 +1,5 @@
 import Keyv = require('keyv');
+import { DbConnection } from 'typings';
 
 export default class KeyvWrapper implements DbConnection {
   private readonly kv: Keyv<any>;

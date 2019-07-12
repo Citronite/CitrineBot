@@ -1,20 +1,21 @@
-import {
-  Collection,
-  Client,
-  Message,
-  User,
-  GuildMember,
-  Guild,
-  TextChannel,
-  DMChannel,
-  GroupDMChannel,
-  Snowflake,
-  MessageReaction,
-  PermissionResolvable,
-  Emoji,
-  ReactionEmoji,
-  ClientOptions
-} from 'discord.js';
+declare module "typings" {
+  import {
+    Collection,
+    Client,
+    Message,
+    User,
+    GuildMember,
+    Guild,
+    TextChannel,
+    DMChannel,
+    GroupDMChannel,
+    Snowflake,
+    MessageReaction,
+    PermissionResolvable,
+    Emoji,
+    ReactionEmoji,
+    ClientOptions
+  } from 'discord.js';
 
   interface Context {
     client: Client;
@@ -193,3 +194,4 @@ import {
     code: string;
     input: string;
   };
+}

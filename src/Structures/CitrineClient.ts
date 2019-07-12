@@ -10,6 +10,7 @@ import CitrineSettings from './Citrine/CitrineSettings';
 import GuildConfig from './Utils/GuildConfig';
 import Memory from './DbDrivers/Memory';
 import ConsoleLogger from './Loggers/Console';
+import { DbDriver, Logger, CitrineOptions, GuildID } from 'typings';
 
 const root = resolve(`${__dirname}/../../`);
 const { readdirSync } = fs;

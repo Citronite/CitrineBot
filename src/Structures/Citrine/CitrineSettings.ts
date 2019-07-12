@@ -1,4 +1,5 @@
 import CitrineClient from '../CitrineClient';
+import { GlobalConfigData } from 'typings';
 
 export default class CitrineSettings {
   public readonly client: CitrineClient;

@@ -1,5 +1,5 @@
 import CitrineClient from './Structures/CitrineClient';
-
+import { CitrineOptions } from 'typings';
 /*
  *       CitrineBot - A powerful & extensible Discord bot!
  *

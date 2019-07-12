@@ -4,6 +4,7 @@ import GuildConfig from '../Utils/GuildConfig';
 import BaseCommand from '../Command/BaseCommand';
 import Exception from '../Exceptions/Exception';
 import Context from '../Utils/Context';
+import { Command } from 'typings';
 
 function isSubcommand(subcmd: any): subcmd is SubCommand {
   return subcmd instanceof SubCommand;

@@ -1,6 +1,7 @@
 import { Collection } from 'discord.js';
 import Context from '../Utils/Context';
 import SubCommand from './SubCommand';
+import { BaseCommandOptions } from 'typings';
 
 function validateOptions(options: any): void {
   if (!options) throw new Error('Invalid CommandOptions provided!');

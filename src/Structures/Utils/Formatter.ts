@@ -1,7 +1,6 @@
 import BaseCommand from '../Command/BaseCommand';
-import SubCommand from '../Command/SubCommand';
-
-type Command = BaseCommand | SubCommand;
+import { Command, FormatHelpOptions, CommandHelpData } from 'typings';
+import { SubCommand } from '../../exports';
 
 export default class Formatter {
   public italic(str: string | string[]): string | string[] {
@@ -60,7 +59,10 @@ export default class Formatter {
   }
 
   public cmdHelp(cmd: Command, options?: FormatHelpOptions): CommandHelpData {
-    let chip, parent, base, usage, subcommands;
+    let chip = '--/--';
+    let parent = '--/--';
+    let base = '--/--';
+    let usage, subcommands;
     const name = cmd.name;
     const description = cmd.description;
     const maxWidth = (options && options.maxWidth) || 50;
@@ -69,7 +71,7 @@ export default class Formatter {
     if (cmd instanceof BaseCommand) {
       chip = cmd.chip;
       base = parent = '--/--';
-    } else {
+    } else if (cmd instanceof SubCommand) {
       const parentCmd = cmd.getParent();
       const baseCmd = cmd.getBase();
       chip = baseCmd ? baseCmd.chip : '--/--';

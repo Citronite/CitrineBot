@@ -1,4 +1,5 @@
 import { Role, Guild, User, GuildMember, GuildChannel, Client } from 'discord.js';
+import { CodeBlockData } from 'typings';
 
 export default class DjsUtils {
   /**

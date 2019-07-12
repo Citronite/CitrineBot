@@ -3,6 +3,7 @@ import CitrineClient from '../CitrineClient';
 import Exception from '../Exceptions/Exception';
 import ExceptionMessages from '../Exceptions/ExceptionMessages';
 import SubCommand from '../Command/SubCommand';
+import { Command, ContextData, LockPermsOptions, LockType } from 'typings';
 import {
   Message,
   User,
