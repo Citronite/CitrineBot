@@ -104,7 +104,7 @@ export default class CitrineClient extends Client {
       await this.settings.save();
       return Promise.resolve(`Successfully loaded chip: ${chip}`);
     } catch (err) {
-      return Promise.reject(`Failed to load chip: ${chip}\n${err}`);
+      return Promise.reject(`Failed to load chip: ${chip}\n${err.stack}`);
     }
   }
 
@@ -121,7 +121,7 @@ export default class CitrineClient extends Client {
       await this.settings.save();
       return Promise.resolve(`Successfully unloaded chip: ${chip}`);
     } catch (err) {
-      return Promise.reject(`Failed to unload chip: ${chip}\n${err}`);
+      return Promise.reject(`Failed to unload chip: ${chip}\n${err.stack}`);
     }
   }
 
@@ -134,7 +134,7 @@ export default class CitrineClient extends Client {
       }
       return Promise.resolve(`Successfully cleared cache for chip: ${chip}`);
     } catch (err) {
-      return Promise.reject(`Failed to clear cache for chip: ${chip}\n${err}`);
+      return Promise.reject(`Failed to clear cache for chip: ${chip}\n${err.stack}`);
     }
   }
 
