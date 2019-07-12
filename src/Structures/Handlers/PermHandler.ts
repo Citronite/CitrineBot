@@ -12,7 +12,6 @@ import {
 } from 'discord.js';
 
 export default class PermHandler {
-
   public checkFilters(ctx: Context, config?: GuildConfig): void {
     const { settings: globalConfig } = ctx.client;
     if (ctx.author.id === globalConfig.owner) return;

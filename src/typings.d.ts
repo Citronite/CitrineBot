@@ -1,4 +1,4 @@
-declare module "typings" {
+declare module 'typings' {
   import {
     Collection,
     Client,
@@ -57,7 +57,7 @@ declare module "typings" {
     getParent: () => Command | undefined;
     getBase: () => BaseCommand | undefined;
     register: (...args: SubCommand[]) => this;
-  } 
+  }
 
   export interface Logger {
     info: (...args: any[]) => void;

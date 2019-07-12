@@ -79,7 +79,7 @@ export default class CitrineClient extends Client {
   public readonly permHandler: PermHandler;
   public readonly commands: Collection<string, BaseCommand>;
   public readonly defaultChips: Set<string>;
-  public lastException: Error | null; // Temporary?
+  public lastException: Error | null;
 
   public constructor(options?: CitrineOptions) {
     super(options);
@@ -126,8 +126,9 @@ export default class CitrineClient extends Client {
 
   public async unloadChip(chip: string): Promise<string> {
     try {
-      this.commands.sweep(cmd => cmd.chip === chip);
       const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
+      this.commands.sweep(cmd => cmd.chip === chip);
+
       if (dir.includes('_setup.js')) {
         const { unload: fn } = require(`../Chips/${chip}/_setup.js`);
         if (typeof fn === 'function') fn(this);
@@ -143,9 +144,11 @@ export default class CitrineClient extends Client {
     try {
       const basePath = resolve(`${root}/bin/Chips/${chip}`);
       const cachedPaths = Object.keys(require.cache);
+
       for (const path of cachedPaths) {
         if (path.startsWith(basePath)) delete require.cache[path];
       }
+
       return Promise.resolve(`Successfully cleared cache for chip: ${chip}`);
     } catch (err) {
       return Promise.reject(`Failed to clear cache for chip: ${chip}\n${err.stack}`);

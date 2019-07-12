@@ -11,7 +11,6 @@ function isSubcommand(subcmd: any): subcmd is SubCommand {
 }
 
 export default class CmdHandler {
-
   public checkPrefix(message: Message, config?: GuildConfig): string | null {
     if (message.author.bot) return null;
     const client: any = message.client;
@@ -73,10 +72,7 @@ export default class CmdHandler {
     return [cmd, finalArgs];
   }
 
-  public *getCmdGenerator(
-    message: Message,
-    args: string[]
-  ): IterableIterator<[Command, string[]]> {
+  public *getCmdGenerator(message: Message, args: string[]): IterableIterator<[Command, string[]]> {
     if (!args || !args.length) return;
 
     const result = this.getBaseCmd(message, args);
