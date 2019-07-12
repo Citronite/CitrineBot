@@ -52,6 +52,24 @@ async function initChips(client: CitrineClient): Promise<void> {
   for (const chip of chips) await client.loadChip(chip);
 }
 
+async function updateMetaData(client: CitrineClient): Promise<void> {
+  const data = require(`${root}/data/core/_instance.json`);
+  const app = await client.fetchApplication();
+
+  client.settings.owner = app.owner.id;
+
+  data.botOwner = app.owner.id;
+  data.appOwner = app.owner.id;
+  data.appId = app.id;
+
+  const path = `${root}/data/core/_instance.json`;
+  const content = JSON.stringify(data, null, '  ');
+
+  fs.writeFile(path, content, err => {
+    if (err) client.logger.warn(err);
+  });
+}
+
 export default class CitrineClient extends Client {
   public readonly settings: CitrineSettings;
   public readonly logger: Logger;
@@ -100,8 +118,6 @@ export default class CitrineClient extends Client {
         if (typeof fn === 'function') fn(this);
       }
 
-      this.settings.addLoadedChip(chip);
-      await this.settings.save();
       return Promise.resolve(`Successfully loaded chip: ${chip}`);
     } catch (err) {
       return Promise.reject(`Failed to load chip: ${chip}\n${err.stack}`);
@@ -117,8 +133,6 @@ export default class CitrineClient extends Client {
         if (typeof fn === 'function') fn(this);
       }
 
-      this.settings.removeLoadedChip(chip);
-      await this.settings.save();
       return Promise.resolve(`Successfully unloaded chip: ${chip}`);
     } catch (err) {
       return Promise.reject(`Failed to unload chip: ${chip}\n${err.stack}`);
@@ -138,44 +152,26 @@ export default class CitrineClient extends Client {
     }
   }
 
-  public async updateMetaData(): Promise<void> {
-    const data = require(`${root}/data/core/_instance.json`);
-    const app = await this.fetchApplication();
- 
-    this.settings.owner = app.owner.id;
-
-    data.botOwner = app.owner.id;
-    data.appOwner = app.owner.id;
-    data.appId = app.id;
-
-    const path = `${root}/data/core/_instance.json`;
-    const content = JSON.stringify(data, null, '  ');
-
-    fs.writeFile(path, content, err => {
-      if (err) this.logger.warn(err);
-    });
-  }
-
   // Starts Citrine!
   public async launch(): Promise<void> {
     try {
-      this.logger.info('------------------');
-      this.logger.info('Loading chips...');
-      await initChips(this);
-
+      this.logger.info('----------------');
       this.logger.info('Fetching data...');
       const data = require(`${root}/data/core/_instance.json`);
       await this.settings.load();
+
+      this.logger.info('Loading chips...');
+      await initChips(this);
 
       if (this.settings.globalPrefix === 'DEFAULT') {
         this.settings.globalPrefix = data.initialPrefix;
       }
 
-      this.logger.info('\nLogging in to Discord...');
+      this.logger.info('Logging in to Discord...');
       await this.login(data.TOKEN);
 
       if (this.settings.owner === 'DEFAULT') {
-        this.updateMetaData();
+        updateMetaData(this);
       }
 
       await this.settings.save();
