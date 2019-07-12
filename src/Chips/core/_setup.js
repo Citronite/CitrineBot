@@ -70,12 +70,26 @@ async function message(client, message) {
 
 module.exports = {
   load: client => {
+    // Connect to the db
     client.db.connect('guilds', dbPath);
 
+    // Attach event listeners
     client.once('ready', onceReady.bind(null, client));
     client.on('ready', ready.bind(null, client));
     client.on('disconnect', disconnect.bind(null, client));
     client.on('exception', exception.bind(null, client));
     client.on('message', message.bind(null, client));
+
+    client.on('error', () => client.logger.error('Connection error. . .'));
+    client.on('reconnecting', () => client.logger.warn('Reconnecting. . .'));
+    client.on('resume', () => client.logger.info('Connection resumed!'));
+
+    // Clear cache for core chip, since it cant be
+    // unloaded unless reloading.
+    try {
+      client.clearChipCache('core');
+    } catch (err) {
+      client.logger.warn(err);
+    }
   }
 };
