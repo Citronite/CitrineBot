@@ -1,6 +1,6 @@
 import GuildConfig from '../Utils/GuildConfig';
 import Exception from '../Exceptions/Exception';
-import ExceptionCodes from '../Exceptions/ExceptionCodes';
+import ErrCode from '../Exceptions/ExceptionCodes';
 import Context from '../Utils/Context';
 import {
   GuildMember,
@@ -11,9 +11,8 @@ import {
   User
 } from 'discord.js';
 
-const ErrCode = ExceptionCodes;
-
 export default class PermHandler {
+
   public checkFilters(ctx: Context, config?: GuildConfig): void {
     const { settings: globalConfig } = ctx.client;
     if (ctx.author.id === globalConfig.owner) return;
@@ -50,7 +49,7 @@ export default class PermHandler {
     const missing = new Permissions(memberPerms.missing(perms, checkAdmin)).toArray();
     if (!missing || !missing.length) return;
 
-    const { MISSING_BOT_PERMS, MISSING_MEMBER_PERMS } = ExceptionCodes;
+    const { MISSING_BOT_PERMS, MISSING_MEMBER_PERMS } = ErrCode;
     const code = channel.client.user.id === member.id ? MISSING_BOT_PERMS : MISSING_MEMBER_PERMS;
     throw new Exception(code, ['Missing permissions:', ...missing]);
   }
