@@ -1,26 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class DjsUtils {
-    /**
-     * Extracts text from a codeblock inside text.
-     */
     extractCodeBlock(text) {
         const rgx = /```(.*?)\n(.*)\n```/s;
         const result = rgx.exec(text);
-        if (!result)
-            return;
-        return {
-            match: result[0],
-            lang: result[1],
-            code: result[2],
-            input: text
-        };
+        if (result) {
+            return {
+                match: result[0],
+                lang: result[1],
+                code: result[2],
+                input: text
+            };
+        }
     }
-    /**
-     * Parses mentions to obtain the snowflake.
-     */
     parseMention(mention) {
-        const rgx = /^<(#|@|@!|@&)\d+>$/;
+        const rgx = /^<(#|@)\d+>$/;
         if (rgx.test(mention)) {
             mention = mention.slice(2, -1);
             if (/^!|&/.test(mention))
@@ -28,9 +22,6 @@ class DjsUtils {
         }
         return mention;
     }
-    /**
-     * Parses double-quoted arguments from strings.
-     */
     parseQuotes(text) {
         const matches = text.match(/".*?"/g);
         if (!matches)
@@ -39,11 +30,8 @@ class DjsUtils {
         return text
             .replace(/".*?"/g, tmp)
             .split(/ +/)
-            .map(val => val === tmp ? matches.shift() : val);
+            .map(val => (val === tmp ? matches.shift() : val));
     }
-    /**
-     * Resolves a role object given a guild and the string input.
-     */
     async resolveRole(guild, role) {
         role = this.parseMention(role);
         const finder = (val) => {
@@ -56,9 +44,6 @@ class DjsUtils {
         };
         return guild.roles.get(role) || guild.roles.find(finder) || null;
     }
-    /**
-     * Resolves a guild channel object given a guild and the string input
-     */
     async resolveGuildChannel(guild, channel) {
         channel = this.parseMention(channel);
         const finder = (val) => {
@@ -71,9 +56,6 @@ class DjsUtils {
         };
         return guild.channels.get(channel) || guild.channels.find(finder) || null;
     }
-    /**
-     * Resolves a user object given the client and the string input.
-     */
     async resolveUser(client, user) {
         user = this.parseMention(user);
         try {
@@ -87,15 +69,11 @@ class DjsUtils {
             return client.users.find(finder) || null;
         }
         catch (err) {
-            // Don't mind this :^)
             const c = client;
             c.logger.warn(`resolveUser() failed for [${user}]`);
             return null;
         }
     }
-    /**
-     * Resolves a guild member object given the guild and the string input.
-     */
     async resolveGuildMember(guild, member) {
         member = this.parseMention(member);
         try {
@@ -105,18 +83,18 @@ class DjsUtils {
             guild = await guild.fetchMembers(member, 5);
             const rgx = new RegExp(member, 'i');
             const finder = (val) => {
-                return val.user.id === member
-                    || val.user.username === member
-                    || val.nickname === member
-                    || val.user.tag === member
-                    || rgx.test(val.user.username)
-                    || rgx.test(val.nickname);
+                return (val.user.id === member ||
+                    val.user.username === member ||
+                    val.nickname === member ||
+                    val.user.tag === member ||
+                    rgx.test(val.user.username) ||
+                    rgx.test(val.nickname));
             };
             return guild.members.find(finder) || null;
         }
         catch (err) {
-            const client = guild.client;
-            client.logger.warn(`resolveGuildMember() failed for [${member}]`);
+            const c = guild.client;
+            c.logger.warn(`resolveGuildMember() failed for [${member}]`);
             return null;
         }
     }

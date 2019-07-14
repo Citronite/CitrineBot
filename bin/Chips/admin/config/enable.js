@@ -101,7 +101,7 @@ class EnableChannel extends SubCommand {
         if (channels.length) {
             const enabled = [];
             for (const channel of channels) {
-                const found = ctx.client.utils.djs.resolveGuildChannel(ctx.guild, channel);
+                const found = await ctx.client.utils.djs.resolveGuildChannel(ctx.guild, channel);
                 if (!found)
                     continue;
                 data.enableChannel(found.id);

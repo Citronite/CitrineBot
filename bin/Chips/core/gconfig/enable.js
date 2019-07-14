@@ -60,7 +60,7 @@ class EnableUser extends SubCommand {
         if (users.length) {
             const enabled = [];
             for (const user of users) {
-                const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+                const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
                 if (!found)
                     continue;
                 ctx.client.settings.enableUser(found.id);

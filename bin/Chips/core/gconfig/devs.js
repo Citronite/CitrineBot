@@ -11,7 +11,7 @@ class Devs extends SubCommand {
     async execute(ctx) {
         if (!ctx.subcommand) {
             const devs = ctx.client.settings.devs.map(v => `<@${v}>`);
-            ctx.send(`Current list of bot developers: ${devs.join(', ')}`);
+            ctx.send(`Current list of bot developers:\n${devs.join(', ')}`);
         }
     }
 }
@@ -28,7 +28,7 @@ class Add extends SubCommand {
         if (users.length) {
             const added = [];
             for (const user of users) {
-                const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+                const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
                 if (!found)
                     continue;
                 ctx.client.settings.addDev(found.id);
@@ -36,7 +36,7 @@ class Add extends SubCommand {
             }
             if (added.length) {
                 await ctx.client.settings.save();
-                return ctx.success(`Successfully added bot developers: ${inline(added).join(', ')}`);
+                return ctx.success(`Successfully added bot developer(s):\n${inline(added).join(', ')}`);
             }
             else {
                 return ctx.error('No users were added. Are you sure you provided the correct name?');
@@ -61,7 +61,7 @@ class Remove extends SubCommand {
         if (users.length) {
             const removed = [];
             for (const user of users) {
-                const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+                const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
                 if (!found)
                     continue;
                 ctx.client.settings.removeDev(found.id);
@@ -69,7 +69,7 @@ class Remove extends SubCommand {
             }
             if (removed.length) {
                 await ctx.client.settings.save();
-                ctx.success(`Successfully removed bot developers: ${inline(removed).join(', ')}`);
+                ctx.success(`Successfully removed bot developer(s):\n${inline(removed).join(', ')}`);
             }
             else {
                 return ctx.error('No users were removed. Are you sure you provided the correct names?');

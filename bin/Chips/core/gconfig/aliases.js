@@ -16,7 +16,8 @@ class Aliases extends SubCommand {
                 list.push(`${key}: ${aliases[key].join(', ')}`);
             }
             if (list.length) {
-                ctx.send(`Current list of command aliases: ${list.join('\n')}`);
+                const { format } = ctx.client.utils;
+                ctx.send(`Current list of command aliases:\n${format.block(list.join('\n'))}`);
             }
             else {
                 ctx.send('You have not registered any command aliases so far!');

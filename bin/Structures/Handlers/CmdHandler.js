@@ -82,14 +82,11 @@ class CmdHandler {
         let cmd = base;
         do {
             yield [cmd, finalArgs];
-            if (!finalArgs.length)
+            if (!finalArgs.length || !finalArgs[0])
                 break;
             if (!cmd.subcommands)
                 break;
-            const name = finalArgs[0];
-            if (!name)
-                break;
-            cmd = cmd.subcommands.get(name.toLowerCase());
+            cmd = cmd.subcommands.get(finalArgs[0].toLowerCase());
             if (!cmd)
                 break;
         } while (finalArgs.shift());

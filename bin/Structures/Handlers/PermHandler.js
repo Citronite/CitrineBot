@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Exception_1 = __importDefault(require("../Exceptions/Exception"));
 const ExceptionCodes_1 = __importDefault(require("../Exceptions/ExceptionCodes"));
 const discord_js_1 = require("discord.js");
-const ErrCode = ExceptionCodes_1.default;
 class PermHandler {
     checkFilters(ctx, config) {
         const { settings: globalConfig } = ctx.client;
@@ -31,14 +30,14 @@ class PermHandler {
             errors.push('Disabled User [Global]');
         if (disabledCommands.includes(ctx.command.name))
             errors.push('Disabled Command [Global]');
-        const code = ErrCode.FAILED_FILTER_CHECKS;
+        const code = ExceptionCodes_1.default.FAILED_FILTER_CHECKS;
         if (errors.length)
             throw new Exception_1.default(code, errors);
     }
     checkPerms(perms, member, channel, checkAdmin = true) {
         const memberPerms = channel.memberPermissions(member);
         if (!memberPerms)
-            throw new Exception_1.default(ErrCode.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
+            throw new Exception_1.default(ExceptionCodes_1.default.NOT_FOUND, `Member permissions not found (id: ${member.id})`);
         const missing = new discord_js_1.Permissions(memberPerms.missing(perms, checkAdmin)).toArray();
         if (!missing || !missing.length)
             return;
@@ -49,19 +48,19 @@ class PermHandler {
     checkGuildOwner(guild, user) {
         if (guild.ownerID === user.id)
             return;
-        throw new Exception_1.default(ErrCode.PERMISSION_ERROR, 'Only guild owners may perform that action!');
+        throw new Exception_1.default(ExceptionCodes_1.default.PERMISSION_ERROR, 'Only guild owners may perform that action!');
     }
     checkBotOwner(user) {
         const client = user.client;
         if (user.id === client.settings.owner)
             return;
-        throw new Exception_1.default(ErrCode.PERMISSION_ERROR, 'Only bot owners may perform that action!');
+        throw new Exception_1.default(ExceptionCodes_1.default.PERMISSION_ERROR, 'Only bot owners may perform that action!');
     }
     checkBotDev(user) {
         const client = user.client;
         if (client.settings.devs.includes(user.id))
             return;
-        throw new Exception_1.default(ErrCode.PERMISSION_ERROR, 'Only bot developers may perform that action!');
+        throw new Exception_1.default(ExceptionCodes_1.default.PERMISSION_ERROR, 'Only bot developers may perform that action!');
     }
 }
 exports.default = PermHandler;

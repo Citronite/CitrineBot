@@ -144,9 +144,9 @@ async function createBatchFile() {
   if (rootDir.includes('start_citrine.bat')) return;
   if (rootDir.includes('start_citrine.sh')) return;
 
-  const helpStr = 'You can run `npm run citrine` in your\n' + 'console to directly launch citrine!';
-
+  const helpStr = 'You can run `npm run citrine` in your\nconsole to directly launch citrine!';
   const { platform } = process;
+  const filePath = resolve(`${root}/bin/citrine.js`);
 
   try {
     if (platform === 'win32') {
@@ -154,13 +154,13 @@ async function createBatchFile() {
 
       const content =
         '@echo off\n' +
-        'rem start citrine.js\n\n' +
+        'rem starts citrine.js\n\n' +
         'cls\n' +
         'title Citrine Launcher\n\n' +
         'echo --------------\n' +
         'echo %DATE%\n' +
         'echo --------------\n' +
-        `node ${root}/bin/citrine.js\n` +
+        `node ${filePath}\n` +
         'pause\n';
 
       fs.writeFileSync(`${root}/start_citrine.bat`, content);
@@ -174,7 +174,7 @@ async function createBatchFile() {
         'echo -----------------------------\n' +
         'date\n' +
         'echo -----------------------------\n' +
-        `node ${root}/bin/citrine.js\n` +
+        `node ${filePath}\n` +
         'read -n1 -r -p "Press any key to continue..."\n';
 
       fs.writeFileSync(`${root}/start_citrine.sh`, content);

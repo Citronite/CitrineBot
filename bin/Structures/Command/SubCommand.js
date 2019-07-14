@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const BaseCommand_1 = __importDefault(require("./BaseCommand"));
 function validateOptions(options) {
     if (!options)
         throw new Error('Invalid CommandOptions provided!');
@@ -9,21 +13,12 @@ function validateOptions(options) {
     if (!options.description)
         throw new Error('No description provided!');
 }
-function setParent(child, parent) {
-    if (parent.id === 'base' || parent.id === 'sub') {
-        child.parent = parent;
-    }
-    else {
-        throw new Error('Parent commands must be instances of BaseCommand or SubCommand!');
-    }
-}
 class SubCommand {
     constructor(options) {
         validateOptions(options);
         this.name = options.name;
         this.description = options.description;
         this.usage = options.usage;
-        this.id = 'sub';
     }
     async execute(ctx, ...args) {
         if (ctx.subcommand)
@@ -38,18 +33,17 @@ class SubCommand {
     }
     getBase() {
         let cmd = this;
-        while (cmd.parent) {
+        while (cmd instanceof SubCommand) {
             cmd = cmd.parent;
         }
-        return cmd.id === 'base' ? cmd : undefined;
+        return cmd instanceof BaseCommand_1.default ? cmd : undefined;
     }
     register(...subCmds) {
         this.subcommands = new discord_js_1.Collection();
         for (const subCmd of subCmds) {
             if (subCmd instanceof SubCommand) {
-                setParent(subCmd, this);
+                subCmd.parent = this;
                 this.subcommands.set(subCmd.name, subCmd);
-                continue;
             }
             else {
                 throw new Error('Only instances of the SubCommand class can be registered!');

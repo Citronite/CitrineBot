@@ -1,12 +1,12 @@
 "use strict";
 const { BaseCommand } = require('../../exports');
-class Unload extends BaseCommand {
+class Reload extends BaseCommand {
     constructor() {
         super({
-            name: 'unload',
-            description: 'Unloads a chip. Separate multiple names with spaces. ' +
-                'The `core` chip cannot be unloaded.',
-            usage: '[p]unload <...chips>',
+            name: 'reload',
+            description: 'Reloads a chip. Separate multiple names with spaces, or enter `all` to reload all. ' +
+                'This command will only work for loaded chips.',
+            usage: '[p]reload <...chips | "all">',
             chip: 'core'
         });
     }
@@ -14,29 +14,29 @@ class Unload extends BaseCommand {
         ctx.lock('botOwner');
         if (!chips.length)
             throw 'INSUFFICIENT_ARGS';
-        const unloaded = [];
+        const reloaded = [];
         const { loadedChips } = ctx.client.settings;
         const filteredChips = chips.includes('all')
             ? loadedChips
             : chips.filter(name => loadedChips.includes(name));
         for (const chip of filteredChips) {
             try {
-                if (chip === 'core')
-                    continue;
+                await ctx.client.clearChipCache(chip);
                 await ctx.client.unloadChip(chip);
-                unloaded.push(chip);
+                await ctx.client.loadChip(chip);
+                reloaded.push(chip);
             }
             catch (err) {
                 ctx.client.logger.error(err);
             }
         }
-        if (unloaded.length) {
+        if (reloaded.length) {
             const { inline } = ctx.client.utils.format;
-            return ctx.success(`Successfully unloaded chip(s):\n${inline(unloaded).join(', ')}`);
+            return ctx.success(`Successfully reloaded chip(s):\n${inline(reloaded).join(', ')}`);
         }
         else {
-            return ctx.error('No chips were unloaded. Are you sure you provided the correct name(s)?');
+            return ctx.error('No chips were reloaded. Are you sure you provided the correct name(s)?');
         }
     }
 }
-module.exports = new Unload();
+module.exports = new Reload();

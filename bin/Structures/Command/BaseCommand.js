@@ -15,14 +15,6 @@ function validateOptions(options) {
     if (!options.chip)
         throw new Error('Invalid chip name provided!');
 }
-function setParent(child, parent) {
-    if (parent.id === 'base' || parent.id === 'sub') {
-        child.parent = parent;
-    }
-    else {
-        throw new Error('Parent commands must be instances of BaseCommand or SubCommand!');
-    }
-}
 class BaseCommand {
     constructor(options) {
         validateOptions(options);
@@ -30,7 +22,6 @@ class BaseCommand {
         this.description = options.description;
         this.usage = options.usage;
         this.chip = options.chip;
-        this.id = 'base';
     }
     async execute(ctx, ...args) {
         if (ctx.subcommand)
@@ -44,7 +35,7 @@ class BaseCommand {
         this.subcommands = new discord_js_1.Collection();
         for (const subCmd of subCmds) {
             if (subCmd instanceof SubCommand_1.default) {
-                setParent(subCmd, this);
+                subCmd.parent = this;
                 this.subcommands.set(subCmd.name, subCmd);
                 continue;
             }

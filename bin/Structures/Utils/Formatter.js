@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseCommand_1 = __importDefault(require("../Command/BaseCommand"));
+const exports_1 = require("../../exports");
 class Formatter {
     italic(str) {
         if (typeof str === 'string') {
@@ -60,7 +61,10 @@ class Formatter {
         return text;
     }
     cmdHelp(cmd, options) {
-        let chip, parent, base, usage, subcommands;
+        let chip = '--/--';
+        let parent = '--/--';
+        let base = '--/--';
+        let usage, subcommands;
         const name = cmd.name;
         const description = cmd.description;
         const maxWidth = (options && options.maxWidth) || 50;
@@ -69,7 +73,7 @@ class Formatter {
             chip = cmd.chip;
             base = parent = '--/--';
         }
-        else {
+        else if (cmd instanceof exports_1.SubCommand) {
             const parentCmd = cmd.getParent();
             const baseCmd = cmd.getBase();
             chip = baseCmd ? baseCmd.chip : '--/--';

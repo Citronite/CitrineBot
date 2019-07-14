@@ -13,128 +13,85 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
 const path_1 = require("path");
 const util_1 = require("util");
+const discord_js_1 = require("discord.js");
 const CmdHandler_1 = __importDefault(require("./Handlers/CmdHandler"));
 const PermHandler_1 = __importDefault(require("./Handlers/PermHandler"));
 const CitrineUtils_1 = __importDefault(require("./Citrine/CitrineUtils"));
 const CitrineSettings_1 = __importDefault(require("./Citrine/CitrineSettings"));
 const GuildConfig_1 = __importDefault(require("./Utils/GuildConfig"));
-const Memory_1 = __importDefault(require("./DbDrivers/Memory"));
+const Memory_1 = __importDefault(require("./DbProviders/Memory"));
 const Console_1 = __importDefault(require("./Loggers/Console"));
-const discord_js_1 = require("discord.js");
 const root = path_1.resolve(`${__dirname}/../../`);
 const { readdirSync } = fs;
 const readdirAsync = util_1.promisify(fs.readdir);
 function fileFilter(arr) {
     return arr.filter(val => !val.startsWith('_') && val.endsWith('.js'));
 }
-function resolveDbDriver(options) {
-    if (!options || !options.dbDriver)
+function resolveDbProvider(options) {
+    if (!options || !options.DbProvider)
         return Memory_1.default;
+    const { DbProvider } = options;
+    const drivers = fileFilter(readdirSync(`${root}/bin/Structures/DbProviders`));
+    if (drivers.includes(`${DbProvider}.js`)) {
+        return require(`${root}/bin/Structures/DbProviders/${DbProvider}.js`).default;
+    }
     else {
-        const { dbDriver } = options;
-        const drivers = fileFilter(readdirSync(`${root}/bin/Structures/DbDrivers`));
-        if (drivers.includes(`${dbDriver}.js`)) {
-            return require(`${root}/bin/Structures/DbDrivers/${dbDriver}.js`).default;
-        }
-        else {
-            throw new Error('Invalid dbDriver option provided!');
-        }
+        throw new Error('Invalid DbProvider option provided!');
     }
 }
 function resolveLogger(options) {
     if (!options || !options.logger)
         return Console_1.default;
-    else {
-        const { logger } = options;
-        const loggers = fileFilter(readdirSync(`${root}/bin/Structures/Loggers`));
-        if (loggers.includes(`${logger}.js`)) {
-            return require(`${root}/bin/Structures/Loggers/${logger}.js`).default;
-        }
-        else {
-            throw new Error('Invalid logger option provided!');
-        }
+    const { logger } = options;
+    const loggers = fileFilter(readdirSync(`${root}/bin/Structures/Loggers`));
+    if (loggers.includes(`${logger}.js`)) {
+        return require(`${root}/bin/Structures/Loggers/${logger}.js`).default;
     }
+    else {
+        throw new Error('Invalid logger option provided!');
+    }
+}
+async function initChips(client) {
+    const allChips = await readdirAsync(`${root}/bin/Chips`);
+    const defaults = client.defaultChips;
+    const chips = defaults.has('all') ? allChips : client.defaultChips;
+    for (const chip of chips)
+        await client.loadChip(chip);
+}
+async function updateMetaData(client) {
+    const data = require(`${root}/data/core/_instance.json`);
+    const app = await client.fetchApplication();
+    client.settings.owner = app.owner.id;
+    data.botOwner = app.owner.id;
+    data.appOwner = app.owner.id;
+    data.appId = app.id;
+    const path = `${root}/data/core/_instance.json`;
+    const content = JSON.stringify(data, null, '  ');
+    fs.writeFile(path, content, err => {
+        if (err)
+            client.logger.warn(err);
+    });
 }
 class CitrineClient extends discord_js_1.Client {
     constructor(options) {
         super(options);
         this.settings = new CitrineSettings_1.default(this);
+        this.permHandler = new PermHandler_1.default();
+        this.cmdHandler = new CmdHandler_1.default();
         this.commands = new discord_js_1.Collection();
         this.utils = new CitrineUtils_1.default();
-        this.cmdHandler = new CmdHandler_1.default();
-        this.permHandler = new PermHandler_1.default();
-        const dbDriver = resolveDbDriver(options);
-        this.db = new dbDriver();
+        const DbProvider = resolveDbProvider(options);
+        this.db = new DbProvider();
         const logger = resolveLogger(options);
         this.logger = new logger();
-        this.defaultChips = ['core'];
+        this.defaultChips = new Set(['core']);
         if (options && options.defaultChips) {
-            this.defaultChips = ['core', ...options.defaultChips];
+            this.defaultChips = new Set(['core', ...options.defaultChips]);
         }
         this.lastException = null;
-        this.on('error', () => this.logger.error('Connection error. . .'));
-        this.on('reconnecting', () => this.logger.warn('Reconnecting. . .'));
-        this.on('resume', () => this.logger.info('Connection resumed!'));
-    }
-    // Loads all chips from the Chips folder.
-    // Removes the core chip from cache since it is only loaded once.
-    initChips() {
-        try {
-            const allChips = readdirSync(`${root}/bin/Chips`);
-            const chips = this.defaultChips.includes('all') ? allChips : this.defaultChips;
-            for (const chip of chips) {
-                if (!allChips.includes(chip)) {
-                    throw new Error(`Unable to find chip ${chip}. Make sure it is placed in ./bin/Chips`);
-                }
-                const dir = readdirSync(`${root}/bin/Chips/${chip}`);
-                const cmdFiles = fileFilter(dir);
-                for (const file of cmdFiles) {
-                    const cmd = require(`../Chips/${chip}/${file}`);
-                    this.commands.set(cmd.name, cmd);
-                    if (chip === 'core') {
-                        delete require.cache[require.resolve(`../Chips/core/${file}`)];
-                    }
-                }
-                if (dir.includes('_setup.js')) {
-                    const { load: fn } = require(`../Chips/${chip}/_setup.js`);
-                    if (typeof fn === 'function')
-                        fn(this);
-                }
-                this.settings.addLoadedChip(chip);
-            }
-            this.logger.info('Successfully initialized default Chips!');
-        }
-        catch (err) {
-            this.logger.error(`Error initializing default Chips:\n  ${err.stack}`);
-            throw 0;
-        }
-    }
-    // Loads event files and then clears cache since
-    // events should only be loaded once.
-    initEvents() {
-        try {
-            const eventFiles = fileFilter(readdirSync(`${root}/bin/Events`));
-            for (const file of eventFiles) {
-                const event = require(`../Events/${file}`);
-                if (event.listener)
-                    this.on(event.name, event.listener.bind(null, this));
-                if (event.once)
-                    this.once(event.name, event.once.bind(null, this));
-                delete require.cache[require.resolve(`../Events/${file}`)];
-            }
-            this.logger.info('Successfully initialized event listeners!');
-        }
-        catch (err) {
-            this.logger.error(`Error initializing event listeners:\n  ${err.stack}`);
-            throw 0;
-        }
     }
     async loadChip(chip) {
         try {
-            const allChips = await readdirAsync(`${root}/bin/Chips`);
-            if (!allChips.includes(chip)) {
-                return Promise.reject(`Unable to find chip: ${chip}!`);
-            }
             const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
             const cmdFiles = fileFilter(dir);
             for (const file of cmdFiles) {
@@ -146,82 +103,61 @@ class CitrineClient extends discord_js_1.Client {
                 if (typeof fn === 'function')
                     fn(this);
             }
-            this.logger.info(`Successfully loaded chip: ${chip}`);
-            this.settings.addLoadedChip(chip);
-            await this.settings.save();
+            return Promise.resolve(`Successfully loaded chip: ${chip}`);
         }
         catch (err) {
-            this.logger.warn(`Failed to load chip: ${chip}`);
-            this.logger.error(err);
-            return Promise.reject(err);
+            return Promise.reject(`Failed to load chip: ${chip}\n${err.stack}`);
         }
     }
     async unloadChip(chip) {
         try {
-            this.commands.sweep(cmd => cmd.chip === chip);
             const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
+            this.commands.sweep(cmd => cmd.chip === chip);
             if (dir.includes('_setup.js')) {
                 const { unload: fn } = require(`../Chips/${chip}/_setup.js`);
                 if (typeof fn === 'function')
                     fn(this);
             }
-            this.logger.info(`Successfully unloaded chip: ${chip}`);
-            this.settings.removeLoadedChip(chip);
-            await this.settings.save();
+            return Promise.resolve(`Successfully unloaded chip: ${chip}`);
         }
         catch (err) {
-            this.logger.warn(`Failed to unload chip: ${chip}`);
-            this.logger.error(err);
-            return Promise.reject(err);
+            return Promise.reject(`Failed to unload chip: ${chip}\n${err.stack}`);
         }
     }
-    async clearChipCache(chip, all = false) {
+    async clearChipCache(chip) {
         try {
-            const dir = await readdirAsync(`${root}/bin/Chips/${chip}`);
-            const files = all ? dir : fileFilter(dir);
-            for (const file of files) {
-                delete require.cache[require.resolve(`../Chips/${chip}/${file}`)];
+            const basePath = path_1.resolve(`${root}/bin/Chips/${chip}`);
+            const cachedPaths = Object.keys(require.cache);
+            for (const path of cachedPaths) {
+                if (path.startsWith(basePath))
+                    delete require.cache[path];
             }
-            this.logger.info(`Successfully cleared cache for chip: ${chip}`);
-            return Promise.resolve();
+            return Promise.resolve(`Successfully cleared cache for chip: ${chip}`);
         }
         catch (err) {
-            this.logger.warn(`Failed to clear cache for chip: ${chip}`);
-            this.logger.error(err);
-            return Promise.reject(err);
+            return Promise.reject(`Failed to clear cache for chip: ${chip}\n${err.stack}`);
         }
     }
-    // Starts Citrine!
     async launch() {
         try {
-            this.initChips();
-            this.initEvents();
-            this.logger.info('\nFetching data. . .');
+            this.logger.info('----------------');
+            this.logger.info('Loading chips...');
+            await initChips(this);
+            this.logger.info('Fetching data...');
             const data = require(`${root}/data/core/_instance.json`);
             await this.settings.load();
             if (this.settings.globalPrefix === 'DEFAULT') {
                 this.settings.globalPrefix = data.initialPrefix;
             }
-            this.logger.info('\nLogging in to Discord. . .');
+            this.logger.info('Logging in to Discord...');
             await this.login(data.TOKEN);
             if (this.settings.owner === 'DEFAULT') {
-                const app = await this.fetchApplication();
-                this.settings.owner = app.owner.id;
-                data.botOwner = app.owner.id;
-                data.appOwner = app.owner.id;
-                data.appId = app.id;
-                const path = `${root}/data/core/_instance.json`;
-                const content = JSON.stringify(data, null, '  ');
-                fs.writeFile(path, content, err => {
-                    if (err)
-                        this.logger.warn(err);
-                });
+                updateMetaData(this);
             }
             await this.settings.save();
         }
         catch (err) {
             this.logger.error(err);
-            return Promise.reject(err);
         }
     }
     async getGuild(id) {

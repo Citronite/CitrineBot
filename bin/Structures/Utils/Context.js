@@ -32,15 +32,9 @@ class Context {
         this.command = data.command;
         this.subcommand = subcmd;
     }
-    /**
-     * Equivalent to ctx.channel.send
-     */
     async send(...args) {
         return this.channel.send(...args);
     }
-    /**
-     * Attempts to send a DM to the message author.
-     */
     async sendDM(...args) {
         try {
             const res = await this.author.send(...args);
@@ -50,9 +44,6 @@ class Context {
             return this.channel.send('Failed to send DM. Please make sure your DMs are enabled.');
         }
     }
-    /**
-     * Sends a simple success message.
-     */
     async success(msg, embed = true) {
         if (embed) {
             const embed = QuickEmbed_1.default.success(msg);
@@ -62,9 +53,6 @@ class Context {
             return this.channel.send(`✅ ${msg}`);
         }
     }
-    /**
-     * Sends a simple error message.
-     */
     async error(msg, embed = true) {
         if (embed) {
             const embed = QuickEmbed_1.default.error(msg);
@@ -74,22 +62,12 @@ class Context {
             return this.channel.send(`⛔ ${msg}`);
         }
     }
-    /**
-     * Prompts input from a user.
-     */
-    async prompt( /* msg: string, options?: PromptOptions */) {
+    async prompt() {
         return Promise.reject('This feature is yet to be implemented!');
     }
-    /**
-     * Prompts a reaction from a user.
-     */
-    async promptReaction( /* msg: string, emojis: Reaction[], options?: PromptReactionOptions */) {
+    async promptReaction() {
         return Promise.reject('This feature is yet to be implemented!');
     }
-    /**
-     * Add permission checks to restrict command usage.
-     * If failed, throws an Exception with error code 100.
-     */
     lockPerms(perms, options) {
         const { checkPerms } = this.client.permHandler;
         if (!this.member) {
@@ -109,14 +87,9 @@ class Context {
         if (opts.checkBot)
             checkPerms(perms, this.guild.me, this.channel, opts.checkAdmin);
     }
-    /**
-     * Add custom checks to restrict command usage.
-     * If failed, throws an Exception with error code 100.
-     */
     lock(...locks) {
         for (const lock of locks) {
             if (typeof lock === 'boolean') {
-                // 100 === ExceptionCodes.PERMISSION_ERROR
                 if (lock)
                     continue;
                 throw new Exception_1.default(100, ExceptionMessages_1.default[100]);
@@ -124,7 +97,7 @@ class Context {
             else {
                 switch (lock) {
                     case 'guildOwner':
-                        if (this.guild && this.guild.owner.id === this.author.id)
+                        if (this.guild && this.guild.ownerID === this.author.id)
                             continue;
                         throw new Exception_1.default(100, 'Only guild owners may perform this action!');
                     case 'botOwner':
@@ -136,7 +109,7 @@ class Context {
                             continue;
                         throw new Exception_1.default(100, 'Only bot developers may perform this action!');
                     case 'dm':
-                        if (this.message.channel.type === 'dm')
+                        if (this.channel.type === 'dm')
                             continue;
                         throw new Exception_1.default(100, 'This command can only be used in DM channels!');
                     case 'guild':

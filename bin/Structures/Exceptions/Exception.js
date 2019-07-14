@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const QuickEmbed_1 = __importDefault(require("../Utils/QuickEmbed"));
 const ExceptionCodes_1 = __importDefault(require("./ExceptionCodes"));
 const ExceptionMessages_1 = __importDefault(require("./ExceptionMessages"));
-// Type guard
 function isExceptionArray(err) {
     const isArr = err.constructor.name === 'Array';
     const hasType = ['string', 'number'].includes(typeof err[0]);

@@ -59,7 +59,7 @@ class DisableUser extends SubCommand {
         if (users.length) {
             const disabled = [];
             for (const user of users) {
-                const found = ctx.client.utils.djs.resolveUser(ctx.client, user);
+                const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
                 if (!found)
                     continue;
                 ctx.client.settings.disableUser(found.id);

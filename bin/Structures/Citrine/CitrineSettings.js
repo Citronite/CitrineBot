@@ -145,21 +145,6 @@ class CitrineSettings {
             return Promise.reject(err);
         }
     }
-    /*
-    private fromJSON(conf: any): GlobalConfig {
-      return {
-        owner: conf.owner,
-        globalPrefix: conf.globalPrefix,
-        verbose: conf.verbose,
-        devs: new Set(conf.devs),
-        disabledGuilds: new Set(conf.disabledGuilds),
-        disabledCommands: new Set(conf.disabledCommands),
-        disabledUsers: new Set(conf.disabledUsers),
-        loadedChips: new Set(conf.loadedChips),
-        aliases: conf.aliases
-      };
-    }
-  */
     toJSON() {
         const conf = this.data;
         return {
