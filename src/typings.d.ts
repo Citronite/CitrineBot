@@ -43,7 +43,7 @@ declare module 'typings' {
     usage?: string;
     chip: string;
     subcommands?: Collection<string, SubCommand>;
-    execute: (ctx: Context & any, ...args: string[]) => Promise<void>;
+    execute: (ctx: Context & any, ...args: string[]) => Promise<any>;
     register: (...args: SubCommand[]) => this;
   }
 
@@ -53,7 +53,7 @@ declare module 'typings' {
     usage?: string;
     parent?: Command;
     subcommands?: Collection<string, SubCommand>;
-    execute: (ctx: Context & any, ...args: string[]) => Promise<void>;
+    execute: (ctx: Context & any, ...args: string[]) => Promise<any>;
     getParent: () => Command | undefined;
     getBase: () => BaseCommand | undefined;
     register: (...args: SubCommand[]) => this;
