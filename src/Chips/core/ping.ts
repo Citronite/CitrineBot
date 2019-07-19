@@ -1,7 +1,8 @@
-const { BaseCommand } = require('../../exports');
+import { BaseCommand } from '../../exports';
+import Context from '../../Structures/Utils/Context';
 
 class Ping extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'ping',
       description: 'Check bot ping!',
@@ -10,7 +11,7 @@ class Ping extends BaseCommand {
     });
   }
 
-  async execute(ctx) {
+  public async execute(ctx: Context) {
     await ctx.send(`🏓 **Pong!** ${Math.floor(ctx.client.ping)}ms`);
   }
 }

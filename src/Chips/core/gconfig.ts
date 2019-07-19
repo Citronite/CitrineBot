@@ -1,7 +1,8 @@
-const { BaseCommand } = require('../../exports');
+import Context from "../../Structures/Utils/Context";
+import { BaseCommand } from '../../exports';
 
 class GConfig extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'gconfig',
       description: "View or change Citrine's global settings.",
@@ -10,7 +11,7 @@ class GConfig extends BaseCommand {
     });
   }
 
-  async execute(ctx, flag) {
+  public async execute(ctx: Context, flag: string) {
     ctx.lock('botOwner');
     if (ctx.subcommand) return;
 

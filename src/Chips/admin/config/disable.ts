@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Disable extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'disable',
       description: 'Disable guilds/users/commands globally.',
@@ -11,7 +12,7 @@ class Disable extends SubCommand {
 }
 
 class DisableCmd extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'cmd',
       description: 'Locally disable bot commands. Note that only base commands can be disabled.',
@@ -19,20 +20,23 @@ class DisableCmd extends SubCommand {
     });
   }
 
-  async execute(ctx, ...cmds) {
-    const { inline } = ctx.client.utils.format;
-    const data = await ctx.client.getGuild(ctx.guild.id);
+  public async execute(ctx: Context, ...cmds: string[]) {
+    const { inline }: any = ctx.client.utils.format;
+    const { guild }: any = ctx;
+
+    const data = await ctx.client.getGuild(guild.id);
+    if (!data) throw [404, 'GuildConfig not found!'];
 
     if (cmds.length) {
       const disabled = [];
       for (const cmd of cmds) {
-        const [found] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
+        const found = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
         if (!found) continue;
-        data.disableCommand(found.name);
+        data.disableCommand(found[0].name);
         disabled.push(cmd);
       }
       if (disabled.length) {
-        await ctx.client.setGuild(ctx.guild.id, data);
+        await ctx.client.setGuild(guild.id, data);
         return ctx.success(`Successfully disabled commands: ${inline(disabled).join(', ')}`);
       } else {
         return ctx.error('No commands were disabled. Are you sure you provided the correct names?');
@@ -49,7 +53,7 @@ class DisableCmd extends SubCommand {
 }
 
 class DisableUser extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'user',
       description:
@@ -58,19 +62,22 @@ class DisableUser extends SubCommand {
     });
   }
 
-  async execute(ctx, ...users) {
-    const data = await ctx.client.getGuild(ctx.guild.id);
+  public async execute(ctx: Context, ...users: string[]) {
+    const { guild }: any = ctx;
+
+    const data = await ctx.client.getGuild(guild.id);
+    if (!data) throw [404, 'GuildConfig not found!'];
 
     if (users.length) {
       const disabled = [];
       for (let user of users) {
-        user = await ctx.client.utils.djs.resolveUser(ctx.client, user);
-        if (!user) continue;
-        data.disableUser(user.id);
-        disabled.push(user.tag);
+        const found = await ctx.client.utils.djs.resolveUser(ctx.client, user);
+        if (!found) continue;
+        data.disableUser(found.id);
+        disabled.push(found.tag);
       }
       if (disabled.length) {
-        await ctx.client.setGuild(ctx.guild.id, data);
+        await ctx.client.setGuild(guild.id, data);
         return ctx.success(
           `Successfully disabled users: ${data.disabledUsers.map(id => `<@${id}>`).join(', ')}`
         );
@@ -78,7 +85,7 @@ class DisableUser extends SubCommand {
         return ctx.error('No users were disabled. Are you sure you provided the correct names?');
       }
     } else {
-      const { disabledUsers: disabled } = ctx.client.settings;
+      const { disabledUsers: disabled } = data;
       if (disabled.length) {
         return ctx.send(`Currently disabled Users: ${disabled.map(id => `<@${id}>`).join(', ')}`);
       } else {
@@ -89,7 +96,7 @@ class DisableUser extends SubCommand {
 }
 
 class DisableChannel extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'channel',
       description:
@@ -98,27 +105,30 @@ class DisableChannel extends SubCommand {
     });
   }
 
-  async execute(ctx, ...channels) {
-    const { inline } = ctx.client.utils.format;
-    const data = await ctx.client.getGuild(ctx.guild.id);
+  public async execute(ctx: Context, ...channels: string[]) {
+    const { inline }: any = ctx.client.utils.format;
+    const { guild }: any = ctx;
+
+    const data = await ctx.client.getGuild(guild.id);
+    if (!data) throw [404, 'GuildConfig not found!'];
 
     if (channels.length) {
       const disabled = [];
       for (let channel of channels) {
-        channel = await ctx.client.utils.djs.resolveGuildChannel(ctx.guild, channel);
-        if (!channel) continue;
-        data.disableChannel(channel.id);
-        disabled.push(channel.name);
+        const found = await ctx.client.utils.djs.resolveGuildChannel(guild, channel);
+        if (!found) continue;
+        data.disableChannel(found.id);
+        disabled.push(found.name);
       }
 
       if (disabled.length) {
-        await ctx.client.setGuild(ctx.guild.id, data);
+        await ctx.client.setGuild(guild.id, data);
         return ctx.success(`Successfully disabled channels:\n${inline(disabled).join(', ')}`);
       } else {
         return ctx.error('No channels were disabled. Are you sure you provided the correct names?');
       }
     } else {
-      const { disabledChannels: disabled } = ctx.client.settings;
+      const { disabledChannels: disabled } = data;
       if (disabled.length) {
         return ctx.send(
           `Currently disabled channels: ${disabled.map(id => `<#${id}>`).join(', ')}`

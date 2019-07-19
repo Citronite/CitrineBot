@@ -79,6 +79,10 @@ declare module 'typings' {
     disconnect: (...args: any[]) => void;
   }
 
+  /**
+   * The data stored internally by CitrineSettings,
+   * and also stored inside the global DB.
+   */
   export interface GlobalConfigData {
     owner: UserID;
     globalPrefix: string;
@@ -91,6 +95,10 @@ declare module 'typings' {
     aliases: { [cmd: string]: string[] };
   }
 
+  /**
+   * The data stored internally by the GuildConfig class,
+   * and also stored inside the global DB.
+   */
   export interface GuildConfigData {
     id: string;
     prefix: string;

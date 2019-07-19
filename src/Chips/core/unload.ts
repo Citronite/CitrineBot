@@ -1,7 +1,8 @@
-const { BaseCommand } = require('../../exports');
+import { BaseCommand } from '../../exports';
+import Context from '../../Structures/Utils/Context';
 
 class Unload extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'unload',
       description:
@@ -12,7 +13,7 @@ class Unload extends BaseCommand {
     });
   }
 
-  async execute(ctx, ...chips) {
+  public async execute(ctx: Context, ...chips: string[]) {
     ctx.lock('botOwner');
     if (!chips.length) throw 'INSUFFICIENT_ARGS';
 
@@ -33,7 +34,7 @@ class Unload extends BaseCommand {
     }
 
     if (unloaded.length) {
-      const { inline } = ctx.client.utils.format;
+      const { inline }: any = ctx.client.utils.format;
       return ctx.success(`Successfully unloaded chip(s):\n${inline(unloaded).join(', ')}`);
     } else {
       return ctx.error('No chips were unloaded. Are you sure you provided the correct name(s)?');

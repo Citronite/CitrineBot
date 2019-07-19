@@ -1,13 +1,14 @@
-const { BaseCommand } = require('../../exports');
-const { promisify } = require('util');
-const { readdir } = require('fs');
-const { resolve } = require('path');
+import Context from "../../Structures/Utils/Context";
+import { BaseCommand } from '../../exports';
+import { promisify } from 'util';
+import { readdir } from 'fs';
+import { resolve } from 'path';
 
 const readdirAsync = promisify(readdir);
 const root = resolve(`${__dirname}/../../../`);
 
 class Load extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'load',
       description:
@@ -17,7 +18,7 @@ class Load extends BaseCommand {
     });
   }
 
-  async execute(ctx, ...chips) {
+  public async execute(ctx: Context, ...chips: string[]) {
     ctx.lock('botOwner');
     if (!chips.length) throw 'INSUFFICIENT_ARGS';
 
@@ -38,7 +39,7 @@ class Load extends BaseCommand {
       }
     }
 
-    const { inline } = ctx.client.utils.format;
+    const { inline }: any = ctx.client.utils.format;
     if (loaded.length) {
       return ctx.success(`Successfully loaded chip(s):\n${inline(loaded).join(', ')}`);
     } else {

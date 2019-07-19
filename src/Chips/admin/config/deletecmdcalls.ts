@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class DeleteCmdCalls extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'deletecmdcalls',
       description: 'Toggle whether commands calls are deleted after being called.',
@@ -9,8 +10,11 @@ class DeleteCmdCalls extends SubCommand {
     });
   }
 
-  async execute(ctx, setting, delay) {
+  public async execute(ctx: Context, setting: string, delay: string) {
     const data = await ctx.client.getGuild(ctx.message.guild.id);
+    if (!data) {
+      throw [404, 'GuildConfig not found!'];
+    }
     if (setting) {
       setting = setting.toLowerCase();
       if (!['on', 'off'].includes(setting)) {
@@ -25,7 +29,8 @@ class DeleteCmdCalls extends SubCommand {
           }
         }
         data.deleteCmdCalls = setting === 'on' ? true : false;
-        await ctx.client.setGuild(ctx.guild.id, data);
+        const { guild }: any = ctx;
+        await ctx.client.setGuild(guild.id, data);
         ctx.success('Successfully updated server settings!');
       }
     } else {

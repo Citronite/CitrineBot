@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Disable extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'disable',
       description: 'Disable guilds/users/commands globally.',
@@ -11,7 +12,7 @@ class Disable extends SubCommand {
 }
 
 class DisableGuild extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'guild',
       description:
@@ -20,8 +21,8 @@ class DisableGuild extends SubCommand {
     });
   }
 
-  async execute(ctx, ...guilds) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...guilds: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (guilds.length) {
       const disabled = [];
@@ -50,7 +51,7 @@ class DisableGuild extends SubCommand {
 }
 
 class DisableUser extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'user',
       description:
@@ -59,7 +60,7 @@ class DisableUser extends SubCommand {
     });
   }
 
-  async execute(ctx, ...users) {
+  public async execute(ctx: Context, ...users: string[]) {
     if (users.length) {
       const disabled = [];
       for (const user of users) {
@@ -70,7 +71,7 @@ class DisableUser extends SubCommand {
       }
 
       if (disabled.length) {
-        const { inline } = ctx.client.utils.format;
+        const { inline }: any = ctx.client.utils.format;
         await ctx.client.settings.save();
         return ctx.send(`Successfully disabled users: ${inline(disabled).join(', ')}`);
       } else {
@@ -88,7 +89,7 @@ class DisableUser extends SubCommand {
 }
 
 class DisableCmd extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'cmd',
       description:
@@ -97,15 +98,15 @@ class DisableCmd extends SubCommand {
     });
   }
 
-  async execute(ctx, ...cmds) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...cmds: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (cmds.length) {
       const disabled = [];
       for (const cmd of cmds) {
-        const [found] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
-        if (!found || found.chip === 'core') continue;
-        ctx.client.settings.disableCommand(found.name);
+        const found = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
+        if (!found || found[0].chip === 'core') continue;
+        ctx.client.settings.disableCommand(found[0].name);
         disabled.push(cmd);
       }
 

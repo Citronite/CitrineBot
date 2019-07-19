@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Aliases extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'aliases',
       description: 'View or edit the list of command aliases.',
@@ -9,7 +10,7 @@ class Aliases extends SubCommand {
     });
   }
 
-  async execute(ctx) {
+  public async execute(ctx: Context) {
     if (!ctx.subcommand) {
       const aliases = ctx.client.settings.aliases;
       const list = [];
@@ -27,7 +28,7 @@ class Aliases extends SubCommand {
 }
 
 class Add extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'add',
       description: 'Add command aliases. Only aliases for base commands can be added',
@@ -35,20 +36,19 @@ class Add extends SubCommand {
     });
   }
 
-  async execute(ctx, cmd, alias) {
+  public async execute(ctx: Context, cmd: string, alias: string) {
     if (!cmd || !alias) {
-      ctx.subcommand = undefined;
-      this.parent.execute(ctx);
+      throw 'INSUFFICIENT_ARGS';
     } else {
       const found = ctx.client.commands.get(cmd);
       if (!found) {
         ctx.error(`The command \`${cmd}\` does not exist!`);
         return;
       }
-      const exists = ctx.client.cmdHandler.getBaseCmd(ctx.message, Array.from([alias]));
+      const exists = ctx.client.cmdHandler.getBaseCmd(ctx.message, [alias]);
       if (exists) {
         ctx.error(
-          `The alias \`${alias}\` is already registered for the command \`${exists.name}\``
+          `The alias \`${alias}\` is already registered for the command \`${exists[0].name}\``
         );
       } else {
         ctx.client.settings.addAlias(cmd, alias);
@@ -60,7 +60,7 @@ class Add extends SubCommand {
 }
 
 class Remove extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'remove',
       description: 'Remove command aliases.',
@@ -68,10 +68,9 @@ class Remove extends SubCommand {
     });
   }
 
-  async execute(ctx, cmd, alias) {
+  public async execute(ctx: Context, cmd: string, alias: string) {
     if (!cmd || !alias) {
-      ctx.subcommand = undefined;
-      this.parent.execute(ctx);
+      throw 'INSUFFICIENT_ARGS';
     } else {
       const found = ctx.client.commands.get(cmd);
       if (!found) {

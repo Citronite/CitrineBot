@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Prefix extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'prefix',
       description: 'View or change server prefix.',
@@ -9,8 +10,11 @@ class Prefix extends SubCommand {
     });
   }
 
-  async execute(ctx, newPrefix) {
-    const data = await ctx.client.getGuild(ctx.message.guild.id);
+  public async execute(ctx: Context, newPrefix: string) {
+    const { guild }: any = ctx;
+    const data = await ctx.client.getGuild(guild.id);
+    if (!data) throw [404, 'GuildConfig not found!'];
+
     if (newPrefix) {
       data.prefix = newPrefix;
       await ctx.client.setGuild(ctx.message.guild.id, data);

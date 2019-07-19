@@ -1,7 +1,8 @@
-const { BaseCommand } = require('../../exports');
+import { BaseCommand } from '../../exports';
+import Context from '../../Structures/Utils/Context';
 
 class Reload extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'reload',
       description:
@@ -12,7 +13,7 @@ class Reload extends BaseCommand {
     });
   }
 
-  async execute(ctx, ...chips) {
+  public async execute(ctx: Context, ...chips: string[]) {
     ctx.lock('botOwner');
     if (!chips.length) throw 'INSUFFICIENT_ARGS';
 
@@ -34,7 +35,7 @@ class Reload extends BaseCommand {
     }
 
     if (reloaded.length) {
-      const { inline } = ctx.client.utils.format;
+      const { inline }: any = ctx.client.utils.format;
       return ctx.success(`Successfully reloaded chip(s):\n${inline(reloaded).join(', ')}`);
     } else {
       return ctx.error('No chips were reloaded. Are you sure you provided the correct name(s)?');

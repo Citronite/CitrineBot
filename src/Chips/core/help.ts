@@ -1,7 +1,8 @@
-const { BaseCommand, QuickEmbed } = require('../../exports');
+import Context from "../../Structures/Utils/Context";
+import { BaseCommand, QuickEmbed } from '../../exports';
 
 class Help extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'help',
       description: 'Help command',
@@ -10,7 +11,7 @@ class Help extends BaseCommand {
     });
   }
 
-  async execute(ctx, ...args) {
+  public async execute(ctx: Context, ...args: string[]) {
     if (args.length) {
       const result = ctx.client.cmdHandler.getFinalCmd(ctx.message, args);
       if (!result) {

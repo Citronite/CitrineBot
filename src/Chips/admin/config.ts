@@ -1,7 +1,8 @@
-const { BaseCommand } = require('../../exports');
+import { BaseCommand } from '../../exports';
+import Context from '../../Structures/Utils/Context';
 
 class Config extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'config',
       description: 'View or change server settings.',
@@ -10,7 +11,7 @@ class Config extends BaseCommand {
     });
   }
 
-  async execute(ctx, flag) {
+  public async execute(ctx: Context, flag: string) {
     ctx.lock('guild', 'guildOwner');
     if (ctx.subcommand) return;
 

@@ -1,7 +1,8 @@
-const { BaseCommand } = require('../../exports');
+import { BaseCommand } from '../../exports';
+import Context from '../../Structures/Utils/Context';
 
 class Shutdown extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'shutdown',
       description: 'Shuts down the bot, with a zero exit code.',
@@ -10,7 +11,7 @@ class Shutdown extends BaseCommand {
     });
   }
 
-  async execute(ctx) {
+  public async execute(ctx: Context) {
     ctx.lock('botOwner');
     await ctx.send('Goodbye 👋');
     await ctx.client.settings.save();

@@ -4,7 +4,7 @@ import { GuildConfigData, RoleID, ChannelID, UserID } from 'typings';
 export default class GuildConfig {
   private readonly data: GuildConfigData;
 
-  public constructor(guild: Guild | GuildConfig) {
+  public constructor(guild: Guild | GuildConfigData) {
     if (guild instanceof Guild) {
       const client: any = guild.client;
       this.data = {

@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class DisabledRole extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'disabledrole',
       description:
@@ -12,15 +13,19 @@ class DisabledRole extends SubCommand {
     });
   }
 
-  async execute(ctx, role) {
+  public async execute(ctx: Context, role: string) {
+    const { guild }: any = ctx;
+
     const data = await ctx.client.getGuild(ctx.message.guild.id);
+    if (!data) throw [404, 'GuildConfig not found!'];
+
     if (role) {
       if (role === '--clear') {
         data.disabledRole = '';
         await ctx.client.setGuild(ctx.message.guild.id, data);
         return ctx.success('Successfully reset the disabled role');
       } else {
-        const parsed = await ctx.client.utils.djs.resolveRole(ctx.guild, role);
+        const parsed = await ctx.client.utils.djs.resolveRole(guild, role);
         if (!parsed) {
           return ctx.error(`Unable to find role \`${role}\``);
         } else {
@@ -30,7 +35,7 @@ class DisabledRole extends SubCommand {
         }
       }
     } else {
-      const disabledRole = ctx.guild.roles.get(data.disabledRole);
+      const disabledRole = guild.roles.get(data.disabledRole);
       if (disabledRole) {
         return ctx.send(`The current disabled role is \`${disabledRole.name}\``);
       } else {

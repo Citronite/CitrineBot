@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { resolve } from 'path';
 import { promisify } from 'util';
-import { Client, Collection } from 'discord.js';
+import { Client, Collection, Guild } from 'discord.js';
 import CmdHandler from './Handlers/CmdHandler';
 import PermHandler from './Handlers/PermHandler';
 import BaseCommand from './Command/BaseCommand';
@@ -10,7 +10,7 @@ import CitrineSettings from './Citrine/CitrineSettings';
 import GuildConfig from './Utils/GuildConfig';
 import Memory from './DbProviders/Memory';
 import ConsoleLogger from './Loggers/Console';
-import { DbProvider, Logger, CitrineOptions, GuildID } from 'typings';
+import { DbProvider, Logger, CitrineOptions, GuildID, GuildConfigData } from 'typings';
 
 const root = resolve(`${__dirname}/../../`);
 const { readdirSync } = fs;
@@ -183,13 +183,13 @@ export default class CitrineClient extends Client {
     }
   }
 
-  public async getGuild(id: GuildID): Promise<{ [key: string]: any } | undefined> {
+  public async getGuild(id: GuildID): Promise<GuildConfig | undefined> {
     const db: any = this.db;
     const guild = await db.global.read(id);
     return guild ? new GuildConfig(guild) : undefined;
   }
 
-  public async setGuild(id: GuildID, data: GuildConfig): Promise<void> {
+  public async setGuild(id: GuildID, data: Guild | GuildConfigData): Promise<void> {
     const guild = new GuildConfig(data);
     const db: any = this.db;
     await db.global.update(id, guild.toJSON());

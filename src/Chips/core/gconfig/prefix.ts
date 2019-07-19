@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Prefix extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'prefix',
       description: 'View or change the global prefix.',
@@ -9,7 +10,7 @@ class Prefix extends SubCommand {
     });
   }
 
-  async execute(ctx, prefix) {
+  public async execute(ctx: Context, prefix: string) {
     if (prefix) {
       ctx.client.settings.globalPrefix = prefix;
       await ctx.client.settings.save();

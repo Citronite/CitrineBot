@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class ReadMsgEdits extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'readmsgedits',
       description: 'Toggle whether to read edited messages for commands.',
@@ -9,8 +10,11 @@ class ReadMsgEdits extends SubCommand {
     });
   }
 
-  async execute(ctx, setting) {
-    const data = await ctx.client.getGuild(ctx.message.guild.id);
+  public async execute(ctx: Context, setting: string) {
+    const { guild }: any = ctx;
+    const data = await ctx.client.getGuild(guild.id);
+    if (!data) throw [404, 'GuildConfig not found!'];
+
     if (setting) {
       setting = setting.toLowerCase();
       if (!['on', 'off'].includes(setting)) {

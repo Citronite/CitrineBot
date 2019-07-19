@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Enable extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'enable',
       description: 'Enable guilds/users/commands globally.',
@@ -11,7 +12,7 @@ class Enable extends SubCommand {
 }
 
 class EnableGuild extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'guild',
       description: 'Globally enable guilds from using this bot.',
@@ -19,8 +20,8 @@ class EnableGuild extends SubCommand {
     });
   }
 
-  async execute(ctx, ...guilds) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...guilds: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (guilds.length) {
       const enabled = [];
@@ -49,7 +50,7 @@ class EnableGuild extends SubCommand {
 }
 
 class EnableUser extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'user',
       description: 'Globally enable users from using this bot.',
@@ -57,8 +58,8 @@ class EnableUser extends SubCommand {
     });
   }
 
-  async execute(ctx, ...users) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...users: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (users.length) {
       const enabled = [];
@@ -87,7 +88,7 @@ class EnableUser extends SubCommand {
 }
 
 class EnableCmd extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'cmd',
       description: 'Globally enable commands. Only base commands may be enabled.',
@@ -95,14 +96,14 @@ class EnableCmd extends SubCommand {
     });
   }
 
-  async execute(ctx, ...cmds) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...cmds: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (cmds.length) {
       const enabled = [];
       for (const cmd of cmds) {
-        const [exists] = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
-        if (!exists || exists.chip === 'core') continue;
+        const found = ctx.client.cmdHandler.getBaseCmd(ctx.message, [cmd]);
+        if (!found || found[0].chip === 'core') continue;
         ctx.client.settings.enableCommand(cmd);
         enabled.push(cmd);
       }

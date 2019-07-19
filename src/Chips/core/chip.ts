@@ -25,7 +25,7 @@ class Chip extends BaseCommand {
 
     if (chip === '--list') {
       ctx.lock('botOwner');
-      const inline: any = ctx.client.utils.format.inline;
+      const { inline }: any = ctx.client.utils.format;
       const loaded = ctx.client.settings.loadedChips;
       const unloaded = allChips.filter(name => !loaded.includes(name));
 

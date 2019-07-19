@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Verbose extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'verbose',
       description: 'View or toggle verbose mode setting.',
@@ -9,13 +10,13 @@ class Verbose extends SubCommand {
     });
   }
 
-  async execute(ctx, choice) {
+  public async execute(ctx: Context, choice: string) {
     if (choice) {
       choice = choice.toLowerCase();
       if (!['on', 'off'].includes(choice)) {
         return ctx.error('Please specify `on` or `off`');
       } else {
-        ctx.settings.verbose = choice === 'on' ? true : false;
+        ctx.client.settings.verbose = choice === 'on' ? true : false;
         await ctx.client.settings.save();
         return ctx.success(`Verbose mode is now \`${choice.toUpperCase()}\``);
       }

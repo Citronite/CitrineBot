@@ -1,7 +1,8 @@
-const { SubCommand } = require('../../../exports');
+import { SubCommand } from '../../../exports';
+import Context from '../../../Structures/Utils/Context';
 
 class Devs extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'devs',
       description: 'View or edit the list of bot developers.',
@@ -9,7 +10,7 @@ class Devs extends SubCommand {
     });
   }
 
-  async execute(ctx) {
+  public async execute(ctx: Context) {
     if (!ctx.subcommand) {
       const devs = ctx.client.settings.devs.map(v => `<@${v}>`);
       ctx.send(`Current list of bot developers:\n${devs.join(', ')}`);
@@ -18,7 +19,7 @@ class Devs extends SubCommand {
 }
 
 class Add extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'add',
       description:
@@ -27,8 +28,8 @@ class Add extends SubCommand {
     });
   }
 
-  async execute(ctx, ...users) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...users: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (users.length) {
       const added = [];
@@ -46,14 +47,13 @@ class Add extends SubCommand {
         return ctx.error('No users were added. Are you sure you provided the correct name?');
       }
     } else {
-      ctx.subcommand = undefined;
-      await this.parent.execute(ctx);
+      throw 'INSUFFICIENT_ARGS';
     }
   }
 }
 
 class Remove extends SubCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'remove',
       description: 'Remove users as bot developers.',
@@ -61,8 +61,8 @@ class Remove extends SubCommand {
     });
   }
 
-  async execute(ctx, ...users) {
-    const { inline } = ctx.client.utils.format;
+  public async execute(ctx: Context, ...users: string[]) {
+    const { inline }: any = ctx.client.utils.format;
 
     if (users.length) {
       const removed = [];
@@ -80,8 +80,7 @@ class Remove extends SubCommand {
         return ctx.error('No users were removed. Are you sure you provided the correct names?');
       }
     } else {
-      ctx.subcommand = undefined;
-      await this.parent.execute(ctx);
+      throw 'INSUFFICIENT_ARGS';
     }
   }
 }
