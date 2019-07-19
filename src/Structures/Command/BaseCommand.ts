@@ -25,7 +25,7 @@ export default class BaseCommand {
     this.chip = options.chip;
   }
 
-  public async execute(ctx: Context, ...args: string[]): Promise<void> {
+  public async execute(ctx: Context, ...args: string[]): Promise<any> {
     if (ctx.subcommand) return;
     if (args.length) throw 'INVALID_ARGS';
     else throw 'INSUFFICIENT_ARGS';

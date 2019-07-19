@@ -23,7 +23,7 @@ export default class SubCommand {
     this.usage = options.usage;
   }
 
-  public async execute(ctx: Context, ...args: string[]): Promise<void> {
+  public async execute(ctx: Context, ...args: string[]): Promise<any> {
     if (ctx.subcommand) return;
     if (args.length) throw 'INVALID_ARGS';
     else throw 'INSUFFICIENT_ARGS';
