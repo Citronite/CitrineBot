@@ -1,9 +1,11 @@
-const { resolve } = require('path');
-const { QuickEmbed, GuildConfig, Exception } = require('../../exports');
+import { resolve } from 'path';
+import { Command } from 'typings';
+import { Message } from 'discord.js';
+import { QuickEmbed, GuildConfig, Exception } from '../../exports';
+import Context from '../../Structures/Utils/Context';
+import CitrineClient from '../../Structures/CitrineClient';
 
-const dbPath = resolve(`${__dirname}/../../../data/core/guilds.sqlite`);
-
-async function onceReady(client) {
+async function onceReady(client: CitrineClient) {
   const name = client.user.tag;
   const servers = client.guilds.size;
   const invite = await client.generateInvite();
@@ -21,17 +23,17 @@ async function onceReady(client) {
   log('\n(Note: Closing this window will also shut down the bot!)\n');
 }
 
-function ready(client) {
+function ready(client: CitrineClient) {
   client.logger.info(`${client.user.tag} is online!\n`);
 }
 
-async function disconnect(client) {
+async function disconnect(client: CitrineClient) {
   client.logger.error('Connection error, client disconnected!');
   await client.settings.save();
   process.exit(1);
 }
 
-async function exception(client, err, ctx, cmd) {
+async function exception(client: CitrineClient, err: Exception, ctx?: Context, cmd?: Command) {
   const ignored = [101, 102, 103, 201, 202];
 
   if (ctx) {
@@ -49,16 +51,16 @@ async function exception(client, err, ctx, cmd) {
   client.lastException = err;
 }
 
-async function message(client, message) {
-  const { cmdHandler, db } = client;
+async function message(client: CitrineClient, message: Message) {
+  const { cmdHandler, db }: any = client;
   let config;
 
   try {
     if (message.guild) {
-      config = await db.guilds.read(message.guild.id);
+      config = await db.global.read(message.guild.id);
       if (!config) {
         config = new GuildConfig(message.guild);
-        await db.guilds.create(message.guild.id, config);
+        await db.global.create(message.guild.id, config);
       }
     }
     await cmdHandler.processCommand(message, config);
@@ -69,9 +71,16 @@ async function message(client, message) {
 }
 
 module.exports = {
-  load: client => {
+  load: (client: CitrineClient) => {
     // Connect to the db
-    client.db.connect('guilds', dbPath);
+    let opts: any;
+    switch (client.db.type) {
+      case 'SQLiteKV':
+        // Path to SQLite DB file.
+        opts = resolve(`${__dirname}/../../../data/core/global.sqlite`);
+        break;
+    }
+    client.db.connect('global', opts);
 
     // Attach event listeners
     client.once('ready', onceReady.bind(null, client));

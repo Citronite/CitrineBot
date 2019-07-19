@@ -74,6 +74,7 @@ declare module 'typings' {
   }
 
   export interface DbProvider {
+    type: string;
     connect: (...options: any[]) => DbConnection;
     disconnect: (...args: any[]) => void;
   }

@@ -151,7 +151,7 @@ export default class CitrineSettings {
   public async save(): Promise<void> {
     try {
       const db: any = this.client.db;
-      await db.guilds.update('GLOBAL', this.data);
+      await db.global.update('GLOBAL', this.data);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -160,7 +160,7 @@ export default class CitrineSettings {
   public async load(): Promise<void> {
     try {
       const db: any = this.client.db;
-      const jsonData = await db.guilds.read('GLOBAL');
+      const jsonData = await db.global.read('GLOBAL');
       if (!jsonData) return;
       this.data = jsonData;
     } catch (err) {

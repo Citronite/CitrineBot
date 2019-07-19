@@ -1,5 +1,5 @@
 /*
-export default class JsonDB {
+export default class JsonDB implements DbProvider {
 
 }
 */

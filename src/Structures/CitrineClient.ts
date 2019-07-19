@@ -185,18 +185,18 @@ export default class CitrineClient extends Client {
 
   public async getGuild(id: GuildID): Promise<{ [key: string]: any } | undefined> {
     const db: any = this.db;
-    const guild = await db.guilds.read(id);
+    const guild = await db.global.read(id);
     return guild ? new GuildConfig(guild) : undefined;
   }
 
   public async setGuild(id: GuildID, data: GuildConfig): Promise<void> {
     const guild = new GuildConfig(data);
     const db: any = this.db;
-    await db.guilds.update(id, guild.toJSON());
+    await db.global.update(id, guild.toJSON());
   }
 
   public async delGuild(id: GuildID): Promise<void> {
     const db: any = this.db;
-    await db.guilds.delete(id);
+    await db.global.delete(id);
   }
 }

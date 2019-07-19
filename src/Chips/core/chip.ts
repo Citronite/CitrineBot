@@ -1,13 +1,14 @@
-const { BaseCommand, QuickEmbed } = require('../../exports');
-const { promisify } = require('util');
-const { readdir } = require('fs');
-const { resolve } = require('path');
+import { promisify } from 'util';
+import { readdir } from 'fs';
+import { resolve } from 'path';
+import Context from "../../Structures/Utils/Context";
+import { BaseCommand, QuickEmbed } from '../../exports';
 
 const readdirAsync = promisify(readdir);
 const root = resolve(`${__dirname}/../../../`);
 
 class Chip extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'chip',
       description:
@@ -17,15 +18,15 @@ class Chip extends BaseCommand {
     });
   }
 
-  async execute(ctx, chip) {
+  public async execute(ctx: Context, chip: string) {
     if (!chip) throw 'INSUFFICIENT_ARGS';
 
     const allChips = await readdirAsync(`${root}/bin/Chips`);
 
     if (chip === '--list') {
       ctx.lock('botOwner');
-      const { inline } = ctx.client.utils.format;
-      const { loadedChips: loaded } = ctx.client.settings;
+      const inline: any = ctx.client.utils.format.inline;
+      const loaded = ctx.client.settings.loadedChips;
       const unloaded = allChips.filter(name => !loaded.includes(name));
 
       const embed = QuickEmbed.basic(ctx.member || ctx.author)

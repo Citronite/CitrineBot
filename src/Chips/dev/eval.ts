@@ -1,8 +1,10 @@
-const { BaseCommand } = require('../../exports');
+import { BaseCommand } from '../../exports';
+import Context from '../../Structures/Utils/Context';
+
 const { TOKEN } = require(`${__dirname}/../../../data/core/_instance.json`);
 
 class Eval extends BaseCommand {
-  constructor() {
+  public constructor() {
     super({
       name: 'eval',
       description:
@@ -12,7 +14,7 @@ class Eval extends BaseCommand {
     });
   }
 
-  async execute(ctx, ...args) {
+  public async execute(ctx: Context, ...args: string[]) {
     ctx.lock('botOwner');
     const { extractCodeBlock } = ctx.client.utils.djs;
     const { censor } = ctx.client.utils.format;

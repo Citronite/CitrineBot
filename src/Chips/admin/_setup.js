@@ -8,10 +8,10 @@ async function listener(oldMsg, newMsg) {
     if (newMsg.guild) {
       const { db } = client;
       const { guild } = newMsg;
-      config = await db.guilds.read(guild.id);
+      config = await db.global.read(guild.id);
       if (!config) {
         config = new GuildConfig(guild);
-        await db.guilds.create(guild.id, config);
+        await db.global.create(guild.id, config);
       }
     }
     if (config && !config.readMsgEdits) return;
