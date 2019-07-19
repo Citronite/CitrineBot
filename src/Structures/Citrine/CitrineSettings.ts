@@ -151,6 +151,7 @@ export default class CitrineSettings {
   public async save(): Promise<void> {
     try {
       const db: any = this.client.db;
+      if (!db || !db.global) throw new Error('CitrineClient#db uninitialized!');
       await db.global.update('GLOBAL', this.data);
     } catch (err) {
       return Promise.reject(err);
@@ -160,6 +161,7 @@ export default class CitrineSettings {
   public async load(): Promise<void> {
     try {
       const db: any = this.client.db;
+      if (!db || !db.global) throw new Error('CitrineClient#db uninitialized!');
       const jsonData = await db.global.read('GLOBAL');
       if (!jsonData) return;
       this.data = jsonData;
