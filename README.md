@@ -1,3 +1,7 @@
+> **NOTE:** I've decided to put this project to rest, after getting busy with other stuff and
+> not having the time to continue this project (which I imagine would need major changes as well
+> after the updates to Discord's API since I last worked with it).
+
 <h4 align="center">
     <a href="https://github.com/Citronite/CitrineBot">
         <img src="https://i.imgur.com/D0I9Yoq.png?size=1024" alt="CitrineBanner"/>
@@ -27,10 +31,6 @@
 </p>
 
 <hr/>
-
-> **NOTE:** Citrine is still in development stages. *Breaking changes can and will be made without notice*.
-> There is still a lot to do, and it will be some time before Citrine is stable enough for proper usage.
-> All help is appreciated, so feel free to [contribute!](#Contribute)
 
 # Overview
 Citrine is a powerful, and highly extensible Discord bot.
