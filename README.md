@@ -64,7 +64,9 @@ If you have any troubles, feel free to join the [support server](https://discord
 <br/>
 
 # Contribute
-Citrine is still in development stages. Testing, built-in Chips, documentation, installation & usage guides, and much more still needs work. If you feel like contributing, feel free to open a PR, or drop by at the [support server!](https://discord.gg/yyqjd3B).
+See note at the top.
+
+~~Citrine is still in development stages. Testing, built-in Chips, documentation, installation & usage guides, and much more still needs work. If you feel like contributing, feel free to open a PR, or drop by at the [support server!](https://discord.gg/yyqjd3B).~~
 
 <br/>
 
